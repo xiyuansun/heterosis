@@ -187,10 +187,12 @@ p(\alpha_g \mid \cdots) & \propto \left [ \prod_{k(n) \ne 2}   \text{Poisson}(y_
 & \ \ \ \ \ \left . {\color{white} \prod_{k(n) \ne 2}} \times \left [ \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \right ] \right ]  \\
 p(\theta_\alpha \mid \cdots ) & \propto \left [ \prod_{k(n) \ne 2}  \left [ \text{N}( \alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \cdot \text{N}(\theta_\alpha \mid 0, 1000) \right ] \right ] ^G \\
 p(\sigma_\alpha \mid \cdots ) & \propto \left [ \prod_{k(n) \ne 2}  \left [ \text{N}( \alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \cdot \text{U}(\sigma_\alpha \mid 0, 1000) \right ] \right ]^G \\
+p(\pi_\alpha \mid \cdots) &\propto \\
 p(\delta_g \mid \cdots) & \propto \left [ \prod_{k(n) = 2}   \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right .  \\
 & \ \ \ \ \ \left . {\color{white} \prod_{k(n) = 2}} \times \left [ \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g = 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) \right ] \right ]  \\
 p(\theta_\delta \mid \cdots ) & \propto \left [ \prod_{k(n) = 2}  \left [ \text{N}( \delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot \text{N}(\theta_\delta \mid 0, 1000) \right ] \right ] ^G \\
-p(\sigma_\delta \mid \cdots ) & \propto \left [ \prod_{k(n) = 2}  \left [ \text{N}( \delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot \text{U}(\sigma_\delta \mid 0, 1000) \right ] \right ]^G 
+p(\sigma_\delta \mid \cdots ) & \propto \left [ \prod_{k(n) = 2}  \left [ \text{N}( \delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot \text{U}(\sigma_\delta \mid 0, 1000) \right ] \right ]^G \\
+p(\pi_\delta \mid \cdots) &\propto 
 \end{align*}
 
 
