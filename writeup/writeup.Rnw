@@ -1,0 +1,201 @@
+% !TEX TS-program = knitr
+\documentclass{article}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{caption}
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{mathrsfs}
+\usepackage{natbib}
+\usepackage[nottoc]{tocbibind}
+\usepackage{url}
+
+\providecommand{\all}{\ \forall \ }
+\providecommand{\bs}{\backslash}
+\providecommand{\e}{\varepsilon}
+\providecommand{\E}{\ \exists \ }
+\providecommand{\lm}[2]{\lim_{#1 \rightarrow #2}}
+\providecommand{\m}[1]{\mathbb{#1}}
+\providecommand{\nv}{{}^{-1}}
+\providecommand{\ov}[1]{\overline{#1}}
+\providecommand{\p}{\newpage}
+\providecommand{\q}{$\quad$ \newline}
+\providecommand{\rt}{\rightarrow}
+\providecommand{\Rt}{\Rightarrow}
+\providecommand{\vc}[1]{\boldsymbol{#1}}
+\providecommand{\wh}[1]{\widehat{#1}}
+
+%\renewcommand\bibname{References}
+%\renewcommand{\thesection}{Problem \arabic{section}}
+%\renewcommand{\thesubsection}{Part \alph{subsection}}
+
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[R]{\thepage}
+\fancyhead[C]{Landau}
+
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue
+}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ 
+  language=C,                % the language of the code
+  basicstyle=\Large,           % the size of the fonts that are used for the code
+  numberstyle= \tiny \color{white},  % the style that is used for the line-numbers
+  stepnumber=2,                   % the step between two line-numbers. 
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=lrb,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text 
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=t,                   % sets the caption-position 
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{gray},       % comment style
+  stringstyle=\color{dkgreen},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*, ...},               % if you want to add more keywords to the set
+  xleftmargin=0.053in, % left horizontal offset of caption box
+  xrightmargin=-.03in % right horizontal offset of caption box
+}
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-0.05in}}
+\captionsetup[lstlisting]{format = listing, labelfont = white, textfont = white}
+% For caption-free listings, comment out the 3 lines above and uncomment the 2 lines below.
+% \captionsetup{labelformat = empty, labelsep = none}
+% \lstset{frame = single}
+
+<<echo = F>>=
+options(width = 60) # R output width
+@
+
+\begin{document}
+\begin{titlepage}
+\begin{center}
+
+\vspace*{4cm}
+\hrule 
+\vspace{0.4cm}
+{ \huge \bfseries A Fully Bayesian Model for RNA-seq Data}
+\vspace{0.4cm}
+\hrule 
+
+\vspace{1cm}
+\Large
+\begin{center}
+Will Landau \\ $\quad$ \\
+Department of Statistics \\
+Iowa State University \\ $\quad$ \\
+\today
+\end{center}
+
+\vfill
+\large
+\end{center}
+\end{titlepage}
+
+\newpage 
+\pagestyle{fancy}
+\setcounter{page}{1}
+\pagenumbering{roman}
+\tableofcontents 
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+%\fancyhead[C]{\thesection}
+
+\begin{flushleft}
+
+\section{The Model}
+
+Let $y_{g,n}$ be the expression level of gene $g$  ($g = 1, \ldots, G$) in library $n$ ($n = 1, \ldots, N$). Let $\mu(n, \phi_g, \alpha_g, \delta_g)$ be the function given by:
+
+
+\begin{align*}
+\mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+\phi_g - \alpha_g & \text{ library $n$ is in treatment group 1} \\
+\phi_g + \delta_g & \text{ library $n$ is in treatment group 2} \\
+\phi_g + \alpha_g & \text{ library $n$ is in treatment group 3} \\
+\end{cases}
+\end{align*}
+
+Then:
+
+\begin{align*}
+&y_{g,n} \sim \text{Poisson}(\log(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+&\qquad c_n \sim \text{N}(0, \sigma^2_c) \\
+& \qquad \qquad \sigma_c \sim \text{U}(0,1) \\
+& \qquad \e_{g, n} \sim \text{N}(0, \sigma^2_g) \\
+& \qquad \qquad \sigma_g \sim \text{Gamma}\left (\frac{d \cdot \sigma_0^2}{2}, \frac{d}{2} \right) \\
+& \qquad \qquad \qquad d \sim \text{U}(0, 1000) \\
+& \qquad \qquad \qquad \sigma_0^2 \sim \text{Exp}(1) \\
+& \qquad \phi_g \sim \text{N}(\theta_\phi, \sigma_\phi^2) \\
+& \qquad \qquad \theta_\phi \sim \text{N}(0, 1000) \\
+& \qquad \qquad \sigma_\phi \sim \text{U}(0, 1000) \\
+& \qquad \alpha_g \sim \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\theta_\alpha, \sigma_\alpha^2) \\
+& \qquad \qquad \theta_\alpha \sim \text{N}(0, 1000) \\
+& \qquad \qquad \sigma_\alpha \sim \text{U}(0, 1000) \\
+& \qquad \qquad \pi_\alpha \sim \text{U}(0,1) \\
+& \qquad \delta_g \sim \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0)  \text{N}(\theta_\delta, \sigma_\delta^2) \\
+& \qquad \qquad \theta_\delta \sim \text{N}(0, 1000) \\
+& \qquad \qquad \sigma_\delta \sim \text{U}(0, 1000) \\
+& \qquad \qquad \pi_\delta \sim \text{U}(0,1) \\
+\end{align*}
+
+where:
+\begin{itemize}
+\item Independence is implied unless otherwise specified.
+\item The parameters to the left of the ``$\sim$" are implicitly conditioned on the parameters to the right.
+\end{itemize}
+
+This gives us the full conditional posteriors up to a normalizing constant. Below, $k(n)$ is the treatment group of library $n$.
+
+\begin{align*}
+p(c_n \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \text{N}(c_n \mid 0, \sigma^2_c)^G  \\
+p(\sigma_c \mid \cdots) &\propto  \left [ \prod_{n = 1}^N \text{N}(c_n \mid 0, \sigma_c^2) \right ]^G \text{U}(\sigma_c \mid 0,1)^{G\cdot N} \\
+p(\e_{g, n} \mid \cdots) &\propto \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \\
+p(\sigma_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2)\right ] \text{Gamma} \left ( \sigma_g \mid \frac{d \cdot \sigma_0^2}{2}, \frac{d}{2} \right )^N \\
+p(d \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Gamma} \left ( \sigma_g \mid \frac{d \cdot \sigma_0^2}{2}, \frac{d}{2} \right ) \right ] ^{N} \text{U}(d \mid 0, 1000)^{G \cdot N} \\
+p(\sigma_0^2 \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Gamma} \left ( \sigma_g \mid \frac{d \cdot \sigma_0^2}{2}, \frac{d}{2} \right ) \right ] ^{N} \text{Exp}(\sigma^2 \mid 1)^{G \cdot N} \\
+p(\phi_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2)^N \\
+p(\theta_\phi \mid \cdots ) & \propto \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2)^{G \cdot N} \cdot \text{N}(\theta_\phi \mid 0, 1000)^{G \cdot N} \\
+p(\sigma_\phi \mid \cdots ) & \propto \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2)^{G \cdot N} \cdot \text{U}(\sigma_\phi \mid 0, 1000)^{G \cdot N} \\
+p(\alpha_g \mid \cdots) & \propto \left [ \prod_{k(n) \ne 2}   \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right .  \\
+& \ \ \ \ \ \left . {\color{white} \prod_{k(n) \ne 2}} \times \left [ \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \right ] \right ]  \\
+p(\theta_\alpha \mid \cdots ) & \propto \left [ \prod_{k(n) \ne 2}  \left [ \text{N}( \alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \cdot \text{N}(\theta_\alpha \mid 0, 1000) \right ] \right ] ^G \\
+p(\sigma_\alpha \mid \cdots ) & \propto \left [ \prod_{k(n) \ne 2}  \left [ \text{N}( \alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \cdot \text{U}(\sigma_\alpha \mid 0, 1000) \right ] \right ]^G \\
+p(\delta_g \mid \cdots) & \propto \left [ \prod_{k(n) = 2}   \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right .  \\
+& \ \ \ \ \ \left . {\color{white} \prod_{k(n) = 2}} \times \left [ \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g = 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) \right ] \right ]  \\
+p(\theta_\delta \mid \cdots ) & \propto \left [ \prod_{k(n) = 2}  \left [ \text{N}( \delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot \text{N}(\theta_\delta \mid 0, 1000) \right ] \right ] ^G \\
+p(\sigma_\delta \mid \cdots ) & \propto \left [ \prod_{k(n) = 2}  \left [ \text{N}( \delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot \text{U}(\sigma_\delta \mid 0, 1000) \right ] \right ]^G 
+\end{align*}
+
+
+\end{flushleft}
+%\newpage 
+%\bibliographystyle{plainnat} 
+%\bibliography{}
+\end{document}
