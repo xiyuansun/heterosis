@@ -183,16 +183,16 @@ p(\sigma_0^2 \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Gamma} \left ( 
 p(\phi_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2)^N \\
 p(\theta_\phi \mid \cdots ) & \propto \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2)^{G \cdot N} \cdot \text{N}(\theta_\phi \mid 0, 1000)^{G \cdot N} \\
 p(\sigma_\phi \mid \cdots ) & \propto \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2)^{G \cdot N} \cdot \text{U}(\sigma_\phi \mid 0, 1000)^{G \cdot N} \\
-p(\alpha_g \mid \cdots) & \propto \left [ \prod_{k(n) \ne 2}   \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right .  \\
-& \ \ \ \ \ \left . {\color{white} \prod_{k(n) \ne 2}} \times \left [ \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \right ] \right ]  \\
+p(\alpha_g \mid \cdots) & \propto \prod_{k(n) \ne 2}  [ \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \ \ \ \qquad \quad \times \left ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \right ]  \\
 p(\theta_\alpha \mid \cdots ) & \propto \left [ \prod_{k(n) \ne 2}  \left [ \text{N}( \alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \cdot \text{N}(\theta_\alpha \mid 0, 1000) \right ] \right ] ^G \\
-p(\sigma_\alpha \mid \cdots ) & \propto \left [ \prod_{k(n) \ne 2}  \left [ \text{N}( \alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \cdot \text{U}(\sigma_\alpha \mid 0, 1000) \right ] \right ]^G \\
-p(\pi_\alpha \mid \cdots) &\propto \\
-p(\delta_g \mid \cdots) & \propto \left [ \prod_{k(n) = 2}   \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right .  \\
-& \ \ \ \ \ \left . {\color{white} \prod_{k(n) = 2}} \times \left [ \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g = 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) \right ] \right ]  \\
+p(\sigma_\alpha \mid \cdots ) & \propto \left [ \prod_{k(n) \ne 2}  \left [ \text{N}( \alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \cdot \text{U}(\sigma_\alpha \mid 0, 1000) ) \right ] \right ]^G \\
+p(\pi_\alpha \mid \cdots) &\propto  \prod_{k(n) \ne 2} \left [ \left [ \prod_{g = 1}^G ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \right ] \text{U}(\pi_\alpha \mid 0, 1)^G \right ] \\
+p(\delta_g \mid \cdots) & \propto \prod_{k(n) = 2}  [ \text{Poisson}(y_{g, n} \mid \log(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \\
+& \ \ \ \qquad \quad \times \left ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g = 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \right ] \\
 p(\theta_\delta \mid \cdots ) & \propto \left [ \prod_{k(n) = 2}  \left [ \text{N}( \delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot \text{N}(\theta_\delta \mid 0, 1000) \right ] \right ] ^G \\
 p(\sigma_\delta \mid \cdots ) & \propto \left [ \prod_{k(n) = 2}  \left [ \text{N}( \delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot \text{U}(\sigma_\delta \mid 0, 1000) \right ] \right ]^G \\
-p(\pi_\delta \mid \cdots) &\propto 
+p(\pi_\delta \mid \cdots) &\propto \prod_{k(n) \ne 2} \left [ \left [ \prod_{g = 1}^G ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \right ] \text{U}(\pi_\delta \mid 0, 1)^G \right ] 
 \end{align*}
 
 
