@@ -179,24 +179,25 @@ new_chain = function(d, M){
   return(c); 
 }
 
-mu = function(m, n, g, c){
+mu = function(n, ph, al, de){
   if(c$gr[n] == 1){
-    return(c$ph[m, g] - c$al[m, g]);
+    return(ph - al);
   } else if(c$gr[n] == 2){
-    return(c$ph[m, g] + c$de[m, g]);
+    return(ph + de);
   } else if(c$gr[n] == 3){
-    return(c$ph[m, g] + c$al[m, g]);
+    return(ph + al);
   }
 }
 
 # log full conditionals (up to normalizing constants)
 
-l_c = function(arg, m, c, d){ # parallelize across genes
+l_c = function(arg, m, n, c, d){ # parallelize across genes
   g = 0;
   l = 0;
 
   for(g in 1:c$G)
-    l = l + safelog(dpois(d$y[n, g], exp(arg + c$e[m, n, g] + mu(m, n, g, c))));
+    l = l + safelog(dpois(d$y[n, g], 
+                    exp(arg + c$e[m, n, g] + mu(n, c$ph[m, g], c$al[m, g], c$de[m, g]))));
 
   l = l + c$G * safelog(dnorm(arg, 0, c$sc[m]));
 
@@ -216,12 +217,13 @@ l_sc = function(arg, m, c, d){
   return(G * l);
 }
 
-l_e = function(arg, m, c, d){
-  return(safelog(dpois(d$y[n, g], exp(c$c[m, n] + arg + mu(m, n, g, c)))) +
+l_e = function(arg, m, n, g, c, d){
+  return(safelog(dpois(d$y[n, g], 
+                 exp(c$c[m, n] + arg + mu(n, c$ph[m, g], c$al[m, g], c$de[m, g])))) +
          safelog(dnorm(arg, 0, c$s[m, g]));
 }
 
-l_s = function(arg, m, c, d){
+l_s = function(arg, m, g, c, d){
   n = 0;
   l = 0;  
 
@@ -259,8 +261,15 @@ l_s0_sq = function(arg, m, c, d){
   return(c$N * c$G * safelog(dexp(arg)));
 }
 
-l_ph = function(arg, m, c, d){
+l_ph = function(arg, m, g, c, d){
+  n = 0;
+  l = 0;
 
+  for(n in 1:c$N)
+    l = l + safelog(dpois(d$y[n, g], 
+                    exp(c$c[m, n] + c$e[m, n, g] + mu(n, arg, c$al[m, g], c$de[m, g]))));
+  
+  return(l + c$N * safelog(dnorm(arg, c$th_ph[m], c$s_ph[m])));
 }
 
 
