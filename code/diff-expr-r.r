@@ -61,7 +61,7 @@ safelog = function(x){
   if(x > 0) {
     return(log(x));
   } else {
-    return(0);
+    return(-Inf);
   }
 }
 
@@ -139,7 +139,7 @@ new_chain = function(d, M){
     aux = c()
 
     for(n in 1:N)
-      aux = c(phis, safelog(d$y[n, g]) - c$e[1, n, g] - c$c[1, n]);
+      aux = c(aux, safelog(d$y[n, g]) - c$e[1, n, g] - c$c[1, n]);
 
     c$ph[1, g] = median(aux);
   }
@@ -191,31 +191,83 @@ mu = function(m, n, g, c){
 
 # log full conditionals (up to normalizing constants)
 
-l_c = function(m, n, c, d){ # parallelize across genes
+l_c = function(arg, m, c, d){ # parallelize across genes
   g = 0;
   l = 0;
 
   for(g in 1:c$G)
-    l = l + safelog(dpois(d$y[n, g], exp(c$c[m, n] + c$e[m, n, g] + mu(m, n, g, c))));
+    l = l + safelog(dpois(d$y[n, g], exp(arg + c$e[m, n, g] + mu(m, n, g, c))));
 
-  l = l + c$G * safelog(dnorm(c$c[m, n], 0, c$sc[m]));
+  l = l + c$G * safelog(dnorm(arg, 0, c$sc[m]));
 
   return(l);
 }
 
-l_sc = function(m, c, d){
+l_sc = function(arg, m, c, d){
   n = 0;
   l = 0;
 
-  if(c$sc[m] == 0)
-    return(0);
+  if(arg < 0 || arg > 1)
+    return(-Inf);
 
   for(n in 1:c$N)
-    l = l + safelog(dnorm(c$c[m,n], 0, c$sc[m]))
+    l = l + safelog(dnorm(c$c[m,n], 0, arg));
 
-  return(G * l)
+  return(G * l);
+}
+
+l_e = function(arg, m, c, d){
+  return(safelog(dpois(d$y[n, g], exp(c$c[m, n] + arg + mu(m, n, g, c)))) +
+         safelog(dnorm(arg, 0, c$s[m, g]));
+}
+
+l_s = function(arg, m, c, d){
+  n = 0;
+  l = 0;  
+
+  for(n in 1:c$N)
+    l = l + safelog(dnorm(c$e[m, n, g], 0, arg));
+  
+  l = l + c$N * safelog(dgamma(arg, shape = c$d[m] * c$s0[m]^2 / 2, rate = c$d[m] / 2));
+
+}
+
+l_d = function(arg, m, c, d){ # parallelize accross genes
+  g = 0;
+  l = 0;
+
+  if(arg < 0 || arg > 1000)
+    return(-Inf);
+
+  for(g in 1:c$G)
+    l = l + safelog(dgamma(c$s[m, g], shape = arg * c$s0[m]^2 / 2, rate = arg / 2));
+
+  return(l * c$N);
+}
+
+l_s0_sq = function(arg, m, c, d){
+  g = 0;
+  l = 0;
+
+  if(arg < 0)
+    return(-Inf);
+
+  for(g in 1:c$G)
+    l = l + safelog(dgamma(c$s[m, g], shape = c$d[m] * arg / 2, rate = c$d[m] / 2));
+
+  l = l * c$N;
+  return(c$N * c$G * safelog(dexp(arg)));
+}
+
+l_ph = function(arg, m, c, d){
+
 }
 
 
-# d = hammer()
+
+#for(n in 1:N)
+  for(g in 1:G)
+    print(paste(l_s(m, g, c, d)))
+
+d = hammer()
 c = new_chain(d, 5)
