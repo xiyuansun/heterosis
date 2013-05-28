@@ -196,16 +196,13 @@ l_c = function(arg, m, n, c, d){ # parallelize across genes
   l = 0;
 
   for(g in 1:c$G)
-    l = l + safelog(dpois(d$y[n, g], 
+    l = l + log(dpois(d$y[n, g], 
                     exp(arg + c$e[m, n, g] + mu(n, c$ph[m, g], c$al[m, g], c$de[m, g]))));
 
-  l = l + c$G * safelog(dnorm(arg, 0, c$sc[m]));
+  l = l + c$G * log(dnorm(arg, 0, c$sc[m]));
 
   return(l);
 }
-
-for(n in 1:c$N)
-  print(paste(l_sc(c$sc[m], m, c, d)))
 
 l_sc = function(arg, m, c, d){
   n = 0;
@@ -215,16 +212,16 @@ l_sc = function(arg, m, c, d){
     return(-Inf);
 
   for(n in 1:c$N)
-    l = l + safelog(dnorm(c$c[m,n], 0, arg));
+    l = l + log(dnorm(c$c[m,n], 0, arg));
 
   return(G * l);
 }
 
 l_e = function(arg, m, n, g, c, d){
   l = 0;
-  l = l + safelog(dpois(d$y[n, g], 
+  l = l + log(dpois(d$y[n, g], 
                  exp(c$c[m, n] + arg + mu(n, c$ph[m, g], c$al[m, g], c$de[m, g]))));
-  return(l + safelog(dnorm(arg, 0, c$s[m, g])));
+  return(l + log(dnorm(arg, 0, c$s[m, g])));
 }
 
 l_s = function(arg, m, g, c, d){
@@ -232,10 +229,9 @@ l_s = function(arg, m, g, c, d){
   l = 0;  
 
   for(n in 1:c$N)
-    l = l + safelog(dnorm(c$e[m, n, g], 0, arg));
+    l = l + log(dnorm(c$e[m, n, g], 0, arg));
   
-  l = l + c$N * safelog(dgamma(arg, shape = c$d[m] * c$s0[m]^2 / 2, rate = c$d[m] / 2));
-
+  l = l + c$N * log(dgamma(arg, shape = c$d[m] * c$s0[m]^2 / 2, rate = c$d[m] / 2));
 }
 
 l_d = function(arg, m, c, d){ # parallelize accross genes
@@ -246,7 +242,7 @@ l_d = function(arg, m, c, d){ # parallelize accross genes
     return(-Inf);
 
   for(g in 1:c$G)
-    l = l + safelog(dgamma(c$s[m, g], shape = arg * c$s0[m]^2 / 2, rate = arg / 2));
+    l = l + log(dgamma(c$s[m, g], shape = arg * c$s0[m]^2 / 2, rate = arg / 2));
 
   return(l * c$N);
 }
@@ -259,10 +255,10 @@ l_s0_sq = function(arg, m, c, d){
     return(-Inf);
 
   for(g in 1:c$G)
-    l = l + safelog(dgamma(c$s[m, g], shape = c$d[m] * arg / 2, rate = c$d[m] / 2));
+    l = l + log(dgamma(c$s[m, g], shape = c$d[m] * arg / 2, rate = c$d[m] / 2));
 
   l = l * c$N;
-  return(c$N * c$G * safelog(dexp(arg)));
+  return(c$N * c$G * log(dexp(arg)));
 }
 
 l_ph = function(arg, m, g, c, d){
@@ -270,20 +266,24 @@ l_ph = function(arg, m, g, c, d){
   l = 0;
 
   for(n in 1:c$N)
-    l = l + safelog(dpois(d$y[n, g], 
+    l = l + log(dpois(d$y[n, g], 
                     exp(c$c[m, n] + c$e[m, n, g] + mu(n, arg, c$al[m, g], c$de[m, g]))));
   
-  return(l + c$N * safelog(dnorm(arg, c$th_ph[m], c$s_ph[m])));
+  return(l + c$N * log(dnorm(arg, c$th_ph[m], c$s_ph[m])));
 }
+
+for(n in 1:c$N)
+  for(g in 1:c$G)
+    print(paste(l_th_ph(c$th_ph[m], m,  c, d)))
 
 l_th_ph = function(arg, m, c, d){
   g = 0;
   l = 0;
 
   for(g in 1:c$G)
-    l = l + safelog(dnorm(c$ph[m, g], arg, c$s_ph));
+    l = l + log(dnorm(c$ph[m, g], arg, c$s_ph[m]));
 
-  l = l + c$G * safelog(dnorm(arg, 0, sqrt(1000)));
+  l = l + c$G * log(dnorm(arg, 0, sqrt(1000)));
 
   return(c$N * l);
 }
