@@ -57,11 +57,11 @@ hammer = function(){
        N = dim(counts)[2]))
 }
 
-safelog = function(x){
+safelog = function(x){ # for log counts
   if(x > 0) {
     return(log(x));
   } else {
-    return(-Inf);
+    return(log(0.1));
   }
 }
 
@@ -204,6 +204,9 @@ l_c = function(arg, m, n, c, d){ # parallelize across genes
   return(l);
 }
 
+for(n in 1:c$N)
+  print(paste(l_sc(c$sc[m], m, c, d)))
+
 l_sc = function(arg, m, c, d){
   n = 0;
   l = 0;
@@ -218,9 +221,10 @@ l_sc = function(arg, m, c, d){
 }
 
 l_e = function(arg, m, n, g, c, d){
-  return(safelog(dpois(d$y[n, g], 
-                 exp(c$c[m, n] + arg + mu(n, c$ph[m, g], c$al[m, g], c$de[m, g])))) +
-         safelog(dnorm(arg, 0, c$s[m, g]));
+  l = 0;
+  l = l + safelog(dpois(d$y[n, g], 
+                 exp(c$c[m, n] + arg + mu(n, c$ph[m, g], c$al[m, g], c$de[m, g]))));
+  return(l + safelog(dnorm(arg, 0, c$s[m, g])));
 }
 
 l_s = function(arg, m, g, c, d){
