@@ -272,11 +272,170 @@ l_ph = function(arg, m, g, c, d){
   return(l + c$N * safelog(dnorm(arg, c$th_ph[m], c$s_ph[m])));
 }
 
+l_th_ph = function(arg, m, c, d){
+  g = 0;
+  l = 0;
 
+  for(g in 1:c$G)
+    l = l + safelog(dnorm(c$ph[m, g], arg, c$s_ph));
 
-#for(n in 1:N)
-  for(g in 1:G)
-    print(paste(l_s(m, g, c, d)))
+  l = l + c$G * safelog(dnorm(arg, 0, sqrt(1000)));
+
+  return(c$N * l);
+}
+
+l_s_ph = function(arg, m, c, d){
+  g = 0;
+  l = 0;
+
+  if(arg < 0 || arg > 1000)
+    return(-Inf);
+
+  for(g in 1:c$G)
+    l = l + safelog(dnorm(c$ph[m, g], c$th_ph[m], arg));
+
+  return(c$N * l);
+}
+
+l_al = function(arg, m, g, c, d){
+  n = 0;
+  l = 0;
+
+  for(n in 1:c$N)
+    if(c$gr[n] != 2)
+      l = l + safelog(dpois(d$y[n, g], 
+                      exp(c$c[m, n] + c$e[m, n, g] + mu(n, arg, c$al[m, g], c$de[m, g]))));
+
+  if(arg == 0){
+    return(l + sum(c$gr != 2) * safelog(c$pi_al[m]));
+  } else {
+    return(l + sum(c$gr != 2) * (safelog(1 - c$pi_al[m]) + 
+                                 safelog(dnorm(arg, c$th_al[m], c$s_al[m]))));
+  }
+}
+
+l_th_al = function(arg, m, c, d){
+  g = 0;
+  n = 0;
+  l = 0;
+
+  for(n in 1:c$N)
+    if(c$gr[n] != 2)
+      for(g in 1:c$G)
+        l = l + safelog(dnorm(c$al[m, g], arg, c$s_al));
+
+  return(l + c$G * c$N * safelog(dnorm(arg, 0, sqrt(1000))));
+}
+
+l_s_al = function(arg, m, c, d){
+  g = 0;
+  n = 0;
+  l = 0;
+
+  if(arg < 0 || arg > 1000)
+    return(-Inf);
+
+  for(n in 1:c$N)
+    if(c$gr[n] != 2)
+      for(g in 1:c$G)
+        l = l + safelog(dnorm(c$al[m, g], c$th_al[m], arg));
+
+  return(l);
+}
+
+l_pi_al = function(arg, m, c, d){
+  n = 0;
+  g = 0;
+  l = 0;
+
+  if(arg < 0 || arg > 1)
+    return(-Inf);
+
+  s = sum(c$gr != 2);
+  
+  for(g in 1:c$G){
+    if(c$al[m, g] == 0) {
+      l = l + safelog(arg);
+    } else {
+      l = l + safelog(1 - arg) + safelog(dnorm(c$al[m, g], c$th_al[m], c$s_al[m]));
+    }
+  }
+
+  return(s * l);
+}
+
+l_de = function(arg, m, g, c, d){
+  n = 0;
+  l = 0;
+
+  for(n in 1:c$N)
+    if(c$gr[n] == 2)
+      l = l + safelog(dpois(d$y[n, g], 
+                      exp(c$c[m, n] + c$e[m, n, g] + mu(n, arg, c$de[m, g], c$de[m, g]))));
+
+  if(arg == 0){
+    return(l + sum(c$gr == 2) * safelog(c$pi_de[m]));
+  } else {
+    return(l + sum(c$gr == 2) * (safelog(1 - c$pi_de[m]) + 
+                                 safelog(dnorm(arg, c$th_de[m], c$s_de[m]))));
+  }
+}
+
+l_th_de = function(arg, m, c, d){
+  g = 0;
+  n = 0;
+  l = 0;
+
+  for(n in 1:c$N)
+    if(c$gr[n] == 2)
+      for(g in 1:c$G)
+        l = l + safelog(dnorm(c$de[m, g], arg, c$s_de));
+
+  return(l + c$G * c$N * safelog(dnorm(arg, 0, sqrt(1000))));
+}
+
+l_s_de = function(arg, m, c, d){
+  g = 0;
+  n = 0;
+  l = 0;
+
+  if(arg < 0 || arg > 1000)
+    return(-Inf);
+
+  for(n in 1:c$N)
+    if(c$gr[n] == 2)
+      for(g in 1:c$G)
+        l = l + safelog(dnorm(c$de[m, g], c$th_de[m], arg));
+
+  return(l);
+}
+
+l_pi_de = function(arg, m, c, d){
+  n = 0;
+  g = 0;
+  l = 0;
+
+  if(arg < 0 || arg > 1)
+    return(-Inf);
+
+  s = sum(c$gr == 2);
+  
+  for(g in 1:c$G){
+    if(c$de[m, g] == 0) {
+      l = l + safelog(arg);
+    } else {
+      l = l + safelog(1 - arg) + safelog(dnorm(c$de[m, g], c$th_de[m], c$s_de[m]));
+    }
+  }
+
+  return(s * l);
+}
+
+## functions to sample from conditionals
+
+## Gibbs sampler function
+
+## run Gibbs sampler
 
 d = hammer()
 c = new_chain(d, 5)
