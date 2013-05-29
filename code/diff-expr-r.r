@@ -284,14 +284,6 @@ l_th_ph = function(arg, m, c, d){
   return(c$N * l);
 }
 
-
-############
-for(n in 1:c$N)
-  for(g in 1:c$G)
-    print(paste(l_th_ph(c$th_ph[m], m,  c, d)))
-##############
-
-
 l_s_ph = function(arg, m, c, d){
   g = 0;
   l = 0;
