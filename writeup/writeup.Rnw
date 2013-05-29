@@ -175,11 +175,11 @@ This gives us the (unsimplified) full conditional posteriors below, where $k(n)$
 
 \begin{align*}
 p(c_n \mid \cdots) &= \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
-p(\sigma_c \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}(c_n \mid 0, \sigma_c^2) \cdot \text{U}(\sigma_c \mid 0, \sigma_{c0}) \\
+p \left (\sigma_c \mid \cdots \right ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}(c_n \mid 0, \sigma_c^2) \cdot \text{U}(\sigma_c \mid 0, \sigma_{c0}) \\
 p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \\
-p(\sigma_g^2 \mid \cdots) &= \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \cdot \text{Inv-Gamma} \left ( \sigma_g^2 \mid \frac{d \cdot \tau^2}{2}, \frac{d}{2} \right ) \\ 
-p(d \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \frac{d \cdot \tau^2}{2}, \frac{d}{2} \right ) \cdot \text{U}(d \mid 0, d_0) \\ 
-p(\tau^2 \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \frac{d \cdot \tau^2}{2}, \frac{d}{2} \right ) \cdot \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau) \\
+p(\sigma_g^2 \mid \cdots) &= \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \cdot \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \\ 
+p(d \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{U}(d \mid 0, d_0) \\ 
+p(\tau^2 \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau) \\
 p(\phi_g \mid \cdots) &= \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 p(\theta_\phi \mid \cdots ) & = \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2)  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
 p(\sigma_\phi \mid \cdots ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
@@ -195,6 +195,30 @@ p(\sigma_\delta \mid \cdots ) & =  \prod_{k(n) = 2} \prod_{g = 1}^G  ( \pi_\delt
 p(\pi_\delta \mid \cdots) &= \prod_{k(n) = 2} \prod_{g = 1}^G ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) )\cdot \text{Beta}(\pi_\delta \mid a_\delta, b_\delta)
 \end{align*}
 
+
+Simplified, the full conditionals are:
+
+\begin{align*}
+p(c_n \mid \cdots) &= \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
+p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right ) &= \text{Gamma} \left ( \text{shape} = 1, \text{rate} = \frac{G}{2} \sum_{n = 1}^N c_n^2 \right ) \cdot \text{I}(0 < \sigma_c < \sigma_{c0}) \\
+p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \\
+p(\sigma_g^2 \mid \cdots) &= \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \cdot \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \\ 
+p(d \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{U}(d \mid 0, d_0) \\ 
+p(\tau^2 \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau) \\
+p(\phi_g \mid \cdots) &= \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
+p(\theta_\phi \mid \cdots ) & = \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2)  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
+p(\sigma_\phi \mid \cdots ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
+p(\alpha_g \mid \cdots) &= \prod_{k(n) \ne 2}   \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \ \ \ \qquad \quad \times  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \\
+p(\theta_\alpha \mid \cdots ) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
+p(\sigma_\alpha \mid \cdots ) & =  \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0}) )   \\
+p(\pi_\alpha \mid \cdots) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) )\cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
+p(\delta_g \mid \cdots) &= \prod_{k(n) = 2}   \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \\
+& \ \ \ \qquad \quad \times  ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \\
+p(\theta_\delta \mid \cdots ) &= \prod_{k(n) = 2} \prod_{g = 1}^G  ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2)   \\
+p(\sigma_\delta \mid \cdots ) & =  \prod_{k(n) = 2} \prod_{g = 1}^G  ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0}) )   \\
+p(\pi_\delta \mid \cdots) &= \prod_{k(n) = 2} \prod_{g = 1}^G ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) )\cdot \text{Beta}(\pi_\delta \mid a_\delta, b_\delta)
+\end{align*}
 
 \end{flushleft}
 %\newpage 
