@@ -151,7 +151,7 @@ Then:
 & \qquad \e_{g, n} \sim \text{N}(0, \sigma^2_g) \\
 & \qquad \qquad \sigma_g^2 \sim \text{Inv-Gamma}\left (\text{shape} = \frac{d \cdot \tau^2}{2}, \ \text{rate} =  \frac{d}{2} \right) \\
 & \qquad \qquad \qquad d \sim \text{U}(0, d_0) \\
-& \qquad \qquad \qquad \tau^2 \sim \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau) \\
+& \qquad \qquad \qquad \tau^2 \sim \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
 & \qquad \phi_g \sim \text{N}(\theta_\phi, \sigma_\phi^2) \\
 & \qquad \qquad \theta_\phi \sim \text{N}(0, \gamma_{\phi }^2) \\
 & \qquad \qquad \sigma_\phi \sim \text{U}(0, \sigma_{\phi 0}) \\
@@ -181,7 +181,7 @@ p \left (\sigma_c \mid \cdots \right ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{
 p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \\
 p(\sigma_g^2 \mid \cdots) &= \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \cdot \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \\ 
 p(d \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{U}(d \mid 0, d_0) \\ 
-p(\tau^2 \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau) \\
+p(\tau^2 \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
 p(\phi_g \mid \cdots) &= \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 p(\theta_\phi \mid \cdots ) & = \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2)  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
 p(\sigma_\phi \mid \cdots ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
@@ -274,10 +274,52 @@ p \left ({\sigma_g^2} \mid \cdots \right ) &= \prod_{n = 1}^N \text{N}(\e_{g, n}
 The last line is the kernel of an inverse gamma distribution with shape parameter $N\frac{d \tau^2 + 3}{2} - 1$ and rate parameter $\left (\frac{2N}{d} + \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2 \right )^{-1} $. Hence:
 
 \begin{align*}
-p \left ( {\sigma_g^2} \mid \cdots \right ) = \text{Gamma} \left (\text{shape} = N\frac{d \tau^2 + 3}{2} - 1, \  \text{rate} = \left (\frac{2N}{d} + \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2 \right )^{-1} \right)
+p \left ( \frac{1}{\sigma_g^2} \mid \cdots \right ) = \text{Gamma} \left (\frac{1}{\sigma_g^2} \mid \text{shape} = N\frac{d \tau^2 + 3}{2} - 1, \  \text{rate} = \left (\frac{2N}{d} + \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2 \right )^{-1} \right)
 \end{align*}
 
-The $\sigma_g^2$'s will be sampled in parallel on the GPU.
+The $1/\sigma_g^2$'s will be sampled in parallel on the GPU.
+
+\subsection{$p(d \mid \cdots)$}
+
+\begin{align*}
+p(d \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{U}(d \mid 0, d_0) \\ 
+& =\prod_{n = 1}^N \prod_{g = 1}^G  \left [ \Gamma \left ( \frac{d \tau^2}{2} \right ) \right ] ^{-1}  \left ( \frac{d}{2} \right )^{-d \tau^2 / 2} (\sigma_g^2)^{-(d \tau^2/2 + 1)} \exp \left ( - \frac{1}{\sigma_g^2} \frac{2}{d} \right )  I(0 < d < d_0) \\
+&=  \left [ \Gamma \left ( \frac{d \tau^2}{2} \right ) \right ] ^{-GN}  \left ( \frac{d}{2} \right )^{-GNd \tau^2 / 2}  \prod_{n = 1}^N \prod_{g = 1}^G (\sigma_g^2)^{-(d \tau^2/2 + 1)} \exp \left ( - \frac{1}{\sigma_g^2} \frac{2}{d} \right )  I(0 < d < d_0) \\
+&=  \left [ \Gamma \left ( \frac{d \tau^2}{2} \right ) \right ] ^{-GN}  \left ( \frac{d}{2} \right )^{-GNd \tau^2 / 2}  \prod_{g = 1}^G (\sigma_g^2)^{-N(d \tau^2/2 + 1)} \exp \left ( - \frac{N}{\sigma_g^2} \frac{2}{d} \right )  I(0 < d < d_0) \\
+&=  \left [ \Gamma \left ( \frac{d \tau^2}{2} \right ) \right ] ^{-GN}  \left ( \frac{d}{2} \right )^{-GNd \tau^2 / 2}  \left ( \prod_{g = 1}^G \sigma_g^2 \right )^{-N(d \tau^2/2 + 1)} \exp \left ( - \frac{2N}{d} \sum_{g = 1}^G \frac{1}{\sigma_g^2} \right )  I(0 < d < d_0) \\
+\end{align*}
+
+I will sample $d$ with a metropolis step using the above density. Sums and products over $g$ ($g = 1, \ldots, G$) will be done in parallel on the GPU.
+
+
+
+
+
+
+
+
+
+\subsection{$p(\tau^2 \mid \cdots)$}
+
+\begin{align*}
+p(\tau^2 \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
+p(\tau^2 \mid \cdots) &\propto \prod_{n = 1}^N \prod_{g = 1}^G \left [ \Gamma \left ( \frac{d \tau^2}{2} \right ) \right ] ^{-1}  \left ( \frac{d}{2} \right )^{-d \tau^2 / 2} (\sigma_g^2)^{-(d \tau^2/2 + 1)} \exp \left ( - \frac{1}{\sigma_g^2} \frac{2}{d} \right ) \\
+& \qquad \qquad \times (\tau^2)^{a_\tau - 1} \exp \left ( - \tau^2 b_\tau \right ) \\
+&= (\tau^2)^{a_\tau - 1} \left [ \Gamma \left ( \frac{d \tau^2}{2} \right ) \right ] ^{-GN}  \left ( \frac{d}{2} \right )^{-GN d \tau^2 / 2} \left ( \prod_{g = 1}^G \sigma_g^2 \right )^{-N(d \tau^2/2 + 1)} \exp \left (-GN \tau^2 b_\tau - \frac{2N }{d} \sum_{g = 1}^G \frac{1}{\sigma_g^2} \right ) 
+\end{align*}
+
+I will sample $\tau^2$ with a metropolis step using the above density. Sums and products over $g$ ($g = 1, \ldots, G$) will be done in parallel on the GPU.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -285,8 +327,6 @@ The $\sigma_g^2$'s will be sampled in parallel on the GPU.
 
 
 \begin{align*}
-p(d \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{U}(d \mid 0, d_0) \\ 
-p(\tau^2 \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau) \\
 p(\phi_g \mid \cdots) &= \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 p(\theta_\phi \mid \cdots ) & = \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2)  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
 p(\sigma_\phi \mid \cdots ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
