@@ -252,13 +252,37 @@ p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac
 p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2)
 \end{align*}
 
-
+which is nothing immediately recognizable. I will sample from this distribution in a metropolis step using the kernel:
 
 \begin{align*}
-p \left (\frac{1}{\sigma_g^2} \mid \cdots \right ) &= \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \cdot \text{Gamma} \left ( \frac{1}{\sigma_g^2} \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \\ 
-&\propto \prod_{n = 1}^N \exp \left (- \frac{1}{ \sigma_g^2} \frac{\e_{g, n}^2}{2} \right ) \cdot \left ( \frac{1}{ \sigma_g^2} \right )^{\frac{d \tau^2}{2}} \exp \left (- \frac{d}{2} \frac{1}{ \sigma_g^2} \right ) \\
-&=  \left ( \frac{1}{ \sigma_g^2} \right )^{\frac{d \tau^2}{2}}  \exp \left (- \frac{1}{\sigma_g^2} \left (  \frac{N \cdot d}{2} + \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2  \right )  \right ) 
+&\lambda_{g, n}^{y_{g, n}} \exp(- \lambda_{g,n}) \exp \left ( - \frac{\e_{g, n}^2}{2 \sigma_g^2} \right ) \\
+=& \exp \left (y_{g, n} \log \lambda_{g, n}- \lambda_{g,n}  - \frac{\e_{g, n}^2}{2 \sigma_g^2} \right)
+\end{align*} 
+
+where $\lambda_{g, n} = \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))$. The $\e_{g, n}$'s will be sampled in parallel across genes on the GPU. 
+
+
+\subsection{$p \left (\frac{1}{\sigma_g^2} \mid \cdots \right )$}
+
+\begin{align*}
+p \left ({\sigma_g^2} \mid \cdots \right ) &= \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \cdot \text{Inv-Gamma} \left ( {\sigma_g^2} \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \\ 
+&\propto \prod_{n = 1}^N (\sigma_g^{2})^{-1/2} \exp \left (- \frac{1}{ \sigma_g^2} \frac{\e_{g, n}^2}{2} \right ) \cdot \left ( { \sigma_g^2} \right )^{ -(d \tau^2/2 + 1)} \exp \left (- \frac{1}{ \sigma_g^2}\frac{2}{d} \right ) \\
+&= \prod_{n = 1}^N (\sigma_g^2)^{-(d \tau^2 + 3)/2} \exp \left ( -\frac{1}{\sigma_g^2} \left (\frac{\e_{g, n}^2}{2} + \frac{2}{d} \right ) \right) \\
+&=  (\sigma_g^2)^{-N(d \tau^2 + 3)/2} \exp \left ( -\frac{1}{\sigma_g^2} \left (\frac{2N}{d} + \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2 \right ) \right)
 \end{align*}
+
+The last line is the kernel of an inverse gamma distribution with shape parameter $N\frac{d \tau^2 + 3}{2} - 1$ and rate parameter $\left (\frac{2N}{d} + \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2 \right )^{-1} $. Hence:
+
+\begin{align*}
+p \left ( {\sigma_g^2} \mid \cdots \right ) = \text{Gamma} \left (\text{shape} = N\frac{d \tau^2 + 3}{2} - 1, \  \text{rate} = \left (\frac{2N}{d} + \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2 \right )^{-1} \right)
+\end{align*}
+
+The $\sigma_g^2$'s will be sampled in parallel on the GPU.
+
+
+
+
+
 
 \begin{align*}
 p(d \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{U}(d \mid 0, d_0) \\ 
