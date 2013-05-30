@@ -171,7 +171,9 @@ where:
 \item The parameters to the left of the ``$\sim$" are implicitly conditioned on the parameters to the right.
 \end{itemize}
 
-This gives us the (unsimplified) full conditional posteriors below, where $k(n)$ is the treatment group of library $n$. 
+\section{Full Conditional Distributions}
+
+Let $k(n)$ be the treatment group of library $n$. Then: 
 
 \begin{align*}
 p(c_n \mid \cdots) &= \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
@@ -188,21 +190,77 @@ p(\alpha_g \mid \cdots) &= \prod_{k(n) \ne 2}   \text{Poisson}(y_{g, n} \mid \ex
 p(\theta_\alpha \mid \cdots ) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
 p(\sigma_\alpha \mid \cdots ) & =  \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0}) )   \\
 p(\pi_\alpha \mid \cdots) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) )\cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
+\end{align*}
+
+\begin{align*}
 p(\delta_g \mid \cdots) &= \prod_{k(n) = 2}   \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \\
 & \ \ \ \qquad \quad \times  ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \\
 p(\theta_\delta \mid \cdots ) &= \prod_{k(n) = 2} \prod_{g = 1}^G  ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2)   \\
-p(\sigma_\delta \mid \cdots ) & =  \prod_{k(n) = 2} \prod_{g = 1}^G  ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0}) )   \\
+p(\sigma_\delta \mid \cdots ) & =  \prod_{k(n) = 2} \prod_{g = 1}^G  ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) ) \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0})) \\
 p(\pi_\delta \mid \cdots) &= \prod_{k(n) = 2} \prod_{g = 1}^G ( \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) )\cdot \text{Beta}(\pi_\delta \mid a_\delta, b_\delta)
 \end{align*}
 
 
-Simplified, the full conditionals are:
+\section{Simplifying the Full Conditionals}
+
+\subsection{$p(c_n \mid \cdots)$}
 
 \begin{align*}
-p(c_n \mid \cdots) &= \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
-p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right ) &= \text{Gamma} \left ( \text{shape} = 1, \text{rate} = \frac{G}{2} \sum_{n = 1}^N c_n^2 \right ) \cdot \text{I}(0 < \sigma_c < \sigma_{c0}) \\
-p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \\
-p(\sigma_g^2 \mid \cdots) &= \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \cdot \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \\ 
+p(c_n \mid \cdots) &= \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot  \text{N}(c_n \mid 0, \sigma^2_c)
+\end{align*}
+
+which is nothing immediately recognizable. I will sample from this distribution in a metropolis step using the kernel of this distribution (taking $\lambda_{g, n} = \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))$ ):
+
+
+\begin{align*}
+&\prod_{g = 1}^G  \lambda_{g, n}^{y_{g, n}}  \exp(- \lambda_{g, n}) \exp \left ( - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
+=&\prod_{g = 1}^G \exp \left (y_{g, n} \log \lambda_{g, n} - \lambda_{g, n}  - \frac{c_n^2}{2 \sigma_c^2} \right )  \\
+=& \exp \left (\sum_{g = 1}^G  \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - \frac{G c_n^2}{2 \sigma_c^2} \right ) \\
+\end{align*}
+
+where the sum inside the exponent can be parallelized on the GPU.
+
+\subsection {$p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right ) $}
+
+\begin{align*}
+p \left ( \sigma_c \mid \cdots \right ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}(c_n \mid 0, \sigma_c^2) \cdot \text{U}(\sigma_c \mid 0, \sigma_{c0})\\
+    &\propto \prod_{n = 1}^N \prod_{g = 1}^G \frac{1}{\sqrt{\sigma_c^2 }}\exp \left (- \frac{c_n^2}{2 \sigma_c^2} \right )\cdot \text{I}(0 < \sigma_c < \sigma_{c0}) \\
+    &= (\sigma_c^2)^{-NG/2} \exp \left ( - \frac{1}{\sigma_c^2}\frac{G}{2 } \sum_{n = 1}^N c_n^2 \right )\cdot \text{I}(0 < \sigma_c < \sigma_{c0}) \\
+    \intertext{which, for constants $a$ and $b = \frac{G}{2} \sum_{n = 1}^N c_n^2$, can be written as}
+    &a \cdot (\sigma_c^2)^{-NG/2} \exp \left ( - \frac{1}{\sigma_c^2} b\right )\text{I}(0 < \sigma_c^2 < \sigma_{c0}^2) \\
+ \end{align*}
+ 
+Transformation: let $z = g(\sigma_c) = {\sigma_c^2}$ so that $g \nv (z) ={\sqrt{z}}$ and:
+
+\begin{align*}
+p \left ( {\sigma_c^2} = z \mid \cdots \right ) &= p ( \sigma_c = g \nv (z) \mid \cdots) \left  |\frac{d g \nv (z)}{dz} \right | \\
+&= a \cdot z^{-NG/2} \exp \left ( - \frac{1}{(\sqrt{z})^2} b\right ) I \left (0 < z < \sigma_{c0}^2 \right ) \left | \frac{1}{2} z^{-1/2 } \right | \\
+&= \frac{a}{2} z^{-(NG/2 - 1/2 + 1)} \exp \left ( - \frac{1}{z} b\right ) I \left (0 < z < \sigma_{c0}^2 \right ) \\
+&= \text{Inv-Gamma} \left (z \mid \text{shape} = \frac{NG - 1}{2}, \ \text{rate} = \frac{1}{b}\right ) I \left (0 < z < \sigma_{c0}^2 \right ) \\
+\end{align*}
+
+Recalling that $\frac{1}{b} = \frac{2}{G} \frac{1}{\sum_{n = 1}^N c_n^2}$,
+
+\begin{align*}
+p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac{1}{\sigma_c^2} \mid \text{shape} = \frac{NG - 1}{2}, \ \text{rate} =\frac{2}{G} \frac{1}{\sum_{n = 1}^N c_n^2} \right )  I \left (\frac{1}{\sigma_c^2} < \frac{1}{\sigma_{c0}^2} \right ) \\
+\end{align*}
+
+ 
+\subsection{ $p(\e_{g, n} \mid \cdots) $}
+ 
+ \begin{align*}
+p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2)
+\end{align*}
+
+
+
+\begin{align*}
+p \left (\frac{1}{\sigma_g^2} \mid \cdots \right ) &= \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \cdot \text{Gamma} \left ( \frac{1}{\sigma_g^2} \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \\ 
+&\propto \prod_{n = 1}^N \exp \left (- \frac{1}{ \sigma_g^2} \frac{\e_{g, n}^2}{2} \right ) \cdot \left ( \frac{1}{ \sigma_g^2} \right )^{\frac{d \tau^2}{2}} \exp \left (- \frac{d}{2} \frac{1}{ \sigma_g^2} \right ) \\
+&=  \left ( \frac{1}{ \sigma_g^2} \right )^{\frac{d \tau^2}{2}}  \exp \left (- \frac{1}{\sigma_g^2} \left (  \frac{N \cdot d}{2} + \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2  \right )  \right ) 
+\end{align*}
+
+\begin{align*}
 p(d \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{U}(d \mid 0, d_0) \\ 
 p(\tau^2 \mid \cdots) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d \cdot \tau^2}{2}, \text{rate} = \frac{d}{2} \right ) \cdot \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau) \\
 p(\phi_g \mid \cdots) &= \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
