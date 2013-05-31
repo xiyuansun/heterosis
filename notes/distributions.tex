@@ -1,0 +1,47 @@
+\documentclass{article}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{caption}
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{mathrsfs}
+\usepackage{natbib}
+\usepackage[nottoc]{tocbibind}
+\usepackage{url}
+
+\providecommand{\all}{\ \forall \ }
+\providecommand{\bs}{\backslash}
+\providecommand{\e}{\varepsilon}
+\providecommand{\E}{\ \exists \ }
+\providecommand{\lm}[2]{\lim_{#1 \rightarrow #2}}
+\providecommand{\m}[1]{\mathbb{#1}}
+\providecommand{\nv}{{}^{-1}}
+\providecommand{\ov}[1]{\overline{#1}}
+\providecommand{\p}{\newpage}
+\providecommand{\q}{$\quad$ \newline}
+\providecommand{\rt}{\rightarrow}
+\providecommand{\Rt}{\Rightarrow}
+\providecommand{\vc}[1]{\boldsymbol{#1}}
+\providecommand{\wh}[1]{\widehat{#1}}
+
+\begin{document}
+\begin{flushleft}
+
+
+
+\begin{align*}
+\text{Gamma}(x \mid \text{shape} = \alpha, \text{rate} = \beta) &= \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha - 1} e^{- \beta x} \\
+\text{Inv-Gamma}(x \mid \text{shape} = \alpha, \text{rate} = \beta) &= \frac{1}{\beta^\alpha \Gamma(\alpha)} x^{-(\alpha + 1)} e^{-1/ \beta x}
+\end{align*}
+
+
+\end{flushleft}
+\end{document}
