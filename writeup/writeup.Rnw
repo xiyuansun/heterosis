@@ -155,18 +155,18 @@ Then:
 & \qquad \phi_g \sim \text{N}(\theta_\phi, \sigma_\phi^2) \\
 & \qquad \qquad \theta_\phi \sim \text{N}(0, \gamma_{\phi }^2) \\
 & \qquad \qquad \sigma_\phi \sim \text{U}(0, \sigma_{\phi 0}) \\
-& \qquad \alpha_g \sim \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\theta_\alpha, \sigma_\alpha^2) \\
+& \qquad \alpha_g \sim \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \\
 & \qquad \qquad \theta_\alpha \sim \text{N}(0, \gamma_{\alpha}^2) \\
 & \qquad \qquad \sigma_\alpha \sim \text{U}(0, \sigma_{\alpha 0}) \\
 & \qquad \qquad \pi_\alpha \sim \text{Beta}(a_{\alpha}, b_{\alpha}) \\
-& \qquad \delta_g \sim \pi_\delta \text{I}(\delta_g = 0) +  (1- \pi_\delta)\text{I}(\delta_g \ne 0)  \text{N}(\theta_\delta, \sigma_\delta^2) \\
-& \qquad \qquad \theta_\delta \sim \text{N}(0, \gamma_{\delta}^2) \\
+& \qquad \delta_g \sim \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\& \qquad \qquad \theta_\delta \sim \text{N}(0, \gamma_{\delta}^2) \\
 & \qquad \qquad \sigma_\delta \sim \text{U}(0, \sigma_{\delta 0}) \\
 & \qquad \qquad \pi_\delta \sim \text{Beta}(a_{\delta}, b_{\delta}) \\
 \end{align*}
 
 where:
 \begin{itemize}
+\item $I(x) = 0$ if $x = 0$ and 1 otherwise. 
 \item Independence is implied unless otherwise specified.
 \item The parameters to the left of the ``$\sim$" are implicitly conditioned on the parameters to the right.
 \end{itemize}
@@ -184,9 +184,8 @@ p(d \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 
 p(\tau^2 \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma_g^2 \mid \text{shape} = \frac{d}{2}, \text{rate} = \frac{d \cdot \tau^2}{2} \right ) \right ] \cdot \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
 p(\phi_g \mid \cdots) &= \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 p(\theta_\phi \mid \cdots ) & = \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ]  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
-p(\sigma_\phi \mid \cdots ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
-p(\alpha_g \mid \cdots) &= \prod_{k(n) \ne 2}   \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-& \ \ \ \qquad \quad \times  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \\
+p(\sigma_\phi \mid \cdots ) &= \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ] \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
+p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
 p(\theta_\alpha \mid \cdots ) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
 p(\sigma_\alpha \mid \cdots ) & =  \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0}) )   \\
 p(\pi_\alpha \mid \cdots) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) )\cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
@@ -366,13 +365,15 @@ p(\theta_\phi \mid \cdots) &= \text{N} \left ( \frac{ \gamma_\phi^2 \sum_{g = 1}
 \end{align*}
 
 
-\subsection{$p\left ( \frac{1}{\sigma_\phi^2} \mid \ldots \right )$: inverse cdf}
+
+
+\subsection{$p\left ( \frac{1}{\sigma_\phi^2} \mid \ldots \right )$: Truncated Gamma}
 
 \begin{align*}
-p(\sigma_\phi \mid \cdots ) &= \prod_{n = 1}^N \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\ 
-&\propto \prod_{n = 1}^N \prod_{g = 1}^G (\sigma_\phi^2)^{-1/2} \exp \left ( - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \text{I}(0 < \sigma_\phi^2 < \sigma_{\phi 0}^2) \\
-&=  (\sigma_\phi^2)^{-NG/2} \exp \left ( - \sum_{n = 1}^N \sum_{g = 1}^G \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \text{I}(0 < \sigma_\phi^2 < \sigma_{\phi 0}^2) \\
-&=  (\sigma_\phi^2)^{-NG/2} \exp \left ( - \frac{1}{\sigma_\phi^2} \frac{N}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 \right ) \text{I}(0 < \sigma_\phi^2 < \sigma_{\phi 0}^2) \\
+p(\sigma_\phi \mid \cdots ) &= \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ] \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\ 
+&\propto  \prod_{g = 1}^G (\sigma_\phi^2)^{-1/2} \exp \left ( - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \text{I}(0 < \sigma_\phi^2 < \sigma_{\phi 0}^2) \\
+&=  (\sigma_\phi^2)^{-G/2} \exp \left ( - \sum_{g = 1}^G \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \text{I}(0 < \sigma_\phi^2 < \sigma_{\phi 0}^2) \\
+&=  (\sigma_\phi^2)^{-G/2} \exp \left ( - \frac{1}{\sigma_\phi^2} \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 \right ) \text{I}(0 < \sigma_\phi^2 < \sigma_{\phi 0}^2) \\
 \end{align*}
 
 Transformation: let $z = g(\sigma_\phi) = \sigma_\phi^2$ so that $g \nv (z) = \sqrt{z}$. Then for some proportionality constant, $a$:
@@ -380,14 +381,14 @@ Transformation: let $z = g(\sigma_\phi) = \sigma_\phi^2$ so that $g \nv (z) = \s
 \begin{align*}
 p(\sigma_\phi^2 = z \mid \cdots) &= p( \sigma_\phi = g \nv (z) \mid \cdots ) \left | \frac{g \nv (z)}{dz} \right |  \\
 &= p( \sigma_\phi = \sqrt{z} \mid \cdots ) \left |\frac{1}{2}  z^{-1/2} \right |  \\
-&=a \cdot (z)^{-NG/2} \exp \left ( - \frac{1}{z} \frac{N}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 \right ) \text{I}(0 < z < \sigma_{\phi 0}^2) z^{-1/2} \\ 
-&= \frac{a}{2} \cdot z^{-(NG/2 - 1/2 + 1)} \exp \left ( - \frac{1}{z} \frac{N}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 \right ) \text{I}(0 < z < \sigma_{\phi 0}^2)
+&=a \cdot (z)^{-G/2} \exp \left ( - \frac{1}{z} \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 \right ) \text{I}(0 < z < \sigma_{\phi 0}^2) z^{-1/2} \\ 
+&= \frac{a}{2} \cdot z^{-(G/2 - 1/2 + 1)} \exp \left ( - \frac{1}{z} \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 \right ) \text{I}(0 < z < \sigma_{\phi 0}^2)
 \end{align*}
 
-which is a truncated inverse gamma distribution with shape parameter $\frac{NG}{2} - \frac{1}{2}$ and rate parameter $\left ( \frac{N}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 \right ) ^ {-1}$. Thus:
+which is a truncated inverse gamma distribution with shape parameter $\frac{G - 1}{2}$ and rate parameter $ \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 $. Thus:
 
 \begin{align*}
-p \left ( \frac{1}{\sigma_\phi^2} \mid \cdots \right ) &= \text{Gamma} \left ( \text{shape} = \frac{NG}{2} - \frac{1}{2}, \ \text{rate} =  \left ( \frac{N}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2 \right ) ^ {-1} \right )   \text{I} \left (\frac{1}{\sigma_\phi^2} >\frac{1}{ \sigma_{\phi 0}^2} \right )
+p \left ( \frac{1}{\sigma_\phi^2} \mid \cdots \right ) &= \text{Gamma} \left ( \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2  \right )   \text{I} \left (\frac{1}{\sigma_\phi^2} >\frac{1}{ \sigma_{\phi 0}^2} \right )
 \end{align*}
 
 I will sample $1/\sigma_\phi^2$ using the inverse cdf method.
@@ -418,11 +419,10 @@ I will sample $1/\sigma_\phi^2$ using the inverse cdf method.
 
 
 \begin{align*}
-p(\alpha_g \mid \cdots) &= \prod_{k(n) \ne 2}   \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-& \ \ \ \qquad \quad \times  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) )
+p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
 \end{align*}
 
-Draw $u_g ~ U(0,1)$. 
+Draw $u_g \sim U(0,1)$. 
 
 \begin{enumerate}
 \item Case 1: if $u_g < \pi_\alpha$, use a Metropolis step to draw $\phi_g$ from a distribution with the kernel:
@@ -435,18 +435,11 @@ Draw $u_g ~ U(0,1)$.
 \item Case 2: if $u_g \ge \pi_\alpha$, use a Metropolis step to draw $\phi_g$ from a distribution with the kernel:
 
 \begin{align*}
- \text{Poisson}(y_{g, n} \mid \lambda_{g, n})) \cdot \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)
+&\left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \lambda_{g, n})) \right ] \cdot \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \\
+\propto& \left [ \prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right ) \\
+=&  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] -\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right )
 \end{align*}
 \end{enumerate}
-
-which, from similar work on the $\phi_g$'s, simplifies to:
-
-
-\begin{align*}
-\exp \left ( -N_{13}\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \sum_{k(n) \ne 2} \left [y_{g, n} \log \lambda_{g, n} - \lambda_{g, n}    \right ] \right )
-\end{align*}
-
-where $N_{13}$ is the number of libraries not in treatment group 2. 
 
 
 \subsection{$p(\theta_\alpha \mid \cdots )$: Metropolis}
