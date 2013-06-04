@@ -185,10 +185,10 @@ p(\tau^2 \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma
 p(\phi_g \mid \cdots) &= \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 p(\theta_\phi \mid \cdots ) & = \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ]  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
 p(\sigma_\phi \mid \cdots ) &= \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ] \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
-p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
-p(\theta_\alpha \mid \cdots ) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
-p(\sigma_\alpha \mid \cdots ) & =  \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0}) )   \\
-p(\pi_\alpha \mid \cdots) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) )\cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
+p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
+p(\theta_\alpha \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
+p(\sigma_\alpha \mid \cdots ) & = \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ]  \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0})    \\
+p(\pi_\alpha \mid \cdots) &=\left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
 \end{align*}
 
 \begin{align*}
@@ -413,6 +413,9 @@ I will sample $1/\sigma_\phi^2$ using the inverse cdf method.
 
 
 
+
+
+
 % alpha_g's
 
 \subsection{$p (\alpha_g \mid \cdots) $: Metropolis}
@@ -442,23 +445,41 @@ Draw $u_g \sim U(0,1)$.
 \end{enumerate}
 
 
-\subsection{$p(\theta_\alpha \mid \cdots )$: Metropolis}
+
+
+
+
+
+
+\subsection{$p(\theta_\alpha \mid \cdots )$: Normal}
 
 \begin{align*}
-p(\theta_\alpha \mid \cdots ) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
+p(\theta_\alpha \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)} [(1- \pi_\alpha) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}  \right ]  \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2) \\
+& \propto \left [ \prod_{\alpha_g \ne 0} \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]  \right ]  \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)
 \end{align*}
 
-Since some of the $\alpha_g$'s are 0 and some are nonzero, this expression cannot simplify any further. I will use a Metropolis step here.
-
-
-\subsection{$p(\sigma_\alpha \mid \cdots )$: Metropolis}
+From algebra similar to the derivation of $p(\theta_\phi \mid \cdots)$, we get:
 
 \begin{align*}
-p(\sigma_\alpha \mid \cdots ) & =  \prod_{k(n) \ne 2} \prod_{g = 1}^G  ( \pi_\alpha \text{I}(\alpha_g = 0) +  (1- \pi_\alpha)\text{I}(\alpha_g \ne 0) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) ) \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0}) )   
+p(\theta_\alpha \mid \cdots) &= N \left ( \frac{\gamma_\alpha^2 \sum_{\alpha_g \ne 0} \alpha_g}{G' \gamma_\alpha^2 + \sigma_\alpha^2}, \ \frac{\gamma_\alpha^2 \sigma_\alpha^2}{G' \gamma_\alpha^2 + \sigma_\alpha^2} \right ) 
+\end{align*}
+
+where $G'$ is the number of genes for which $\alpha_g \ne 0$.
+
+
+
+
+
+
+
+
+\subsection{$p(\frac{1}{\sigma_\alpha} \mid \cdots )$: Gamma}
+
+\begin{align*}
+p(\sigma_\alpha \mid \cdots ) & = \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ]  \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0})    \\
 \end{align*}
 
 
-Since some of the $\alpha_g$'s are 0 and some are nonzero, this expression cannot simplify any further. I will use a Metropolis step here.
 
 
 
@@ -469,6 +490,17 @@ p(\pi_\alpha \mid \cdots) &= \prod_{k(n) \ne 2} \prod_{g = 1}^G ( \pi_\alpha \te
 \end{align*}
 
 Since some of the $\alpha_g$'s are 0 and some are nonzero, this expression cannot simplify any further. I will use a Metropolis step here.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
