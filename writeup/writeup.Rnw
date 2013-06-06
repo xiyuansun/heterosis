@@ -291,12 +291,16 @@ I use this transformation several times in the next sections.
 \subsection{$p(c_n \mid \cdots)$: Metropolis}
 
 \begin{align*}
-p(c_n \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
+p(c_n \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \right ] \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
 &\propto \left [ \prod_{g = 1}^G  \lambda_{g, n}^{y_{g, n}}  \exp(- \lambda_{g, n}) \right ] \exp \left ( - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
 &= \exp \left (\sum_{g = 1}^G  \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
+&=\exp \left (\sum_{g = 1}^G  \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
+&=\exp \left (c_n G\ov{y}_{.n} +  \sum_{g = 1}^G \left [ y_{g, n}( \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ]  - \sum_{g = 1}^G \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))- \frac{c_n^2}{2 \sigma_c^2} \right ) \\
+&=\exp \left (c_n G\ov{y}_{.n} +  \sum_{g = 1}^G \left [ y_{g, n}( \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ]  -\exp(c_n) \sum_{g = 1}^G \exp( \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))- \frac{c_n^2}{2 \sigma_c^2} \right ) \\
 \end{align*}
 
-
+ $p(c_n) \propto \exp( -\frac{c_n^2}{2\sigma_c^2} + c_n
+G\overline{y}_n e^c_n \sum_g \exp(e_{gn}+\mu_{g,k(n)}))$
 
 
 
@@ -333,9 +337,10 @@ p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac
 \subsection{ $p(\e_{g, n} \mid \cdots)$ Metropolis}
  
  \begin{align*}
-p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \\
+p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \cdot \text{N}(\e_{g, n} \mid 0, \sigma_g^2) \\
 &\propto \lambda_{g, n}^{y_{g, n}} \exp(- \lambda_{g,n}) \exp \left ( - \frac{\e_{g, n}^2}{2 \sigma_g^2} \right ) \\
-&= \exp \left (y_{g, n} \log \lambda_{g, n}- \lambda_{g,n}  - \frac{\e_{g, n}^2}{2 \sigma_g^2} \right)
+&= \exp \left (y_{g, n} \log \lambda_{g, n}- \lambda_{g,n}  - \frac{\e_{g, n}^2}{2 \sigma_g^2} \right) \\
+&= \exp \left (y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))- \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))  - \frac{\e_{g, n}^2}{2 \sigma_g^2} \right)
 \end{align*}
 
 
@@ -424,7 +429,8 @@ p(\tau^2 \mid \cdots) = \text{Gamma} \left ( \tau^2 \mid \text{shape} =  a_\tau 
 \begin{align*}
 p(\phi_g \mid \cdots) &= \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 & \propto \left [ \prod_{n = 1}^N \lambda_{g, n}^{y_{g, n}} \exp(- \lambda_{g, n}) \right ] \cdot \exp \left ( - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \\
-& \exp \left (\sum_{n = 1}^N \left [y_{g, n} \log \lambda_{g, n}  - \lambda_{g, n} \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) 
+& \exp \left (\sum_{n = 1}^N \left [y_{g, n} \log \lambda_{g, n}  - \lambda_{g, n} \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \\
+& \exp \left (\sum_{n = 1}^N \left [y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) 
 \end{align*}
 
 
@@ -512,7 +518,9 @@ p \left ( \frac{1}{\sigma_\phi^2} \mid \cdots \right ) &= \text{Gamma} \left ( \
 \begin{align*}
 p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
 &\propto \left [ \prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -I(\alpha_g) \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right ) \\
-=&  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g)\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right )
+=&  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g)\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right ) \\
+=&  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+& \qquad  \left .- I(\alpha_g)\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right ) \\
 \end{align*}
 
 
@@ -600,7 +608,9 @@ p(\pi_\alpha \mid \cdots) = \text{Beta}(G - G_\alpha + \alpha_\tau, \ G_\alpha +
 \begin{align*}
 p(\delta_g \mid \cdots) &= \left [ \prod_{k(n) = 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right ] \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
 &\propto \left [ \prod_{k(n) = 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -I(\delta_g) \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right ) \\
-=&  \exp \left ( \sum_{k(n) = 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\delta_g)\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right )
+=&  \exp \left ( \sum_{k(n) = 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\delta_g)\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right ) \\
+=&  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g)) \right ] \right . \\
+& \qquad  \left .- I(\delta_g)\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right ) \\
 \end{align*}
 
 
