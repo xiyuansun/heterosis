@@ -129,7 +129,7 @@ Iowa State University \\ $\quad$ \\
 
 \begin{flushleft}
 
-\section{The Model}
+\section{The Model} \label{sec:model}
 
 Let $y_{g,n}$ be the expression level of gene $g$  ($g = 1, \ldots, G$) in library $n$ ($n = 1, \ldots, N$). Let $\mu(n, \phi_g, \alpha_g, \delta_g)$ be the function given by:
 
@@ -173,7 +173,14 @@ where:
 
 \section{Full Conditional Distributions}
 
-Let $k(n)$ be the treatment group of library $n$. Then: 
+
+
+
+\appendix
+
+\section{Simplifying and Sampling From the Full Conditionals}
+
+Let $k(n)$ be the treatment group of library $n$. Then from the model in Section \ref{sec:model}, we get: 
 
 \begin{align*}
 p(c_n \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
@@ -185,13 +192,13 @@ p(\tau^2 \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \sigma
 p(\phi_g \mid \cdots) &= \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 p(\theta_\phi \mid \cdots ) & = \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ]  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
 p(\sigma_\phi \mid \cdots ) &= \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ] \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
+\end{align*}
+
+\begin{align*}
 p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
 p(\theta_\alpha \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
 p(\sigma_\alpha \mid \cdots ) & = \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ]  \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0})    \\
 p(\pi_\alpha \mid \cdots) &=\left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
-\end{align*}
-
-\begin{align*}
 p(\delta_g \mid \cdots) &= \left [ \prod_{k(n) = 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right ] \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
 p(\theta_\delta \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ] \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2)   \\
 p(\sigma_\delta \mid \cdots ) & = \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ]  \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0})    \\
@@ -199,7 +206,6 @@ p(\pi_\delta \mid \cdots) &=\left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[
 \end{align*}
 
 
-\section{Simplifying and Sampling From the Full Conditionals}
 
 \subsection{$p(c_n \mid \cdots)$: Metropolis}
 
