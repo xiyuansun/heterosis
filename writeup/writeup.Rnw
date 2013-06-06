@@ -224,7 +224,7 @@ p(\pi_\delta \mid \cdots) &= \text{Beta}(G - G_\delta + \delta_\tau, \ G_\delta 
 
 \appendix
 
-\section{Simplifying and Sampling From the Full Conditionals}
+\section{Derivations of the Full Conditionals}
 
 Let $k(n)$ be the treatment group of library $n$. Then from the model in Section \ref{sec:model}, we get: 
 
@@ -511,27 +511,9 @@ I will sample $1/\sigma_\phi^2$ using the inverse cdf method.
 
 \begin{align*}
 p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
+&\propto \left [ \prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -I(\alpha_g) \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right ) \\
+=&  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g)\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right )
 \end{align*}
-
-Draw $u_g \sim U(0,1)$. 
-
-\begin{enumerate}
-\item Case 1: if $u_g < \pi_\alpha$, use a Metropolis step to draw $\phi_g$ from a distribution with the kernel:
-\begin{align*}
-&\prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \\
-\propto &\prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp ( - \lambda_{g, n}) \\
-=& \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] \right )
-\end{align*}
-
-\item Case 2: if $u_g \ge \pi_\alpha$, use a Metropolis step to draw $\phi_g$ from a distribution with the kernel:
-
-\begin{align*}
-&\left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \lambda_{g, n})) \right ] \cdot \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \\
-\propto& \left [ \prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right ) \\
-=&  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] -\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right )
-\end{align*}
-\end{enumerate}
-
 
 
 
@@ -618,34 +600,16 @@ p(\pi_\alpha \mid \cdots) = \text{Beta}(G - G_\alpha + \alpha_\tau, \ G_\alpha +
 
 
 
-% delta_G_\alphas
+% delta_g's 
+
 
 \subsection{$p (\delta_g \mid \cdots) $: Metropolis}
 
-
 \begin{align*}
 p(\delta_g \mid \cdots) &= \left [ \prod_{k(n) = 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right ] \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
+&\propto \left [ \prod_{k(n) = 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -I(\delta_g) \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right ) \\
+=&  \exp \left ( \sum_{k(n) = 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\delta_g)\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right )
 \end{align*}
-
-Draw $u_g \sim U(0,1)$. 
-
-\begin{enumerate}
-\item Case 1: if $u_g < \pi_\delta$, use a Metropolis step to draw $\phi_g$ from a distribution with the kernel:
-\begin{align*}
-&\prod_{k(n) = 2} \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \\
-\propto &\prod_{k(n) = 2} \lambda_{g, n}^{y_{g, n}} \exp ( - \lambda_{g, n}) \\
-=& \exp \left ( \sum_{k(n) = 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] \right )
-\end{align*}
-
-\item Case 2: if $u_g \ge \pi_\delta$, use a Metropolis step to draw $\phi_g$ from a distribution with the kernel:
-
-\begin{align*}
-&\left [ \prod_{k(n) = 2} \text{Poisson}(y_{g, n} \mid \lambda_{g, n})) \right ] \cdot \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2) \\
-\propto& \left [ \prod_{k(n) = 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right ) \\
-=&  \exp \left ( \sum_{k(n) = 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] -\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right )
-\end{align*}
-\end{enumerate}
-
 
 
 
@@ -663,10 +627,10 @@ p(\theta_\delta \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta
 From algebra similar to the derivation of $p(\theta_\phi \mid \cdots)$, we get:
 
 \begin{align*}
-p(\theta_\delta \mid \cdots) &= N \left ( \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\alpha \gamma_\delta^2 + \sigma_\delta^2}, \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\alpha \gamma_\delta^2 + \sigma_\delta^2} \right ) 
+p(\theta_\delta \mid \cdots) &= N \left ( \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\delta \gamma_\delta^2 + \sigma_\delta^2}, \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right ) 
 \end{align*}
 
-where $G_\alpha$ is the number of genes for which $\delta_g \ne 0$.
+where $G_\delta$ is the number of genes for which $\delta_g \ne 0$.
 
 
 
@@ -681,21 +645,21 @@ where $G_\alpha$ is the number of genes for which $\delta_g \ne 0$.
 p(\sigma_\delta \mid \cdots ) & = \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ]  \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0}) \\
 &\propto \prod_{\delta_g \ne 0} N(\delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 ) \\
 &\propto \prod_{\delta_g \ne 0} (\sigma_\delta^2)^{-1/2} \exp \left ( -\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2}\right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 ) \\
-&= (\sigma_\delta^2)^{-G_\alpha/2} \exp \left ( -\frac{1}{\theta_\delta^2} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 ) \\
+&= (\sigma_\delta^2)^{-G_\delta/2} \exp \left ( -\frac{1}{\theta_\delta^2} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 ) \\
 \end{align*}
 
-where $G_\alpha$ is the number of genes for which $\delta_g \ne 0$. Transformation: let $z = \sigma_\delta^2 = g(\sigma_\delta)$ so that $g \nv (z) = \sqrt{z}$. Then:
+where $G_\delta$ is the number of genes for which $\delta_g \ne 0$. Transformation: let $z = \sigma_\delta^2 = g(\sigma_\delta)$ so that $g \nv (z) = \sqrt{z}$. Then:
 
 \begin{align*}
 p(\sigma_\delta^2 = z \mid \cdots) &= p(\sigma_\delta = \sqrt{z} \mid \cdots) \left | \frac{d}{dz} \sqrt{z} \right |_z \\
-=& (z)^{-G_\alpha/2} \exp \left ( -\frac{1}{z} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < z < \sigma_{\delta 0}^2 ) \left | -\frac{1}{2} z^{-1/2} \right | \\ 
-=& (z)^{-(G_\alpha/2 - 1/2 + 1)} \exp \left ( -\frac{1}{z} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < z < \sigma_{\delta 0}^2 ) \\ 
+=& (z)^{-G_\delta/2} \exp \left ( -\frac{1}{z} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < z < \sigma_{\delta 0}^2 ) \left | -\frac{1}{2} z^{-1/2} \right | \\ 
+=& (z)^{-(G_\delta/2 - 1/2 + 1)} \exp \left ( -\frac{1}{z} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < z < \sigma_{\delta 0}^2 ) \\ 
 \end{align*}
 
 which is the kernel of an Inverse-Gamma distribution. Hence:
 
 \begin{align*}
-p( \frac{1}{\sigma_\delta^2} \mid \cdots ) = \text{Gamma} \left (\frac{1}{\sigma_\delta^2} \mid \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )
+p( \frac{1}{\sigma_\delta^2} \mid \cdots ) = \text{Gamma} \left (\frac{1}{\sigma_\delta^2} \mid \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )
 \end{align*}
 
 
@@ -707,15 +671,16 @@ p( \frac{1}{\sigma_\delta^2} \mid \cdots ) = \text{Gamma} \left (\frac{1}{\sigma
 
 \begin{align*}
 p(\pi_\delta \mid \cdots) &=\left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ] \cdot \text{Beta}(\pi_\delta \mid a_\delta, b_\delta)  \\
-&\propto [\pi_\delta^{G - G_\alpha}(1-\pi_\delta)^{G_\alpha}] \pi_\delta^{a_\tau - 1} (1 - \pi_\delta)^{b_\tau - 1} \\
-&= \pi_{\delta}^{G - G_\alpha + a_\tau - 1}(1 - \pi_\delta)^{G_\alpha + b_\tau - 1}
+&\propto [\pi_\delta^{G - G_\delta}(1-\pi_\delta)^{G_\delta}] \pi_\delta^{a_\tau - 1} (1 - \pi_\delta)^{b_\tau - 1} \\
+&= \pi_{\delta}^{G - G_\delta + a_\tau - 1}(1 - \pi_\delta)^{G_\delta + b_\tau - 1}
 \end{align*}
 
-where $G_\alpha$ is the number of genes for which $\delta_g \ne 0$. Hence:
+where $G_\delta$ is the number of genes for which $\delta_g \ne 0$. Hence:
 
 \begin{align*}
-p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\alpha + \delta_\tau, \ G_\alpha + b_\tau)
+p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + \delta_\tau, \ G_\delta + b_\tau)
 \end{align*}
+
 
 
 
