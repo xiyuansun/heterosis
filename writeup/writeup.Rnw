@@ -176,6 +176,18 @@ where:
 
 \section{Full Conditional Distributions}
 
+Define:
+
+\begin{itemize}
+\item  $k(n)$ = treatment group of library $n$.
+\item $\lambda_{g, n} = \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))$ )
+\item $G_\alpha = $ number of genes for which $\alpha_g \ne 0$
+\item $G_\delta = $ number of genes for which $\delta_g \ne 0$
+\item $I(x) = 0$ if $x = 0$ and $1$ otherwise.
+\end{itemize}
+
+Then: 
+
 \begin{align*}
 p(c_n \mid \cdots) &\propto \exp \left (\sum_{g = 1}^G  \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
 p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac{1}{\sigma_c^2} \mid \text{shape} = \frac{N - 1}{2}, \ \text{rate} =\frac{1}{2} {\sum_{n = 1}^N c_n^2} \right )  I \left (\frac{1}{\sigma_c^2} > \frac{1}{\sigma_{c0}^2} \right ) \\
@@ -186,6 +198,8 @@ p(\tau^2 \mid \cdots) &= \text{Gamma} \left ( \tau^2 \mid \text{shape} =  a_\tau
 p(\phi_g \mid \cdots) &\propto  \exp \left (\sum_{n = 1}^N \left [y_{g, n} \log \lambda_{g, n}  - \lambda_{g, n} \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right )  \\
 p(\theta_\phi \mid \cdots) &= \text{N} \left ( \frac{ \gamma_\phi^2 \sum_{g = 1}^G \phi_g}{G \gamma_\phi^2 + \sigma_\phi^2}, \ \frac{\gamma_\phi^2 \sigma_\phi^2}{G\gamma_\phi^2 + \sigma_\phi^2} \right ) \\
 p \left ( \frac{1}{\sigma_\phi^2} \mid \cdots \right ) &= \text{Gamma} \left ( \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2  \right )   \text{I} \left (\frac{1}{\sigma_\phi^2} >\frac{1}{ \sigma_{\phi 0}^2} \right ) \\
+\end{align*}
+\begin{align*}
 p( \alpha_g \mid \cdots) &\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g \ne 0)\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right ) \\
 p(\theta_\alpha \mid \cdots) &= N \left ( \frac{\gamma_\alpha^2 \sum_{\alpha_g \ne 0} \alpha_g}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2}, \ \frac{\gamma_\alpha^2 \sigma_\alpha^2}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ) \\
 p( \frac{1}{\sigma_\alpha^2} \mid \cdots ) &= \text{Gamma} \left (\frac{1}{\sigma_\alpha^2} \mid \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right ) \\
@@ -226,7 +240,17 @@ p(\pi_\delta \mid \cdots) &= \text{Beta}(G - G_\delta + \delta_\tau, \ G_\delta 
 
 \section{Derivations of the Full Conditionals}
 
-Let $k(n)$ be the treatment group of library $n$. Then from the model in Section \ref{sec:model}, we get: 
+Recall:
+
+\begin{itemize}
+\item  $k(n)$ = treatment group of library $n$.
+\item $\lambda_{g, n} = \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))$ )
+\item $G_\alpha = $ number of genes for which $\alpha_g \ne 0$
+\item $G_\delta = $ number of genes for which $\delta_g \ne 0$
+\item $I(x) = 0$ if $x = 0$ and $1$ otherwise.
+\end{itemize}
+
+ Then from the model in Section \ref{sec:model}, we get: 
 
 \begin{align*}
 p(c_n \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
@@ -252,22 +276,20 @@ p(\pi_\delta \mid \cdots) &=\left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[
 \end{align*}
 
 
+\subsection{Transformations of Standard Deviations}
+
+
+
+
 
 \subsection{$p(c_n \mid \cdots)$: Metropolis}
 
 \begin{align*}
-p(c_n \mid \cdots) &=\left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot  \text{N}(c_n \mid 0, \sigma^2_c)
+p(c_n \mid \cdots) &=\left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot  \text{N}(c_n \mid 0, \sigma^2_c) \\
+&\propto \left [ \prod_{g = 1}^G  \lambda_{g, n}^{y_{g, n}}  \exp(- \lambda_{g, n}) \right ] \exp \left ( - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
+&= \exp \left (\sum_{g = 1}^G  \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
 \end{align*}
 
-which is nothing immediately recognizable. I will sample from this distribution in a Metropolis step using the kernel of this distribution (taking $\lambda_{g, n} = \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))$ ):
-
-
-\begin{align*}
-& \left [ \prod_{g = 1}^G  \lambda_{g, n}^{y_{g, n}}  \exp(- \lambda_{g, n}) \right ] \exp \left ( - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
-=& \exp \left (\sum_{g = 1}^G  \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
-\end{align*}
-
-where the sum inside the exponent can be parallelized on the GPU.
 
 
 
