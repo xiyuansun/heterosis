@@ -98,7 +98,7 @@ options(width = 60) # R output width
 \vspace*{4cm}
 \hrule 
 \vspace{0.4cm}
-{ \huge \bfseries A Fully Bayesian Model for RNA-seq Data}
+{ \huge \bfseries A Fully Bayesian Model for Gene Expression Heterosis in RNA-seq Data}
 \vspace{0.4cm}
 \hrule 
 
