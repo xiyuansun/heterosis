@@ -263,7 +263,45 @@ lD = function(y, chn, m, arg){
   return(ret);
 }
 
-lPhi = function(y, chn, m, g){
+lPhi = function(y, chn, m, g, arg){
+  N = chn$N;
+  y = y[n, g];
 
+  c = chn$c[m$c, n];
+  alp = chn$alp[m$alp, g];
+  del = chn$del[m$del, g];
+
+  thePhi = chn$thePhi[m$thePhi];
+  sigPhi = chn$sigPhi[m$sigPhi];
+  
+  s = 0; 
+  for(n in 1:N){
+    tmp = mu(chn, n, arg, alp, del);
+    s = s + y * tmp - exp(c + eps + tmp);
+  }
+ 
+  ret = s - (arg - thePhi)^2 / 2 * sigPhi^2;
+  return(ret);
+}
+
+lAlp = function(y, chn, m, g, arg){
+  N = chn$N;
+  y = y[n, g];
+
+  c = chn$c[m$c, n];
+  phi = chn$phi[m$phi, g];
+  del = chn$del[m$del, g];
+
+  theAlp = chn$theAlp[m$theAlp];
+  sigAlp = chn$sigAlp[m$sigAlp];
+  
+  s = 0; 
+  for(n in 1:N){
+    tmp = mu(chn, n, phi, arg, del);
+    s = s + y * tmp - exp(c + eps + tmp);
+  }
+ 
+  ret = s - (arg - theAlp)^2 / 2 * sigAlp^2;
+  return(ret);
 }
 
