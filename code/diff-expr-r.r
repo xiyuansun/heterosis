@@ -4,39 +4,8 @@
 # May 2013
 # 
 # This code attempts to learn about differential expression
-# between 2 treatment groups of an RNA-Seq dataset.
-# 
-# Model (based on section 2.3.2 of the proposal):
-#
-# y_gij | lambda_gij ~ Poisson(c_ij lambda_gij)
-# epsilon_gij | sigma_g^2 ~ N(0, sigma_g^2)
-# sigma^2_g | d, sigma0^2 ~ d sigma0^2 inv-chisquare_d
-# c_ij ~ N(1, sigma_c^2)
-# 
-# log(lambda_gij) = mu_gi + epsilon_gij
-# mu_g1 = phi_g - alpha_g
-# mu_g2 = phi_g + delta_g
-# mu_g3 = phi_g + alpha_g
-#
-# phi_g | theta_phi, sigma_phi^2 ~ N(theta_phi, sigma_phi^2)
-# alpha_g | theta_alpha, sigma_alpha^2, pi_alpha ~ 
-#   pi_alpha 1(alpha_g == 0) + (1- pi_alpha) N(theta_alpha, sigma_alpha^2)
-# delta_g | theta_delta, sigma_delta^2, pi_delta ~ 
-#   pi_delta 1(delta_g == 0) + (1- pi_delta) N(theta_delta, sigma_delta^2)
-# 
-# d ~ unif(0, 1e3)
-# pi_alpha ~ unif(0, 1) 
-# pi_delta ~ unif(0,1)
-# 
-# theta_phi ~ N(0, 1e3)
-# theta_alpha ~ N(0, 1e3)
-# theta_delta ~ N(0, 1e3)
-# 
-# sigma0 ~ unif(0, 1e3)
-# sigma_phi ~ unif(0, 1e3)  
-# sigma_alpha ~ unif(0, 1e3)  
-# sigma_delta ~ unif(0, 1e3)
-# sigma_c ~ unif(0, 1)
+# between 2 treatment groups of an RNA-Seq dataset. See
+# writeup.pdf for the model.
 
 library(Biobase)
 library(coda)
@@ -52,12 +21,12 @@ hammer = function(){
   group = as.factor(as.numeric(group))
 
   return(list(y = t(counts), 
-       gr = group, 
-       G = 30, #dim(counts)[1], 
+       grp = group, 
+       G = dim(counts)[1], 
        N = dim(counts)[2]))
 }
 
-safelog = function(x){ # for log counts
+safeLog = function(x){ # for log counts
   if(x > 0) {
     return(log(x));
   } else {
@@ -65,377 +34,236 @@ safelog = function(x){ # for log counts
   }
 }
 
-new_chain = function(d, M){
-  n = 0;
-  g = 0;
-  shape = 0;
-  rate = 0;
-  coin = 0;
+initParams = function(){
+  list(
+    sigC0 = 10,
+    d0 = 1e3,
 
-  N = d$N;
-  G = d$G;
+    aTau = 1e2,
+    aAlp = 1,
+    aDel = 1,
 
-  # create chain object
+    bTau = 1e2,
+    bAlp = 1,
+    bDel = 1,
+  
+    gamPhi = 2,
+    gamAlp = 2,
+    gamDel = 2,
 
-  c = list(
-    gr = d$gr,
+    sigPhi0 = 2,
+    sigAlp0 = 2,
+    sigDel0 = 2
+  );
+}
+
+emptyChain = function(y, grp, par, M, N, G){
+ list(
+    yMeanG = rowMeans(y),
+    grp = grp,
     M = M,
     N = N,
     G = G,
     
+    sigC0 = par$sigC0,
+    d0 = par$d0,
+
+    aTau = par$aTau,
+    aAlp = par$aAlp,
+    aDel = par$aDel,
+
+    bTau = par$bTau,
+    bAlp = par$bAlp,
+    bDel = par$bDel,
+  
+    gamPhi = par$gamPhi,
+    gamAlp = par$gamAlp,
+    gamDel = par$gamDel,
+
+    sigPhi0 = par$sigPhi0,
+    sigAlp0 = par$sigAlp0,
+    sigDel0 = par$sigDel0,
+
     c = array(0, c(M, N)),
-      sc = rep(0, M),
+      sigC = rep(0, M),
     
-    e = array(0, c(M, N, G)),
-      s = array(0, c(M, G)),
+    eps = array(0, c(M, N, G)),
+      sig = array(0, c(M, G)),
         d = rep(0, M),
-        s0 = rep(0, M),
+        tau = rep(0, M),
 
-    ph = array(0, c(M, G)),
-      th_ph = rep(0, M),
-      s_ph = rep(0, M),
+    phi = array(0, c(M, G)),
+      thePhi = rep(0, M),
+      sigPhi = rep(0, M),
 
-    al = array(0, c(M, G)),
-      th_al = rep(0, M),
-      s_al = rep(0, M),
-      pi_al = rep(0, M),
+    alp = array(0, c(M, G)),
+      theAlp = rep(0, M),
+      sigAlp = rep(0, M),
+      piAlp = rep(0, M),
 
-    de = array(0, c(M, G)),
-      th_de = rep(0, M),
-      s_de = rep(0, M),
-      pi_de = rep(0, M)
+    del = array(0, c(M, G)),
+      theDel = rep(0, M),
+      sigDel = rep(0, M),
+      piDel = rep(0, M)
   );
+}
+
+newChain = function(y, grp, M, N, G){
+  par = initParams();
+  chn = emptyChain(y, grp, par, M, N, G);
 
   # compute initial values, mostly using priors
 
-  c$sc[1] = c(runif(1));
-
   for(n in 1:N)
-    c$c[1, n] = log(quantile(d$y[n,], .75))
+    chn$c[1, n] = log(quantile(y[n,], .75))
+  chn$c[1, ] = chn$c[1, ] - mean(chn$c[1, ])
 
-  c$c[1, ] = c$c[1, ] - mean(c$c[1, ])
+  chn$sigC[1] = runif(1, 0, chn$sigC0)
 
-  ##
-
-  c$s0[1] = sqrt(rexp(1));
-  c$d[1] = runif(1, 0, 1000);
-
-  shape = c$d[1] * c$s0[1]^2 / 2;
-  rate = c$d[1] / 2;
+  chn$d[1] = runif(1, 0, chn$d0)
+  chn$tau[1] = sqrt(rgamma(1, shape = chn$aTau, rate = chn$bTau))
 
   for(g in 1:G)
-    c$s[1, g] = rgamma(1, shape = shape, rate = rate);
+    chn$sig[1, g] = 1/sqrt(rgamma(1, shape = chn$d[1] / 2, 
+                                  rate = chn$d[1] * chn$tau[1]^2 / 2))
+
 
   for(n in 1:N)
     for(g in 1:G)
-      c$e[1, n, g] = rnorm(1, 0, c$s[1,g]);
+      chn$eps[1, n, g] = rnorm(1, 0, chn$sig[1, g]);
 
-  ##
 
-  c$s_ph[1] = runif(1, 0, 1000);
-  c$th_ph[1] = rnorm(1, 0, sqrt(1000));
+  chn$thePhi[1] = rnorm(1, 0, chn$gamPhi)
+  chn$theAlp[1] = rnorm(1, 0, chn$gamAlp)
+  chn$theDel[1] = rnorm(1, 0, chn$gamDel)
 
-  for(g in 1:G){ # change phi to the parental average for heterosis
-    aux = c()
+  chn$sigPhi[1] = runif(1, 0, chn$sigPhi0)
+  chn$sigAlp[1] = runif(1, 0, chn$sigAlp0)
+  chn$sigDel[1] = runif(1, 0, chn$sigDel0)
 
-    for(n in 1:N)
-      aux = c(aux, safelog(d$y[n, g]) - c$e[1, n, g] - c$c[1, n]);
+  chn$piAlp[1] = rbeta(1, chn$aAlp, chn$bAlp)
+  chn$piDel[1] = rbeta(1, chn$aDel, chn$bDel)
 
-    c$ph[1, g] = median(aux);
-  }
+  for(g in 1:G){
+    chn$phi[1, g] = rnorm(1, chn$thePhi[1], chn$sigPhi[1]);
 
-  ##
-
-  c$s_al[1] = runif(1, 0, 1000);
-  c$th_al[1] = rnorm(1, 0, sqrt(1000));
-  c$pi_al[1] = runif(1);
-
-  for(g in 1:G){ # change alpha to half the parental difference for heterosis
-    aux = c();
-
-    for(n in 1:N)
-      if(n == 1)
-        aux = c(aux, c$ph[1, g] + c$e[1, n, g] + c$c[1, n] - safelog(d$y[n, g]));
-
-    c$al[1, g] = median(aux);
-  }
-
-  ##
-
-  c$s_de[1] = runif(1, 0, 1000);
-  c$th_de[1] = rnorm(1, 0, sqrt(1000));
-  c$pi_de[1] = runif(1);
-
-  for(g in 1:G){ # change delta to the parent-child difference for heterosis
-    aux = c();
-
-    for(n in 1:N)
-      if(n == 2)
-        aux = c(aux, - c$ph[1, g] - c$e[1, n, g] - c$c[1, n] + safelog(d$y[n, g]));
-
-    c$de[1, g] = median(aux);
-  }
-
-  return(c); 
-}
-
-mu = function(n, ph, al, de){
-  if(c$gr[n] == 1){
-    return(ph - al);
-  } else if(c$gr[n] == 2){
-    return(ph + de);
-  } else if(c$gr[n] == 3){
-    return(ph + al);
-  }
-}
-
-# log full conditionals (up to normalizing constants)
-
-l_c = function(arg, m, n, c, d){ # parallelize across genes
-  g = 0;
-  l = 0;
-
-  for(g in 1:c$G)
-    l = l + log(dpois(d$y[n, g], 
-                    exp(arg + c$e[m, n, g] + mu(n, c$ph[m, g], c$al[m, g], c$de[m, g]))));
-
-  l = l + c$G * log(dnorm(arg, 0, c$sc[m]));
-
-  return(l);
-}
-
-l_sc = function(arg, m, c, d){
-  n = 0;
-  l = 0;
-
-  if(arg < 0 || arg > 1)
-    return(-Inf);
-
-  for(n in 1:c$N)
-    l = l + log(dnorm(c$c[m,n], 0, arg));
-
-  return(G * l);
-}
-
-l_e = function(arg, m, n, g, c, d){
-  l = 0;
-  l = l + log(dpois(d$y[n, g], 
-                 exp(c$c[m, n] + arg + mu(n, c$ph[m, g], c$al[m, g], c$de[m, g]))));
-  return(l + log(dnorm(arg, 0, c$s[m, g])));
-}
-
-l_s = function(arg, m, g, c, d){
-  n = 0;
-  l = 0;  
-
-  for(n in 1:c$N)
-    l = l + log(dnorm(c$e[m, n, g], 0, arg));
-  
-  l = l + c$N * log(dgamma(arg, shape = c$d[m] * c$s0[m]^2 / 2, rate = c$d[m] / 2));
-}
-
-l_d = function(arg, m, c, d){ # parallelize accross genes
-  g = 0;
-  l = 0;
-
-  if(arg < 0 || arg > 1000)
-    return(-Inf);
-
-  for(g in 1:c$G)
-    l = l + log(dgamma(c$s[m, g], shape = arg * c$s0[m]^2 / 2, rate = arg / 2));
-
-  return(l * c$N);
-}
-
-l_s0_sq = function(arg, m, c, d){
-  g = 0;
-  l = 0;
-
-  if(arg < 0)
-    return(-Inf);
-
-  for(g in 1:c$G)
-    l = l + log(dgamma(c$s[m, g], shape = c$d[m] * arg / 2, rate = c$d[m] / 2));
-
-  l = l * c$N;
-  return(c$N * c$G * log(dexp(arg)));
-}
-
-l_ph = function(arg, m, g, c, d){
-  n = 0;
-  l = 0;
-
-  for(n in 1:c$N)
-    l = l + log(dpois(d$y[n, g], 
-                    exp(c$c[m, n] + c$e[m, n, g] + mu(n, arg, c$al[m, g], c$de[m, g]))));
-  
-  return(l + c$N * log(dnorm(arg, c$th_ph[m], c$s_ph[m])));
-}
-
-l_th_ph = function(arg, m, c, d){
-  g = 0;
-  l = 0;
-
-  for(g in 1:c$G)
-    l = l + log(dnorm(c$ph[m, g], arg, c$s_ph[m]));
-
-  l = l + c$G * log(dnorm(arg, 0, sqrt(1000)));
-
-  return(c$N * l);
-}
-
-l_s_ph = function(arg, m, c, d){
-  g = 0;
-  l = 0;
-
-  if(arg < 0 || arg > 1000)
-    return(-Inf);
-
-  for(g in 1:c$G)
-    l = l + safelog(dnorm(c$ph[m, g], c$th_ph[m], arg));
-
-  return(c$N * l);
-}
-
-l_al = function(arg, m, g, c, d){
-  n = 0;
-  l = 0;
-
-  for(n in 1:c$N)
-    if(c$gr[n] != 2)
-      l = l + safelog(dpois(d$y[n, g], 
-                      exp(c$c[m, n] + c$e[m, n, g] + mu(n, arg, c$al[m, g], c$de[m, g]))));
-
-  if(arg == 0){
-    return(l + sum(c$gr != 2) * safelog(c$pi_al[m]));
-  } else {
-    return(l + sum(c$gr != 2) * (safelog(1 - c$pi_al[m]) + 
-                                 safelog(dnorm(arg, c$th_al[m], c$s_al[m]))));
-  }
-}
-
-l_th_al = function(arg, m, c, d){
-  g = 0;
-  n = 0;
-  l = 0;
-
-  for(n in 1:c$N)
-    if(c$gr[n] != 2)
-      for(g in 1:c$G)
-        l = l + safelog(dnorm(c$al[m, g], arg, c$s_al));
-
-  return(l + c$G * c$N * safelog(dnorm(arg, 0, sqrt(1000))));
-}
-
-l_s_al = function(arg, m, c, d){
-  g = 0;
-  n = 0;
-  l = 0;
-
-  if(arg < 0 || arg > 1000)
-    return(-Inf);
-
-  for(n in 1:c$N)
-    if(c$gr[n] != 2)
-      for(g in 1:c$G)
-        l = l + safelog(dnorm(c$al[m, g], c$th_al[m], arg));
-
-  return(l);
-}
-
-l_pi_al = function(arg, m, c, d){
-  n = 0;
-  g = 0;
-  l = 0;
-
-  if(arg < 0 || arg > 1)
-    return(-Inf);
-
-  s = sum(c$gr != 2);
-  
-  for(g in 1:c$G){
-    if(c$al[m, g] == 0) {
-      l = l + safelog(arg);
+    u = runif(1);
+    if(u < chn$piAlp[1]){
+      chn$alp[1, g] = 0;
     } else {
-      l = l + safelog(1 - arg) + safelog(dnorm(c$al[m, g], c$th_al[m], c$s_al[m]));
+      chn$alp[1, g] = rnorm(1, chn$theAlp[1], chn$sigAlp[1]);
+    }
+    
+    u = runif(1);
+    if(u < chn$piDel[1]){
+      chn$del[1, g] = 0;
+    } else {
+      chn$del[1, g] = rnorm(1, chn$theDel[1], chn$sigDel[1]);
     }
   }
 
-  return(s * l);
+  return(chn);
 }
 
-l_de = function(arg, m, g, c, d){
-  n = 0;
-  l = 0;
+# struct to store the current place in the chain for each parameter
 
-  for(n in 1:c$N)
-    if(c$gr[n] == 2)
-      l = l + safelog(dpois(d$y[n, g], 
-                      exp(c$c[m, n] + c$e[m, n, g] + mu(n, arg, c$de[m, g], c$de[m, g]))));
+newM = function(){
+  list(
+    c = 1,
+    sigC = 1,
 
-  if(arg == 0){
-    return(l + sum(c$gr == 2) * safelog(c$pi_de[m]));
-  } else {
-    return(l + sum(c$gr == 2) * (safelog(1 - c$pi_de[m]) + 
-                                 safelog(dnorm(arg, c$th_de[m], c$s_de[m]))));
+    eps = 1,
+    sig = 1,
+    d = 1,
+    tau = 1,
+
+    phi = 1,
+    alp = 1,
+    del = 1,
+
+    thePhi = 1,
+    theAlp = 1,
+    theDel = 1,
+
+    sigPhi = 1,
+    sigAlp = 1,
+    sigDel = 1,
+
+    piAlp = 1,
+    piDel = 1
+  );
+}
+
+mu = function(chn, n, phi, alp, del){
+  if(chn$grp[n] == 1){
+    return(phi - alp);
+  } else if(chn$grp[n] == 2){
+    return(phi + del);
+  } else if(chn$grp[n] == 3){
+    return(phi + alp);
   }
 }
 
-l_th_de = function(arg, m, c, d){
-  g = 0;
-  n = 0;
-  l = 0;
+# log full conditionals with no convenient form
 
-  for(n in 1:c$N)
-    if(c$gr[n] == 2)
-      for(g in 1:c$G)
-        l = l + safelog(dnorm(c$de[m, g], arg, c$s_de));
+lC = function(y, chn, m, n, arg){
+  G = chn$G;
 
-  return(l + c$G * c$N * safelog(dnorm(arg, 0, sqrt(1000))));
+  ybar = chn$yMeanG;
+  sigC = chn$sigC[m$sigC];
+  eps = chn$eps[m$eps,n,];
+  phi = chn$phi[m$phi,];
+  alp = chn$alp[m$alp,];
+  del = chn$del[m$del,];
+
+  s = 0;
+  for(g in 1:G)
+    s = s + exp(eps[g] + mu(chn, n, phi[g], alp[g], del[g]));
+
+  ret = arg * G * ybar[n] - exp(arg) * s - arg^2 / 2 * sigC^2;
+  return(ret);
 }
 
-l_s_de = function(arg, m, c, d){
-  g = 0;
-  n = 0;
-  l = 0;
-
-  if(arg < 0 || arg > 1000)
-    return(-Inf);
-
-  for(n in 1:c$N)
-    if(c$gr[n] == 2)
-      for(g in 1:c$G)
-        l = l + safelog(dnorm(c$de[m, g], c$th_de[m], arg));
-
-  return(l);
-}
-
-l_pi_de = function(arg, m, c, d){
-  n = 0;
-  g = 0;
-  l = 0;
-
-  if(arg < 0 || arg > 1)
-    return(-Inf);
-
-  s = sum(c$gr == 2);
+lEps = function(y, chn, m, n, g, arg){
+  G = chn$G;
   
-  for(g in 1:c$G){
-    if(c$de[m, g] == 0) {
-      l = l + safelog(arg);
-    } else {
-      l = l + safelog(1 - arg) + safelog(dnorm(c$de[m, g], c$th_de[m], c$s_de[m]));
-    }
-  }
+  y = y[n, g]
+  c = chn$c[m$c, n];
+  sig = chn$sig[m$sig, g];
+  phi = chn$phi[m$phi, g];
+  alp = chn$alp[m$alp, g];
+  del = chn$del[m$del, g];
 
-  return(s * l);
+  ret = y * arg - exp(c + arg + mu(chn, n, phi, alp, del)) - arg^2 / s * sig^2;
+  return(ret);
 }
 
-## functions to sample from conditionals
+lD = function(y, chn, m, arg){
+  G = chn$G;
+  d0 = chn$d0;
+  tau = chn$tau[m$tau];
+  sig = chn$sig[m$sig,];
 
-## Gibbs sampler function
+  if(arg < 0 || arg > d0)
+    return(-Inf);
 
-## run Gibbs sampler
+  s1 = 0;
+  for(g in 1:G)
+    s1 = s1 + 2 * log(sig[g]);
 
-d = hammer()
-c = new_chain(d, 5)
+  s2 = 0;
+  for(g in 1:G)
+    s2 = s2 + (1/sig[g])^2
+
+  tmp = arg * tau^2 / 2
+
+  ret = -G * lgamma(arg/2) + (G * arg / 2) * log(tmp);
+  ret = ret  - (arg/2 + 1) * s1 - tmp * s2;
+
+  return(ret);
+}
+
+lPhi = function(y, chn, m, g){
+
+}
+
