@@ -358,7 +358,7 @@ sampleNormal = function(m = 0, s = 1){
 }
 
 sampleGamma = function(shape = 1, rate = 1, lb = -1){
-  if(shape >= 1){
+  if(shape >= 1){ # Marsaglia and Tsang (2000)
 
     d = shape - 1/3;
     c = 1 / sqrt(9 * d);
@@ -380,7 +380,7 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
         return(ret);
 
     }
-  } else if (0.01 <= shape && shape < 1){
+  } else if (0.1 <= shape && shape < 1){ # Kundu and Gupta (2006)
     
     while(1){
       u = runif(1);
@@ -390,13 +390,14 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
       tmp1 = exp(-x/2);
       tmp2 = x^(shape - 1)* tmp1 * 2^(1 - shape) * (1 - tmp1)^(1 - shape);
 
-      if(v < tmp2)
-        return(x / rate);
+      if(x != 0)
+        if(v < tmp2)
+          return(x / rate);
 
     }
-  } else{
+  } else{ # Martin and Liu (2013)
    
-    while(1){
+    while(1){ # 
       lam = 1/shape - 1;
       w = shape / (exp(1 - shape));
       r = 1/(1 + w); 
@@ -420,6 +421,17 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
     }
   }
 }
+
+shape = .145
+pvs = c()
+for(j in 1:1000){
+  r = c()
+  for(i in 1:1000)
+    r = c(r, sampleGamma(shape = shape))
+  pvs = c(pvs, ks.test(r, f)$p.value)
+}
+hist(pvs)
+
 
 trapInt = function(f, a, b, n = 1000){
 
