@@ -88,7 +88,7 @@ emptyChain = function(y, grp, par, M, N, G){
       sigC = rep(0, M),
     
     eps = array(0, c(M, N, G)),
-      sig = array(0, c(M, G)),
+      eta = array(0, c(M, G)),
         d = rep(0, M),
         tau = rep(0, M),
 
@@ -124,13 +124,13 @@ newChain = function(y, grp, M, N, G){
   chn$tau[1] = sqrt(rgamma(1, shape = chn$aTau, rate = chn$bTau))
 
   for(g in 1:G)
-    chn$sig[1, g] = 1/sqrt(rgamma(1, shape = chn$d[1] / 2, 
+    chn$eta[1, g] = 1/sqrt(rgamma(1, shape = chn$d[1] / 2, 
                                   rate = chn$d[1] * chn$tau[1]^2 / 2))
 
 
   for(n in 1:N)
     for(g in 1:G)
-      chn$eps[1, n, g] = rnorm(1, 0, chn$sig[1, g]);
+      chn$eps[1, n, g] = rnorm(1, 0, chn$eta[1, g]);
 
 
   chn$thePhi[1] = rnorm(1, 0, chn$gamPhi)
@@ -173,7 +173,7 @@ newM = function(){
     sigC = 1,
 
     eps = 1,
-    sig = 1,
+    eta = 1,
     d = 1,
     tau = 1,
 
@@ -229,12 +229,12 @@ lEps = function(y, chn, m, n, g, arg){
   
   y = y[n, g]
   c = chn$c[m$c, n];
-  sig = chn$sig[m$sig, g];
+  eta = chn$eta[m$eta, g];
   phi = chn$phi[m$phi, g];
   alp = chn$alp[m$alp, g];
   del = chn$del[m$del, g];
 
-  ret = y * arg - exp(c + arg + mu(chn, n, phi, alp, del)) - arg^2 / s * sig^2;
+  ret = y * arg - exp(c + arg + mu(chn, n, phi, alp, del)) - arg^2 / s * eta^2;
   return(ret);
 }
 
@@ -242,18 +242,18 @@ lD = function(y, chn, m, arg){
   G = chn$G;
   d0 = chn$d0;
   tau = chn$tau[m$tau];
-  sig = chn$sig[m$sig,];
+  eta = chn$eta[m$eta,];
 
   if(arg < 0 || arg > d0)
     return(-Inf);
 
   s1 = 0;
   for(g in 1:G)
-    s1 = s1 + 2 * log(sig[g]);
+    s1 = s1 + 2 * log(eta[g]);
 
   s2 = 0;
   for(g in 1:G)
-    s2 = s2 + (1/sig[g])^2
+    s2 = s2 + (1/eta[g])^2
 
   tmp = arg * tau^2 / 2
 
