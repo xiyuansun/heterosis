@@ -422,12 +422,14 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
   }
 }
 
-shape = .145
+shape = .15
+rate = 1
 pvs = c()
 for(j in 1:1000){
   r = c()
   for(i in 1:1000)
-    r = c(r, sampleGamma(shape = shape))
+    r = c(r, sampleGamma(shape = shape, rate = rate))
+  f= function(x){pgamma(x, shape = shape, rate = rate)}
   pvs = c(pvs, ks.test(r, f)$p.value)
 }
 hist(pvs)
