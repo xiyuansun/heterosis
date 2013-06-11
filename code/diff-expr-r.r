@@ -370,16 +370,18 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
         v = (1 + c*x)^3;
       }
 
+      ret = d * v / rate
       u = runif(1);
 
       if(u < 1 - 0.0331 * x^4)
-        return(d * v / rate);
+        return(ret);
 
       if(log(u) < 0.5 * x^2 + d * (1 - v + log(v)))
-        return(d * v / rate);
+        return(ret);
+
     }
   } else {
-    
+   
     while(1){
       lam = 1/shape - 1;
       w = shape / (exp(1 - shape));
@@ -405,17 +407,8 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
   }
 }
 
-shape = 1
+shape = .35
 rate = 1
-
-pv = c()
-for(j in 1:1000){
-  r = c()
-  for(i in 1:1000){r = c(r, sampleGamma(shape = shape, rate = rate))}
-  f = function(x){pgamma(x, shape = shape, rate = rate)}
-  pv = c(pv, ks.test(r, f)$p.value)
-}
-hist(pv)
-
-hist(r[r < .000001], freq = F)
-curve(f, from = 0, to = .000001, add = T)
+r = c()
+for(i in 1:10000){r = c(r, sampleGamma(shape = shape))}
+sum(r)/length(r)
