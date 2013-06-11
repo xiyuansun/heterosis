@@ -358,7 +358,7 @@ sampleNormal = function(m = 0, s = 1){
 }
 
 sampleGamma = function(shape = 1, rate = 1, lb = -1){
-  if(shape >= 0.34){
+  if(shape >= 1){
 
     d = shape - 1/3;
     c = 1 / sqrt(9 * d);
@@ -380,7 +380,21 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
         return(ret);
 
     }
-  } else {
+  } else if (0.01 <= shape && shape < 1){
+    
+    while(1){
+      u = runif(1);
+      x = -2 * log(1 - u^(1 / shape));
+      v = runif(1);
+
+      tmp1 = exp(-x/2);
+      tmp2 = x^(shape - 1)* tmp1 * 2^(1 - shape) * (1 - tmp1)^(1 - shape);
+
+      if(v < tmp2)
+        return(x / rate);
+
+    }
+  } else{
    
     while(1){
       lam = 1/shape - 1;
