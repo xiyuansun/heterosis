@@ -354,7 +354,7 @@ lDel = function(y, chn, m, g, arg){
 sampleNormal = function(m = 0, s = 1){
   u1 = runif(1);
   u2 = runif(1);
-  return(sqrt(-2 * log(u1)) * cos(2 * 3.14159265 * u2) * s + m);
+  return(sqrt(-2 * log(u1)) * sin(2 * 3.14159265 * u2) * s + m);
 }
 
 sampleGamma = function(shape = 1, rate = 1, lb = -1){
@@ -402,13 +402,40 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
       }
 
       if(haznaz > runif(1))
-        return(exp(-z/shape) / rate)
+        return(exp(-z/shape) / rate);
     }
   }
 }
 
-shape = .35
-rate = 1
+trapInt = function(f, a, b, n = 1000){
+
+  sum = 0;
+  h = (b - a) / n;
+
+  for(i in 1:n){
+    sum = sum + h * f(a + (i + 0.5)*h);
+  }
+
+  return(sum);
+}
+
+mcInt(h, a, b, n = 1000, fmean, fsd){
+  
+
+
+}
+
+
+m = 2.5
+a = 1
+b = 3
+
+e = 0.5
 r = c()
-for(i in 1:10000){r = c(r, sampleGamma(shape = shape))}
-sum(r)/length(r)
+for(i in 1:1000){
+  u = runif(1)
+  if(u < (m - a) / (b - a))
+    r = c(r, u^(1 - e) * (b - a) + a)
+  else
+    r = c(r, u^(1 + e) * (b - a) + a)
+}
