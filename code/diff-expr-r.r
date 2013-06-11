@@ -357,7 +357,7 @@ sampleNormal = function(m = 0, s = 1){
   return(sqrt(-2 * log(u1)) * sin(2 * 3.14159265 * u2) * s + m);
 }
 
-sampleGamma = function(shape = 1, rate = 1, lb = -1){
+sampleGamma = function(shape = 1, rate = 1, lb = 0){
   if(shape >= 1){ # Marsaglia and Tsang (2000)
 
     d = shape - 1/3;
@@ -366,34 +366,39 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
     while(1){
       v = -1;
       while(v <= 0){
-        x = sampleNormal();
+        x = sampleNormal(0, 1);
         v = (1 + c*x)^3;
       }
 
       ret = d * v / rate
-      u = runif(1);
 
-      if(u < 1 - 0.0331 * x^4)
-        return(ret);
+      if(ret > lb){
+        u = runif(1);
 
-      if(log(u) < 0.5 * x^2 + d * (1 - v + log(v)))
-        return(ret);
+        if(u < 1 - 0.0331 * x^4)
+          return(ret);
 
+        if(log(u) < 0.5 * x^2 + d * (1 - v + log(v)))
+          return(ret);
+      }
     }
-  } else if (0.1 <= shape && shape < 1){ # Kundu and Gupta (2006)
-    
-    while(1){
+  } else if (0.135 <= shape && shape < 1){ # Kundu and Gupta (2006)
+
+    while(1){      
+
       u = runif(1);
       x = -2 * log(1 - u^(1 / shape));
-      v = runif(1);
+      ret = x / rate;
 
-      tmp1 = exp(-x/2);
-      tmp2 = x^(shape - 1)* tmp1 * 2^(1 - shape) * (1 - tmp1)^(1 - shape);
+      if(ret > lb){
+        v = runif(1);
 
-      if(x != 0)
+        tmp1 = exp(-x/2);
+        tmp2 = x^(shape - 1)* tmp1 * 2^(1 - shape) * (1 - tmp1)^(1 - shape);
+
         if(v < tmp2)
-          return(x / rate);
-
+          return(ret);
+      }
     }
   } else{ # Martin and Liu (2013)
    
@@ -407,63 +412,27 @@ sampleGamma = function(shape = 1, rate = 1, lb = -1){
       if(u <= r){
         z = - log(u/r);
       } else {
-        z = log(runif(1))/lam
+        z = log(runif(1))/lam;
       }
       
-      if(z >= 0){
-        haznaz = exp(-exp(-z / shape));
-      } else{
-        haznaz = 1/(w * lam) * exp((lam - 1) * z -exp(z / shape));
-      }
+      ret = exp(-z/shape) / rate;
 
-      if(haznaz > runif(1))
-        return(exp(-z/shape) / rate);
+      if(ret > lb){
+        if(z >= 0){
+          haznaz = exp(-exp(-z / shape));
+        } else{
+          haznaz = 1/(w * lam) * exp((lam - 1) * z -exp(z / shape));
+        }
+
+        if(haznaz > runif(1))
+          return(ret);
+      }
     }
   }
 }
 
-shape = .15
-rate = 1
-pvs = c()
-for(j in 1:1000){
-  r = c()
-  for(i in 1:1000)
-    r = c(r, sampleGamma(shape = shape, rate = rate))
-  f= function(x){pgamma(x, shape = shape, rate = rate)}
-  pvs = c(pvs, ks.test(r, f)$p.value)
-}
-hist(pvs)
-
-
-trapInt = function(f, a, b, n = 1000){
-
-  sum = 0;
-  h = (b - a) / n;
-
-  for(i in 1:n){
-    sum = sum + h * f(a + (i + 0.5)*h);
-  }
-
-  return(sum);
-}
-
-mcInt(h, a, b, n = 1000, fmean, fsd){
-  
-
-
-}
-
-
-m = 2.5
-a = 1
-b = 3
-
-e = 0.5
-r = c()
-for(i in 1:1000){
-  u = runif(1)
-  if(u < (m - a) / (b - a))
-    r = c(r, u^(1 - e) * (b - a) + a)
-  else
-    r = c(r, u^(1 + e) * (b - a) + a)
+sampleBeta = function(a, b){
+  x = sampleGamma(a, 1, 0);
+  y = sampleGamma(b, 1, 0);
+  return(x / (x + y));
 }
