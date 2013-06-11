@@ -287,6 +287,7 @@ lPhi = function(y, chn, m, g, arg){
 lAlp = function(y, chn, m, g, arg){
   N = chn$N;
   y = y[n, g];
+  grp = chn$grp
 
   c = chn$c[m$c, n];
   phi = chn$phi[m$phi, g];
@@ -294,14 +295,127 @@ lAlp = function(y, chn, m, g, arg){
 
   theAlp = chn$theAlp[m$theAlp];
   sigAlp = chn$sigAlp[m$sigAlp];
+
+  piAlp = chn$piAlp[m$piAlp];
   
   s = 0; 
   for(n in 1:N){
-    tmp = mu(chn, n, phi, arg, del);
-    s = s + y * tmp - exp(c + eps + tmp);
+    if(grp[n] != 2){
+      tmp = mu(chn, n, phi, arg, del);
+      s = s + y * tmp - exp(c + eps + tmp);
+    }
   }
  
-  ret = s - (arg - theAlp)^2 / 2 * sigAlp^2;
+  if(arg != 0){
+    tmp = -(arg - theAlp)^2 / 2 * sigAlp^2 - log(1 - piAlp)
+  } else {
+    tmp = log(piAlp)
+  }
+
+  ret = s + tmp;
   return(ret);
 }
 
+lDel = function(y, chn, m, g, arg){
+  N = chn$N;
+  y = y[n, g];
+  grp = chn$grp
+
+  c = chn$c[m$c, n];
+  phi = chn$phi[m$phi, g];
+  alp = chn$alp[m$alp, g];
+
+  theDel = chn$theDel[m$theDel];
+  sigDel = chn$sigDel[m$sigDel];
+
+  piDel = chn$piDel[m$piDel];
+  
+  s = 0; 
+  for(n in 1:N){
+    if(grp[n] == 2){
+      tmp = mu(chn, n, phi, alp, arg);
+      s = s + y * tmp - exp(c + eps + tmp);
+    }
+  }
+ 
+  if(arg != 0){
+    tmp = -(arg - theDel)^2 / 2 * sigDel^2 - log(1 - piDel)
+  } else {
+    tmp = log(piDel)
+  }
+
+  ret = s + tmp;
+  return(ret);
+}
+
+
+# sampling from known distributions
+
+sampleNormal = function(m = 0, s = 1){
+  u1 = runif(1);
+  u2 = runif(1);
+  return(sqrt(-2 * log(u1)) * cos(2 * 3.14159265 * u2) * s + m);
+}
+
+sampleGamma = function(shape = 1, rate = 1, lb = -1){
+  if(shape >= 0.34){
+
+    d = shape - 1/3;
+    c = 1 / sqrt(9 * d);
+
+    while(1){
+      v = -1;
+      while(v <= 0){
+        x = sampleNormal();
+        v = (1 + c*x)^3;
+      }
+
+      u = runif(1);
+
+      if(u < 1 - 0.0331 * x^4)
+        return(d * v / rate);
+
+      if(log(u) < 0.5 * x^2 + d * (1 - v + log(v)))
+        return(d * v / rate);
+    }
+  } else {
+    
+    while(1){
+      lam = 1/shape - 1;
+      w = shape / (exp(1 - shape));
+      r = 1/(1 + w); 
+
+      u = runif(1);
+
+      if(u <= r){
+        z = - log(u/r);
+      } else {
+        z = log(runif(1))/lam
+      }
+      
+      if(z >= 0){
+        haznaz = exp(-exp(-z / shape));
+      } else{
+        haznaz = 1/(w * lam) * exp((lam - 1) * z -exp(z / shape));
+      }
+
+      if(haznaz > runif(1))
+        return(exp(-z/shape) / rate)
+    }
+  }
+}
+
+shape = 1
+rate = 1
+
+pv = c()
+for(j in 1:1000){
+  r = c()
+  for(i in 1:1000){r = c(r, sampleGamma(shape = shape, rate = rate))}
+  f = function(x){pgamma(x, shape = shape, rate = rate)}
+  pv = c(pv, ks.test(r, f)$p.value)
+}
+hist(pv)
+
+hist(r[r < .000001], freq = F)
+curve(f, from = 0, to = .000001, add = T)
