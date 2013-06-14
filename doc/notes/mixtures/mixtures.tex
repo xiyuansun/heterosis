@@ -1,0 +1,65 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Updating mixture components}
+
+Suppose 
+\begin{align*} 
+y_i &\stackrel{iid}{\sim} \pi \delta_0 + (1-\pi) N(\theta,\sigma^2) &i=1,\ldots,n \\
+\pi &\sim Be(\alpha,\beta) \\
+\theta &\sim N(0,\gamma^2) \\
+\sigma^2 &\sim \frac{1}{2\sigma_0} (\sigma^2)^{-1/2} \mathrm{I}(0<\sigma^2<\sigma_0^2) 
+\end{align*}
+then
+\begin{align*}
+p(\pi|\ldots) &\propto p(y|\pi,\theta,\sigma^2) p(\pi) \\
+&= \left[ \prod_{i=1}^n (\pi \delta_{y_i=0} + (1-\pi) N(y_i;\theta,\sigma^2) \right] p(\pi) \\
+&= \left[ \prod_{i:y_i=0} \pi \delta_{y_i=0} \right] \left[ \prod_{i:y_i\ne 0} (1-\pi) N(y_i;\theta,\sigma^2) \right] p(\pi) \\
+&\propto \pi^{n-n_y}(1-\pi)^{n_y} \pi^{\alpha-1}(1-\pi)^{\beta-1} \\
+&= \pi^{\alpha+n-n_y-1}(1-\pi)^{\beta+n_y-1} \\
+&\propto Be(\alpha+n-n_y,\beta+n_y) 
+\end{align*}
+where $n_y = \sum_{i=1}^n \mathrm{I}(y_i\ne 0)$. And  
+\begin{align*}
+p(\theta|\ldots) &\propto p(y|\pi,\theta,\sigma^2) p(\theta) \\
+&= \left[ \prod_{i=1}^n (\pi \delta_{y_i=0} + (1-\pi) N(y_i;\theta,\sigma^2) \right] p(\theta) \\
+&= \left[ \prod_{i:y_i=0} \pi \delta_{y_i=0} \right] \left[ \prod_{i:y_i\ne 0} (1-\pi) N(y_i;\theta,\sigma^2) \right] p(\theta) \\
+&\propto \left[ \prod_{i:y_i\ne 0} N(y_i;\theta,\sigma^2) \right] N(\theta;0,\gamma^2) \\
+&\propto N(\theta; \hat{\theta}, v_\theta) \\
+v_\theta &= (n_y \sigma^{-2} + \gamma^{-2})^{-1} \\
+\hat{\theta} &= v_\theta (n_y \sigma^{-2} \overline{y})
+\end{align*}
+where $\overline{y} = \frac{1}{n_y} \sum_{i:y_i\ne 0} y_i$. And
+\begin{align*}
+p(\sigma^2|\ldots) &\propto p(y|\pi,\theta,\sigma^2) p(\sigma^2) \\
+&\propto \left[ \prod_{i:y_i\ne 0} N(y_i;\theta,\sigma^2) \right] (\sigma^2)^{-1/2} \mathrm{I}(0<\sigma^2<\sigma_0^2) \\
+&\propto (\sigma^2)^{-[n_y+1]/2} \exp\left(-\sum_{i:y_i\ne 0} (y_i-\theta)^2/2\sigma^2\right)\mathrm{I}(0<\sigma^2<\sigma_0^2) \\
+&\propto IG([n_y+1]/2-1, u_y/2) \\
+u_y &=  \sum_{i:y_i\ne 0} (y_i-\theta)^2
+\end{align*}
+
+\section{Updating parameters with mixture priors}
+
+Let 
+\begin{align*}
+y &\sim p(y|\alpha) & i=1,\ldots,n \\
+\alpha&\sim \pi \delta_0 +(1-\pi) p(\theta)
+\end{align*}
+then
+\begin{align*}
+p(\alpha|\ldots) &= p(y|\alpha)[\pi \delta_{\alpha=0} +(1-\pi) p(\alpha|\theta) ] \\
+&= \pi p(y|0) \delta_{\alpha=0} + (1-\pi) p(y|\alpha) p(\alpha|\theta) \\
+&= \pi p(y|0) \delta_{\alpha=0} + (1-\pi) p(y|\theta) \frac{p(y|\alpha) p(\alpha|\theta)}{p(y|\theta)} \\
+&\propto \pi' \delta_{\alpha=0} + (1-\pi') p(\alpha|y,\theta) \\
+\pi' &= \frac{\pi p(y|0)}{\pi p(y|0) + (1-\pi) p(y|\theta)} = \frac{1}{1+\frac{p(y|\theta)}{p(y|0)}\frac{1-\pi}{\pi}} \\
+p(\alpha|y,\theta) &= \frac{p(y|\alpha) p(\alpha|\theta)}{p(y|\theta)} \propto p(y|\alpha) p(\alpha|\theta)
+\end{align*}
+The last is equivalent to the posterior for $\alpha$ given data $y$ and prior $p(\alpha|\theta)$ which is just the $(1-\pi)$ component of the mixture. 
+
+
+
+
+\end{document}
