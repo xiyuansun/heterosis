@@ -199,23 +199,23 @@ Let $y_{g,n}$ be the expression level of gene $g$  ($g = 1, \ldots, G$) in libra
 Then:
 
 \begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-&\qquad c_n \stackrel{\text{ind}}{\sim} \text{N}(0, \sigma_c^2) \\
-& \qquad \qquad \sigma_c \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{c0}) \\
-& \qquad \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(0, \eta_g^2) \\
-& \qquad \qquad \eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\text{shape} = \frac{d}{2}, \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right) \\
-& \qquad \qquad \qquad d \stackrel{\text{}}{\sim} \text{U}(0, d_0) \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+&\qquad c_n \stackrel{\text{ind}}{\sim} \text{N}(c_n \mid 0, \sigma_c^2) \\
+& \qquad \qquad \sigma_c \stackrel{\text{}}{\sim} \text{U}(\sigma_c \mid 0, \sigma_{c0}) \\
+& \qquad \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2) \\
+& \qquad \qquad \eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right) \\
+& \qquad \qquad \qquad d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0) \\
 & \qquad \qquad \qquad \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
-& \qquad \phi_g \stackrel{\text{ind}}{\sim} \text{N}(\theta_\phi, \sigma_\phi^2) \\
-& \qquad \qquad \theta_\phi \stackrel{\text{}}{\sim} \text{N}(0, \gamma_{\phi }^2) \\
-& \qquad \qquad \sigma_\phi \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{\phi 0}) \\
-& \qquad \alpha_g \stackrel{\text{ind}}{\sim} \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \\
-& \qquad \qquad \theta_\alpha \stackrel{\text{}}{\sim} \text{N}(0, \gamma_{\alpha}^2) \\
-& \qquad \qquad \sigma_\alpha \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{\alpha 0}) \\
-& \qquad \qquad \pi_\alpha \stackrel{\text{}}{\sim} \text{Beta}(a_{\alpha}, b_{\alpha}) \\
-& \qquad \delta_g \stackrel{\text{ind}}{\sim} \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\& \qquad \qquad \theta_\delta \stackrel{\text{}}{\sim} \text{N}(0, \gamma_{\delta}^2) \\
-& \qquad \qquad \sigma_\delta \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{\delta 0}) \\
-& \qquad \qquad \pi_\delta \stackrel{\text{}}{\sim} \text{Beta}(a_{\delta}, b_{\delta}) \\
+& \qquad \phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
+& \qquad \qquad \theta_\phi \stackrel{\text{}}{\sim} \text{N}(\theta_\phi \mid 0, \gamma_{\phi }^2) \\
+& \qquad \qquad \sigma_\phi \stackrel{\text{}}{\sim} \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
+& \qquad \alpha_g \stackrel{\text{ind}}{\sim} \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \\
+& \qquad \qquad \theta_\alpha \stackrel{\text{}}{\sim} \text{N}(\theta_\alpha \mid 0, \gamma_{\alpha}^2) \\
+& \qquad \qquad \sigma_\alpha \stackrel{\text{}}{\sim} \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0}) \\
+& \qquad \qquad \pi_\alpha \stackrel{\text{}}{\sim} \text{Beta}(\pi_\alpha \mid a_{\alpha}, b_{\alpha}) \\
+& \qquad \delta_g \stackrel{\text{ind}}{\sim} \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\& \qquad \qquad \theta_\delta \stackrel{\text{}}{\sim} \text{N}(\theta_\delta \mid 0, \gamma_{\delta}^2) \\
+& \qquad \qquad \sigma_\delta \stackrel{\text{}}{\sim} \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0}) \\
+& \qquad \qquad \pi_\delta \stackrel{\text{}}{\sim} \text{Beta}(\pi_\delta \mid a_{\delta}, b_{\delta}) \\
 \end{align*}
 
 where:
@@ -757,6 +757,72 @@ p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + \delta_\tau, \ G_\delta +
 
 
 
+
+
+
+
+\section{Derivations of Metropolis proposal distributions}
+
+
+\subsection{$\alpha_g$}
+
+The proposal for $\alpha_g$ has the form,
+
+\begin{align*}
+q(\alpha_g \mid \theta_\alpha', \sigma_\alpha', \pi_\alpha') = I(\alpha_g = 0) \pi_\alpha'  + I(\alpha_g \ne 0) (1 - \pi_\alpha') N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2),
+\end{align*}
+
+which resembles the prior for $\alpha_g$ except that the parameters are updated to reflect the data, $\underline{y}  = (y_{1, 1}, \ldots, y_{G, N})$. For example, whereas we interpret $\pi_\alpha$ as $P(\alpha = 0)$, a prior probability, we interpret $\pi_\alpha'$ as:
+
+\begin{align*}
+\pi_\alpha' &= P(\alpha_g = 0 \mid \underline{y}, \ \ldots) \\
+& = \frac{P(\underline{y} \mid \alpha_g = 0,  \ldots) P(\alpha_g = 0)}{P(\underline{y} \mid \alpha_g = 0, \ \ldots) P(\alpha_g = 0) + P(\underline{y} \mid \alpha_g \ne 0,  \ldots) P(\alpha_g \ne 0)} \\
+&= \frac{1}{1 + \frac{P(  \underline{y} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P( \underline{y} \ \mid \ \alpha_g = 0, \ \ldots) } \frac{1 - \pi_\alpha}{\pi_\alpha}} \\
+&= \frac{1}{1 + \frac{1 - \pi_\alpha}{\pi_\alpha} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \alpha_g = 0, \ \ldots) } }
+\end{align*}
+
+where ``$\ldots$" represents all the model parameters except for the other $\alpha_g$'s. To simplify the likelihood ratio in the denominator, we need:
+
+
+\begin{align*}
+P(y_{g, n} \mid \alpha_g = 0, \ldots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)))  \\
+&\propto \exp(-\exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
+&= \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
+P(y_{g, n} \mid \alpha_g \ne 0, \ldots)  &= \int_{\alpha_g \ne 0} P(y_{g, n} \mid \alpha_g , \ldots) N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&= ?????
+\end{align*}
+
+which is computationally expensive at best. \newline
+
+To find $\theta_\alpha'$ and $\sigma_\alpha'$, we pretend that $\alpha_g$ has a $N(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)$ likelihood and $\theta_\alpha$ has a $N(\theta_\alpha \mid 0, \gamma_\alpha^2)$ prior. We find the posterior, denoted $N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha^2)')$, with the rule on pages 46 and 47 of Gelman's book:
+
+ \begin{align*}
+\theta_\alpha' &= \frac{\gamma_\alpha^{-2} \theta_\alpha + \sigma_\alpha^{-2}    N_\alpha^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{\gamma_\alpha^{-2} + \sigma_\alpha^{-2}} \qquad \qquad (\sigma_\alpha')^2 = (\gamma_\alpha^{-2} + \sigma_\alpha^{-2})\nv
+\end{align*}
+
+where $N_\alpha$ is the number of libraries not in the second treatment group. 
+
+\subsection{$\alpha_g$}
+
+The proposal for $\delta_g$ is analogous to that of $\alpha_g$:
+
+
+\begin{align*}
+q(\delta_g \mid \theta_\delta', \sigma_\delta', \pi_\delta') = I(\delta_g = 0) \pi_\delta'  + I(\delta_g \ne 0) (1 - \pi_\delta') N(\delta_g \mid \theta_\delta', (\sigma_\delta')^2),
+\end{align*}
+
+where:
+
+\begin{align*}
+\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) } } \\ \\
+& \quad  P(y_{g, n} \mid \delta_g = 0, \ldots) = \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0))) \\
+& \quad P(y_{g, n} \mid \delta_g \ne 0, \ldots) = \text{?????} \\ \\
+\theta_\delta' &= \frac{\gamma_\delta^{-2} \theta_\delta + \sigma_\delta^{-2}    N_\delta^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{\gamma_\delta^{-2} + \sigma_\delta^{-2}} \\ 
+(\sigma_\delta')^2 &= (\gamma_\delta^{-2} + \sigma_\delta^{-2})\nv
+\end{align*}
+
+where $N_\delta$ is the number of libraries in the second treatment group. 
 
 \end{flushleft}
 \newpage 
