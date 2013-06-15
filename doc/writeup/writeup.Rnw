@@ -1,6 +1,6 @@
 % !TEX TS-program = knitr
 \documentclass{article}
-
+ 
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}
