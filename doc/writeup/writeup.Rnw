@@ -757,11 +757,12 @@ P(y_{g, n} \mid \alpha_g = 0, \ldots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n +
 &\propto \exp(-\exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
 &= \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
 P(y_{g, n} \mid \alpha_g \ne 0, \ldots)  &= \int_{\alpha_g \ne 0} P(y_{g, n} \mid \alpha_g , \ldots) N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-&= ?????
+&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \underbrace{\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))}_{\lambda_{g, n}})  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&\approx  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \underbrace{\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))}_{\lambda_{g, n}})  \\
+& \qquad \times \text{Gamma}(\alpha_g \mid \text{shape = } \underbrace{(\theta_\alpha')^2/(\sigma_\alpha')^2}_a, \ \text{rate = } \underbrace{(\theta_\alpha'/(\sigma_\alpha')^2}_b) \ d \alpha_g \\
 \end{align*}
 
-which is computationally expensive at best. \newline
+which is still a difficult integration because $\alpha_g$ is in the exponent of the mean of the Poisson distribution above. So for now, I will let $P(y_{g, n} \mid \alpha_g \ne 0, \ldots) = P(y_{g, n} \mid \alpha_g = 0, \ldots)$ so that $\pi_\alpha' = \pi_\alpha$.\newline
 
 To find $\theta_\alpha'$ and $\sigma_\alpha'$, we pretend that $\alpha_g$ has a $N(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)$ likelihood and $\theta_\alpha$ has a $N(\theta_\alpha \mid 0, \gamma_\alpha^2)$ prior. We find the posterior, denoted $N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha^2)')$, with the rule on pages 46 and 47 of Gelman's book:
 
@@ -783,9 +784,7 @@ q(\delta_g \mid \theta_\delta', \sigma_\delta', \pi_\delta') = I(\delta_g = 0) \
 where:
 
 \begin{align*}
-\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) } } \\ \\
-& \quad  P(y_{g, n} \mid \delta_g = 0, \ldots) = \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0))) \\
-& \quad P(y_{g, n} \mid \delta_g \ne 0, \ldots) = \text{?????} \\ \\
+\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) } } \approx \pi_\delta \\
 \theta_\delta' &= \frac{\gamma_\delta^{-2} \theta_\delta + \sigma_\delta^{-2}    N_\delta^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{\gamma_\delta^{-2} + \sigma_\delta^{-2}} \\ 
 (\sigma_\delta')^2 &= (\gamma_\delta^{-2} + \sigma_\delta^{-2})\nv
 \end{align*}
