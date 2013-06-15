@@ -203,12 +203,12 @@ p \left ( \left . \frac{1}{\sigma_\phi^2}  \ \right \rvert \ \cdots \right ) &= 
 p(\alpha_g \mid \cdots) &\propto \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (\mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
 p(\theta_\alpha \mid \cdots) &= N \left (\theta_\alpha \ \left \lvert \ \frac{\gamma_\alpha^2 \sum_{\alpha_g \ne 0} \alpha_g}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ., \ \frac{\gamma_\alpha^2 \sigma_\alpha^2}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ) \\
-p \left ( \left . \frac{1}{\sigma_\alpha^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\alpha^2} \ \right \rvert  \ \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right ) \\
+p \left ( \left . \frac{1}{\sigma_\alpha^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\alpha^2} \ \right \rvert  \ \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right )  \text{I} \left (\frac{1}{\sigma_\alpha^2} >\frac{1}{ \sigma_{\alpha 0}^2} \right )\\
 p(\pi_\alpha \mid \cdots) &= \text{Beta}(\pi_\alpha \mid G - G_\alpha + \alpha_\tau, \ G_\alpha + b_\tau) \\
 p(\delta_g \mid \cdots) &\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (\mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
 p(\theta_\delta \mid \cdots) &= N \left ( \theta_\delta \ \left \lvert \ \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right . , \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right ) \\
-p \left ( \left . \frac{1}{\sigma_\delta^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\delta^2} \ \right \rvert \ \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \\
+p \left ( \left . \frac{1}{\sigma_\delta^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\delta^2} \ \right \rvert \ \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )  \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ \sigma_{\delta 0}^2} \right ) \\
 p(\pi_\delta \mid \cdots) &= \text{Beta}(\pi_\delta \mid G - G_\delta + \delta_\tau, \ G_\delta + b_\tau)
 \end{align*}
 
@@ -607,7 +607,7 @@ p(\sigma_\alpha^2 \mid \cdots ) & = p(\sigma_\alpha \mid \cdots) \frac{1}{2} (\s
 which is the kernel of a truncated inverse gamma distribution. Hence:
 
 \begin{align*}
-p( \frac{1}{\sigma_\alpha^2} \mid \cdots ) = \text{Gamma} \left (\frac{1}{\sigma_\alpha^2} \mid \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right )
+p \left ( \frac{1}{\sigma_\alpha^2} \mid \cdots \right ) = \text{Gamma} \left (\frac{1}{\sigma_\alpha^2} \mid \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right ) \text{I} \left (\frac{1}{\sigma_\alpha^2} >\frac{1}{ \sigma_{\alpha 0}^2} \right )
 \end{align*}
 
 
@@ -626,7 +626,7 @@ p(\pi_\alpha \mid \cdots) &=\left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[
 Hence:
 
 \begin{align*}
-p(\pi_\alpha \mid \cdots) = \text{Beta}(G - G_\alpha + \alpha_\tau, \ G_\alpha + b_\tau)
+p(\pi_\alpha \mid \cdots) = \text{Beta}(G - G_\alpha + a_\tau, \ G_\alpha + b_\tau)
 \end{align*}
 
 
@@ -703,7 +703,7 @@ p(\sigma_\delta^2 \mid \cdots ) & = p(\sigma_\delta \mid \cdots) \frac{1}{2} (\s
 which is the kernel of a truncated inverse gamma distribution. Hence:
 
 \begin{align*}
-p( \frac{1}{\sigma_\delta^2} \mid \cdots ) = \text{Gamma} \left (\frac{1}{\sigma_\delta^2} \mid \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )
+p\left ( \frac{1}{\sigma_\delta^2} \mid \cdots \right ) = \text{Gamma} \left (\frac{1}{\sigma_\delta^2} \mid \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )  \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ \sigma_{\delta 0}^2} \right )
 \end{align*}
 
 
@@ -720,7 +720,7 @@ p(\pi_\delta \mid \cdots) &=\left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[
 where $G_\delta$ is the number of genes for which $\delta_g \ne 0$. Hence:
 
 \begin{align*}
-p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + \delta_\tau, \ G_\delta + b_\tau)
+p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + a_\tau, \ G_\delta + b_\tau)
 \end{align*}
 
 
@@ -729,12 +729,25 @@ p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + \delta_\tau, \ G_\delta +
 
 
 
-\section{Derivations of Metropolis proposal distributions}
+
+
+
+
+
+
+
+
+
+
+
+\section{Derivations of Metropolis proposals for point mass mixtures}
+
+
 
 
 \subsection{$\alpha_g$}
 
-The proposal for $\alpha_g$ has the form,
+I choose a proposal for $\alpha_g$ with the form,
 
 \begin{align*}
 q(\alpha_g \mid \theta_\alpha', \sigma_\alpha', \pi_\alpha') = I(\alpha_g = 0) \pi_\alpha'  + I(\alpha_g \ne 0) (1 - \pi_\alpha') N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2),
