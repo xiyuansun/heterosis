@@ -119,8 +119,8 @@ sampleGamma = function(shape = 1, rate = 1, lb = 0){
 }
 
 sampleBeta = function(a, b){
-  x = sampleGamma(a, 1, 0);
-  y = sampleGamma(b, 1, 0);
+  x = sampleGamma(shape=a, rate=1, lb=0);
+  y = sampleGamma(shape=b, rate=1, lb=0);
   return(x / (x + y));
 }
 
