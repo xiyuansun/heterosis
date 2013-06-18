@@ -200,12 +200,12 @@ p(\theta_\phi \mid \cdots) &= \text{N} \left (\theta_\phi \ \left \lvert  \ \fra
 p \left ( \left . \frac{1}{\sigma_\phi^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\phi^2} \ \right \rvert \ \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2  \right )   \text{I} \left (\frac{1}{\sigma_\phi^2} >\frac{1}{ \sigma_{\phi 0}^2} \right ) \\
 \end{align*}
 \begin{align*}
-p(\alpha_g \mid \cdots) &\propto \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (\mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+p(\alpha_g \mid \cdots) &\propto \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
 p(\theta_\alpha \mid \cdots) &= N \left (\theta_\alpha \ \left \lvert \ \frac{\gamma_\alpha^2 \sum_{\alpha_g \ne 0} \alpha_g}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ., \ \frac{\gamma_\alpha^2 \sigma_\alpha^2}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ) \\
 p \left ( \left . \frac{1}{\sigma_\alpha^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\alpha^2} \ \right \rvert  \ \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right )  \text{I} \left (\frac{1}{\sigma_\alpha^2} >\frac{1}{ \sigma_{\alpha 0}^2} \right )\\
 p(\pi_\alpha \mid \cdots) &= \text{Beta}(\pi_\alpha \mid G - G_\alpha + \alpha_\tau, \ G_\alpha + b_\tau) \\
-p(\delta_g \mid \cdots) &\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (\mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+p(\delta_g \mid \cdots) &\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
 p(\theta_\delta \mid \cdots) &= N \left ( \theta_\delta \ \left \lvert \ \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right . , \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right ) \\
 p \left ( \left . \frac{1}{\sigma_\delta^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\delta^2} \ \right \rvert \ \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )  \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ \sigma_{\delta 0}^2} \right ) \\
@@ -563,7 +563,7 @@ p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \m
 &=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
 &=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
-&\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (\mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+&\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
 \end{align*}
 
@@ -656,7 +656,7 @@ p(\delta_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \m
 &=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
 &=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
-&\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (\mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+&\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
 \end{align*}
 
@@ -762,20 +762,55 @@ which resembles the prior for $\alpha_g$ except that the parameters are updated 
 &= \frac{1}{1 + \frac{1 - \pi_\alpha}{\pi_\alpha} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \alpha_g = 0, \ \ldots) } }
 \end{align*}
 
-where ``$\ldots$" represents all the model parameters except for the other $\alpha_g$'s. To simplify the likelihood ratio in the denominator, we need:
-
+where ``$\ldots$" represents all the model parameters except for the other $\alpha_g$'s. To simplify the likelihood ratio in the denominator, we need $P(y_{g, n} \mid \alpha_g = 0, \ldots)$ and $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$. 
 
 \begin{align*}
 P(y_{g, n} \mid \alpha_g = 0, \ldots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)))  \\
 &\propto \exp(-\exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
 &= \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
-P(y_{g, n} \mid \alpha_g \ne 0, \ldots)  &= \int_{\alpha_g \ne 0} P(y_{g, n} \mid \alpha_g , \ldots) N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \underbrace{\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))}_{\lambda_{g, n}})  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-&\approx  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \underbrace{\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))}_{\lambda_{g, n}})  \\
-& \qquad \times \text{Gamma}(\alpha_g \mid \text{shape = } \underbrace{(\theta_\alpha')^2/(\sigma_\alpha')^2}_a, \ \text{rate = } \underbrace{(\theta_\alpha'/(\sigma_\alpha')^2}_b) \ d \alpha_g \\
 \end{align*}
 
-which is still a difficult integration because $\alpha_g$ is in the exponent of the mean of the Poisson distribution above. So for now, I will let $P(y_{g, n} \mid \alpha_g \ne 0, \ldots) = P(y_{g, n} \mid \alpha_g = 0, \ldots)$ so that $\pi_\alpha' = \pi_\alpha$.\newline
+
+I break up the calculation of $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ into 2 cases.
+
+\begin{enumerate}
+\item Assume library $n$ is in treatment group 1.
+
+
+
+
+\begin{align*}
+P(y_{g, n}& \mid \alpha_g \ne 0, \ldots) \\
+& = \int_{\alpha_g \ne 0} P(y_{g, n} \mid \alpha_g , \ldots) N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(\underbrace{c_n + \e_{g, n} + \phi_g}_{i} - \alpha_g)  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&= \int \frac{\exp(-\exp(i - \alpha_g)) (\exp(i - \alpha_g))^{y_{g, n}}}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right) d \alpha_g\\
+&\approx \int \frac{\exp(-\frac{(i - \alpha_g)^2}{2} - (i - \alpha_g) - 1) (\exp(y_{g, n}(i - \alpha_g)))}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right)d \alpha_g \\
+&= (2 \pi y_{g, n}! (\sigma_\alpha')^2)^{-1/2} \int \exp \left (-\frac{(i - \alpha_g)^2}{2} - i + \alpha_g - 1 + y_{g, n}(i - \alpha_g) - \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2} \right ) d \alpha_g \\
+&=  (2 \pi y_{g, n}! (\sigma_\alpha')^2)^{-1/2} \int \exp \left ( -\frac{\alpha_g^2}{2 (\sigma_\alpha')^2} -\frac{\alpha_g^2}{2} + i \alpha_g + \frac{\theta_\alpha' \alpha_g}{(\sigma_\alpha')^2} - y_{g, n} \alpha_g + \alpha_g  \right . \\
+& \left . \qquad - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1 \right ) d \alpha_g \\
+&=  \underbrace{(2 \pi y_{g, n}! (\sigma_\alpha')^2)^{-1/2}}_{D} \int \exp \left ( \underbrace{\left ( -\frac{1}{2 (\sigma_\alpha')^2} -\frac{1}{2} \right )}_A \alpha_g^2 + \underbrace{\left ( i  + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} - y_{g, n}  + 1 \right )}_B \alpha_g  \right . \\
+& \left . \qquad \underbrace{ - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1}_C \right ) d \alpha_g \\
+&= D \int \exp (A \alpha_g^2 + B \alpha_g + C) d \alpha_g \\
+&= D \int \exp \left( A \left (\alpha_g + \frac{B}{2A} \right )^2 C - \frac{B^2}{4A^2} \right ) d \alpha_g \\
+&= D \exp \left ( C - \frac{B^2}{4A^2} \right ) \int \underbrace{\exp \left( -\frac{1}{2(1/2|A|)} \left (\alpha_g + \frac{B}{2A} \right )^2  \right ) d \alpha_g}_{\text{kernel of normal distribution (note: $A < 0$)}} \\
+&= D \exp \left ( C - \frac{B^2}{4A^2} \right ) \left  (\frac{2 \pi }{ 2|A|} \right )^{1/2}
+\end{align*}
+
+\item $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ is the same when $n$ is in treatment group 3 except that $B$ switches signs.
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
 
 To find $\theta_\alpha'$ and $\sigma_\alpha'$, we pretend that $\alpha_g$ has a $N(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)$ likelihood and $\theta_\alpha$ has a $N(\theta_\alpha \mid 0, \gamma_\alpha^2)$ prior. We find the posterior, denoted $N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha^2)')$, with the rule on pages 46 and 47 of Gelman's book:
 
@@ -785,7 +820,7 @@ To find $\theta_\alpha'$ and $\sigma_\alpha'$, we pretend that $\alpha_g$ has a 
 
 where $N_\alpha$ is the number of libraries not in the second treatment group. 
 
-\subsection{$\alpha_g$}
+\subsection{$\delta_g$}
 
 The proposal for $\delta_g$ is analogous to that of $\alpha_g$:
 
@@ -797,7 +832,7 @@ q(\delta_g \mid \theta_\delta', \sigma_\delta', \pi_\delta') = I(\delta_g = 0) \
 where:
 
 \begin{align*}
-\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) } } \approx \pi_\delta \\
+\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\
 \theta_\delta' &= \frac{\gamma_\delta^{-2} \theta_\delta + \sigma_\delta^{-2}    N_\delta^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{\gamma_\delta^{-2} + \sigma_\delta^{-2}} \\ 
 (\sigma_\delta')^2 &= (\gamma_\delta^{-2} + \sigma_\delta^{-2})\nv
 \end{align*}
