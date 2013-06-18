@@ -793,7 +793,7 @@ P(y_{g, n}& \mid \alpha_g \ne 0, \ldots) \\
 & \left . \qquad \underbrace{ - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1}_C \right ) d \alpha_g \\
 &= D \int \exp (A \alpha_g^2 + B \alpha_g + C) d \alpha_g \\
 &= D \int \exp \left( A \left (\alpha_g + \frac{B}{2A} \right )^2 C - \frac{B^2}{4A^2} \right ) d \alpha_g \\
-&= D \exp \left ( C - \frac{B^2}{4A^2} \right ) \int \underbrace{\exp \left( -\frac{1}{2(1/2|A|)} \left (\alpha_g + \frac{B}{2A} \right )^2  \right ) d \alpha_g}_{\text{kernel of normal distribution (note: $A < 0$)}} \\
+&= D \exp \left ( C - \frac{B^2}{4A^2} \right ) \int \underbrace{\exp \left( -\frac{1}{2(1/2|A|)} \left (\alpha_g + \frac{B}{2A} \right )^2  \right ) d \alpha_g}_{\text{kernel of a normal distribution (note: $A < 0$)}} \\
 &= D \exp \left ( C - \frac{B^2}{4A^2} \right ) \left  (\frac{2 \pi }{ 2|A|} \right )^{1/2}
 \end{align*}
 
