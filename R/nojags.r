@@ -45,6 +45,16 @@ sampleNormal = function(m = 0, s = 1){
 }
 
 sampleGamma = function(shape = 1, rate = 1, lb = 0){
+  if(shape <= 0){
+    print(paste("Error: bad shape:", shape));
+    return(NaN);
+  }
+  
+  if(rate <= 0){
+    print(paste("Error: bad rate:", rate));
+    return(NaN);
+  }
+
   if(shape >= 1){ # Marsaglia and Tsang (2000)
 
     d = shape - 1/3;
@@ -119,14 +129,14 @@ sampleGamma = function(shape = 1, rate = 1, lb = 0){
 }
 
 sampleBeta = function(a, b){
-  x = sampleGamma(shape=a, rate=1, lb=0);
-  y = sampleGamma(shape=b, rate=1, lb=0);
+  x = sampleGamma(a, 1, 0);
+  y = sampleGamma(b, 1, 0);
   return(x / (x + y));
 }
 
 # data structures and initialization
 
-initParams = function(){
+initParam = function(){
   list(
     sigC0 = 10,
     d0 = 1e3,
@@ -151,7 +161,7 @@ initParams = function(){
 
 # struct to store the current place in the chain for each parameter
 
-newMs = function(){
+newm = function(){
   list(
     c = 1,
     sigC = 1,
@@ -187,7 +197,7 @@ emptyChain = function(y, grp, par, M, N, G){
     N = N,
     G = G,
 
-    ms = newMs(),
+    m = newm(),
     
     sigC0 = par$sigC0,
     d0 = par$d0,
@@ -228,680 +238,689 @@ emptyChain = function(y, grp, par, M, N, G){
     del = array(0, c(M, G)),
       theDel = rep(0, M),
       sigDel = rep(0, M),
-      piDel = rep(0, M)
+      piDel = rep(0, M),
+
+    tmp1 = rep(0, G),
+    tmp2 = rep(0, G)
   );
 }
 
 newChain = function(y, grp, M, N, G){
-  par = initParams();
-  chn = emptyChain(y, grp, par, M, N, G);
+  par = initParam();
+  a = emptyChain(y, grp, par, M, N, G);
 
   # compute initial values, mostly using priors
 
   for(n in 1:N)
-    chn$c[1, n] = log(quantile(y[n,], .75))
-  chn$c[1, ] = chn$c[1, ] - mean(chn$c[1, ])
+    a$c[1, n] = log(quantile(y[n,], .75))
+  a$c[1, ] = a$c[1, ] - mean(a$c[1, ])
 
-  chn$sigC[1] = runif(1, 0, chn$sigC0)
+  a$sigC[1] = runif(1, 0, a$sigC0)
 
-  chn$d[1] = runif(1, 0, chn$d0)
-  chn$tau[1] = sqrt(rgamma(1, shape = chn$aTau, rate = chn$bTau))
+  a$d[1] = runif(1, 0, a$d0)
+  a$tau[1] = sqrt(sampleGamma(shape = a$aTau, rate = a$bTau))
 
-  for(g in 1:G)
-    chn$eta[1, g] = 1/sqrt(rgamma(1, shape = chn$d[1] / 2, 
-                                  rate = chn$d[1] * chn$tau[1]^2 / 2))
+  a$thePhi[1] = sampleNormal(0, a$gamPhi)
+  a$theAlp[1] = sampleNormal(0, a$gamAlp)
+  a$theDel[1] = sampleNormal(0, a$gamDel)
 
+  a$sigPhi[1] = runif(1, 0, a$sigPhi0)
+  a$sigAlp[1] = runif(1, 0, a$sigAlp0)
+  a$sigDel[1] = runif(1, 0, a$sigDel0)
 
-  for(n in 1:N)
-    for(g in 1:G)
-      chn$eps[1, n, g] = rnorm(1, 0, chn$eta[1, g]);
+  a$piAlp[1] = sampleBeta(a$aAlp, a$bAlp)
+  a$piDel[1] = sampleBeta( a$aDel, a$bDel)
 
-
-  chn$thePhi[1] = rnorm(1, 0, chn$gamPhi)
-  chn$theAlp[1] = rnorm(1, 0, chn$gamAlp)
-  chn$theDel[1] = rnorm(1, 0, chn$gamDel)
-
-  chn$sigPhi[1] = runif(1, 0, chn$sigPhi0)
-  chn$sigAlp[1] = runif(1, 0, chn$sigAlp0)
-  chn$sigDel[1] = runif(1, 0, chn$sigDel0)
-
-  chn$piAlp[1] = rbeta(1, chn$aAlp, chn$bAlp)
-  chn$piDel[1] = rbeta(1, chn$aDel, chn$bDel)
-
-  for(g in 1:G){
-    chn$phi[1, g] = rnorm(1, chn$thePhi[1], chn$sigPhi[1]);
+  for(g in 1:G){ # PARALLELIZE
+    a$phi[1, g] = rnorm(1, a$thePhi[1], a$sigPhi[1]);
 
     u = runif(1);
-    if(u < chn$piAlp[1]){
-      chn$alp[1, g] = 0;
+    if(u < a$piAlp[1]){
+      a$alp[1, g] = 0;
     } else {
-      chn$alp[1, g] = rnorm(1, chn$theAlp[1], chn$sigAlp[1]);
+      a$alp[1, g] = rnorm(1, a$theAlp[1], a$sigAlp[1]);
     }
     
     u = runif(1);
-    if(u < chn$piDel[1]){
-      chn$del[1, g] = 0;
+    if(u < a$piDel[1]){
+      a$del[1, g] = 0;
     } else {
-      chn$del[1, g] = rnorm(1, chn$theDel[1], chn$sigDel[1]);
+      a$del[1, g] = rnorm(1, a$theDel[1], a$sigDel[1]);
     }
+ 
+    a$eta[1, g] = 1/sqrt(sampleGamma(shape = a$d[1] / 2, 
+                                  rate = a$d[1] * a$tau[1]^2 / 2))
   }
+
+  for(n in 1:N)
+    for(g in 1:G) # PARALLELIZE
+      a$eps[1, n, g] = sampleNormal(0, a$eta[1, g]);
+
 
   # tuning parameters for metropolis steps (std deviations of normal distributions)
 
-  chn$tunC = rep(0, N);
-  s = 2 * sd(chn$c[1, ]);
+  a$tunC = rep(0, N);
+  s = 2 * sd(a$c[1, ]);
   for(n in 1:N)
-    chn$tunC[n] = s;
+    a$tunC[n] = s;
 
-  chn$tunEps = matrix(0, nrow = N, ncol = G);
+  a$tunEps = matrix(0, nrow = N, ncol = G);
   for(g in 1:G){
-    s = 2 * sd(chn$eps[1,,g]);
+    s = 2 * sd(a$eps[1,,g]);
    
     for(n in 1:N)
-      chn$tunEps[n, g] = s;
-  }
+      a$tunEps[n, g] = s;
+  }	
 
-  chn$tunD = chn$d[1];
+  a$tunD = a$d[1];
   
-  chn$tunPhi = rep(0, G);
-  s = 2* sd(chn$phi[1,]);
+  a$tunPhi = rep(0, G);
+  s = 2* sd(a$phi[1,]);
   for(g in 1:G)
-    chn$tunPhi[g] = s;
+    a$tunPhi[g] = s;
 
-  return(chn);
+  return(a);
 }
 
-mu = function(chn, n, phi, alp, del){
-  if(chn$grp[n] == 1){
+mu = function(a, n, phi, alp, del){
+  if(a$grp[n] == 1){
     return(phi - alp);
-  } else if(chn$grp[n] == 2){
+  } else if(a$grp[n] == 2){
     return(phi + del);
-  } else if(chn$grp[n] == 3){
+  } else if(a$grp[n] == 3){
     return(phi + alp);
   }
 }
 
 # log full conditionals with no convenient form
 
-lC = function(chn, n, arg){
-  G = chn$G;
+lC = function(a, n, arg){
 
-  ybar = chn$yMeanG;
-  sigC = chn$sigC[chn$ms$sigC];
-  eps = chn$eps[chn$ms$eps,n,];
-  phi = chn$phi[chn$ms$phi,];
-  alp = chn$alp[chn$ms$alp,];
-  del = chn$del[chn$ms$del,];
+  for(g in 1:a$G) # PARALLELIZE
+    a$tmp1[g] = exp(a$eps[a$m$eps, n, g] + mu(a, n, a$phi[a$m$phi, g], 
+                                            a$alp[a$m$alp, g], a$del[a$m$del, g]));
 
   s = 0;
-  for(g in 1:chn$G)
-    s = s + exp(eps[g] + mu(chn, n, phi[g], alp[g], del[g]));
+  for(g in 1:a$G) # PARALLELIZE
+    s = s + a$tmp1[g];
 
-  ret = arg * G * ybar[n] - exp(arg) * s - arg^2 / (2 * sigC^2);
+  ret = arg * a$G * a$yMeanG[n] - exp(arg) * s - arg^2 / (2 * a$sigC[a$m$sigC]^2);
   return(ret);
 }
 
-lEps = function(chn, n, g, arg){
-  
-  y = chn$y
-  c = chn$c[chn$ms$c, ];
-  eta = chn$eta[chn$ms$eta, ];
-  phi = chn$phi[chn$ms$phi, ];
-  alp = chn$alp[chn$ms$alp, ];
-  del = chn$del[chn$ms$del, ];
+lEps = function(a, n, g, arg){
 
-  ret = y[n, g] * arg - exp(c[n] + arg + mu(chn, n, phi[g], alp[g], del[g])) 
-          - arg^2 / (2 * eta[g]^2);
+  ret = a$y[n, g] * arg - 
+        exp(a$c[a$m$c, n] + arg + mu(a, n, a$phi[a$m$phi, g], 
+                                     a$alp[a$m$alp, g], a$del[a$m$del, g])) 
+          - arg^2 / (2 * a$eta[a$m$eta, g]^2);
+
   return(ret);
 }
 
-lD = function(chn, arg){
-  G = chn$G
-  d0 = chn$d0
-  tmp = rep(0, G);
-
-  tau = chn$tau[chn$ms$tau];
-  eta = chn$eta[chn$ms$eta,];
+lD = function(a, arg){
   
-  if(arg <= 0 || arg > d0)
+  if(arg <= 0 || arg > a$d0)
     return(-Inf);
   
-  for(g in 1:G) # PARALLELIZE
-    tmp[g] = 2 * log(eta[g]);
+  for(g in 1:a$G){ # PARALLELIZE
+    a$tmp1[g] = 2 * log(a$eta[a$m$eta, g]);
+    a$tmp2[g] = 1/(a$eta[a$m$eta, g] * a$eta[a$m$eta, g]);
+  }
 
   s1 = 0;
-  for(g in 1:G) # PARALLELIZE
-    s1 = s1 + tmp[g];
-
-  for(g in 1:G) # PARALLELIZE
-    tmp[g] = 1/(eta[g] * eta[g]);
+  for(g in 1:a$G) # PARALLELIZE
+    s1 = s1 + a$tmp1[g];
 
   s2 = 0;
-  for(g in 1:G) # PARALLELIZE
-    s2 = s2 + tmp[g];
+  for(g in 1:a$G) # PARALLELIZE
+    s2 = s2 + a$tmp2[g];
 
-  tmp[0] = arg * tau^2 / 2;
+  a$tmp1[0] = arg * a$tau[a$m$tau]^2 / 2;
 
-  ret = -G * lgamma(arg/2) + (G * arg / 2) * log(tmp[0]);
-  ret = ret  - (arg/2 + 1) * s1 - tmp[0] * s2;
+  ret = -a$G * lgamma(arg/2) + (a$G * arg / 2) * log(a$tmp1[0]);
+  ret = ret  - (arg/2 + 1) * s1 - a$tmp1[0] * s2;
 
   return(ret);
 }
 
-lPhi = function(chn, g, arg){
-  N = chn$N;
-  y = chn$y;
-  c = chn$c[chn$ms$c,];
-  eps = chn$eps[chn$ms$eps,,]
-  alp = chn$alp[chn$ms$alp,];
-  del = chn$del[chn$ms$del,];
-  thePhi = chn$thePhi[chn$ms$thePhi];
-  sigPhi = chn$sigPhi[chn$ms$sigPhi];
-  
+lPhi = function(a, g, arg){
+ 
   s = 0; 
-  for(n in 1:N){
-    tmp = mu(chn, n, arg, alp[g], del[g]);
-    s = s + y[n, g] * tmp - exp(c[n] + eps[n, g] + tmp);
+  for(n in 1:a$N){
+    a$tmp[0] = mu(a, n, arg, a$alp[a$m$alp, g], a$del[a$m$del, g]);
+    s = s + a$y[n, g] * a$tmp[0] - exp(a$c[a$m$c, n] + 
+        a$eps[a$m$eps, n, g] + a$tmp[0]);
   }
  
-  ret = s - (arg - thePhi)^2 / (2 * sigPhi^2);
+  ret = s - (arg - a$thePhi[a$m$thePhi])^2 / (2 * a$sigPhi[a$m$sigPhi]^2);
   return(ret);
 }
 
-lAlp = function(chn, g, arg){
-  N = chn$N;
-
-  y = chn$y
-  grp = chn$grp;
-
-  c = chn$c[chn$ms$c, ];
-  eps = chn$eps[chn$ms$eps,,];
-  phi = chn$phi[chn$ms$phi, ];
-  del = chn$del[chn$ms$del, ];
-
-  theAlp = chn$theAlp[chn$ms$theAlp];
-  sigAlp = chn$sigAlp[chn$ms$sigAlp];
-
-  piAlp = chn$piAlp[chn$ms$piAlp];
+lAlp = function(a, g, arg){
   
   s = 0; 
-  for(n in 1:N){
+  for(n in 1:a$N){
     if(grp[n] != 2){
-      tmp = mu(chn, n, phi[g], arg, del[g]);
-      s = s + y[n, g] * tmp - exp(c[n] + eps[n, g] + tmp);
+      a$tmp[0] = mu(a, n, a$phi[a$m$phi, g], arg, a$del[a$m$del, g]);
+      s = s + y[n, g] * a$tmp1[0] - exp(a$c[a$m$c, n] + 
+          a$eps[a$m$eps, n, g] + a$tmp1[0]);
     }
   }
  
   if(arg != 0){
-    tmp = -(arg - theAlp)^2 / (2 * sigAlp^2) - log(1 - piAlp)
+    a$tmp1[0] = -(arg - a$theAlp[a$m$theAlp])^2 / (2 * a$sigAlp[a$m$sigAlp]^2) -
+                log(1 - a$piAlp[a$m$piAlp]);
   } else {
-    tmp = log(piAlp)
+    a$tmp1[0] = log(a$piAlp[a$m$piAlp])
   }
 
-  ret = s + tmp;
+  ret = s + a$tmp1[0];
   return(ret);
 }
 
-lDel = function(chn, g, arg){
-  N = chn$N;
-
-  y = chn$y
-  grp = chn$grp;
-
-  c = chn$c[chn$ms$c, ];
-  eps = chn$eps[chn$ms$eps,,];
-  phi = chn$phi[chn$ms$phi, ];
-  alp = chn$alp[chn$ms$alp, ];
-
-  theDel = chn$theDel[chn$ms$theDel];
-  sigDel = chn$sigDel[chn$ms$sigDel];
-
-  piDel = chn$piDel[chn$ms$piDel];
+lDel = function(a, g, arg){
   
   s = 0; 
-  for(n in 1:N){
+  for(n in 1:a$N){
     if(grp[n] != 2){
-      tmp = mu(chn, n, phi[g], alp[g], arg);
-      s = s + y[n, g] * tmp - exp(c[n] + eps[n, g] + tmp);
+      a$tmp[0] = mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$alp, g], arg);
+      s = s + y[n, g] * a$tmp1[0] - exp(a$c[a$m$c, n] + 
+          a$eps[a$m$eps, n, g] + a$tmp1[0]);
     }
   }
  
   if(arg != 0){
-    tmp = -(arg - theDel)^2 / (2 * sigDel^2) - log(1 - piDel)
+    a$tmp1[0] = -(arg - a$theDel[a$m$theDel])^2 / (2 * a$sigDel[a$m$sigDel]^2) -
+                log(1 - a$piDel[a$m$piDel]);
   } else {
-    tmp = log(piDel)
+    a$tmp1[0] = log(a$piDel[a$m$piDel])
   }
 
-  ret = s + tmp;
+  ret = s + a$tmp1[0];
   return(ret);
 }
 
 # samplers
 
-sampleC = function(chn){ # PARALLELIZE: N BLOCKS, 1 THREAD PER BLOCK (NOTHING IN LOCKSTEP)
-  for(n in 1:chn$N){ 
-    old = chn$c[chn$ms$c, n];
-    new = sampleNormal(old, chn$tunC[n]);
+sampleC = function(a){ # PARALLELIZE: N BLOCKS, 1 THREAD PER BLOCK (NOTHING IN LOCKSTEP)
+  for(n in 1:a$N){ 
+    old = a$c[a$m$c, n];
+    new = sampleNormal(old, a$tunC[n]);
 
-    lp = min(0, lC(chn, n, new) - lC(chn, n, old));
+    lp = min(0, lC(a, n, new) - lC(a, n, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
-      chn$c[chn$ms$c + 1, n] = new;
-      chn$tunC = chn$tunC * 1.1; # Increase the proposal variance to avoid getting 
+      a$c[a$m$c + 1, n] = new;
+      a$tunC = a$tunC * 1.1; # Increase the proposal variance to avoid getting 
                                    # stuck in a mode
     } else { # reject
-      chn$c[chn$ms$c + 1, n] = new;
-      chn$tunC = chn$tunC / 1.1; # If you're rejecting too often, decrease the proposal 
+      a$c[a$m$c + 1, n] = new;
+      a$tunC = a$tunC / 1.1; # If you're rejecting too often, decrease the proposal 
                                    # variance to sample closer to the last accepted value.
     }
   }
 
-  chn$ms$c = chn$ms$c + 1;
-  return(chn)
+  a$m$c = a$m$c + 1;
+  return(a)
 }
 
-sampleSigC = function(chn){
-  shape = (chn$N - 1) / 2;
-  tmp = rep(0, chn$N);  
+sampleSigC = function(a){
 
-  for(n in 1:chn$N) # PARALLELIZE: 1 BLOCK, N THREADS (LOCKSTEP IS FINE)
-    tmp[n] = chn$c[chn$ms$c, n]^2;
+  for(n in 1:a$N) # PARALLELIZE: 1 BLOCK, N THREADS (LOCKSTEP IS FINE)
+    a$tmp1[n] = a$c[a$m$c, n]^2;
 
   rate = 0;
-  for(n in 1:chn$N) # PARALLELIZE: PARALLEL SUM IN THRUST
-    rate = rate + tmp[n];
+  for(n in 1:a$N) # PARALLELIZE: PARALLEL SUM IN THRUST
+    rate = rate + a$tmp1[n];
   
+  shape = (a$N - 1) / 2; 
   rate = rate / 2;
+  lb = 1 / a$sigC0^2  
 
-  lb = 1 / chn$sigC0^2  
-
-  chn$sigC[chn$ms$sigC + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
-  chn$ms$sigC = chn$ms$sigC + 1;
-  return(chn)
+  a$sigC[a$m$sigC + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  a$m$sigC = a$m$sigC + 1;
+  return(a)
 }
 
-sampleEps = function(chn){ # PARALLELIZE: N BLOCKS, G THREADS PER BLOCK (OR SOMETHING BETTER)
-  for(g in 1:chn$G){
-    for(n in 1:chn$N){ 
-      old = chn$eps[chn$ms$eps, n, g];
-      new = sampleNormal(old, chn$tunEps[n, g]);
+sampleEps = function(a){ # PARALLELIZE: N BLOCKS, G THREADS PER BLOCK (OR SOMETHING BETTER)
+  for(g in 1:a$G){
+    for(n in 1:a$N){ 
+      old = a$eps[a$m$eps, n, g];
+      new = sampleNormal(old, a$tunEps[n, g]);
 
-      lp = min(0, lEps(chn, n, g, new) - lEps(chn, n, g, old));
+      lp = min(0, lEps(a, n, g, new) - lEps(a, n, g, old));
       lu = log(runif(1));
       
       if(lu < lp){ # accept
-        chn$eps[chn$ms$eps + 1, n, g] = new;
-        chn$tuneEps[n, g] = chn$tuneEps[n, g] * 1.1; 
+        a$eps[a$m$eps + 1, n, g] = new;
+        a$tuneEps[n, g] = a$tuneEps[n, g] * 1.1; 
       } else { # reject
-        chn$eps[chn$ms$eps + 1, n, g] = new;
-        chn$tuneEps[n, g] = chn$tuneEps[n, g] / 1.1;
+        a$eps[a$m$eps + 1, n, g] = new;
+        a$tuneEps[n, g] = a$tuneEps[n, g] / 1.1;
       }
     }
   }
 
-  chn$ms$eps = chn$ms$eps + 1;
-  return(chn)
+  a$m$eps = a$m$eps + 1;
+  return(a)
 }
 
-sampleEta = function(chn){
-  for(g in 1:chn$G){ # PARALLELIZE: FIGURE OUT HOW MANY BLOCKS AND THREADS PER BLOCK
+sampleEta = function(a){
+  for(g in 1:a$G){ # PARALLELIZE: FIGURE OUT HOW MANY BLOCKS AND THREADS PER BLOCK
 
-    shape = (chn$N - chn$d[chn$ms$d]) / 2;
-    tmp = rep(0, chn$N);  
+    shape = (a$N - a$d[a$m$d]) / 2; 
 
-    for(n in 1:chn$N) # MAYBE PARALLELIZABLE, MAYBE NOT
-      tmp[n] = chn$eps[chn$ms$eps, n, g]^2;
+    for(n in 1:a$N) # MAYBE PARALLELIZABLE, MAYBE NOT
+      a$tmp1[n] = a$eps[a$m$eps, n, g]^2;
 
     rate = 0;
-    for(n in 1:chn$N) # MAYBE PARALLELIZE, MAYBE NOT
-      rate = rate + tmp[n];
+    for(n in 1:a$N) # MAYBE PARALLELIZE, MAYBE NOT
+      rate = rate + a$tmp1[n];
   
-    rate = (rate + chn$d[chn$ms$d] * chn$tau[chn$ms$tau] * chn$tau[chn$ms$tau]) / 2; 
+    rate = (rate + a$d[a$m$d] * a$tau[a$m$tau] * a$tau[a$m$tau]) / 2; 
 
-    chn$eta[chn$ms$eta + 1, g] = 1/sqrt(sampleGamma(shape, rate));
+    a$eta[a$m$eta + 1, g] = 1/sqrt(sampleGamma(shape, rate));
   }
 
-  chn$ms$eta = chn$ms$eta + 1;
-  return(chn)
+  a$m$eta = a$m$eta + 1;
+  return(a)
 }
 
-sampleD = function(chn){ 
+sampleD = function(a){ 
 
-  old = chn$d[chn$ms$d];
-  new = sampleNormal(old, chn$tunD);
+  old = a$d[a$m$d];
+  new = sampleNormal(old, a$tunD);
 
-  lp = min(0, lD(chn, new) - lD(chn, old));
+  lp = min(0, lD(a, new) - lD(a, old));
   lu = log(runif(1));
     
   if(lu < lp){ # accept
-    chn$d[chn$ms$d + 1] = new;
-    chn$tunD = chn$tunD * 1.1; # Increase the proposal variance to avoid getting 
+    a$d[a$m$d + 1] = new;
+    a$tunD = a$tunD * 1.1; # Increase the proposal variance to avoid getting 
                                  # stuck in a mode
   } else { # reject
-    chn$d[chn$ms$d + 1] = new;
-    chn$tunD = chn$tunD / 1.1; # If you're rejecting too often, decrease the proposal 
+    a$d[a$m$d + 1] = new;
+    a$tunD = a$tunD / 1.1; # If you're rejecting too often, decrease the proposal 
                                  # variance to sample closer to the last accepted value.
   }
 
-  chn$ms$d = chn$ms$d + 1;
-  return(chn)
+  a$m$d = a$m$d + 1;
+  return(a)
 }
 
-sampleTau = function(chn){
-  shape = chn$aTau + chn$G * chn$d[chn$ms$d] / 2;
+sampleTau = function(a){
+  shape = a$aTau + a$G * a$d[a$m$d] / 2;
 
-  tmp = rep(0, chn$G);
-  for(g in 1:chn$G) # PARALLELIZE
-    tmp[g] = 1/chn$eta[chn$ms$eta, g]^2;
+  for(g in 1:a$G) # PARALLELIZE
+    a$tmp1[g] = 1/a$eta[a$m$eta, g]^2;
 
   rate = 0;
-  for(g in 1:chn$G) # PARALLELIZE
-    rate = rate + tmp[g];
-  rate = rate * chn$d[chn$ms$d] / 2 + chn$bTau;
+  for(g in 1:a$G) # PARALLELIZE
+    rate = rate + a$tmp1[g];
+  rate = rate * a$d[a$m$d] / 2 + a$bTau;
 
-  chn$tau[chn$ms$tau + 1] = 1/sqrt(sampleGamma(shape, rate));
-  chn$ms$tau = chn$ms$tau + 1;
-  return(chn)
+  a$tau[a$m$tau + 1] = 1/sqrt(sampleGamma(shape, rate));
+  a$m$tau = a$m$tau + 1;
+  return(a)
 }
 
-samplePhi = function(chn){ 
-  for(g in 1:chn$G){ # PARALLELIZE
+samplePhi = function(a){ 
+  for(g in 1:a$G){ # PARALLELIZE
 
-    old = chn$phi[chn$ms$phi, g];
-    new = sampleNormal(old, chn$tunPhi[g]);
+    old = a$phi[a$m$phi, g];
+    new = sampleNormal(old, a$tunPhi[g]);
 
-    lp = min(0, lPhi(chn, g, new) - lPhi(chn, g, old));
+    lp = min(0, lPhi(a, g, new) - lPhi(a, g, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
-      chn$phi[chn$ms$phi + 1, g] = new;
-      chn$tunPhi[g] = chn$tunPhi[g] * 1.1; 
+      a$phi[a$m$phi + 1, g] = new;
+      a$tunPhi[g] = a$tunPhi[g] * 1.1; 
 
     } else { # reject
-      chn$phi[chn$ms$phi + 1, g] = new;
-      chn$tunPhi[g] = chn$tunPhi[g] / 1.1; 
+      a$phi[a$m$phi + 1, g] = new;
+      a$tunPhi[g] = a$tunPhi[g] / 1.1; 
     }
   }
 
-  chn$ms$phi = chn$ms$phi + 1;
-  return(chn)
+  a$m$phi = a$m$phi + 1;
+  return(a)
 }
 
-sampleThePhi = function(chn){
+sampleThePhi = function(a){
   sm = 0; 
-  for(g in 1:chn$G) # PARALLELIZE
-    sm = sm + chn$phi[chn$ms$phi, g];
+  for(g in 1:a$G) # PARALLELIZE
+    sm = sm + a$phi[a$m$phi, g];
 
-  gs = chn$gamPhi^2;
-  ss = chn$sigPhi[chn$ms$sigPhi]^2;
-  den = (chn$G * gs + ss);
+  gs = a$gamPhi^2;
+  ss = a$sigPhi[a$m$sigPhi]^2;
+  den = (a$G * gs + ss);
 
   m = gs * sm / den;
   s = gs * ss / den;
 
-  chn$thePhi[chn$ms$thePhi + 1] = sampleNormal(m, s);
-  chn$ms$thePhi = chn$ms$thePhi + 1;
-  return(chn)
+  a$thePhi[a$m$thePhi + 1] = sampleNormal(m, s);
+  a$m$thePhi = a$m$thePhi + 1;
+  return(a)
 }
 
-sampleSigPhi = function(chn){
-  shape = (chn$G - 1) / 2;
+sampleSigPhi = function(a){
+  shape = (a$G - 1) / 2;
+
+  for(g in 1:a$G) # PARALLELIZE
+    a$tmp1[g] = (a$phi[a$m$phi, g] - a$thePhi[a$m$thePhi])^2;
 
   rate = 0;
-  for(g in 1:chn$G) # PARALLELIZE
-    rate = rate + (chn$phi[chn$ms$phi, g] - chn$thePhi[chn$ms$thePhi])^2;
+  for(g in 1:a$G) # PARALLELIZE
+    rate = rate + a$tmp1[g];
   rate = rate / 2;
 
-  lb = 1/chn$sigPhi0^2;
-  chn$sigPhi[chn$ms$sigPhi + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
-  chn$ms$sigPhi = chn$ms$sigPhi + 1;
-  return(chn)
+  lb = 1/a$sigPhi0^2;
+  a$sigPhi[a$m$sigPhi + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  a$m$sigPhi = a$m$sigPhi + 1;
+  return(a)
 }
 
-sampleAlp = function(chn){ 
-  for(g in 1:chn$G){ # PARALLELIZE
+sampleAlp = function(a){ 
+  for(g in 1:a$G){ # PARALLELIZE
 
-    old = chn$alp[chn$ms$alp, g];
+    old = a$alp[a$m$alp, g];
 
     u = runif(1);
-    if(u < chn$piAlp[chn$ms$piAlp]) {
+    if(u < a$piAlp[a$m$piAlp]) {
       new = 0;
     } else {
 
       tmp = 0;
       Nalp = 0;
-      for(n in 1:chn$N)
-        if(chn$grp[n] != 2){
-          tmp = tmp + chn$y[n, g];
+      for(n in 1:a$N)
+        if(a$grp[n] != 2){
+          tmp = tmp + a$y[n, g];
           Nalp = Nalp + 1;
         }
       
-      mu = chn$theAlp[chn$ms$theAlp] / chn$gamAlp^2 + 
-           tmp / (Nalp * chn$sigAlp[chn$ms$sigAlp]^2)
-      mu = mu / (1/chn$gamAlp^2 + 1/chn$sigAlp[chn$ms$sigAlp]^2)
+      mu = a$theAlp[a$m$theAlp] / a$gamAlp^2 + 
+           tmp / (Nalp * a$sigAlp[a$m$sigAlp]^2)
+      mu = mu / (1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2)
 
-      s = 1/sqrt(1/chn$gamAlp^2 + 1/chn$sigAlp[chn$ms$sigAlp]^2);
+      s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2);
       new = sampleNormal(mu, s);
     }
 
-    lp = min(0, lAlp(chn, g, new) - lAlp(chn, g, old));
+    lp = min(0, lAlp(a, g, new) - lAlp(a, g, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
-      chn$alp[chn$ms$alp + 1, g] = new;
-      chn$tunAlp[g] = chn$tunAlp[g] * 1.1; 
+      a$alp[a$m$alp + 1, g] = new;
+      a$tunAlp[g] = a$tunAlp[g] * 1.1; 
 
     } else { # reject
-      chn$alp[chn$ms$alp + 1, g] = new;
-      chn$tunAlp[g] = chn$tunAlp[g] / 1.1; 
+      a$alp[a$m$alp + 1, g] = new;
+      a$tunAlp[g] = a$tunAlp[g] / 1.1; 
     }
   }
 
-  chn$ms$alp = chn$ms$alp + 1;
-  return(chn)
+  a$m$alp = a$m$alp + 1;
+  return(a)
 }
 
-sampleTheAlp = function(chn){
+sampleTheAlp = function(a){
   sm = 0;
   Galp = 0;
 
-  for(g in 1:chn$G) # PARALLELIZE
-    if(chn$alp[chn$ms$alp, g]){
-      Galp = Galp + 1;
-      sm = sm + chn$alp[chn$ms$alp, g];
+  for(g in 1:a$G){ # PARALLELIZE
+    if(a$alp[a$m$alp, g]){
+      a$tmp1[g] = 1;
+      a$tmp2[g] = a$alp[a$m$alp, g];
+    } else {
+      a$tmp1[g] = 0;
+      a$tmp2[g] = 0;
     }
+  }
 
-  gs = chn$gamAlp^2;
-  ss = chn$sigAlp[chn$ms$sigAlp]^2;
+  for(g in 1:a$G) # PARALLELIZE
+    Galp = Galp + a$tmp1[g];
+
+  for(g in 1:a$G) # PARALLELIZE
+    sm = sm + a$tmp2[g];
+
+  gs = a$gamAlp^2;
+  ss = a$sigAlp[a$m$sigAlp]^2;
   den = (Galp * gs + ss);
 
   m = gs * sm / den;
   s = gs * ss / den;
 
-  chn$theAlp[chn$ms$theAlp + 1] = sampleNormal(m, s);
-  chn$ms$theAlp = chn$ms$theAlp + 1;
-  return(chn)
+  a$theAlp[a$m$theAlp + 1] = sampleNormal(m, s);
+  a$m$theAlp = a$m$theAlp + 1;
+  return(a);
 }
 
-sampleSigAlp = function(chn){
+sampleSigAlp = function(a){
   Galp = 0;
   rate = 0;
 
-  for(g in 1:chn$G) # PARALLELIZE
-    if(chn$alp[chn$ms$alp, g]){
-      rate = rate + (chn$alp[chn$ms$alp, g] - chn$theAlp[chn$ms$theAlp])^2;
-      Galp = Galp + 1;
+  for(g in 1:a$G){ # PARALLELIZE
+    if(a$alp[a$m$alp, g]){
+      a$tmp1[g] = (a$alp[a$m$alp, g] - a$theAlp[a$m$theAlp])^2;
+      a$tmp2[g] = 1;
+    } else {
+      a$tmp1[g] = 0;
+      a$tmp2[g] = 0;
     }
+  }
+
+  for(g in 1:a$G) # PARALLELIZE
+    rate = rate + a$tmp1[g];
+
+  for(g in 1:a$G) # PARALLELIZE
+    Galp = Galp + a$tmp2[g];   
 
   shape = (Galp - 1) / 2;
   rate = rate / 2;
-  lb = 1/chn$sigAlp0^2;
+  lb = 1/a$sigAlp0^2;
 
-  chn$sigAlp[chn$ms$sigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
-  chn$ms$sigAlp = chn$ms$sigAlp + 1;
-  return(chn)
+  a$sigAlp[a$m$sigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  a$m$sigAlp = a$m$sigAlp + 1;
+  return(a)
 }
 
-samplePiAlp = function(chn){
+samplePiAlp = function(a){ # bookmark
+  for(g in 1:a$G){ # PARALLELIZE
+    if(a$alp[a$m$alp, g]){
+      a$tmp1[g] = 1;
+    } else {
+      a$tmp1[g] = 0;
+    }
+  }
+
   Galp = 0;
-  for(g in 1:chn$G) # PARALLELIZE
-    if(chn$alp[chn$ms$alp, g])
-      Galp = Galp + 1;
+  for(g in 1:a$G) # PARALLELIZE
+    Galp = Galp + a$tmp1[g];
 
-  chn$piAlp[chn$ms$piAlp + 1] = sampleBeta(chn$G + Galp + chn$aTau, Galp + chn$bTau);
-  chn$ms$piAlp = chn$ms$piAlp + 1;
-  return(chn)
+  a$piAlp[a$m$piAlp + 1] = sampleBeta(a$G + Galp + a$aTau, Galp + a$bTau);
+  a$m$piAlp = a$m$piAlp + 1;
+  return(a)
 }
 
-sampleDel = function(chn){ 
-  for(g in 1:chn$G){ # PARALLELIZE
+sampleDel = function(a){ 
+  for(g in 1:a$G){ # PARALLELIZE
 
-    old = chn$del[chn$ms$del, g];
+    old = a$del[a$m$del, g];
 
     u = runif(1);
-    if(u < chn$piDel[chn$ms$piDel]) {
+    if(u < a$piDel[a$m$piDel]) {
       new = 0;
     } else {
 
       tmp = 0;
       Ndel = 0;
-      for(n in 1:chn$N)
-        if(chn$grp[n] != 2){
-          tmp = tmp + chn$y[n, g];
+      for(n in 1:a$N)
+        if(a$grp[n] != 2){
+          tmp = tmp + a$y[n, g];
           Ndel = Ndel + 1;
         }
       
-      mu = chn$theDel[chn$ms$theDel] / chn$gamDel^2 + 
-           tmp / (Ndel * chn$sigDel[chn$ms$sigDel]^2)
-      mu = mu / (1/chn$gamDel^2 + 1/chn$sigDel[chn$ms$sigDel]^2)
+      mu = a$theDel[a$m$theDel] / a$gamDel^2 + 
+           tmp / (Ndel * a$sigDel[a$m$sigDel]^2)
+      mu = mu / (1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2)
 
-      s = 1/sqrt(1/chn$gamDel^2 + 1/chn$sigDel[chn$ms$sigDel]^2);
+      s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2);
       new = sampleNormal(mu, s);
     }
 
-    lp = min(0, lDel(chn, g, new) - lDel(chn, g, old));
+    lp = min(0, lDel(a, g, new) - lDel(a, g, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
-      chn$del[chn$ms$del + 1, g] = new;
-      chn$tunDel[g] = chn$tunDel[g] * 1.1; 
+      a$del[a$m$del + 1, g] = new;
+      a$tunDel[g] = a$tunDel[g] * 1.1; 
 
     } else { # reject
-      chn$del[chn$ms$del + 1, g] = new;
-      chn$tunDel[g] = chn$tunDel[g] / 1.1; 
+      a$del[a$m$del + 1, g] = new;
+      a$tunDel[g] = a$tunDel[g] / 1.1; 
     }
   }
 
-  chn$ms$del = chn$ms$del + 1;
-  return(chn)
+  a$m$del = a$m$del + 1;
+  return(a)
 }
 
-sampleTheDel = function(chn){
-  sm = 0;
-  Gdel = 0;
+sampleTheDel = function(a){
 
-  for(g in 1:chn$G) # PARALLELIZE
-    if(chn$del[chn$ms$del, g]){
-      Gdel = Gdel + 1;
-      sm = sm + chn$del[chn$ms$del, g];
+  for(g in 1:a$G){ # PARALLELIZE
+    if(a$del[a$m$del, g]){
+      a$tmp1[g] = 1;
+      a$tmp2[g] = a$del[a$m$del, g];
+    } else {
+      a$tmp1[g] = 0;
+      a$tmp2[g] = 0;
     }
+  }
 
-  gs = chn$gamDel^2;
-  ss = chn$sigDel[chn$ms$sigDel]^2;
+  Gdel = 0;
+  for(g in 1:a$G) # PARALLELIZE  
+    Gdel = Gdel + a$tmp1[g];
+
+  sm = 0;
+  for(g in 1:a$G) # PARALLELIZE
+    sm = sm + a$tmp2[g];
+
+  gs = a$gamDel^2;
+  ss = a$sigDel[a$m$sigDel]^2;
   den = (Gdel * gs + ss);
 
   m = gs * sm / den;
   s = gs * ss / den;
 
-  chn$theDel[chn$ms$theDel + 1] = sampleNormal(m, s);
-  chn$ms$theDel = chn$ms$theDel + 1;
-  return(chn)
+  a$theDel[a$m$theDel + 1] = sampleNormal(m, s);
+  a$m$theDel = a$m$theDel + 1;
+  return(a)
 }
 
-sampleSigDel = function(chn){
+sampleSigDel = function(a){
   Gdel = 0;
   rate = 0;
 
-  for(g in 1:chn$G) # PARALLELIZE
-    if(chn$del[chn$ms$del, g]){
-      rate = rate + (chn$del[chn$ms$del, g] - chn$theDel[chn$ms$theDel])^2;
-      Gdel = Gdel + 1;
+  for(g in 1:a$G){ # PARALLELIZE
+    if(a$del[a$m$del, g]){
+      a$tmp1[g] = (a$del[a$m$del, g] - a$theDel[a$m$theDel])^2;
+      a$tmp2[g] = 1;
+    } else {
+      a$tmp1[g] = 0;
+      a$tmp2[g] = 0;
     }
+  }
+
+  for(g in 1:a$G) # PARALLELIZE
+    rate = rate + a$tmp1[g];
+ 
+  for(g in 1:a$G) # PARALLELIZE
+    Gdel = Gdel + a$tmp2[g];
 
   shape = (Gdel - 1) / 2;
   rate = rate / 2;
-  lb = 1/chn$sigDel0^2;
+  lb = 1/a$sigDel0^2;
 
-  chn$sigDel[chn$ms$sigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
-  chn$ms$sigDel = chn$ms$sigDel + 1;
-  return(chn)
+  a$sigDel[a$m$sigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  a$m$sigDel = a$m$sigDel + 1;
+  return(a)
 }
 
-samplePiDel = function(chn){
+samplePiDel = function(a){
+
+  for(g in 1:a$G){ # PARALLELIZE
+    if(a$del[a$m$del, g]){
+      a$tmp1[g] = 1; 
+    } else {
+      a$tmp1[g] = 0;
+    }
+  } 
+
   Gdel = 0;
-  for(g in 1:chn$G) # PARALLELIZE
-    if(chn$del[chn$ms$del, g])
-      Gdel = Gdel + 1;
+  for(g in 1:a$G) # PARALLELIZE
+     Gdel = Gdel + a$tmp1[g];
 
-  chn$piDel[chn$ms$piDel + 1] = sampleBeta(chn$G + Gdel + chn$aTau, Gdel + chn$bTau);
-  chn$ms$piDel = chn$ms$piDel + 1;
-  return(chn)
+  a$piDel[a$m$piDel + 1] = sampleBeta(a$G + Gdel + a$aTau, Gdel + a$bTau);
+  a$m$piDel = a$m$piDel + 1;
+  return(a)
 }
 
-runChain = function(chn){
-  for(m in 1:(chn$M - 1)){
+runChain = function(a){
+  for(m in 1:(a$M - 1)){
 
     print(paste(m))
     print("  step 1")
 
-    chn = sampleC(chn);
+    a = sampleC(a);
 
 print("  step 2")
 
-    chn = sampleTau(chn);
-    chn = samplePiAlp(chn);
-    chn = samplePiDel(chn);
+    a = sampleTau(a);
+    a = samplePiAlp(a);
+    a = samplePiDel(a);
 
 print("  step 3")
 
-    chn = sampleD(chn);
-    chn = sampleThePhi(chn);
-    chn = sampleTheAlp(chn);
-    chn = sampleTheDel(chn);
+    a = sampleD(a);
+    a = sampleThePhi(a);
+    a = sampleTheAlp(a);
+    a = sampleTheDel(a);
 
 print("  step 4")
 
-    chn = sampleSigC(chn); print("    sigc")
-    chn = sampleSigPhi(chn);  print("    sigphi")
-    chn = sampleSigAlp(chn);  print("    sigalp")
-    chn = sampleSigDel(chn);  print("    sigdel")
-    chn = sampleEta(chn); print("    eta")
+    a = sampleSigC(a); print("    sigc")
+    a = sampleSigPhi(a);  print("    sigphi")
+    a = sampleSigAlp(a);  print("    sigalp")
+    a = sampleSigDel(a);  print("    sigdel")
+    a = sampleEta(a); print("    eta")
 
 print("  step 5")
 
-    chn = sampleEps(chn);
+    a = sampleEps(a);
 
 print("  step 6")
 
-    chn = samplePhi(chn);
+    a = samplePhi(a);
 
 print("  step 7")
 
-    chn = sampleAlp(chn);
+    a = sampleAlp(a);
 
 print("  step 8")
 
-    chn = sampleDel(chn);
+    a = sampleDel(a);
   }
 
-  return(chn)
+  return(a)
 }
 
 run = function(){
   h = hammer();
   y = h$y
   grp = h$grp
-  chn = newChain(y, grp, 5, 4, 10)
-  return(runChain(chn)) 
+  a = newChain(y, grp, 5, 4, 10)
+  return(runChain(a)) 
 }
