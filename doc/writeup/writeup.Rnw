@@ -766,8 +766,8 @@ where ``$\ldots$" represents all the model parameters except for the other $\alp
 
 \begin{align*}
 P(y_{g, n} \mid \alpha_g = 0, \ldots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)))  \\
-&\propto \exp(-\exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
-&= \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
+&= \frac{1}{y_{g, n}!} \exp(-\exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
+&=  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
 \end{align*}
 
 
@@ -792,9 +792,10 @@ P(y_{g, n}& \mid \alpha_g \ne 0, \ldots) \\
 &=  \underbrace{(2 \pi y_{g, n}! (\sigma_\alpha')^2)^{-1/2}}_{D} \int \exp \left ( \underbrace{\left ( -\frac{1}{2 (\sigma_\alpha')^2} -\frac{1}{2} \right )}_A \alpha_g^2 + \underbrace{\left ( i  + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} - y_{g, n}  + 1 \right )}_B \alpha_g  \right . \\
 & \left . \qquad \underbrace{ - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1}_C \right ) d \alpha_g \\
 &= D \int \exp (A \alpha_g^2 + B \alpha_g + C) d \alpha_g \\
-&= D \int \exp \left( A \left (\alpha_g + \frac{B}{2A} \right )^2 C - \frac{B^2}{4A^2} \right ) d \alpha_g \\
-&= D \exp \left ( C - \frac{B^2}{4A^2} \right ) \int \underbrace{\exp \left( -\frac{1}{2(1/2|A|)} \left (\alpha_g + \frac{B}{2A} \right )^2  \right ) d \alpha_g}_{\text{kernel of a normal distribution (note: $A < 0$)}} \\
-&= D \exp \left ( C - \frac{B^2}{4A^2} \right ) \left  (\frac{2 \pi }{ 2|A|} \right )^{1/2}
+&= D \int \exp \left( A \left (\alpha_g + \frac{B}{2A} \right )^2 + C - \frac{B^2}{4A} \right ) d \alpha_g \\
+&= D \exp \left ( C - \frac{B^2}{4A} \right ) \int \underbrace{\exp \left( -\frac{1}{2(1/(-2A))} \left (\alpha_g + \frac{B}{2A} \right )^2  \right ) d \alpha_g}_{\text{kernel of a normal distribution (note: $A < 0$)}} \\
+&= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (\frac{2 \pi }{ -2A} \right )^{1/2} \\
+&= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (- \frac{\pi }{ A} \right )^{1/2} \\
 \end{align*}
 
 \item $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ is the same when $n$ is in treatment group 3 except that $B$ switches signs.
@@ -832,7 +833,7 @@ q(\delta_g \mid \theta_\delta', \sigma_\delta', \pi_\delta') = I(\delta_g = 0) \
 where:
 
 \begin{align*}
-\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\
+\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) = 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\
 \theta_\delta' &= \frac{\gamma_\delta^{-2} \theta_\delta + \sigma_\delta^{-2}    N_\delta^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{\gamma_\delta^{-2} + \sigma_\delta^{-2}} \\ 
 (\sigma_\delta')^2 &= (\gamma_\delta^{-2} + \sigma_\delta^{-2})\nv
 \end{align*}
