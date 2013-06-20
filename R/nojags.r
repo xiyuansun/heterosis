@@ -12,7 +12,7 @@ library(coda)
 
 # reading data
 
-hammer = function(){
+hammer = function(){ # host
   load(url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/hammer_eset.RData"))
   counts = exprs(hammer.eset)
   counts = counts[rowSums(counts) > 0,]
@@ -28,31 +28,23 @@ hammer = function(){
        N = dim(counts)[2]))
 }
 
-safeLog = function(x){ # for log counts
-  if(x > 0) {
-    return(log(x));
-  } else {
-    return(log(0.1));
-  }
-}
-
 # sampling from known distributions
 
-sampleNormal = function(m = 0, s = 1){
+sampleNormal = function(m = 0, s = 1){ # device
   u1 = runif(1);
   u2 = runif(1);
   return(sqrt(-2 * log(u1)) * sin(2 * 3.14159265 * u2) * s + m);
 }
 
-sampleGamma = function(shape = 1, rate = 1, lb = 0){
+sampleGamma = function(shape = 1, rate = 1, lb = 0){ # device
   if(shape <= 0){
     print(paste("Error: bad shape:", shape));
-    return(NaN);
+    return(0/0);
   }
   
   if(rate <= 0){
     print(paste("Error: bad rate:", rate));
-    return(NaN);
+    return(0/0);
   }
 
   if(shape >= 1){ # Marsaglia and Tsang (2000)
@@ -128,7 +120,7 @@ sampleGamma = function(shape = 1, rate = 1, lb = 0){
   }
 }
 
-sampleBeta = function(a, b){
+sampleBeta = function(a, b){ # device
   x = sampleGamma(a, 1, 0);
   y = sampleGamma(b, 1, 0);
   return(x / (x + y));
@@ -136,87 +128,41 @@ sampleBeta = function(a, b){
 
 # data structures and initialization
 
-initParam = function(){
-  list(
-    sigC0 = 10,
-    d0 = 1e3,
-
-    aTau = 1e2,
-    aAlp = 1,
-    aDel = 1,
-
-    bTau = 1e2,
-    bAlp = 1,
-    bDel = 1,
-  
-    gamPhi = 2,
-    gamAlp = 2,
-    gamDel = 2,
-
-    sigPhi0 = 2,
-    sigAlp0 = 2,
-    sigDel0 = 2
-  );
-}
-
-# struct to store the current place in the chain for each parameter
-
-newm = function(){
-  list(
-    c = 1,
-    sigC = 1,
-
-    eps = 1,
-    eta = 1,
-    d = 1,
-    tau = 1,
-
-    phi = 1,
-    alp = 1,
-    del = 1,
-
-    thePhi = 1,
-    theAlp = 1,
-    theDel = 1,
-
-    sigPhi = 1,
-    sigAlp = 1,
-    sigDel = 1,
-
-    piAlp = 1,
-    piDel = 1
-  );
-}
-
-emptyChain = function(y, grp, par, M, N, G){
+allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
  list(
-    y = y,
-    yMeanG = rowMeans(y),
-    grp = grp,
-    M = M,
-    N = N,
-    G = G,
 
-    m = newm(),
-    
-    sigC0 = par$sigC0,
-    d0 = par$d0,
+    # initialization constants
 
-    aTau = par$aTau,
-    aAlp = par$aAlp,
-    aDel = par$aDel,
+    sigC0 = 0,
+    d0 = 0,
 
-    bTau = par$bTau,
-    bAlp = par$bAlp,
-    bDel = par$bDel,
+    aTau = 0,
+    aAlp = 0,
+    aDel = 0,
+
+    bTau = 0,
+    bAlp = 0,
+    bDel = 0,
   
-    gamPhi = par$gamPhi,
-    gamAlp = par$gamAlp,
-    gamDel = par$gamDel,
+    gamPhi = 0,
+    gamAlp = 0,
+    gamDel = 0,
 
-    sigPhi0 = par$sigPhi0,
-    sigAlp0 = par$sigAlp0,
-    sigDel0 = par$sigDel0,
+    sigPhi0 = 0,
+    sigAlp0 = 0,
+    sigDel0 = 0,
+
+    # data 
+
+    y = array(0, c(N, G)),
+    yMeanG = rep(0, N),
+    grp = rep(0, N),
+
+    M = 0,
+    N = 0,
+    G = 0,
+
+    # parameters
 
     c = array(0, c(M, N)),
       sigC = rep(0, M),
@@ -240,21 +186,54 @@ emptyChain = function(y, grp, par, M, N, G){
       sigDel = rep(0, M),
       piDel = rep(0, M),
 
+    # temporary and return values
+
     tmp1 = rep(0, G),
-    tmp2 = rep(0, G)
+    tmp2 = rep(0, G),  
+
+    shape = 0,
+    rate = 0,
+    ret = 0,
+
+    # struct to store the current place in the chain for each parameter
+
+    m = list(
+      c = 0,
+      sigC = 0,
+
+      eps = 0,
+      eta = 0,
+      d = 0,
+      tau = 0,
+
+      phi = 0,
+      alp = 0,
+      del = 0,
+
+      thePhi = 0,
+      theAlp = 0,
+      theDel = 0,
+
+      sigPhi = 0,
+      sigAlp = 0,
+      sigDel = 0,
+
+      piAlp = 0,
+      piDel = 0
+    ),
+
+    # tuning parameters for metropolis steps (std deviations of normal distributions)
+
+    tun = list(
+      c = rep(0, N),
+      eps = array(0, c(N, G)),
+      d = 0,
+      phi = rep(0, G)
+    )
   );
 }
 
-newChain = function(y, grp, M, N, G){
-  par = initParam();
-  a = emptyChain(y, grp, par, M, N, G);
-
-  # compute initial values, mostly using priors
-
-  for(n in 1:N)
-    a$c[1, n] = log(quantile(y[n,], .75))
-  a$c[1, ] = a$c[1, ] - mean(a$c[1, ])
-
+newChain_kernel1 = function(a){ # kernel: 1 block, 1 thread each
   a$sigC[1] = runif(1, 0, a$sigC0)
 
   a$d[1] = runif(1, 0, a$d0)
@@ -269,60 +248,148 @@ newChain = function(y, grp, M, N, G){
   a$sigDel[1] = runif(1, 0, a$sigDel0)
 
   a$piAlp[1] = sampleBeta(a$aAlp, a$bAlp)
-  a$piDel[1] = sampleBeta( a$aDel, a$bDel)
+  a$piDel[1] = sampleBeta(a$aDel, a$bDel)
 
-  for(g in 1:G){ # PARALLELIZE
-    a$phi[1, g] = rnorm(1, a$thePhi[1], a$sigPhi[1]);
+  return(a);
+}
+
+newChain_kernel2 = function(a){ # kernel: G blocks, 1 thread each
+ for(g in 1:a$G){
+    a$phi[1, g] = sampleNormal(a$thePhi[1], a$sigPhi[1]);
 
     u = runif(1);
     if(u < a$piAlp[1]){
       a$alp[1, g] = 0;
     } else {
-      a$alp[1, g] = rnorm(1, a$theAlp[1], a$sigAlp[1]);
+      a$alp[1, g] = sampleNormal(a$theAlp[1], a$sigAlp[1]);
     }
     
     u = runif(1);
     if(u < a$piDel[1]){
       a$del[1, g] = 0;
     } else {
-      a$del[1, g] = rnorm(1, a$theDel[1], a$sigDel[1]);
+      a$del[1, g] = sampleNormal(a$theDel[1], a$sigDel[1]);
     }
  
     a$eta[1, g] = 1/sqrt(sampleGamma(shape = a$d[1] / 2, 
                                   rate = a$d[1] * a$tau[1]^2 / 2))
-  }
 
-  for(n in 1:N)
-    for(g in 1:G) # PARALLELIZE
+    for(n in 1:a$N)
       a$eps[1, n, g] = sampleNormal(0, a$eta[1, g]);
-
-
-  # tuning parameters for metropolis steps (std deviations of normal distributions)
-
-  a$tunC = rep(0, N);
-  s = 2 * sd(a$c[1, ]);
-  for(n in 1:N)
-    a$tunC[n] = s;
-
-  a$tunEps = matrix(0, nrow = N, ncol = G);
-  for(g in 1:G){
-    s = 2 * sd(a$eps[1,,g]);
-   
-    for(n in 1:N)
-      a$tunEps[n, g] = s;
-  }	
-
-  a$tunD = a$d[1];
-  
-  a$tunPhi = rep(0, G);
-  s = 2* sd(a$phi[1,]);
-  for(g in 1:G)
-    a$tunPhi[g] = s;
+  }
 
   return(a);
 }
 
-mu = function(a, n, phi, alp, del){
+newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
+
+  a = allocChain(y, M, N, G);
+
+  # data: cudaMemCpies
+
+  for(n in 1:N){
+    a$grp[n] = grp[n];
+    tmp = 0;
+
+    for(g in 1:G){
+      a$y[n, g] = y[n, g];
+      tmp = tmp + y[n, g];
+    }
+
+    a$yMeanG[n] = tmp / G;
+  }
+
+  a$M = M;
+  a$N = N;
+  a$G = G;
+
+  # initialization constants: cudaMemCpies
+
+  a$sigC0 = 10;
+  a$d0 = 1e3;
+
+  a$aTau = 1e2;
+  a$aAlp = 1;
+  a$aDel = 1;
+
+  a$bTau = 1e2;
+  a$bAlp = 1;
+  a$bDel = 1;
+  
+  a$gamPhi = 2;
+  a$gamAlp = 2;
+  a$gamDel = 2;
+
+  a$sigPhi0 = 2;
+  a$sigAlp0 = 2;
+  a$sigDel0 = 2;
+
+  # compute initial normalization factors, mostly using priors
+
+  lqts = rep(0, N);
+  tmp = rep(0, G);
+
+  s = 0;
+  for(n in 1:N){
+    for(g in 1:G)
+      tmp[g] = y[n, g];
+
+    tmp = sort(tmp); # use qsort()
+    lqts[n] = log(tmp[floor(G * 0.75)]); 
+    s = s + lqts[n];
+  }
+
+  s = s / N;
+
+  for(n in 1:N)
+    a$c[1, n] = lqts[n] - s; # cudaMemCpy
+
+  # location in chain: cudaMemCpies
+
+  a$m$c = 1;
+  a$m$sigC = 1;
+
+  a$m$eps = 1;
+  a$m$eta = 1;
+  a$m$d = 1;
+  a$m$tau = 1;
+
+  a$m$phi = 1;
+  a$m$alp = 1;
+  a$m$del = 1;
+
+  a$m$thePhi = 1;
+  a$m$theAlp = 1;
+  a$m$theDel = 1;
+
+  a$m$sigPhi = 1;
+  a$m$sigAlp = 1;
+  a$m$sigDel = 1;
+
+  a$m$piAlp = 1;
+  a$m$piDel = 1;
+
+  # tuning parameters for metropolis steps (std deviations of normal dists): cudaMemCpies
+
+  for(n in 1:N)
+    a$tun$c[n] = 1;
+
+  for(g in 1:G){
+    a$tun$phi[g] = 1;
+
+    for(n in 1:N)
+      a$tun$eps[n, g] = 1;
+  }
+
+  a$tun$d = 500;
+
+  a = newChain_kernel1(a);
+  a = newChain_kernel2(a);
+
+  return(a);
+}
+
+mu = function(a, n, phi, alp, del){ # device
   if(a$grp[n] == 1){
     return(phi - alp);
   } else if(a$grp[n] == 2){
@@ -334,17 +401,18 @@ mu = function(a, n, phi, alp, del){
 
 # log full conditionals with no convenient form
 
-lC = function(a, n, arg){
+lC = function(a, n, arg){ # host
 
   for(g in 1:a$G) # PARALLELIZE
     a$tmp1[g] = exp(a$eps[a$m$eps, n, g] + mu(a, n, a$phi[a$m$phi, g], 
                                             a$alp[a$m$alp, g], a$del[a$m$del, g]));
 
   s = 0;
-  for(g in 1:a$G) # PARALLELIZE
+  for(g in 1:a$G) # PARALLEL PAIRWISE SUM IN THRUST
     s = s + a$tmp1[g];
 
-  ret = arg * a$G * a$yMeanG[n] - exp(arg) * s - arg^2 / (2 * a$sigC[a$m$sigC]^2);
+  ret = arg * a$G * a$yMeanG[n] - exp(arg) * s - (arg*arg) / 
+        (2 * a$sigC[a$m$sigC] * a$sigC[a$m$sigC]);
   return(ret);
 }
 
@@ -376,10 +444,10 @@ lD = function(a, arg){
   for(g in 1:a$G) # PARALLELIZE
     s2 = s2 + a$tmp2[g];
 
-  a$tmp1[0] = arg * a$tau[a$m$tau]^2 / 2;
+  a$tmp1[1] = arg * a$tau[a$m$tau]^2 / 2;
 
-  ret = -a$G * lgamma(arg/2) + (a$G * arg / 2) * log(a$tmp1[0]);
-  ret = ret  - (arg/2 + 1) * s1 - a$tmp1[0] * s2;
+  ret = -a$G * lgamma(arg/2) + (a$G * arg / 2) * log(a$tmp1[1]);
+  ret = ret  - (arg/2 + 1) * s1 - a$tmp1[1] * s2;
 
   return(ret);
 }
@@ -402,20 +470,20 @@ lAlp = function(a, g, arg){
   s = 0; 
   for(n in 1:a$N){
     if(grp[n] != 2){
-      a$tmp[0] = mu(a, n, a$phi[a$m$phi, g], arg, a$del[a$m$del, g]);
-      s = s + y[n, g] * a$tmp1[0] - exp(a$c[a$m$c, n] + 
-          a$eps[a$m$eps, n, g] + a$tmp1[0]);
+      a$tmp[1] = mu(a, n, a$phi[a$m$phi, g], arg, a$del[a$m$del, g]);
+      s = s + y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
+          a$eps[a$m$eps, n, g] + a$tmp1[1]);
     }
   }
  
   if(arg != 0){
-    a$tmp1[0] = -(arg - a$theAlp[a$m$theAlp])^2 / (2 * a$sigAlp[a$m$sigAlp]^2) -
+    a$tmp1[1] = -(arg - a$theAlp[a$m$theAlp])^2 / (2 * a$sigAlp[a$m$sigAlp]^2) -
                 log(1 - a$piAlp[a$m$piAlp]);
   } else {
-    a$tmp1[0] = log(a$piAlp[a$m$piAlp])
+    a$tmp1[1] = log(a$piAlp[a$m$piAlp])
   }
 
-  ret = s + a$tmp1[0];
+  ret = s + a$tmp1[1];
   return(ret);
 }
 
@@ -424,40 +492,42 @@ lDel = function(a, g, arg){
   s = 0; 
   for(n in 1:a$N){
     if(grp[n] != 2){
-      a$tmp[0] = mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$alp, g], arg);
-      s = s + y[n, g] * a$tmp1[0] - exp(a$c[a$m$c, n] + 
-          a$eps[a$m$eps, n, g] + a$tmp1[0]);
+      a$tmp[1] = mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$alp, g], arg);
+      s = s + y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
+          a$eps[a$m$eps, n, g] + a$tmp1[1]);
     }
   }
  
   if(arg != 0){
-    a$tmp1[0] = -(arg - a$theDel[a$m$theDel])^2 / (2 * a$sigDel[a$m$sigDel]^2) -
+    a$tmp1[1] = -(arg - a$theDel[a$m$theDel])^2 / (2 * a$sigDel[a$m$sigDel]^2) -
                 log(1 - a$piDel[a$m$piDel]);
   } else {
-    a$tmp1[0] = log(a$piDel[a$m$piDel])
+    a$tmp1[1] = log(a$piDel[a$m$piDel])
   }
 
-  ret = s + a$tmp1[0];
+  ret = s + a$tmp1[1];
   return(ret);
 }
 
+
+
 # samplers
 
-sampleC = function(a){ # PARALLELIZE: N BLOCKS, 1 THREAD PER BLOCK (NOTHING IN LOCKSTEP)
+sampleC = function(a){ # host
   for(n in 1:a$N){ 
     old = a$c[a$m$c, n];
-    new = sampleNormal(old, a$tunC[n]);
+    new = sampleNormal(old, a$tun$c[n]);
 
     lp = min(0, lC(a, n, new) - lC(a, n, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
       a$c[a$m$c + 1, n] = new;
-      a$tunC = a$tunC * 1.1; # Increase the proposal variance to avoid getting 
+      a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid getting 
                                    # stuck in a mode
     } else { # reject
-      a$c[a$m$c + 1, n] = new;
-      a$tunC = a$tunC / 1.1; # If you're rejecting too often, decrease the proposal 
+      a$c[a$m$c + 1, n] = old;
+      a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the proposal 
                                    # variance to sample closer to the last accepted value.
     }
   }
@@ -488,17 +558,17 @@ sampleEps = function(a){ # PARALLELIZE: N BLOCKS, G THREADS PER BLOCK (OR SOMETH
   for(g in 1:a$G){
     for(n in 1:a$N){ 
       old = a$eps[a$m$eps, n, g];
-      new = sampleNormal(old, a$tunEps[n, g]);
+      new = sampleNormal(old, a$tun$eps[n, g]);
 
       lp = min(0, lEps(a, n, g, new) - lEps(a, n, g, old));
       lu = log(runif(1));
       
       if(lu < lp){ # accept
         a$eps[a$m$eps + 1, n, g] = new;
-        a$tuneEps[n, g] = a$tuneEps[n, g] * 1.1; 
+        a$tun$eps[n, g] = a$tun$eps[n, g] * 1.1; 
       } else { # reject
-        a$eps[a$m$eps + 1, n, g] = new;
-        a$tuneEps[n, g] = a$tuneEps[n, g] / 1.1;
+        a$eps[a$m$eps + 1, n, g] = old;
+        a$tun$eps[n, g] = a$tun$eps[n, g] / 1.1;
       }
     }
   }
@@ -508,9 +578,10 @@ sampleEps = function(a){ # PARALLELIZE: N BLOCKS, G THREADS PER BLOCK (OR SOMETH
 }
 
 sampleEta = function(a){
-  for(g in 1:a$G){ # PARALLELIZE: FIGURE OUT HOW MANY BLOCKS AND THREADS PER BLOCK
 
-    shape = (a$N - a$d[a$m$d]) / 2; 
+  shape = (a$N + a$d[a$m$d]) / 2; 
+
+  for(g in 1:a$G){ # PARALLELIZE: FIGURE OUT HOW MANY BLOCKS AND THREADS PER BLOCK
 
     for(n in 1:a$N) # MAYBE PARALLELIZABLE, MAYBE NOT
       a$tmp1[n] = a$eps[a$m$eps, n, g]^2;
@@ -531,18 +602,18 @@ sampleEta = function(a){
 sampleD = function(a){ 
 
   old = a$d[a$m$d];
-  new = sampleNormal(old, a$tunD);
+  new = sampleNormal(old, a$tun$d);
 
   lp = min(0, lD(a, new) - lD(a, old));
   lu = log(runif(1));
     
   if(lu < lp){ # accept
     a$d[a$m$d + 1] = new;
-    a$tunD = a$tunD * 1.1; # Increase the proposal variance to avoid getting 
+    a$tun$d = a$tun$d * 1.1; # Increase the proposal variance to avoid getting 
                                  # stuck in a mode
   } else { # reject
-    a$d[a$m$d + 1] = new;
-    a$tunD = a$tunD / 1.1; # If you're rejecting too often, decrease the proposal 
+    a$d[a$m$d + 1] = old;
+    a$tun$d = a$tun$d / 1.1; # If you're rejecting too often, decrease the proposal 
                                  # variance to sample closer to the last accepted value.
   }
 
@@ -570,18 +641,18 @@ samplePhi = function(a){
   for(g in 1:a$G){ # PARALLELIZE
 
     old = a$phi[a$m$phi, g];
-    new = sampleNormal(old, a$tunPhi[g]);
+    new = sampleNormal(old, a$tun$phi[g]);
 
     lp = min(0, lPhi(a, g, new) - lPhi(a, g, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
       a$phi[a$m$phi + 1, g] = new;
-      a$tunPhi[g] = a$tunPhi[g] * 1.1; 
+      a$tun$phi[g] = a$tun$phi[g] * 1.1; 
 
     } else { # reject
-      a$phi[a$m$phi + 1, g] = new;
-      a$tunPhi[g] = a$tunPhi[g] / 1.1; 
+      a$phi[a$m$phi + 1, g] = old;
+      a$tun$phi[g] = a$tun$phi[g] / 1.1; 
     }
   }
 
@@ -654,11 +725,8 @@ sampleAlp = function(a){
     
     if(lu < lp){ # accept
       a$alp[a$m$alp + 1, g] = new;
-      a$tunAlp[g] = a$tunAlp[g] * 1.1; 
-
     } else { # reject
-      a$alp[a$m$alp + 1, g] = new;
-      a$tunAlp[g] = a$tunAlp[g] / 1.1; 
+      a$alp[a$m$alp + 1, g] = old;
     }
   }
 
@@ -776,11 +844,8 @@ sampleDel = function(a){
     
     if(lu < lp){ # accept
       a$del[a$m$del + 1, g] = new;
-      a$tunDel[g] = a$tunDel[g] * 1.1; 
-
     } else { # reject
-      a$del[a$m$del + 1, g] = new;
-      a$tunDel[g] = a$tunDel[g] / 1.1; 
+      a$del[a$m$del + 1, g] = old;
     }
   }
 
