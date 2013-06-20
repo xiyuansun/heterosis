@@ -194,11 +194,11 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
     shape = 0,
     rate = 0,
     
-    old = 0,
-    new = 0,
+    old = array(0, c(N, G)),
+    new = array(0, c(N, G)),
 
-    lOld = 0,
-    lNew = 0,
+    lOld = array(0, c(N, G)),
+    lNew = array(0, c(N, G)),
 
     # struct to store the current place in the chain for each parameter
 
@@ -425,18 +425,18 @@ lC_kernel2 = function(a, n){ # kernel <<<G, 1>>>
 lC_kernel3 = function(a, n, newArg){ # kernel <<<1, 1>>>
 
   if(newArg){
-    arg = a$new;
+    arg = a$new[1, 1];
   } else {
-    arg = a$old;
+    arg = a$old[1, 1];
   }
 
   ret = arg * a$G * a$yMeanG[n] - exp(arg) * a$tmp2[1] - (arg*arg) / 
         (2 * a$sigC[a$m$sigC] * a$sigC[a$m$sigC]);
 
   if(newArg){
-    a$lNew = ret;
+    a$lNew[1, 1] = ret;
   } else {
-    a$lOld = ret;
+    a$lOld[1, 1] = ret;
   }
 
   a
@@ -547,22 +547,22 @@ lDel = function(a, g, arg){
 # samplers
 
 sampleC_kernel1 = function(a, n){ # kernel <<<1, 1>>>
-  a$old = a$c[a$m$c, n];
-  a$new = sampleNormal(a$old, a$tun$c[n]);
+  a$old[1, 1] = a$c[a$m$c, n];
+  a$new[1, 1] = sampleNormal(a$old[1, 1], a$tun$c[n]);
 
   a
 }
 
 sampleC_kernel2 = function(a, n){ # kernel <<<1, 1>>>
-  lp = min(0, a$lNew - a$lOld);
+  lp = min(0, a$lNew[1, 1] - a$lOld[1, 1]);
   lu = log(runif(1));
     
   if(lu < lp){ # accept
-    a$c[a$m$c + 1, n] = a$new;
+    a$c[a$m$c + 1, n] = a$new[1, 1];
     a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid getting 
                                    # stuck in a mode
   } else { # reject
-    a$c[a$m$c + 1, n] = a$old;
+    a$c[a$m$c + 1, n] = a$old[1, 1];
     a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the proposal 
                                    # variance to sample closer to the last accepted value.
   }
