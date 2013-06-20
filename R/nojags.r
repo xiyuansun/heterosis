@@ -459,7 +459,7 @@ lEps = function(a, n, g, arg){ # device
   return(ret);
 }
 
-lD = function(a, arg){
+lD = function(a, arg){ # host
   
   if(arg <= 0 || arg > a$d0)
     return(-Inf);
