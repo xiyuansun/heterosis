@@ -193,7 +193,12 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
 
     shape = 0,
     rate = 0,
-    ret = 0,
+    
+    old = 0,
+    new = 0,
+
+    lOld = 0,
+    lNew = 0,
 
     # struct to store the current place in the chain for each parameter
 
@@ -401,19 +406,47 @@ mu = function(a, n, phi, alp, del){ # device
 
 # log full conditionals with no convenient form
 
-lC = function(a, n, arg){ # host
-
+lC_kernel1 = function(a, n){ # kernel <<<G, 1>>>
   for(g in 1:a$G) # PARALLELIZE
     a$tmp1[g] = exp(a$eps[a$m$eps, n, g] + mu(a, n, a$phi[a$m$phi, g], 
                                             a$alp[a$m$alp, g], a$del[a$m$del, g]));
 
-  s = 0;
-  for(g in 1:a$G) # PARALLEL PAIRWISE SUM IN THRUST
-    s = s + a$tmp1[g];
+  a
+}
 
-  ret = arg * a$G * a$yMeanG[n] - exp(arg) * s - (arg*arg) / 
+lC_kernel2 = function(a, n){ # kernel <<<G, 1>>>
+  a$tmp2[1] = 0;
+  for(g in 1:a$G) # PARALLEL PAIRWISE SUM IN THRUST
+    a$tmp2[1] = a$tmp2[1] + a$tmp1[g];
+
+  a
+}
+
+lC_kernel3 = function(a, n, newArg){ # kernel <<<1, 1>>>
+
+  if(newArg){
+    arg = a$new;
+  } else {
+    arg = a$old;
+  }
+
+  ret = arg * a$G * a$yMeanG[n] - exp(arg) * a$tmp2[1] - (arg*arg) / 
         (2 * a$sigC[a$m$sigC] * a$sigC[a$m$sigC]);
-  return(ret);
+
+  if(newArg){
+    a$lNew = ret;
+  } else {
+    a$lOld = ret;
+  }
+
+  a
+}
+
+lC = function(a, n, newArg){ # host
+  a = lC_kernel1(a, n);
+  a = lC_kernel2(a, n);
+  a = lC_kernel3(a, n, newArg);
+  a
 }
 
 lEps = function(a, n, g, arg){
@@ -513,27 +546,49 @@ lDel = function(a, g, arg){
 
 # samplers
 
-sampleC = function(a){ # host
-  for(n in 1:a$N){ 
-    old = a$c[a$m$c, n];
-    new = sampleNormal(old, a$tun$c[n]);
+sampleC_kernel1 = function(a, n){ # kernel <<<1, 1>>>
+  a$old = a$c[a$m$c, n];
+  a$new = sampleNormal(a$old, a$tun$c[n]);
 
-    lp = min(0, lC(a, n, new) - lC(a, n, old));
-    lu = log(runif(1));
+  a
+}
+
+sampleC_kernel2 = function(a, n){ # kernel <<<1, 1>>>
+  lp = min(0, a$lNew - a$lOld);
+  lu = log(runif(1));
     
-    if(lu < lp){ # accept
-      a$c[a$m$c + 1, n] = new;
-      a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid getting 
+  if(lu < lp){ # accept
+    a$c[a$m$c + 1, n] = a$new;
+    a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid getting 
                                    # stuck in a mode
-    } else { # reject
-      a$c[a$m$c + 1, n] = old;
-      a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the proposal 
+  } else { # reject
+    a$c[a$m$c + 1, n] = a$old;
+    a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the proposal 
                                    # variance to sample closer to the last accepted value.
-    }
   }
 
+  a
+}
+
+sampleC_kernel3 = function(a){ # kernel <<<1, 1>>>
   a$m$c = a$m$c + 1;
-  return(a)
+  a
+}
+
+
+sampleC = function(a){ # host
+  for(n in 1:a$N){ 
+
+    a = sampleC_kernel1(a, n);
+
+    a = lC(a, n, newArg = 1);
+    a = lC(a, n, newArg = 0);
+
+    a = sampleC_kernel2(a, n);
+  }
+
+  a = sampleC_kernel3(a);
+  a
 }
 
 sampleSigC = function(a){
