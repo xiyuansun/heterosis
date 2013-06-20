@@ -449,7 +449,7 @@ lC = function(a, n, newArg){ # host
   a
 }
 
-lEps = function(a, n, g, arg){
+lEps = function(a, n, g, arg){ # device
 
   ret = a$y[n, g] * arg - 
         exp(a$c[a$m$c, n] + arg + mu(a, n, a$phi[a$m$phi, g], 
@@ -609,7 +609,8 @@ sampleSigC = function(a){
   return(a)
 }
 
-sampleEps = function(a){ # PARALLELIZE: N BLOCKS, G THREADS PER BLOCK (OR SOMETHING BETTER)
+
+sampleEps_kernel1 = function(a){ # kernel <<<N, G>>>
   for(g in 1:a$G){
     for(n in 1:a$N){ 
       old = a$eps[a$m$eps, n, g];
@@ -628,8 +629,20 @@ sampleEps = function(a){ # PARALLELIZE: N BLOCKS, G THREADS PER BLOCK (OR SOMETH
     }
   }
 
+  a
+}
+
+sampleEps_kernel2 = function(a){ # kernel <<<1, 1>>>
   a$m$eps = a$m$eps + 1;
-  return(a)
+  a
+}
+
+sampleEps = function(a){ # host
+
+  a = sampleEps_kernel1(a);
+  a = sampleEps_kernel2(a);
+
+  a
 }
 
 sampleEta = function(a){
