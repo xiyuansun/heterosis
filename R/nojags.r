@@ -910,29 +910,62 @@ sampleSigPhi = function(a){ # host
   return(a)
 }
 
+
+piAlpPrime = function(a, g, mu, s){ # device
+  prod = 1;
+
+  for(n in 1:a$N){
+    if(a$grp[n] != 2){
+      tmp = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] +
+            mu(a, n, a$phi[a$m$phi, g], 0, a$del[a$m$del, g]);
+
+      num = exp(a$y[n, g] * tmp - exp(tmp));
+
+      i = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] + a$phi[a$m$phi, g]
+
+      A = -1/(2 * s * s) - 1/2;
+      B = i + mu/(s * s) - a$y[n, g] + 1;
+
+      if(a$grp[n] == 3)
+        B = -B;        
+
+      C = -(i * i)/2 + i * a$y[g, n] - i - (mu * mu)/(2 * s * s) - 1;
+      D = 1.0/sqrt(2 * pi * s * s);
+                     
+      den = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
+      prod = prod * num/den
+    }
+  }
+
+  ret = ((1 - a$piAlp[a$m$piAlp]) / a$piAlp[a$m$piAlp]) * prod;
+  ret = 1/(1 + ret);
+  ret
+}
+
 sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
 
     old = a$alp[a$m$alp, g];
 
+    tmp = 0;
+    Nalp = 0;
+
+    for(n in 1:a$N)
+      if(a$grp[n] != 2){
+        tmp = tmp + a$y[n, g];
+        Nalp = Nalp + 1;
+      }
+      
+    mu = a$theAlp[a$m$theAlp] / a$gamAlp^2 + 
+         tmp / (Nalp * a$sigAlp[a$m$sigAlp]^2)
+    mu = mu / (1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2)
+
+    s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2);
+
     u = runif(1);
-    if(u < a$piAlp[a$m$piAlp]) {
+    if(u < piAlpPrime(a, g, mu, s)) {
       new = 0;
     } else {
-
-      tmp = 0;
-      Nalp = 0;
-      for(n in 1:a$N)
-        if(a$grp[n] != 2){
-          tmp = tmp + a$y[n, g];
-          Nalp = Nalp + 1;
-        }
-      
-      mu = a$theAlp[a$m$theAlp] / a$gamAlp^2 + 
-           tmp / (Nalp * a$sigAlp[a$m$sigAlp]^2)
-      mu = mu / (1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2)
-
-      s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2);
       new = sampleNormal(mu, s);
     }
 
@@ -1114,29 +1147,58 @@ samplePiAlp = function(a){ # host
   return(a)
 }
 
+piDelPrime = function(a, g, mu, s){ # device
+  prod = 1;
+
+  for(n in 1:a$N){
+    if(a$grp[n] == 2){
+      tmp = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] +
+            mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$del, g], 0);
+
+      num = exp(a$y[n, g] * tmp - exp(tmp));
+
+      i = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] + a$phi[a$m$phi, g]
+
+      A = -1/(2 * s * s) - 1/2;
+      B = -(i + mu/(s * s) - a$y[n, g] + 1);
+      C = -(i * i)/2 + i * a$y[g, n] - i - (mu * mu)/(2 * s * s) - 1;
+      D = 1.0/sqrt(2 * pi * s * s);
+                     
+      den = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
+      prod = prod * num/den
+    }
+  }
+
+  ret = ((1 - a$piAlp[a$m$piAlp]) / a$piAlp[a$m$piAlp]) * prod;
+  ret = 1/(1 + ret);
+  ret
+}
+
+
 sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
 
     old = a$del[a$m$del, g];
 
+    tmp = 0;
+    Ndel = 0;
+
+    for(n in 1:a$N)
+      if(a$grp[n] != 2){
+        tmp = tmp + a$y[n, g];
+        Ndel = Ndel + 1;
+      }
+      
+    mu = a$theDel[a$m$theDel] / a$gamDel^2 + 
+         tmp / (Ndel * a$sigDel[a$m$sigDel]^2)
+    mu = mu / (1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2)
+
+    s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2);
+
     u = runif(1);
-    if(u < a$piDel[a$m$piDel]) {
+    if(u < piDelPrime(a, g, mu, s)) {
       new = 0;
     } else {
-
-      tmp = 0;
-      Ndel = 0;
-      for(n in 1:a$N)
-        if(a$grp[n] != 2){
-          tmp = tmp + a$y[n, g];
-          Ndel = Ndel + 1;
-        }
-      
-      mu = a$theDel[a$m$theDel] / a$gamDel^2 + 
-           tmp / (Ndel * a$sigDel[a$m$sigDel]^2)
-      mu = mu / (1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2)
-
-      s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2);
       new = sampleNormal(mu, s);
     }
 
