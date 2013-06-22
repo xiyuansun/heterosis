@@ -1359,10 +1359,76 @@ print("  step 8")
   return(a)
 }
 
-  h = hammer();
-  y = h$y
-  grp = h$grp
-  a = newChain(y, grp, 5, 4, 10)
+allocSummary = function(a){ # device
+  Mkeep = a$M - a$burnin;
+
+  ret = list(
+    sigC = rep(0, Mkeep),
+    d = rep(0, Mkeep),
+    tau = rep(0, Mkeep),
+
+    thePhi = rep(0, Mkeep),
+    sigPhi = rep(0, Mkeep),
+
+    theAlp = rep(0, Mkeep),
+    sigAlp = rep(0, Mkeep),
+    piAlp = rep(0, Mkeep),
+
+    theDel = rep(0, Mkeep),
+    sigDel = rep(0, Mkeep),
+    piDel = rep(0, Mkeep),
+
+    acc = list(
+      c = rep(0, N),
+      eps = array(0, c(N, G)),
+      d = 0,
+      phi = rep(0, G),
+      alp = rep(0, G),
+      del = rep(0, G)
+    )
+  )
+
+  return(ret)
+}
+
+summarizeChain = function(a){ # kernel <<<1, 1>>>
+  ret = allocSummary(a);
+
+  for(i in 1:(a$M - a$burnin)){
+    ret$sigC[i] = a$sigC[i] + a$burnin;
+    ret$d[i] = a$d[i] + a$burnin;
+    ret$tau[i] = a$tau[i] + a$burnin;
+
+    ret$thePhi[i] = a$thePhi[i] + a$burnin;
+    ret$sigPhi[i] = a$sigPhi[i] + a$burnin;
+
+    ret$theAlp[i] = a$theAlp[i] + a$burnin;
+    ret$sigAlp[i] = a$sigAlp[i] + a$burnin;
+    ret$piAlp[i] = a$piAlp[i] + a$burnin;
+
+    ret$theDel[i] = a$theDel[i] + a$burnin;
+    ret$sigDel[i] = a$sigDel[i] + a$burnin;
+    ret$piDel[i] = a$piDel[i] + a$burnin;
+  }
+
+  ret$acc$d = a$acc$d / (a$M - a$burnin);
+
+  for(n in 1:a$N){
+    ret$acc$c[n] = a$acc$c[n] / (a$M - a$burnin);
+
+    for(g in 1:a$G){
+      ret$acc$eps[n, g] = a$acc$eps[n, g] / (a$M - a$burnin);
+    }
+  }
+  
+  for(g in 1:a$G){
+    ret$acc$phi[g] = a$acc$phi[g] / (a$M - a$burnin);
+    ret$acc$alp[g] = a$acc$alp[g] / (a$M - a$burnin);
+    ret$acc$del[g] = a$acc$del[g] / (a$M - a$burnin);
+  }
+
+  ret
+}
 
 run = function(){
   h = hammer();
