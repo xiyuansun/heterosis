@@ -919,20 +919,23 @@ piAlpPrime = function(a, g, mu, s){ # device
       tmp = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] +
             mu(a, n, a$phi[a$m$phi, g], 0, a$del[a$m$del, g]);
 
-      num = exp(a$y[n, g] * tmp - exp(tmp));
+      den = exp(a$y[n, g] * tmp - exp(tmp));
 
       i = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] + a$phi[a$m$phi, g]
 
       A = -1/(2 * s * s) - 1/2;
-      B = i + mu/(s * s) - a$y[n, g] + 1;
 
-      if(a$grp[n] == 3)
-        B = -B;        
+
+      if(a$grp[n] == 1){
+        B = i + mu/(s * s) - a$y[n, g] + 1;
+      } else if(a$grp[n] == 3){
+        B = -i + mu/(s * s) + a$y[n, g] - 1;
+      }     
 
       C = -(i * i)/2 + i * a$y[g, n] - i - (mu * mu)/(2 * s * s) - 1;
       D = 1.0/sqrt(2 * pi * s * s);
                      
-      den = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
+      num = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
       prod = prod * num/den
     }
   }
@@ -1155,16 +1158,16 @@ piDelPrime = function(a, g, mu, s){ # device
       tmp = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] +
             mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$del, g], 0);
 
-      num = exp(a$y[n, g] * tmp - exp(tmp));
+      den = exp(a$y[n, g] * tmp - exp(tmp));
 
       i = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] + a$phi[a$m$phi, g]
 
       A = -1/(2 * s * s) - 1/2;
-      B = -(i + mu/(s * s) - a$y[n, g] + 1);
+      B = -i + mu/(s * s) + a$y[n, g] - 1;
       C = -(i * i)/2 + i * a$y[g, n] - i - (mu * mu)/(2 * s * s) - 1;
       D = 1.0/sqrt(2 * pi * s * s);
                      
-      den = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
+      num = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
       prod = prod * num/den
     }
   }

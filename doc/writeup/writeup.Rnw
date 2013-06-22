@@ -786,10 +786,10 @@ P(y_{g, n}& \mid \alpha_g \ne 0, \ldots) \\
 &=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(\underbrace{c_n + \e_{g, n} + \phi_g}_{i} - \alpha_g)  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
 &= \int \frac{\exp(-\exp(i - \alpha_g)) (\exp(i - \alpha_g))^{y_{g, n}}}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right) d \alpha_g\\
 &\approx \int \frac{\exp(-\frac{(i - \alpha_g)^2}{2} - (i - \alpha_g) - 1) (\exp(y_{g, n}(i - \alpha_g)))}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right)d \alpha_g \\
-&= (2 \pi y_{g, n}! (\sigma_\alpha')^2)^{-1/2} \int \exp \left (-\frac{(i - \alpha_g)^2}{2} - i + \alpha_g - 1 + y_{g, n}(i - \alpha_g) - \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2} \right ) d \alpha_g \\
-&=  (2 \pi y_{g, n}! (\sigma_\alpha')^2)^{-1/2} \int \exp \left ( -\frac{\alpha_g^2}{2 (\sigma_\alpha')^2} -\frac{\alpha_g^2}{2} + i \alpha_g + \frac{\theta_\alpha' \alpha_g}{(\sigma_\alpha')^2} - y_{g, n} \alpha_g + \alpha_g  \right . \\
+&= (2 \pi  (\sigma_\alpha')^2)^{-1/2} / y_{g, n}! \int \exp \left (-\frac{(i - \alpha_g)^2}{2} - i + \alpha_g - 1 + y_{g, n}(i - \alpha_g) - \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2} \right ) d \alpha_g \\
+&=  (2 \pi  (\sigma_\alpha')^2)^{-1/2} / y_{g, n}! \int \exp \left ( -\frac{\alpha_g^2}{2 (\sigma_\alpha')^2} -\frac{\alpha_g^2}{2} + i \alpha_g + \frac{\theta_\alpha' \alpha_g}{(\sigma_\alpha')^2} - y_{g, n} \alpha_g + \alpha_g  \right . \\
 & \left . \qquad - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1 \right ) d \alpha_g \\
-&=  \underbrace{(2 \pi y_{g, n}! (\sigma_\alpha')^2)^{-1/2}}_{D} \int \exp \left ( \underbrace{\left ( -\frac{1}{2 (\sigma_\alpha')^2} -\frac{1}{2} \right )}_A \alpha_g^2 + \underbrace{\left ( i  + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} - y_{g, n}  + 1 \right )}_B \alpha_g  \right . \\
+&=  \underbrace{(2 \pi (\sigma_\alpha')^2)^{-1/2} / y_{g, n}!}_{D} \int \exp \left ( \underbrace{\left ( -\frac{1}{2 (\sigma_\alpha')^2} -\frac{1}{2} \right )}_A \alpha_g^2 + \underbrace{\left ( i  + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} - y_{g, n}  + 1 \right )}_B \alpha_g  \right . \\
 & \left . \qquad \underbrace{ - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1}_C \right ) d \alpha_g \\
 &= D \int \exp (A \alpha_g^2 + B \alpha_g + C) d \alpha_g \\
 &= D \int \exp \left( A \left (\alpha_g + \frac{B}{2A} \right )^2 + C - \frac{B^2}{4A} \right ) d \alpha_g \\
@@ -798,7 +798,11 @@ P(y_{g, n}& \mid \alpha_g \ne 0, \ldots) \\
 &= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (- \frac{\pi }{ A} \right )^{1/2} \\
 \end{align*}
 
-\item $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ is the same when $n$ is in treatment group 3 except that $B$ switches signs.
+\item $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ is the same when $n$ is in treatment group 3 except that $B$ changes:
+
+\begin{align*}
+B = -i + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} + y_{g, n} - 1
+\end{align*}
 
 \end{enumerate}
 
@@ -833,7 +837,15 @@ q(\delta_g \mid \theta_\delta', \sigma_\delta', \pi_\delta') = I(\delta_g = 0) \
 where:
 
 \begin{align*}
-\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) = 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\
+\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) = 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\ \\
+& \qquad P(y_{g, n} \mid \delta_g = 0, \ldots ) =  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0)) \\
+& \qquad   \qquad   \qquad  \qquad - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0))) \\ 
+& \qquad P(y_{g, n} \mid \delta_g = 0, \ldots ) = D \exp \left ( C - \frac{B^2}{4A} \right ) \left ( - \frac{\pi}{A} \right )^{1/2} \\ \\
+& \qquad \qquad A = - \frac{1}{2 (\sigma_\delta')^2} - \frac{1}{2}\\
+& \qquad \qquad B = - i + \frac{\theta_\delta'}{(\sigma_\delta')^2} + y_{g, n} - 1 \\
+& \qquad \qquad C = - \frac{i^2}{2} + i y_{g, n} -i - \frac{(\theta_\delta')^2}{2 (\sigma_\delta')^2} -1 \\
+& \qquad \qquad D = (2 \pi (\sigma_\delta')^2)^{-1/2} / y_{g, n}! \\ \\
+& \qquad \qquad \qquad i = c_n + \e_{g, n} + \phi_g \\ \\ 
 \theta_\delta' &= \frac{\gamma_\delta^{-2} \theta_\delta + \sigma_\delta^{-2}    N_\delta^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{\gamma_\delta^{-2} + \sigma_\delta^{-2}} \\ 
 (\sigma_\delta')^2 &= (\gamma_\delta^{-2} + \sigma_\delta^{-2})\nv
 \end{align*}
