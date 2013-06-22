@@ -164,27 +164,27 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
 
     # parameters
 
-    c = array(0, c(M, N)),
-      sigC = rep(0, M),
+    c = array(0, c(M + 1, N)),
+      sigC = rep(0, M + 1),
     
-    eps = array(0, c(M, N, G)),
-      eta = array(0, c(M, G)),
-        d = rep(0, M),
-        tau = rep(0, M),
+    eps = array(0, c(M + 1, N, G)),
+      eta = array(0, c(M + 1, G)),
+        d = rep(0, M + 1),
+        tau = rep(0, M + 1),
 
-    phi = array(0, c(M, G)),
-      thePhi = rep(0, M),
-      sigPhi = rep(0, M),
+    phi = array(0, c(M + 1, G)),
+      thePhi = rep(0, M + 1),
+      sigPhi = rep(0, M + 1),
 
-    alp = array(0, c(M, G)),
-      theAlp = rep(0, M),
-      sigAlp = rep(0, M),
-      piAlp = rep(0, M),
+    alp = array(0, c(M + 1, G)),
+      theAlp = rep(0, M + 1),
+      sigAlp = rep(0, M + 1),
+      piAlp = rep(0, M + 1),
 
-    del = array(0, c(M, G)),
-      theDel = rep(0, M),
-      sigDel = rep(0, M),
-      piDel = rep(0, M),
+    del = array(0, c(M + 1, G)),
+      theDel = rep(0, M + 1),
+      sigDel = rep(0, M + 1),
+      piDel = rep(0, M + 1),
 
     # temporary and return values
 
@@ -234,11 +234,24 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
       eps = array(0, c(N, G)),
       d = 0,
       phi = rep(0, G)
+    ),
+
+    # number of acceptances for metropolis steps
+    acc = list(
+      c = rep(0, N),
+      eps = array(0, c(N, G)),
+      d = 0,
+      phi = rep(0, G),
+      alp = rep(0, G),
+      del = rep(0, G)
     )
+
   );
 }
 
 newChain_kernel1 = function(a){ # kernel: 1 block, 1 thread each
+  a$burnin = 1;
+
   a$sigC[1] = runif(1, 0, a$sigC0)
 
   a$d[1] = runif(1, 0, a$d0)
@@ -603,6 +616,8 @@ sampleC_kernel2 = function(a, n){ # kernel <<<1, 1>>>
     a$c[a$m$c + 1, n] = a$new[1, 1];
     a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid getting 
                                    # stuck in a mode
+    if(a$m$c + 1 > a$burnin)
+      a$acc$c[n] = a$acc$c[n] + 1;
   } else { # reject
     a$c[a$m$c + 1, n] = a$old[1, 1];
     a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the proposal 
@@ -661,7 +676,10 @@ sampleEps_kernel1 = function(a){ # kernel <<<N, G>>>
       
       if(lu < lp){ # accept
         a$eps[a$m$eps + 1, n, g] = new;
-        a$tun$eps[n, g] = a$tun$eps[n, g] * 1.1; 
+        a$tun$eps[n, g] = a$tun$eps[n, g] * 1.1;
+
+        if(a$m$eps + 1 > a$burnin)
+          a$acc$eps[n, g] = a$acc$eps[n, g] + 1; 
       } else { # reject
         a$eps[a$m$eps + 1, n, g] = old;
         a$tun$eps[n, g] = a$tun$eps[n, g] / 1.1;
@@ -736,6 +754,8 @@ sampleD_kernel2 = function(a){ # kernel <<<1, 1>>>
     a$d[a$m$d + 1] = a$new[1, 1];
     a$tun$d = a$tun$d * 1.1; # Increase the proposal variance to avoid getting 
                                  # stuck in a mode
+    if(a$m$d + 1 > a$burnin)
+      a$acc$d = a$acc$d + 1;
   } else { # reject
     a$d[a$m$d + 1] = a$old[1, 1];
     a$tun$d = a$tun$d / 1.1; # If you're rejecting too often, decrease the proposal 
@@ -804,6 +824,8 @@ samplePhi_kernel1 = function(a){ # kernel <<<G, 1>>>
       a$phi[a$m$phi + 1, g] = new;
       a$tun$phi[g] = a$tun$phi[g] * 1.1; 
 
+      if(a$m$phi + 1 > a$burnin)
+        a$acc$phi[g] = a$acc$phi[g] + 1;
     } else { # reject
       a$phi[a$m$phi + 1, g] = old;
       a$tun$phi[g] = a$tun$phi[g] / 1.1; 
@@ -919,6 +941,9 @@ sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
     
     if(lu < lp){ # accept
       a$alp[a$m$alp + 1, g] = new;
+
+      if(a$m$alp + 1 > a$burnin)
+        a$acc$alp[g] = a$acc$alp[g] + 1;
     } else { # reject
       a$alp[a$m$alp + 1, g] = old;
     }
@@ -1120,6 +1145,9 @@ sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
     
     if(lu < lp){ # accept
       a$del[a$m$del + 1, g] = new;
+
+      if(a$m$del + 1 > a$burnin)
+        a$acc$del[g] = a$acc$del[g] + 1;
     } else { # reject
       a$del[a$m$del + 1, g] = old;
     }
@@ -1139,11 +1167,6 @@ sampleDel = function(a){ # host
   
   return(a)
 }
-
-
-
-
-
 
 sampleTheDel_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
@@ -1288,7 +1311,7 @@ samplePiDel = function(a){ # host
 }
 
 runChain = function(a){ # host
-  for(m in 1:(a$M - 1)){
+  for(m in 1:a$M){
 
     print(paste(m))
     print("  step 1")
