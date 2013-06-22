@@ -404,6 +404,7 @@ mu = function(a, n, phi, alp, del){ # device
   }
 }
 
+
 # log full conditionals with no convenient form
 
 lC_kernel1 = function(a, n){ # kernel <<<G, 1>>>
@@ -459,33 +460,75 @@ lEps = function(a, n, g, arg){ # device
   return(ret);
 }
 
-lD = function(a, arg){ # host
-  
-  if(arg <= 0 || arg > a$d0)
-    return(-Inf);
-  
-  for(g in 1:a$G){ # PARALLELIZE
+lD_kernel1 = function(a){ # kernel <<<G, 1>>>
+  for(g in 1:a$G){ 
     a$tmp1[g] = 2 * log(a$eta[a$m$eta, g]);
     a$tmp2[g] = 1/(a$eta[a$m$eta, g] * a$eta[a$m$eta, g]);
   }
+  a
+}
 
-  s1 = 0;
+lD_kernel2 = function(a){ # kernel: pairwise sum in Thrust
+  a$s1 = 0;
   for(g in 1:a$G) # PARALLELIZE
-    s1 = s1 + a$tmp1[g];
+    a$s1 = a$s1 + a$tmp1[g];
 
-  s2 = 0;
+  a
+}
+
+lD_kernel3 = function(a){ # kernel: pairwise sum in Thrust
+  a$s2 = 0;
   for(g in 1:a$G) # PARALLELIZE
-    s2 = s2 + a$tmp2[g];
+    a$s2 = a$s2 + a$tmp2[g];
+  a
+}
+
+lD_kernel4 = function(a, newArg){ # kernel <<<1, 1>>>
+ 
+  if(newArg){
+    arg = a$new[1, 1];
+  } else{
+    arg = a$old[1, 1];
+  }
 
   a$tmp1[1] = arg * a$tau[a$m$tau]^2 / 2;
 
   ret = -a$G * lgamma(arg/2) + (a$G * arg / 2) * log(a$tmp1[1]);
-  ret = ret  - (arg/2 + 1) * s1 - a$tmp1[1] * s2;
+  ret = ret  - (arg/2 + 1) * a$s1 - a$tmp1[1] * a$s2;
 
-  return(ret);
+  if(newArg){
+    a$lNew[1, 1] = ret;
+  } else{
+    a$lOld[1, 1] = ret;
+  }
+
+  a
 }
 
-lPhi = function(a, g, arg){
+lD = function(a, newArg){ # host
+  
+  # use cudamemcpies
+  if(newArg){
+    if(a$new[1, 1] <= 0 || a$new[1, 1] > a$d0){
+      a$lNew[1, 1] = -Inf;
+      return(a);
+    }
+  } else {
+    if(a$old[1, 1] <= 0 || a$old[1, 1] > a$d0){
+      a$lOld[1, 1] = -Inf; 
+      return(a);
+    }
+  }
+
+  a = lD_kernel1(a);
+  a = lD_kernel2(a);
+  a = lD_kernel3(a);
+  a = lD_kernel4(a, newArg)
+
+  a
+}
+
+lPhi = function(a, g, arg){ # device
  
   s = 0; 
   for(n in 1:a$N){
@@ -498,7 +541,7 @@ lPhi = function(a, g, arg){
   return(ret);
 }
 
-lAlp = function(a, g, arg){
+lAlp = function(a, g, arg){ # device
   
   s = 0; 
   for(n in 1:a$N){
@@ -520,7 +563,7 @@ lAlp = function(a, g, arg){
   return(ret);
 }
 
-lDel = function(a, g, arg){
+lDel = function(a, g, arg){ # device 
   
   s = 0; 
   for(n in 1:a$N){
@@ -541,7 +584,6 @@ lDel = function(a, g, arg){
   ret = s + a$tmp1[1];
   return(ret);
 }
-
 
 
 # samplers
@@ -575,7 +617,6 @@ sampleC_kernel3 = function(a){ # kernel <<<1, 1>>>
   a
 }
 
-
 sampleC = function(a){ # host
   for(n in 1:a$N){ 
 
@@ -591,13 +632,13 @@ sampleC = function(a){ # host
   a
 }
 
-sampleSigC = function(a){
+sampleSigC = function(a){ # kernel <<<1, 1>>>
 
-  for(n in 1:a$N) # PARALLELIZE: 1 BLOCK, N THREADS (LOCKSTEP IS FINE)
+  for(n in 1:a$N) 
     a$tmp1[n] = a$c[a$m$c, n]^2;
 
   rate = 0;
-  for(n in 1:a$N) # PARALLELIZE: PARALLEL SUM IN THRUST
+  for(n in 1:a$N) 
     rate = rate + a$tmp1[n];
   
   shape = (a$N - 1) / 2; 
@@ -608,7 +649,6 @@ sampleSigC = function(a){
   a$m$sigC = a$m$sigC + 1;
   return(a)
 }
-
 
 sampleEps_kernel1 = function(a){ # kernel <<<N, G>>>
   for(g in 1:a$G){
@@ -645,67 +685,113 @@ sampleEps = function(a){ # host
   a
 }
 
-sampleEta = function(a){
+sampleEta_kernel1 = function(a){ # kernel <<<1, 1>>>
+  a$shape = (a$N + a$d[a$m$d]) / 2; 
+  a
+}
 
-  shape = (a$N + a$d[a$m$d]) / 2; 
+sampleEta_kernel2 = function(a){ # kernel <<<G, 1>>>
+  for(g in 1:a$G){
 
-  for(g in 1:a$G){ # PARALLELIZE: FIGURE OUT HOW MANY BLOCKS AND THREADS PER BLOCK
-
-    for(n in 1:a$N) # MAYBE PARALLELIZABLE, MAYBE NOT
+    for(n in 1:a$N) 
       a$tmp1[n] = a$eps[a$m$eps, n, g]^2;
 
     rate = 0;
-    for(n in 1:a$N) # MAYBE PARALLELIZE, MAYBE NOT
+    for(n in 1:a$N) 
       rate = rate + a$tmp1[n];
   
     rate = (rate + a$d[a$m$d] * a$tau[a$m$tau] * a$tau[a$m$tau]) / 2; 
 
-    a$eta[a$m$eta + 1, g] = 1/sqrt(sampleGamma(shape, rate));
+    a$eta[a$m$eta + 1, g] = 1/sqrt(sampleGamma(a$shape, rate));
   }
+  a
+}
 
+sampleEta_kernel3 = function(a){ # kernel <<<1, 1>>>
   a$m$eta = a$m$eta + 1;
+  a
+}
+
+sampleEta = function(a){
+
+  a = sampleEta_kernel1(a);
+  a = sampleEta_kernel2(a);
+  a = sampleEta_kernel3(a);
+
   return(a)
 }
 
-sampleD = function(a){ 
 
-  old = a$d[a$m$d];
-  new = sampleNormal(old, a$tun$d);
+sampleD_kernel1 = function(a){ # kernel <<<1, 1>>>
+  a$old[1, 1] = a$d[a$m$d];
+  a$new[1, 1] = sampleNormal(a$old[1, 1], a$tun$d);
+  a
+}
 
-  lp = min(0, lD(a, new) - lD(a, old));
+sampleD_kernel2 = function(a){ # kernel <<<1, 1>>>
+  lp = min(0, a$lNew[1, 1] - a$lOld[1, 1]);
   lu = log(runif(1));
-    
+
   if(lu < lp){ # accept
-    a$d[a$m$d + 1] = new;
+    a$d[a$m$d + 1] = a$new[1, 1];
     a$tun$d = a$tun$d * 1.1; # Increase the proposal variance to avoid getting 
                                  # stuck in a mode
   } else { # reject
-    a$d[a$m$d + 1] = old;
+    a$d[a$m$d + 1] = a$old[1, 1];
     a$tun$d = a$tun$d / 1.1; # If you're rejecting too often, decrease the proposal 
                                  # variance to sample closer to the last accepted value.
   }
 
   a$m$d = a$m$d + 1;
-  return(a)
+  a
 }
 
-sampleTau = function(a){
-  shape = a$aTau + a$G * a$d[a$m$d] / 2;
+sampleD = function(a){ 
 
+  a = sampleD_kernel1(a);
+
+  a = lD(a, 1);
+  a = lD(a, 0);
+
+  a = sampleD_kernel2(a);
+  a
+}
+
+sampleTau_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G) # PARALLELIZE
     a$tmp1[g] = 1/a$eta[a$m$eta, g]^2;
 
-  rate = 0;
-  for(g in 1:a$G) # PARALLELIZE
-    rate = rate + a$tmp1[g];
-  rate = rate * a$d[a$m$d] / 2 + a$bTau;
+  a
+}
+
+sampleTau_kernel2 = function(a){ # pairwise sum in Thrust
+  tmp = 0;
+  for(g in 1:a$G) 
+    tmp = tmp + a$tmp1[g];
+
+  a$rate = tmp;
+  a
+}
+
+sampleTau_kernel3 = function(a){
+  rate = a$rate * a$d[a$m$d] / 2 + a$bTau;
+  shape = a$aTau + a$G * a$d[a$m$d] / 2;
 
   a$tau[a$m$tau + 1] = 1/sqrt(sampleGamma(shape, rate));
   a$m$tau = a$m$tau + 1;
+
+  a
+}
+
+sampleTau = function(a){ # host
+  a = sampleTau_kernel1(a);
+  a = sampleTau_kernel2(a);
+  a = sampleTau_kernel3(a);
+ 
   return(a)
 }
 
-samplePhi = function(a){ 
+samplePhi_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ # PARALLELIZE
 
     old = a$phi[a$m$phi, g];
@@ -724,46 +810,86 @@ samplePhi = function(a){
     }
   }
 
+  a
+}
+
+samplePhi_kernel2 = function(a){ # kernel <<<1, 1>>>
   a$m$phi = a$m$phi + 1;
+  a
+}
+
+samplePhi = function(a){ # host
+  a = samplePhi_kernel1(a);
+  a = samplePhi_kernel2(a);
   return(a)
 }
 
-sampleThePhi = function(a){
-  sm = 0; 
+sampleThePhi_kernel1 = function(a){ # pairwise sum in Thrust
+  a$s1 = 0; 
   for(g in 1:a$G) # PARALLELIZE
-    sm = sm + a$phi[a$m$phi, g];
+    a$s1 = a$s1 + a$phi[a$m$phi, g];
 
+  a
+}
+
+sampleThePhi_kernel2 = function(a){ # kernel <<<1, 1>>>
   gs = a$gamPhi^2;
   ss = a$sigPhi[a$m$sigPhi]^2;
   den = (a$G * gs + ss);
 
-  m = gs * sm / den;
+  m = gs * a$s1 / den;
   s = gs * ss / den;
 
   a$thePhi[a$m$thePhi + 1] = sampleNormal(m, s);
   a$m$thePhi = a$m$thePhi + 1;
+
+  a
+}
+
+sampleThePhi = function(a){ # host
+  a = sampleThePhi_kernel1(a);
+  a = sampleThePhi_kernel2(a);
   return(a)
 }
 
-sampleSigPhi = function(a){
-  shape = (a$G - 1) / 2;
-
+sampleSigPhi_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G) # PARALLELIZE
     a$tmp1[g] = (a$phi[a$m$phi, g] - a$thePhi[a$m$thePhi])^2;
 
+  a
+}
+
+sampleSigPhi_kernel2 = function(a){ # parallel pairwise sum in Thrust
   rate = 0;
   for(g in 1:a$G) # PARALLELIZE
     rate = rate + a$tmp1[g];
-  rate = rate / 2;
+  a$rate = rate;  
 
+  a
+}
+
+sampleSigPhi_kernel3 = function(a){ # kernel <<<1, 1>>>
+  a$rate = a$rate / 2;
+  shape = (a$G - 1) / 2;
   lb = 1/a$sigPhi0^2;
-  a$sigPhi[a$m$sigPhi + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+
+  a$sigPhi[a$m$sigPhi + 1] = 1/sqrt(sampleGamma(shape, a$rate, lb));
   a$m$sigPhi = a$m$sigPhi + 1;
+
+  a
+}
+
+sampleSigPhi = function(a){ # host
+ 
+  a = sampleSigPhi_kernel1(a);
+  a = sampleSigPhi_kernel2(a);
+  a = sampleSigPhi_kernel3(a);
+
   return(a)
 }
 
-sampleAlp = function(a){ 
-  for(g in 1:a$G){ # PARALLELIZE
+sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
+  for(g in 1:a$G){ 
 
     old = a$alp[a$m$alp, g];
 
@@ -798,14 +924,23 @@ sampleAlp = function(a){
     }
   }
 
+  a
+}
+
+sampleAlp_kernel2 = function(a){ # kernel <<<1, 1>>>
   a$m$alp = a$m$alp + 1;
+  a
+}
+
+
+sampleAlp = function(a){ # host
+  a = sampleAlp_kernel1(a);
+  a = sampleAlp_kernel2(a);
+  
   return(a)
 }
 
-sampleTheAlp = function(a){
-  sm = 0;
-  Galp = 0;
-
+sampleTheAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ # PARALLELIZE
     if(a$alp[a$m$alp, g]){
       a$tmp1[g] = 1;
@@ -816,27 +951,53 @@ sampleTheAlp = function(a){
     }
   }
 
+  a
+}
+
+sampleTheAlp_kernel2 = function(a){ # parallel pairwise sum in Thrust
+  Galp = 0;
   for(g in 1:a$G) # PARALLELIZE
     Galp = Galp + a$tmp1[g];
 
+  a$s1 = Galp;
+  a
+}
+
+sampleTheAlp_kernel3 = function(a){ # parallel pairwise sum in Thrust
+  sm = 0;
   for(g in 1:a$G) # PARALLELIZE
     sm = sm + a$tmp2[g];
 
+  a$s2 = sm;
+  a
+}
+
+sampleTheAlp_kernel4 = function(a){ # kernel <<<1, 1>>>
+
   gs = a$gamAlp^2;
   ss = a$sigAlp[a$m$sigAlp]^2;
-  den = (Galp * gs + ss);
+  den = (a$s1 * gs + ss);
 
-  m = gs * sm / den;
+  m = gs * a$s2 / den;
   s = gs * ss / den;
 
   a$theAlp[a$m$theAlp + 1] = sampleNormal(m, s);
   a$m$theAlp = a$m$theAlp + 1;
+
+  a
+}
+
+sampleTheAlp = function(a){
+  
+  a = sampleTheAlp_kernel1(a);
+  a = sampleTheAlp_kernel2(a);
+  a = sampleTheAlp_kernel3(a);
+  a = sampleTheAlp_kernel4(a);
+ 
   return(a);
 }
 
-sampleSigAlp = function(a){
-  Galp = 0;
-  rate = 0;
+sampleSigAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
 
   for(g in 1:a$G){ # PARALLELIZE
     if(a$alp[a$m$alp, g]){
@@ -848,23 +1009,52 @@ sampleSigAlp = function(a){
     }
   }
 
+  a
+}
+
+sampleSigAlp_kernel2 = function(a){ # parallel pairwise sum in Thrust
+  rate = 0;  
   for(g in 1:a$G) # PARALLELIZE
     rate = rate + a$tmp1[g];
 
-  for(g in 1:a$G) # PARALLELIZE
-    Galp = Galp + a$tmp2[g];   
+  a$s1 = rate;
+  a
+}
 
-  shape = (Galp - 1) / 2;
-  rate = rate / 2;
+sampleSigAlp_kernel3 = function(a){ # parallel pairwise sum in Thrust
+  Galp = 0;
+  for(g in 1:a$G) # PARALLELIZE
+    Galp = Galp + a$tmp2[g];  
+
+  a$s2 = Galp;
+  a
+}
+
+
+sampleSigAlp_kernel4 = function(a){ # parallel pairwise sum in Thrust
+  shape = (a$s2 - 1) / 2;
+  rate = a$s1 / 2;
   lb = 1/a$sigAlp0^2;
 
   a$sigAlp[a$m$sigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   a$m$sigAlp = a$m$sigAlp + 1;
+
+  a;
+}
+
+sampleSigAlp = function(a){ # host
+
+  a = sampleSigAlp_kernel1(a);
+  a = sampleSigAlp_kernel2(a);
+  a = sampleSigAlp_kernel3(a);
+  a = sampleSigAlp_kernel4(a); 
+
   return(a)
 }
 
-samplePiAlp = function(a){ # bookmark
-  for(g in 1:a$G){ # PARALLELIZE
+samplePiAlp_kernel1 = function(a){ # kernel <<<1, 1>>>
+
+  for(g in 1:a$G){ 
     if(a$alp[a$m$alp, g]){
       a$tmp1[g] = 1;
     } else {
@@ -872,17 +1062,35 @@ samplePiAlp = function(a){ # bookmark
     }
   }
 
+  a
+}
+
+samplePiAlp_kernel2 = function(a){ # pairwise sum in Thrust
   Galp = 0;
   for(g in 1:a$G) # PARALLELIZE
     Galp = Galp + a$tmp1[g];
 
-  a$piAlp[a$m$piAlp + 1] = sampleBeta(a$G + Galp + a$aTau, Galp + a$bTau);
+  a$s1 = Galp;
+  a  
+}
+
+samplePiAlp_kernel3 = function(a){ # kernel <<<1, 1>>>
+  a$piAlp[a$m$piAlp + 1] = sampleBeta(a$G + a$s1 + a$aTau, a$s1 + a$bTau);
   a$m$piAlp = a$m$piAlp + 1;
+  a
+}
+
+samplePiAlp = function(a){ # host
+
+  a = samplePiAlp_kernel1(a);
+  a = samplePiAlp_kernel2(a);  
+  a = samplePiAlp_kernel3(a);
+
   return(a)
 }
 
-sampleDel = function(a){ 
-  for(g in 1:a$G){ # PARALLELIZE
+sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
+  for(g in 1:a$G){ 
 
     old = a$del[a$m$del, g];
 
@@ -917,13 +1125,28 @@ sampleDel = function(a){
     }
   }
 
+  a
+}
+
+sampleDel_kernel2 = function(a){ # kernel <<<1 1>>>
   a$m$del = a$m$del + 1;
+  a
+}
+
+sampleDel = function(a){ # host
+  a = sampleDel_kernel1(a);
+  a = sampleDel_kernel2(a);
+  
   return(a)
 }
 
-sampleTheDel = function(a){
 
-  for(g in 1:a$G){ # PARALLELIZE
+
+
+
+
+sampleTheDel_kernel1 = function(a){ # kernel <<<G, 1>>>
+  for(g in 1:a$G){ 
     if(a$del[a$m$del, g]){
       a$tmp1[g] = 1;
       a$tmp2[g] = a$del[a$m$del, g];
@@ -933,19 +1156,37 @@ sampleTheDel = function(a){
     }
   }
 
+  a
+}
+
+sampleTheDel_kernel2 = function(a){ # pairwise sum in Thrust
   Gdel = 0;
   for(g in 1:a$G) # PARALLELIZE  
     Gdel = Gdel + a$tmp1[g];
 
+  a$s1 = Gdel;
+  a
+}
+
+sampleTheDel_kernel3 = function(a){ # pairwise sum in Thrust
   sm = 0;
   for(g in 1:a$G) # PARALLELIZE
     sm = sm + a$tmp2[g];
 
+  a$s2 = sm;
+  a
+}
+
+sampleTheDel = function(a){ # host
+
+  a = sampleTheDel_kernel1(a);
+  a = sampleTheDel_kernel2(a);
+
   gs = a$gamDel^2;
   ss = a$sigDel[a$m$sigDel]^2;
-  den = (Gdel * gs + ss);
+  den = (a$s1 * gs + ss);
 
-  m = gs * sm / den;
+  m = gs * a$s2 / den;
   s = gs * ss / den;
 
   a$theDel[a$m$theDel + 1] = sampleNormal(m, s);
@@ -953,9 +1194,8 @@ sampleTheDel = function(a){
   return(a)
 }
 
-sampleSigDel = function(a){
-  Gdel = 0;
-  rate = 0;
+
+sampleSigDel_kernel1 = function(a){ # kernel <<<G, 1>>>
 
   for(g in 1:a$G){ # PARALLELIZE
     if(a$del[a$m$del, g]){
@@ -966,23 +1206,50 @@ sampleSigDel = function(a){
       a$tmp2[g] = 0;
     }
   }
+  
+  a
+}
 
+sampleSigDel_kernel2 = function(a){ # pairwise sum in Thrust
+  rate = 0;
   for(g in 1:a$G) # PARALLELIZE
     rate = rate + a$tmp1[g];
- 
+
+  a$s1 = rate;
+  a
+}
+
+sampleSigDel_kernel3 = function(a){ # pairwise sum in Thrust
+  Gdel = 0;
   for(g in 1:a$G) # PARALLELIZE
     Gdel = Gdel + a$tmp2[g];
 
-  shape = (Gdel - 1) / 2;
-  rate = rate / 2;
+  a$s2 = Gdel
+  a
+}
+
+sampleSigDel_kernel4 = function(a){ # kernel <<<1, 1>>>
+  shape = (a$s2 - 1) / 2;
+  rate = a$s1 / 2;
   lb = 1/a$sigDel0^2;
 
   a$sigDel[a$m$sigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   a$m$sigDel = a$m$sigDel + 1;
+
+  a
+}
+
+sampleSigDel = function(a){ # host
+
+  a = sampleSigDel_kernel1(a);
+  a = sampleSigDel_kernel2(a);
+  a = sampleSigDel_kernel3(a);
+  a = sampleSigDel_kernel4(a);
+  
   return(a)
 }
 
-samplePiDel = function(a){
+samplePiDel_kernel1 = function(a){ # kernel <<<G, 1>>>
 
   for(g in 1:a$G){ # PARALLELIZE
     if(a$del[a$m$del, g]){
@@ -992,16 +1259,35 @@ samplePiDel = function(a){
     }
   } 
 
+  a
+}
+
+samplePiDel_kernel2 = function(a){ # pairwise sum in Thrust
+
   Gdel = 0;
   for(g in 1:a$G) # PARALLELIZE
      Gdel = Gdel + a$tmp1[g];
 
-  a$piDel[a$m$piDel + 1] = sampleBeta(a$G + Gdel + a$aTau, Gdel + a$bTau);
+  a$s1 = Gdel;
+  a
+}
+
+samplePiDel_kernel3 = function(a){ #kernel <<<1, 1>>>
+  a$piDel[a$m$piDel + 1] = sampleBeta(a$G + a$s1 + a$aTau, a$s1 + a$bTau);
   a$m$piDel = a$m$piDel + 1;
+
+  a
+}
+
+samplePiDel = function(a){ # host
+  a = samplePiDel_kernel1(a);
+  a = samplePiDel_kernel2(a);
+  a = samplePiDel_kernel3(a);
+
   return(a)
 }
 
-runChain = function(a){
+runChain = function(a){ # host
   for(m in 1:(a$M - 1)){
 
     print(paste(m))
@@ -1049,6 +1335,11 @@ print("  step 8")
 
   return(a)
 }
+
+  h = hammer();
+  y = h$y
+  grp = h$grp
+  a = newChain(y, grp, 5, 4, 10)
 
 run = function(){
   h = hammer();
