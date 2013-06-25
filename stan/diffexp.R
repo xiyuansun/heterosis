@@ -17,10 +17,10 @@ d$y = rpois(nrow(d), exp(phi[d$gene]+alpha[d$gene]*d$treatment))
 ## MCMC
 diffexp_model = '
   data {
-    int<lower=0> G;       // number of genes
-    int<lower=0> N;       // number of total observations
+    int<lower=1> G;       // number of genes
+    int<lower=1> N;       // number of total observations
     int<lower=0> y[N];    // gene expression
-    int<lower=0> gene[N]; // gene ID (1:G)
+    int<lower=1> gene[N]; // gene ID (1:G)
     real treatment[N];    // treatment ID (-1 and 1)
   }
   parameters {
