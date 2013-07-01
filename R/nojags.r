@@ -237,6 +237,7 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
     ),
 
     # number of acceptances for metropolis steps
+    # USE CALLOC
     acc = list(
       c = rep(0, N),
       eps = array(0, c(N, G)),
@@ -245,12 +246,10 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
       alp = rep(0, G),
       del = rep(0, G)
     )
-
   );
 }
 
 newChain_kernel1 = function(a){ # kernel: 1 block, 1 thread each
-  a$burnin = 1;
 
   a$sigC[1] = runif(1, 0, a$sigC0)
 
@@ -558,7 +557,7 @@ lAlp = function(a, g, arg){ # device
   
   s = 0; 
   for(n in 1:a$N){
-    if(grp[n] != 2){
+    if(a$grp[n] != 2){
       a$tmp[1] = mu(a, n, a$phi[a$m$phi, g], arg, a$del[a$m$del, g]);
       s = s + y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
           a$eps[a$m$eps, n, g] + a$tmp1[1]);
@@ -580,7 +579,7 @@ lDel = function(a, g, arg){ # device
   
   s = 0; 
   for(n in 1:a$N){
-    if(grp[n] != 2){
+    if(a$grp[n] != 2){
       a$tmp[1] = mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$alp, g], arg);
       s = s + y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
           a$eps[a$m$eps, n, g] + a$tmp1[1]);
@@ -616,8 +615,7 @@ sampleC_kernel2 = function(a, n){ # kernel <<<1, 1>>>
     a$c[a$m$c + 1, n] = a$new[1, 1];
     a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid getting 
                                    # stuck in a mode
-    if(a$m$c + 1 > a$burnin)
-      a$acc$c[n] = a$acc$c[n] + 1;
+    a$acc$c[n] = a$acc$c[n] + 1;
   } else { # reject
     a$c[a$m$c + 1, n] = a$old[1, 1];
     a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the proposal 
@@ -660,7 +658,12 @@ sampleSigC = function(a){ # kernel <<<1, 1>>>
   rate = rate / 2;
   lb = 1 / a$sigC0^2  
 
-  a$sigC[a$m$sigC + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  if(shape >= 1 && rate > 0){
+    a$sigC[a$m$sigC + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  } else {
+    a$sigC[a$m$sigC + 1] = a$sigC[a$m$sigC];
+  }
+
   a$m$sigC = a$m$sigC + 1;
   return(a)
 }
@@ -677,9 +680,7 @@ sampleEps_kernel1 = function(a){ # kernel <<<N, G>>>
       if(lu < lp){ # accept
         a$eps[a$m$eps + 1, n, g] = new;
         a$tun$eps[n, g] = a$tun$eps[n, g] * 1.1;
-
-        if(a$m$eps + 1 > a$burnin)
-          a$acc$eps[n, g] = a$acc$eps[n, g] + 1; 
+        a$acc$eps[n, g] = a$acc$eps[n, g] + 1; 
       } else { # reject
         a$eps[a$m$eps + 1, n, g] = old;
         a$tun$eps[n, g] = a$tun$eps[n, g] / 1.1;
@@ -720,7 +721,11 @@ sampleEta_kernel2 = function(a){ # kernel <<<G, 1>>>
   
     rate = (rate + a$d[a$m$d] * a$tau[a$m$tau] * a$tau[a$m$tau]) / 2; 
 
-    a$eta[a$m$eta + 1, g] = 1/sqrt(sampleGamma(a$shape, rate));
+    if(a$shape >= 1 && rate > 0){
+      a$eta[a$m$eta + 1, g] = 1/sqrt(sampleGamma(a$shape, rate));
+    } else {
+      a$eta[a$m$eta + 1, g] = a$eta[a$m$eta, g];
+    }
   }
   a
 }
@@ -754,8 +759,7 @@ sampleD_kernel2 = function(a){ # kernel <<<1, 1>>>
     a$d[a$m$d + 1] = a$new[1, 1];
     a$tun$d = a$tun$d * 1.1; # Increase the proposal variance to avoid getting 
                                  # stuck in a mode
-    if(a$m$d + 1 > a$burnin)
-      a$acc$d = a$acc$d + 1;
+    a$acc$d = a$acc$d + 1;
   } else { # reject
     a$d[a$m$d + 1] = a$old[1, 1];
     a$tun$d = a$tun$d / 1.1; # If you're rejecting too often, decrease the proposal 
@@ -797,7 +801,12 @@ sampleTau_kernel3 = function(a){
   rate = a$rate * a$d[a$m$d] / 2 + a$bTau;
   shape = a$aTau + a$G * a$d[a$m$d] / 2;
 
-  a$tau[a$m$tau + 1] = 1/sqrt(sampleGamma(shape, rate));
+  if(shape >= 1 && rate > 0){
+    a$tau[a$m$tau + 1] = 1/sqrt(sampleGamma(shape, rate));
+  } else {
+    a$tau[a$m$tau + 1] = a$tau[a$m$tau];
+  }
+
   a$m$tau = a$m$tau + 1;
 
   a
@@ -823,9 +832,7 @@ samplePhi_kernel1 = function(a){ # kernel <<<G, 1>>>
     if(lu < lp){ # accept
       a$phi[a$m$phi + 1, g] = new;
       a$tun$phi[g] = a$tun$phi[g] * 1.1; 
-
-      if(a$m$phi + 1 > a$burnin)
-        a$acc$phi[g] = a$acc$phi[g] + 1;
+      a$acc$phi[g] = a$acc$phi[g] + 1;
     } else { # reject
       a$phi[a$m$phi + 1, g] = old;
       a$tun$phi[g] = a$tun$phi[g] / 1.1; 
@@ -891,11 +898,16 @@ sampleSigPhi_kernel2 = function(a){ # parallel pairwise sum in Thrust
 }
 
 sampleSigPhi_kernel3 = function(a){ # kernel <<<1, 1>>>
-  a$rate = a$rate / 2;
+  rate = a$rate / 2;
   shape = (a$G - 1) / 2;
   lb = 1/a$sigPhi0^2;
 
-  a$sigPhi[a$m$sigPhi + 1] = 1/sqrt(sampleGamma(shape, a$rate, lb));
+  if(shape >= 1 && rate > 0){
+    a$sigPhi[a$m$sigPhi + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  } else {
+    a$sigPhi[a$m$sigPhi + 1] = a$sigPhi[a$m$sigPhi];
+  }
+
   a$m$sigPhi = a$m$sigPhi + 1;
 
   a
@@ -911,7 +923,7 @@ sampleSigPhi = function(a){ # host
 }
 
 
-piAlpPrime = function(a, g, mu, s){ # device
+piAlpPrime = function(a, g, avg, s){ # device
   prod = 1;
 
   for(n in 1:a$N){
@@ -925,14 +937,13 @@ piAlpPrime = function(a, g, mu, s){ # device
 
       A = -1/(2 * s * s) - 1/2;
 
-
       if(a$grp[n] == 1){
-        B = i + mu/(s * s) - a$y[n, g] + 1;
+        B = i + avg/(s * s) - a$y[n, g] + 1;
       } else if(a$grp[n] == 3){
-        B = -i + mu/(s * s) + a$y[n, g] - 1;
+        B = -i + avg/(s * s) + a$y[n, g] - 1;
       }     
 
-      C = -(i * i)/2 + i * a$y[g, n] - i - (mu * mu)/(2 * s * s) - 1;
+      C = -(i * i)/2 + i * a$y[n, g] - i - (avg * avg)/(2 * s * s) - 1;
       D = 1.0/sqrt(2 * pi * s * s);
                      
       num = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
@@ -959,17 +970,19 @@ sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
         Nalp = Nalp + 1;
       }
       
-    mu = a$theAlp[a$m$theAlp] / a$gamAlp^2 + 
+    avg = a$theAlp[a$m$theAlp] / a$gamAlp^2 + 
          tmp / (Nalp * a$sigAlp[a$m$sigAlp]^2)
-    mu = mu / (1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2)
+    avg = avg / (1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2)
 
     s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2);
 
     u = runif(1);
-    if(u < piAlpPrime(a, g, mu, s)) {
+
+    if(u < piAlpPrime(a, g, avg, s)) {
+#    if(u < a$piAlp[a$m$piAlp]){
       new = 0;
     } else {
-      new = sampleNormal(mu, s);
+      new = sampleNormal(avg, s);
     }
 
     lp = min(0, lAlp(a, g, new) - lAlp(a, g, old));
@@ -977,9 +990,7 @@ sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
     
     if(lu < lp){ # accept
       a$alp[a$m$alp + 1, g] = new;
-
-      if(a$m$alp + 1 > a$burnin)
-        a$acc$alp[g] = a$acc$alp[g] + 1;
+      a$acc$alp[g] = a$acc$alp[g] + 1;
     } else { # reject
       a$alp[a$m$alp + 1, g] = old;
     }
@@ -1097,7 +1108,12 @@ sampleSigAlp_kernel4 = function(a){ # parallel pairwise sum in Thrust
   rate = a$s1 / 2;
   lb = 1/a$sigAlp0^2;
 
-  a$sigAlp[a$m$sigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  if(shape >= 1 && rate > 0){
+    a$sigAlp[a$m$sigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  } else {
+    a$sigAlp[a$m$sigAlp + 1] = a$sigAlp[a$m$sigAlp]; 
+  }
+
   a$m$sigAlp = a$m$sigAlp + 1;
 
   a;
@@ -1150,7 +1166,7 @@ samplePiAlp = function(a){ # host
   return(a)
 }
 
-piDelPrime = function(a, g, mu, s){ # device
+piDelPrime = function(a, g, avg, s){ # device
   prod = 1;
 
   for(n in 1:a$N){
@@ -1163,8 +1179,8 @@ piDelPrime = function(a, g, mu, s){ # device
       i = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] + a$phi[a$m$phi, g]
 
       A = -1/(2 * s * s) - 1/2;
-      B = -i + mu/(s * s) + a$y[n, g] - 1;
-      C = -(i * i)/2 + i * a$y[g, n] - i - (mu * mu)/(2 * s * s) - 1;
+      B = -i + avg/(s * s) + a$y[n, g] - 1;
+      C = -(i * i)/2 + i * a$y[n, g] - i - (avg * avg)/(2 * s * s) - 1;
       D = 1.0/sqrt(2 * pi * s * s);
                      
       num = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
@@ -1192,17 +1208,19 @@ sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
         Ndel = Ndel + 1;
       }
       
-    mu = a$theDel[a$m$theDel] / a$gamDel^2 + 
+    avg = a$theDel[a$m$theDel] / a$gamDel^2 + 
          tmp / (Ndel * a$sigDel[a$m$sigDel]^2)
-    mu = mu / (1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2)
+    avg = avg / (1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2)
 
     s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2);
 
     u = runif(1);
-    if(u < piDelPrime(a, g, mu, s)) {
+
+    if(u < piDelPrime(a, g, avg, s)) {
+#    if(u < a$piDel[a$m$piDel]){
       new = 0;
     } else {
-      new = sampleNormal(mu, s);
+      new = sampleNormal(avg, s);
     }
 
     lp = min(0, lDel(a, g, new) - lDel(a, g, old));
@@ -1210,9 +1228,7 @@ sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
     
     if(lu < lp){ # accept
       a$del[a$m$del + 1, g] = new;
-
-      if(a$m$del + 1 > a$burnin)
-        a$acc$del[g] = a$acc$del[g] + 1;
+      a$acc$del[g] = a$acc$del[g] + 1;
     } else { # reject
       a$del[a$m$del + 1, g] = old;
     }
@@ -1321,7 +1337,12 @@ sampleSigDel_kernel4 = function(a){ # kernel <<<1, 1>>>
   rate = a$s1 / 2;
   lb = 1/a$sigDel0^2;
 
-  a$sigDel[a$m$sigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  if(shape >= 1 && rate > 0){
+    a$sigDel[a$m$sigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+  } else {
+    a$sigDel[a$m$sigDel + 1] = a$sigDel[a$m$sigDel];
+  }
+
   a$m$sigDel = a$m$sigDel + 1;
 
   a
@@ -1425,31 +1446,30 @@ print("  step 8")
 }
 
 allocSummary = function(a){ # device
-  Mkeep = a$M - a$burnin;
 
   ret = list(
-    sigC = rep(0, Mkeep),
-    d = rep(0, Mkeep),
-    tau = rep(0, Mkeep),
+    sigC = rep(0, a$M),
+    d = rep(0, a$M),
+    tau = rep(0, a$M),
 
-    thePhi = rep(0, Mkeep),
-    sigPhi = rep(0, Mkeep),
+    thePhi = rep(0, a$M),
+    sigPhi = rep(0, a$M),
 
-    theAlp = rep(0, Mkeep),
-    sigAlp = rep(0, Mkeep),
-    piAlp = rep(0, Mkeep),
+    theAlp = rep(0, a$M),
+    sigAlp = rep(0, a$M),
+    piAlp = rep(0, a$M),
 
-    theDel = rep(0, Mkeep),
-    sigDel = rep(0, Mkeep),
-    piDel = rep(0, Mkeep),
+    theDel = rep(0, a$M),
+    sigDel = rep(0, a$M),
+    piDel = rep(0, a$M),
 
     acc = list(
-      c = rep(0, N),
-      eps = array(0, c(N, G)),
+      c = rep(0, a$N),
+      eps = array(0, c(a$N, a$G)),
       d = 0,
-      phi = rep(0, G),
-      alp = rep(0, G),
-      del = rep(0, G)
+      phi = rep(0, a$G),
+      alp = rep(0, a$G),
+      del = rep(0, a$G)
     )
   )
 
@@ -1459,37 +1479,35 @@ allocSummary = function(a){ # device
 summarizeChain = function(a){ # kernel <<<1, 1>>>
   ret = allocSummary(a);
 
-  for(i in 1:(a$M - a$burnin)){
-    ret$sigC[i] = a$sigC[i] + a$burnin;
-    ret$d[i] = a$d[i] + a$burnin;
-    ret$tau[i] = a$tau[i] + a$burnin;
+  ret$sigC = a$sigC;
+  ret$d = a$d;
+  ret$tau = a$tau;
 
-    ret$thePhi[i] = a$thePhi[i] + a$burnin;
-    ret$sigPhi[i] = a$sigPhi[i] + a$burnin;
+  ret$thePhi = a$thePhi;
+  ret$sigPhi = a$sigPhi;
 
-    ret$theAlp[i] = a$theAlp[i] + a$burnin;
-    ret$sigAlp[i] = a$sigAlp[i] + a$burnin;
-    ret$piAlp[i] = a$piAlp[i] + a$burnin;
+  ret$theAlp = a$theAlp;
+  ret$sigAlp = a$sigAlp;
+  ret$piAlp = a$piAlp;
 
-    ret$theDel[i] = a$theDel[i] + a$burnin;
-    ret$sigDel[i] = a$sigDel[i] + a$burnin;
-    ret$piDel[i] = a$piDel[i] + a$burnin;
-  }
+  ret$theDel = a$theDel;
+  ret$sigDel = a$sigDel;
+  ret$piDel = a$piDel;
 
-  ret$acc$d = a$acc$d / (a$M - a$burnin);
+  ret$acc$d = a$acc$d / a$M;
 
   for(n in 1:a$N){
-    ret$acc$c[n] = a$acc$c[n] / (a$M - a$burnin);
+    ret$acc$c[n] = a$acc$c[n] / a$M;
 
     for(g in 1:a$G){
-      ret$acc$eps[n, g] = a$acc$eps[n, g] / (a$M - a$burnin);
+      ret$acc$eps[n, g] = a$acc$eps[n, g] / a$M;
     }
   }
   
   for(g in 1:a$G){
-    ret$acc$phi[g] = a$acc$phi[g] / (a$M - a$burnin);
-    ret$acc$alp[g] = a$acc$alp[g] / (a$M - a$burnin);
-    ret$acc$del[g] = a$acc$del[g] / (a$M - a$burnin);
+    ret$acc$phi[g] = a$acc$phi[g] / a$M;
+    ret$acc$alp[g] = a$acc$alp[g] / a$M;
+    ret$acc$del[g] = a$acc$del[g] / a$M;
   }
 
   ret
@@ -1500,5 +1518,6 @@ run = function(){
   y = h$y
   grp = h$grp
   a = newChain(y, grp, 5, 4, 10)
-  return(runChain(a)) 
+  a = runChain(a)
+  summarizeChain(a)
 }

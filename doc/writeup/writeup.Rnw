@@ -840,7 +840,7 @@ where:
 \pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) = 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\ \\
 & \qquad P(y_{g, n} \mid \delta_g = 0, \ldots ) =  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0)) \\
 & \qquad   \qquad   \qquad  \qquad - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0))) \\ 
-& \qquad P(y_{g, n} \mid \delta_g = 0, \ldots ) = D \exp \left ( C - \frac{B^2}{4A} \right ) \left ( - \frac{\pi}{A} \right )^{1/2} \\ \\
+& \qquad P(y_{g, n} \mid \delta_g \ne 0, \ldots ) = D \exp \left ( C - \frac{B^2}{4A} \right ) \left ( - \frac{\pi}{A} \right )^{1/2} \\ \\
 & \qquad \qquad A = - \frac{1}{2 (\sigma_\delta')^2} - \frac{1}{2}\\
 & \qquad \qquad B = - i + \frac{\theta_\delta'}{(\sigma_\delta')^2} + y_{g, n} - 1 \\
 & \qquad \qquad C = - \frac{i^2}{2} + i y_{g, n} -i - \frac{(\theta_\delta')^2}{2 (\sigma_\delta')^2} -1 \\
