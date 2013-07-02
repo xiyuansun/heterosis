@@ -131,7 +131,7 @@ sampleBeta = function(a, b){ # device
 allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
  list(
 
-    # initialization constants
+    # allocate initialization constants
 
     sigC0 = 0,
     d0 = 0,
@@ -338,8 +338,8 @@ newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
   a$gamDel = 2;
 
   a$sigPhi0 = 2;
-  a$sigAlp0 = 2;
-  a$sigDel0 = 2;
+  a$sigAlp0 = 100;
+  a$sigDel0 = 100;
 
   # compute initial normalization factors, mostly using priors
 
@@ -949,7 +949,10 @@ piAlpPrime = function(a, g, avg, s){ # device
       D = 1.0/sqrt(2 * pi * s * s);
                      
       num = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
-      prod = prod * num/den
+
+      if(den != 0 && is.finite(num))
+        prod = prod * num/den
+
     }
   }
 
@@ -980,8 +983,8 @@ sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
 
     u = runif(1);
 
-    if(u < piAlpPrime(a, g, avg, s)) {
-#    if(u < a$piAlp[a$m$piAlp]){
+#    if(u < piAlpPrime(a, g, avg, s)) {
+    if(u < a$piAlp[a$m$piAlp]){
       new = 0;
     } else {
       new = sampleNormal(avg, s);
@@ -1110,6 +1113,9 @@ sampleSigAlp_kernel4 = function(a){ # parallel pairwise sum in Thrust
   rate = a$s1 / 2;
   lb = 1/a$sigAlp0^2;
 
+  print(paste(shape, rate, lb))
+
+
   if(shape >= 1 && rate > 0){
     a$sigAlp[a$m$sigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   } else {
@@ -1186,7 +1192,9 @@ piDelPrime = function(a, g, avg, s){ # device
       D = 1.0/sqrt(2 * pi * s * s);
                      
       num = D * exp(C - (B * B)/(4 * A)) * sqrt(- pi/A);
-      prod = prod * num/den
+
+      if(den != 0 && is.finite(num))
+        prod = prod * num/den
     }
   }
 
@@ -1218,8 +1226,8 @@ sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
 
     u = runif(1);
 
-    if(u < piDelPrime(a, g, avg, s)) {
-#    if(u < a$piDel[a$m$piDel]){
+#    if(u < piDelPrime(a, g, avg, s)) {
+    if(u < a$piDel[a$m$piDel]){
       new = 0;
     } else {
       new = sampleNormal(avg, s);
@@ -1338,6 +1346,8 @@ sampleSigDel_kernel4 = function(a){ # kernel <<<1, 1>>>
   shape = (a$s2 - 1) / 2;
   rate = a$s1 / 2;
   lb = 1/a$sigDel0^2;
+
+  print(paste(shape, rate, lb))
 
   if(shape >= 1 && rate > 0){
     a$sigDel[a$m$sigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
@@ -1519,7 +1529,7 @@ init = function(){
   h = hammer();
   y = h$y
   grp = h$grp
-  newChain(y, grp, 10, 4, 30)
+  newChain(y, grp, 10, 4, 100)
 }
 
 
@@ -1527,7 +1537,7 @@ run = function(){
   h = hammer();
   y = h$y
   grp = h$grp
-  a = newChain(y, grp, 10, 4, 30)
+  a = newChain(y, grp, 10, 4, 100)
   a = runChain(a)
   summarizeChain(a)
 }
