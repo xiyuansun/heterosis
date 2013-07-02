@@ -543,10 +543,12 @@ lD = function(a, newArg){ # host
 lPhi = function(a, g, arg){ # device
  
   s = 0; 
+  tmp = 0;
+
   for(n in 1:a$N){
-    a$tmp[0] = mu(a, n, arg, a$alp[a$m$alp, g], a$del[a$m$del, g]);
-    s = s + a$y[n, g] * a$tmp[0] - exp(a$c[a$m$c, n] + 
-        a$eps[a$m$eps, n, g] + a$tmp[0]);
+    tmp = mu(a, n, arg, a$alp[a$m$alp, g], a$del[a$m$del, g]);
+    s = s + a$y[n, g] * tmp - exp(a$c[a$m$c, n] + 
+        a$eps[a$m$eps, n, g] + tmp);
   }
  
   ret = s - (arg - a$thePhi[a$m$thePhi])^2 / (2 * a$sigPhi[a$m$sigPhi]^2);
@@ -559,7 +561,7 @@ lAlp = function(a, g, arg){ # device
   for(n in 1:a$N){
     if(a$grp[n] != 2){
       a$tmp[1] = mu(a, n, a$phi[a$m$phi, g], arg, a$del[a$m$del, g]);
-      s = s + y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
+      s = s + a$y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
           a$eps[a$m$eps, n, g] + a$tmp1[1]);
     }
   }
@@ -581,7 +583,7 @@ lDel = function(a, g, arg){ # device
   for(n in 1:a$N){
     if(a$grp[n] != 2){
       a$tmp[1] = mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$alp, g], arg);
-      s = s + y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
+      s = s + a$y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
           a$eps[a$m$eps, n, g] + a$tmp1[1]);
     }
   }
@@ -1513,11 +1515,19 @@ summarizeChain = function(a){ # kernel <<<1, 1>>>
   ret
 }
 
+init = function(){
+  h = hammer();
+  y = h$y
+  grp = h$grp
+  newChain(y, grp, 10, 4, 30)
+}
+
+
 run = function(){
   h = hammer();
   y = h$y
   grp = h$grp
-  a = newChain(y, grp, 5, 4, 10)
+  a = newChain(y, grp, 10, 4, 30)
   a = runChain(a)
   summarizeChain(a)
 }
