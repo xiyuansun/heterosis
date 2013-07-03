@@ -1,11 +1,12 @@
-1) add differential expression option
-2) output probabilities of differential expression and/or heterosis (lph and hph; fraction of nonzero alphas/deltas for each gene).
-3) add input option for known parameters
-4) double-check math
-5) implement in C
-6) debug with Valgrind
-7) implement in CUDA C
-8) validate with BaySeq
+1) jointly sample phi, alpha, and delta
+2) add input option for known parameters
+3) add differential expression option
+4) output probabilities of differential expression and/or heterosis (lph and hph; fraction of nonzero alphas/deltas for each gene).
+5) double-check math
+6) implement in C
+7) debug with Valgrind
+8) implement in CUDA C
+9) validate with BaySeq
 
 ./mcmc -data [DATA-FILE] 
        -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 
@@ -14,6 +15,8 @@
        -heterosis [HETEROSIS-PROBS-FILE]     # Gene-wise probabilities of heterosis
        -diffexpr [DIFF-EXPR-PROBS-FILE]      # Gene-wise probabilities of differential 
                                              #   expression across parents
+
+       -joint                                # jointly sample phi_g, alpha_g, and delta_g
 
        # input files for known hyperparameters (empirical Bayes)       
 
