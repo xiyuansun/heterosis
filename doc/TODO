@@ -1,0 +1,34 @@
+1) add differential expression option
+2) output probabilities of differential expression and/or heterosis (lph and hph; fraction of nonzero alphas/deltas for each gene).
+3) add input option for known parameters
+4) double-check math
+5) implement in C
+6) debug with Valgrind
+7) implement in CUDA C
+8) validate with BaySeq
+
+./mcmc -data [DATA-FILE] 
+       -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 
+       -hyper [HYPERPARAMETERS-OUTPUT-FILE]  # output hyperparamters
+       -rates [ACCEPT-RATES-FILE]            # output acceptance rates for metropolis steps
+       -heterosis [HETEROSIS-PROBS-FILE]     # Gene-wise probabilities of heterosis
+       -diffexpr [DIFF-EXPR-PROBS-FILE]      # Gene-wise probabilities of differential 
+                                             #   expression across parents
+
+       # input files for known hyperparameters (empirical Bayes)       
+
+       -sigc [SIGC-FILE] 
+
+       -d [D-FILE]
+       -tau [TAU-FILE]
+
+       -thephi [THEPHI-FILE]
+       -sigphi [SIGPHI-FILE]
+
+       -thealp [THEALP-FILE]
+       -sigalp [SIGALP-FILE]
+       -pialp [PIALP-FILE]
+
+       -thedel [THEDEL-FILE]
+       -sigdel [SIGDEL-FILE]
+       -pidel [PIDEL-FILE]

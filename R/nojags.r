@@ -1135,9 +1135,6 @@ sampleSigAlp_kernel4 = function(a){ # parallel pairwise sum in Thrust
   rate = a$s1 / 2;
   lb = 1/a$sigAlp0^2;
 
-  print(paste(shape, rate, lb))
-
-
   if(shape >= 1 && rate > 0){
     a$sigAlp[a$m$sigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   } else {
@@ -1369,8 +1366,6 @@ sampleSigDel_kernel4 = function(a){ # kernel <<<1, 1>>>
   rate = a$s1 / 2;
   lb = 1/a$sigDel0^2;
 
-  print(paste(shape, rate, lb))
-
   if(shape >= 1 && rate > 0){
     a$sigDel[a$m$sigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   } else {
@@ -1432,46 +1427,30 @@ samplePiDel = function(a){ # host
 
 runChain = function(a){ # host
   for(m in 1:a$M){
-
     print(paste(m))
-    print("  step 1")
 
     a = sampleC(a);
-
-print("  step 2")
 
     a = sampleTau(a);
     a = samplePiAlp(a);
     a = samplePiDel(a);
-
-print("  step 3")
 
     a = sampleD(a);
     a = sampleThePhi(a);
     a = sampleTheAlp(a);
     a = sampleTheDel(a);
 
-print("  step 4")
-
-    a = sampleSigC(a); print("    sigc")
-    a = sampleSigPhi(a);  print("    sigphi")
-    a = sampleSigAlp(a);  print("    sigalp")
-    a = sampleSigDel(a);  print("    sigdel")
-    a = sampleEta(a); print("    eta")
-
-print("  step 5")
+    a = sampleSigC(a); 
+    a = sampleSigPhi(a); 
+    a = sampleSigAlp(a);  
+    a = sampleSigDel(a);  
+    a = sampleEta(a); 
 
     a = sampleEps(a);
 
-print("  step 6")
-
     a = samplePhi(a);
 
-print("  step 7")
-
     a = sampleAlp(a);
-
-print("  step 8")
 
     a = sampleDel(a);
   }
@@ -1559,7 +1538,7 @@ run = function(){
   h = hammer();
   y = h$y
   grp = h$grp
-  a = newChain(y, grp, 10, 4, 100)
+  a = newChain(y, grp, 100, 4, 100)
   a = runChain(a)
   summarizeChain(a)
 }
