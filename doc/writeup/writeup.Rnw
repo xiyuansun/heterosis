@@ -852,26 +852,6 @@ where:
 
 where $N_\delta$ is the number of libraries in the second treatment group. 
 
-
-
-\section{A rejection sampler for lower-truncated gamma distributions}
-
-I wish to sample from a lower-truncated $\Gamma(\alpha, 1)$ distribution, which has the pdf,
-
-\begin{align*}
-f(x) = k \cdot x^{\alpha - 1} e^{-x} I(x > c)
-\end{align*}
-
-where $k$ is some proportionality constant. Now, assuming 
-
-
-\begin{enumerate}
-\item Sample $x$ from a truncated exponential distribution,
-\begin{align*}
-g(x) = \e \exp (-\e (x - c)
-\end{align*}
-\end{enumerate}
-
 \end{flushleft}
 \newpage 
 \bibliographystyle{plainnat} 
