@@ -10,16 +10,16 @@
 ./mcmc -data [DATA-FILE] 
        -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 
 
-       -iter [NUMBER-ITERATIONS]             # number of Monte Carlo iterations
-       -burnin [NUMBER-BURNIN]               # burn-in for calculating the probabilities above
-       -joint                                # set to jointly sample phi_g, alpha_g, and delta_g
-
        -heterosis [HETEROSIS-PROBS-FILE]     # Gene-wise probabilities of heterosis
        -diffexpr [DIFF-EXPR-PROBS-FILE]      # Gene-wise probabilities of differential 
                                              #   expression across parents
 
        -hyper [HYPERPARAMETERS-OUTPUT-FILE]  # output hyperparamters
        -rates [ACCEPT-RATES-FILE]            # output acceptance rates for metropolis steps
+
+       -iter [NUMBER-ITERATIONS]             # number of Monte Carlo iterations
+       -burnin [NUMBER-BURNIN]               # burn-in for calculating the probabilities above
+       -joint                                # set to jointly sample phi_g, alpha_g, and delta_g
 
        # input known initialization constants
 

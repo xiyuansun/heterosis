@@ -10,24 +10,6 @@
 library(Biobase)
 library(coda)
 
-# reading data
-
-hammer = function(){ # host
-  load(url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/hammer_eset.RData"))
-  counts = exprs(hammer.eset)
-  counts = counts[rowSums(counts) > 0,]
-  
-  group = as.vector(phenoData(hammer.eset)$protocol)
-  group[group == "control"] = "1"
-  group[group == "L5 SNL"] = "2"
-  group = as.factor(as.numeric(group))
-
-  return(list(y = t(counts), 
-       grp = group, 
-       G = dim(counts)[1], 
-       N = dim(counts)[2]))
-}
-
 # sampling from known distributions
 
 sampleNormal = function(m = 0, s = 1){ # device
@@ -150,14 +132,228 @@ sampleBeta = function(a, b){ # device
 
 # data structures and initialization
 
-allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
+allocConfig = function(){
   list(
+    datafile = "",
+    groupfile = "",
+
+    heterosisfile = "",
+    diffexprfile = "",
+
+    hyperfile = "",
+    ratesfile = "",
+
+    iter = 0,
+    burnin = 0,
+    joint = 0,
+
+    sigC0 = 0,
+    d0 = 0,
     
-    joint = 0, # joint sampling of phi_g, alpha_g, and delta_g?
+    aTau = 0,
+    aAlp = 0,
+    aDel = 0,
+    
+    bTau = 0,
+    bAlp = 0,
+    bDel = 0,
+    
+    gamPhi = 0,
+    gamAlp = 0,
+    gamDel = 0,
+    
+    sigPhi0 = 0,
+    sigAlp0 = 0,
+    sigDel0 = 0,
+    
+    sigC = 0,
+    
+    d = 0,
+    tau = 0,
+    
+    thePhi = 0,
+    theAlp = 0,
+    theDel = 0,
+
+    sigPhi = 0,
+    sigAlp = 0,
+    sigDel = 0,
+
+    piAlp = 0,
+    piDel = 0,
+
+    skip = list(
+
+      sigC = 0,
+    
+      d = 0,
+      tau = 0,
+    
+      thePhi = 0,
+      theAlp = 0,
+      theDel = 0,
+
+      sigPhi = 0,
+      sigAlp = 0,
+      sigDel = 0,
+
+      piAlp = 0,
+      piDel = 0, 
+      
+    )
+  );
+}
+
+getopts = function(){
+  cfg = allcoConfig();
+
+  # initialization constants = -1 when unset
+
+  cfg$sigC0 = -1; 
+  cfg$d0 = -1; 
+
+  cfg$aTau = -1; 
+  cfg$aAlp = -1; 
+  cfg$aDel = -1; 
+
+  cfg$bTau = -1; 
+  cfg$bAlp = -1; 
+  cfg$bDel = -1; 
+  
+  cfg$gamPhi = -1; 
+  cfg$gamAlp = -1; 
+  cfg$gamDel = -1; 
+
+  cfg$sigPhi0 = -1; 
+  cfg$sigAlp0 = -1; 
+  cfg$sigDel0 = -1; 
+
+  cfg$skip$sigC = 0;
+
+  cfg$skip$d = 0;
+  cfg$skip$tau = 0;
+
+  cfg$skip$thePhi = 0;
+  cfg$skip$theAlp = 0;
+  cfg$skip$theDel = 0; 
+
+  cfg$skip$sigPhi = 0; 
+  cfg$skip$sigAlp = 0; 
+  cfg$skip$sigDel = 0; 
+
+  cfg$skip$piAlp = 0;
+  cfg$skip$piDel = 0;
+
+  # Use long getopt to parse command line args.
+
+  cfg$datafile = "~/heterosis/var/data/hammer/hammer.txt";
+  cfg$groupfile = "~/heterosis/var/data/hammer/group.txt"; 
+
+  heterosisfile = "";
+  diffexprfile = "";
+
+  hyperfile = "";
+  ratesfile = "";
+
+  iter = 50;
+  burnin = 0;
+  joint = 0;
+
+  if(cfg$sigC0 < 0)
+    cfg$sigC0 = 10; 
+
+  if(cfg$d0 < 0)
+    cfg$d0 = 1e3; 
+
+  if(cfg$aTau < 0)
+    cfg$aTau = 1e2; 
+
+  if(cfg$aAlp < 0)
+    cfg$aAlp = 1; 
+
+  if(cfg$aDel < 0)
+    cfg$aDel = 1; 
+
+  if(cfg$bTau < 0)
+    cfg$bTau = 1e2; 
+
+  if(cfg$bAlp < 0)
+    cfg$bAlp = 1; 
+
+  if(cfg$bDel < 0)
+    cfg$bDel = 1; 
+  
+  if(cfg$gamPhi < 0)
+    cfg$gamPhi = 2; 
+
+  if(cfg$gamAlp < 0)
+    cfg$gamAlp = 2; 
+
+  if(cfg$gamDel < 0)
+    cfg$gamDel = 2; 
+
+  if(cfg$sigPhi0 < 0)
+    cfg$sigPhi0 = 2; 
+
+  if(cfg$sigAlp0 < 0)
+    cfg$sigAlp0 = 1e2;
+
+  if(cfg$sigDel0 < 0)
+    cfg$sigDel0 = 1e2; 
+
+  if(!cfg$skip$sigC)
+    cfg$sigC = runif(1, 0, cfg$sigC0);
+
+  if(!cfg$skip$d)
+    cfg$d = runif(1, 0, cfg$d0);
+
+  if(!cfg$skip$tau)
+    cfg$tau = sqrt(sampleGamma(shape = cfg$aTau, rate = cfg$bTau));
+
+  if(!cfg$skip$thePhi)
+    cfg$thePhi = sampleNormal(0, cfg$gamPhi);
+
+  if(!cfg$skip$theAlp)
+    cfg$theAlp = sampleNormal(0, cfg$gamAlp);
+
+  if(!cfg$skip$theDel)
+    cfg$theDel = sampleNormal(0, cfg$gamDel); 
+
+  if(!cfg$skip$sigPhi)
+    cfg$sigPhi = runif(1, 0, cfg$sigPhi0); 
+
+  if(!cfg$skip$sigAlp)
+    cfg$sigAlp = runif(1, 0, cfg$sigAlp0); 
+
+  if(!cfg$skip$sigDel)
+    cfg$sigDel = runif(1, 0, cfg$sigDel0); 
+
+  if(!cfg$skip$piAlp)
+    cfg$piAlp = sampleBeta(cfg$aAlp, cfg$bAlp);
+
+  if(!cfg$skip$piDel)
+    cfg$piDel = sampleBeta(cfg$aDel, cfg$bDel);
+ 
+  cfg
+}
+
+allocChain = function(M, N, G){ # host (bunch of cudaMallocs)
+  list(
+
+    # data 
+
+    y = array(0, c(N, G)),
+    yMeanG = rep(0, N),
+    grp = rep(0, N),
+
+    M = M,
+    N = N,
+    G = G,
+    
     burnin = 0, # burn-in for calculating heterosis 
                 # and differential expression probabilities
 
-    # allocate initialization constants
+    # initialization constants
 
     sigC0 = 0,
     d0 = 0,
@@ -177,16 +373,6 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
     sigPhi0 = 0,
     sigAlp0 = 0,
     sigDel0 = 0,
-
-    # data 
-
-    y = array(0, c(N, G)),
-    yMeanG = rep(0, N),
-    grp = rep(0, N),
-
-    M = 0,
-    N = 0,
-    G = 0,
 
     # parameters
 
@@ -263,7 +449,7 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
     ),
 
     # number of acceptances for metropolis steps
-    # USE CALLOC
+
     acc = list(
       c = rep(0, N),
       eps = array(0, c(N, G)),
@@ -332,25 +518,49 @@ newChain_kernel2 = function(a){ # kernel: 1 block, 1 thread
 
   # tuning parameters for metropolis steps (std deviations of normal dists): 
 
-  for(n in 1:N)
+  a$tun$d = 500;
+
+  for(n in 1:a$N)
     a$tun$c[n] = 1;
 
-  for(g in 1:G){
+  for(g in 1:a$G){
     a$tun$phi[g] = 1;
 
-    for(n in 1:N)
+    for(n in 1:a$N)
       a$tun$eps[n, g] = 1;
   }
 
-  a$tun$d = 500;
+  # number of acceptances for metropolis steps
+
+  a$acc$d = 0;
+
+  for(n in 1:a$N){
+    a$acc$c[n] = 0;
+  
+    for(g in 1:a$G)
+      a$acc$eps[n, g] = 0;
+  }
+
+  for(g in 1:a$G){
+    a$acc$phi[g] = 0;
+    a$acc$alp[g] = 0;
+    a$acc$del[g] = 0;
+  }
   
   a
 }
 
-newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
+newChain = function(cfg){ # host (bunch of cudaMemcpies and kernels)
 
-  a = allocChain(y, M, N, G);
+  y = t(matrix(read.table(cfg$datafile)))
+  group = scan(cfg$groupfile)
 
+  M = cfg$iter;
+  N = dim(y)[1];
+  G = dim(y)[2];
+
+  a = allocChain(M, N, G);
+  
   # data
 
   for(n in 1:N){
@@ -369,10 +579,6 @@ newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
   a$N = N; # CudaMemcpy
   a$G = G; # CudaMemcpy
 
-  # joint sampling of alpha_g, delta_g, and phi_g?
-
-  a$joint = 0; # CudaMemcpy
-
   # burn-in for calculating heterosis 
   # and differential expression probabilities
 
@@ -380,42 +586,42 @@ newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
 
   # initialization constants: CudaMemcpies
 
-  a$sigC0 = 10; # CudaMemcpy
-  a$d0 = 1e3; # CudaMemcpy
+  a$sigC0 = cfg$sigC0; # CudaMemcpy
+  a$d0 = cfg$d0; # CudaMemcpy
 
-  a$aTau = 1e2; # CudaMemcpy
-  a$aAlp = 1; # CudaMemcpy
-  a$aDel = 1; # CudaMemcpy
+  a$aTau = cfg$aTau; # CudaMemcpy
+  a$aAlp = cfg$aAlp; # CudaMemcpy
+  a$aDel = cfg$aDel; # CudaMemcpy
 
-  a$bTau = 1e2; # CudaMemcpy
-  a$bAlp = 1; # CudaMemcpy
-  a$bDel = 1; # CudaMemcpy
+  a$bTau = cfg$bTau; # CudaMemcpy
+  a$bAlp = cfg$bAlp; # CudaMemcpy
+  a$bDel = cfg$bDel; # CudaMemcpy
   
-  a$gamPhi = 2; # CudaMemcpy
-  a$gamAlp = 2; # CudaMemcpy
-  a$gamDel = 2; # CudaMemcpy
+  a$gamPhi = cfg$gamPhi; # CudaMemcpy
+  a$gamAlp = cfg$gamAlp; # CudaMemcpy
+  a$gamDel = cfg$gamDel; # CudaMemcpy
 
-  a$sigPhi0 = 2; # CudaMemcpy
-  a$sigAlp0 = 1e2; # CudaMemcpy
-  a$sigDel0 = 1e2; # CudaMemcpy
+  a$sigPhi0 = cfg$sigPhi0; # CudaMemcpy
+  a$sigAlp0 = cfg$sigAlp0; # CudaMemcpy
+  a$sigDel0 = cfg$sigDel0; # CudaMemcpy
 
   # hyperparameters: CudaMemcpies
 
-  a$sigC[1] = runif(1, 0, a$sigC0) # CudaMemcpy
+  a$sigC[1] = cfg$sigC # CudaMemcpy
 
-  a$d[1] = runif(1, 0, a$d0) # CudaMemcpy
-  a$tau[1] = sqrt(sampleGamma(shape = a$aTau, rate = a$bTau)) # CudaMemcpy
+  a$d[1] = cfg$d # CudaMemcpy
+  a$tau[1] = cfg$tau # CudaMemcpy
 
-  a$thePhi[1] = sampleNormal(0, a$gamPhi) # CudaMemcpy
-  a$theAlp[1] = sampleNormal(0, a$gamAlp) # CudaMemcpy
-  a$theDel[1] = sampleNormal(0, a$gamDel) # CudaMemcpy
+  a$thePhi[1] = cfg$thePhi # CudaMemcpy
+  a$theAlp[1] = cfg$theAlp # CudaMemcpy
+  a$theDel[1] = cfg$theDel # CudaMemcpy
 
-  a$sigPhi[1] = runif(1, 0, a$sigPhi0) # CudaMemcpy
-  a$sigAlp[1] = runif(1, 0, a$sigAlp0) # CudaMemcpy
-  a$sigDel[1] = runif(1, 0, a$sigDel0) # CudaMemcpy
+  a$sigPhi[1] = cfg$sigPhi # CudaMemcpy
+  a$sigAlp[1] = cfg$sigAlp # CudaMemcpy
+  a$sigDel[1] = cfg$sigDel # CudaMemcpy
 
-  a$piAlp[1] = sampleBeta(a$aAlp, a$bAlp) # CudaMemcpy
-  a$piDel[1] = sampleBeta(a$aDel, a$bDel) # CudaMemcpy
+  a$piAlp[1] = cfg$piAlp # CudaMemcpy
+  a$piDel[1] = cfg$piDel # CudaMemcpy
 
   # compute initial normalization factors, mostly using priors
 
@@ -1544,30 +1750,49 @@ samplePhiAlpDel = function(a){ # host
   return(a)
 }
 
-runChain = function(a){ # host
+runChain = function(a, cfg){ # host
   for(m in 1:a$M){
     print(paste(m))
 
     a = sampleC(a);
 
-    a = sampleTau(a);
-    a = samplePiAlp(a);
-    a = samplePiDel(a);
+    if(!cfg$skip$tau)
+      a = sampleTau(a);
 
-    a = sampleD(a);
-    a = sampleThePhi(a);
-    a = sampleTheAlp(a);
-    a = sampleTheDel(a);
+    if(!cfg$skip$piAlp)
+      a = samplePiAlp(a);
 
-    a = sampleSigC(a); 
-    a = sampleSigPhi(a); 
-    a = sampleSigAlp(a);  
-    a = sampleSigDel(a);  
+    if(!cfg$skip$piDel)
+      a = samplePiDel(a);
+
+    if(!cfg$skip$d)
+      a = sampleD(a);
+
+    if(!cfg$skip$thePhi)
+      a = sampleThePhi(a);
+
+    if(!cfg$skip$theAlp)
+      a = sampleTheAlp(a);
+
+    if(!cfg$skip$theDel)
+      a = sampleTheDel(a);
+
+    if(!cfg$skip$sigC)
+      a = sampleSigC(a); 
+
+    if(!cfg$skip$sigPhi)
+      a = sampleSigPhi(a); 
+
+    if(!cfg$skip$sigAlp)
+      a = sampleSigAlp(a);  
+
+    if(!cfg$skip$sigDel)
+      a = sampleSigDel(a);  
+
     a = sampleEta(a); 
-
     a = sampleEps(a);
 
-    if(a$joint){
+    if(cfg$joint){
       a = samplePhiAlpDel(a);
     } else {
       a = samplePhi(a);
@@ -1656,11 +1881,9 @@ init = function(){
 
 
 run = function(){
-  h = hammer();
-  y = h$y
-  grp = h$grp
-  a = newChain(y, grp, 100, 4, 100)
-  a = runChain(a)
+  cfg = getopts();
+  a = newChain(cfg)
+  a = runChain(a, cfg)
   s = summarizeChain(a)
   list(chain = a, summ = s)
 }
