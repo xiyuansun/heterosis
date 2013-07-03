@@ -47,7 +47,29 @@ sampleGamma = function(shape = 1, rate = 1, lb = 0){ # device
     return(0/0);
   }
 
-  if(shape >= 1){ # Marsaglia and Tsang (2000)
+  if(shape - 1 < lb * rate){ # Chung (1998)
+    c = lb * rate;
+
+    eps0 = (c - shape + sqrt((c - shape)^2 + 4 * c))/(2 * c);
+
+    if(eps0 > 1){
+      eps = 0.75;
+    } else {
+      eps = eps0
+    }
+
+    A = ((1 - eps)/(shape - 1))^(shape - 1) * exp(shape - 1);
+
+    while(1){
+      x = - (1/eps) * log(runif(1)) + lb * rate;
+      u = runif(1);
+
+      if(u < A * x^(shape - 1) * exp((eps - 1) * x))
+        return(x / rate);
+
+    }
+
+  } else if(shape >= 1){ # Marsaglia and Tsang (2000)
 
     d = shape - 1/3;
     c = 1 / sqrt(9 * d);
@@ -338,8 +360,8 @@ newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
   a$gamDel = 2;
 
   a$sigPhi0 = 2;
-  a$sigAlp0 = 100;
-  a$sigDel0 = 100;
+  a$sigAlp0 = 1e2;
+  a$sigDel0 = 1e2;
 
   # compute initial normalization factors, mostly using priors
 
