@@ -1,4 +1,3 @@
-1) jointly sample phi, alpha, and delta
 2) add input option for known parameters
 3) add differential expression option
 4) output probabilities of differential expression and/or heterosis (lph and hph; fraction of nonzero alphas/deltas for each gene).
@@ -10,19 +9,44 @@
 
 ./mcmc -data [DATA-FILE] 
        -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 
-       -hyper [HYPERPARAMETERS-OUTPUT-FILE]  # output hyperparamters
-       -rates [ACCEPT-RATES-FILE]            # output acceptance rates for metropolis steps
+
+       -iter [NUMBER-ITERATIONS]             # number of Monte Carlo iterations
+       -burnin [NUMBER-BURNIN]               # burn-in for calculating the probabilities above
+       -joint                                # set to jointly sample phi_g, alpha_g, and delta_g
+
        -heterosis [HETEROSIS-PROBS-FILE]     # Gene-wise probabilities of heterosis
        -diffexpr [DIFF-EXPR-PROBS-FILE]      # Gene-wise probabilities of differential 
                                              #   expression across parents
 
-       -joint                                # jointly sample phi_g, alpha_g, and delta_g
+       -hyper [HYPERPARAMETERS-OUTPUT-FILE]  # output hyperparamters
+       -rates [ACCEPT-RATES-FILE]            # output acceptance rates for metropolis steps
 
-       # input files for known hyperparameters (empirical Bayes)       
+       # input known initialization constants
 
-       -sigc [SIGC-FILE] 
+       -sigc0 [SIGC0-VAL]
+       -d0 [D0-VAL]
+       
+       -atau [ATAU-VAL]
+       -aalp [AALP-VAL]
+       -adel [ADEL-VAL]
+       
+       -btau [BTAU-VAL]
+       -balp [BALP-VAL]
+       -bdel [BDEL-VAL]
+       
+       -gamphi [GAMPHI-VAL]
+       -gamalp [GAMALP-VAL]
+       -gamdel [GAMDEL-VAL]
 
-       -d [D-FILE]
+       -sigphi0 [SIGPHI0-VAL]
+       -sigalp0 [SIGALP0-VAL]
+       -sigdel0 [SIGDEL0-VAL]
+
+       # input known hyperparameters (empirical Bayes)       
+
+       -sigc [SIGC-VAL] 
+
+       -d [D-VAL]
        -tau [TAU-FILE]
 
        -thephi [THEPHI-FILE]

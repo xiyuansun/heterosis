@@ -151,7 +151,11 @@ sampleBeta = function(a, b){ # device
 # data structures and initialization
 
 allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
- list(
+  list(
+    
+    joint = 0, # joint sampling of phi_g, alpha_g, and delta_g?
+    burnin = 0, # burn-in for calculating heterosis 
+                # and differential expression probabilities
 
     # allocate initialization constants
 
@@ -271,28 +275,7 @@ allocChain = function(y, M, N, G){ # host (bunch of cudaMallocs)
   );
 }
 
-newChain_kernel1 = function(a){ # kernel: 1 block, 1 thread each
-
-  a$sigC[1] = runif(1, 0, a$sigC0)
-
-  a$d[1] = runif(1, 0, a$d0)
-  a$tau[1] = sqrt(sampleGamma(shape = a$aTau, rate = a$bTau))
-
-  a$thePhi[1] = sampleNormal(0, a$gamPhi)
-  a$theAlp[1] = sampleNormal(0, a$gamAlp)
-  a$theDel[1] = sampleNormal(0, a$gamDel)
-
-  a$sigPhi[1] = runif(1, 0, a$sigPhi0)
-  a$sigAlp[1] = runif(1, 0, a$sigAlp0)
-  a$sigDel[1] = runif(1, 0, a$sigDel0)
-
-  a$piAlp[1] = sampleBeta(a$aAlp, a$bAlp)
-  a$piDel[1] = sampleBeta(a$aDel, a$bDel)
-
-  return(a);
-}
-
-newChain_kernel2 = function(a){ # kernel: G blocks, 1 thread each
+newChain_kernel1 = function(a){ # kernel: G blocks, 1 thread each
  for(g in 1:a$G){
     a$phi[1, g] = sampleNormal(a$thePhi[1], a$sigPhi[1]);
 
@@ -320,70 +303,9 @@ newChain_kernel2 = function(a){ # kernel: G blocks, 1 thread each
   return(a);
 }
 
-newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
+newChain_kernel2 = function(a){ # kernel: 1 block, 1 thread
 
-  a = allocChain(y, M, N, G);
-
-  # data: cudaMemCpies
-
-  for(n in 1:N){
-    a$grp[n] = grp[n];
-    tmp = 0;
-
-    for(g in 1:G){
-      a$y[n, g] = y[n, g];
-      tmp = tmp + y[n, g];
-    }
-
-    a$yMeanG[n] = tmp / G;
-  }
-
-  a$M = M;
-  a$N = N;
-  a$G = G;
-
-  # initialization constants: cudaMemCpies
-
-  a$sigC0 = 10;
-  a$d0 = 1e3;
-
-  a$aTau = 1e2;
-  a$aAlp = 1;
-  a$aDel = 1;
-
-  a$bTau = 1e2;
-  a$bAlp = 1;
-  a$bDel = 1;
-  
-  a$gamPhi = 2;
-  a$gamAlp = 2;
-  a$gamDel = 2;
-
-  a$sigPhi0 = 2;
-  a$sigAlp0 = 1e2;
-  a$sigDel0 = 1e2;
-
-  # compute initial normalization factors, mostly using priors
-
-  lqts = rep(0, N);
-  tmp = rep(0, G);
-
-  s = 0;
-  for(n in 1:N){
-    for(g in 1:G)
-      tmp[g] = y[n, g];
-
-    tmp = sort(tmp); # use qsort()
-    lqts[n] = log(tmp[floor(G * 0.75)]); 
-    s = s + lqts[n];
-  }
-
-  s = s / N;
-
-  for(n in 1:N)
-    a$c[1, n] = lqts[n] - s; # cudaMemCpy
-
-  # location in chain: cudaMemCpies
+  # location in chain:
 
   a$m$c = 1;
   a$m$sigC = 1;
@@ -408,7 +330,7 @@ newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
   a$m$piAlp = 1;
   a$m$piDel = 1;
 
-  # tuning parameters for metropolis steps (std deviations of normal dists): cudaMemCpies
+  # tuning parameters for metropolis steps (std deviations of normal dists): 
 
   for(n in 1:N)
     a$tun$c[n] = 1;
@@ -421,6 +343,99 @@ newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
   }
 
   a$tun$d = 500;
+  
+  a
+}
+
+newChain = function(y, grp, M, N, G){ # host (bunch of cudaMemCpies and kernels)
+
+  a = allocChain(y, M, N, G);
+
+  # data
+
+  for(n in 1:N){
+    a$grp[n] = grp[n]; # CudaMemcpy
+    tmp = 0;
+
+    for(g in 1:G){
+      a$y[n, g] = y[n, g]; # CudaMemcpy
+      tmp = tmp + y[n, g];
+    }
+
+    a$yMeanG[n] = tmp / G; # CudaMemcpy
+  }
+
+  a$M = M; # CudaMemcpy
+  a$N = N; # CudaMemcpy
+  a$G = G; # CudaMemcpy
+
+  # joint sampling of alpha_g, delta_g, and phi_g?
+
+  a$joint = 0; # CudaMemcpy
+
+  # burn-in for calculating heterosis 
+  # and differential expression probabilities
+
+  a$burnin = M/2; 
+
+  # initialization constants: CudaMemcpies
+
+  a$sigC0 = 10; # CudaMemcpy
+  a$d0 = 1e3; # CudaMemcpy
+
+  a$aTau = 1e2; # CudaMemcpy
+  a$aAlp = 1; # CudaMemcpy
+  a$aDel = 1; # CudaMemcpy
+
+  a$bTau = 1e2; # CudaMemcpy
+  a$bAlp = 1; # CudaMemcpy
+  a$bDel = 1; # CudaMemcpy
+  
+  a$gamPhi = 2; # CudaMemcpy
+  a$gamAlp = 2; # CudaMemcpy
+  a$gamDel = 2; # CudaMemcpy
+
+  a$sigPhi0 = 2; # CudaMemcpy
+  a$sigAlp0 = 1e2; # CudaMemcpy
+  a$sigDel0 = 1e2; # CudaMemcpy
+
+  # hyperparameters: CudaMemcpies
+
+  a$sigC[1] = runif(1, 0, a$sigC0) # CudaMemcpy
+
+  a$d[1] = runif(1, 0, a$d0) # CudaMemcpy
+  a$tau[1] = sqrt(sampleGamma(shape = a$aTau, rate = a$bTau)) # CudaMemcpy
+
+  a$thePhi[1] = sampleNormal(0, a$gamPhi) # CudaMemcpy
+  a$theAlp[1] = sampleNormal(0, a$gamAlp) # CudaMemcpy
+  a$theDel[1] = sampleNormal(0, a$gamDel) # CudaMemcpy
+
+  a$sigPhi[1] = runif(1, 0, a$sigPhi0) # CudaMemcpy
+  a$sigAlp[1] = runif(1, 0, a$sigAlp0) # CudaMemcpy
+  a$sigDel[1] = runif(1, 0, a$sigDel0) # CudaMemcpy
+
+  a$piAlp[1] = sampleBeta(a$aAlp, a$bAlp) # CudaMemcpy
+  a$piDel[1] = sampleBeta(a$aDel, a$bDel) # CudaMemcpy
+
+  # compute initial normalization factors, mostly using priors
+
+  lqts = rep(0, N);
+  tmp = rep(0, G);
+
+  s = 0;
+  for(n in 1:N){
+    for(g in 1:G)
+      tmp[g] = y[n, g];
+
+    tmp = sort(tmp); # use qsort()
+    lqts[n] = log(tmp[floor(G * 0.75)]); 
+    s = s + lqts[n];
+  }
+
+  s = s / N;
+
+  for(n in 1:N)
+    a$c[1, n] = lqts[n] - s; # CudaMemcpy
 
   a = newChain_kernel1(a);
   a = newChain_kernel2(a);
@@ -1552,11 +1567,13 @@ runChain = function(a){ # host
 
     a = sampleEps(a);
 
-    a = samplePhi(a);
-
-    a = sampleAlp(a);
-
-    a = sampleDel(a);
+    if(a$joint){
+      a = samplePhiAlpDel(a);
+    } else {
+      a = samplePhi(a);
+      a = sampleAlp(a);
+      a = sampleDel(a);
+    }
   }
 
   return(a)
