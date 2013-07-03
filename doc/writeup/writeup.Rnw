@@ -209,7 +209,10 @@ p(\delta_g \mid \cdots) &\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n
 &\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
 p(\theta_\delta \mid \cdots) &= N \left ( \theta_\delta \ \left \lvert \ \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right . , \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right ) \\
 p \left ( \left . \frac{1}{\sigma_\delta^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\delta^2} \ \right \rvert \ \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )  \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ \sigma_{\delta 0}^2} \right ) \\
-p(\pi_\delta \mid \cdots) &= \text{Beta}(\pi_\delta \mid G - G_\delta + \delta_\tau, \ G_\delta + b_\tau)
+p(\pi_\delta \mid \cdots) &= \text{Beta}(\pi_\delta \mid G - G_\delta + \delta_\tau, \ G_\delta + b_\tau) \\
+p(\phi_g, \alpha_g, \delta_g \mid \cdots)  &\propto  \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right . \\
+& \qquad \qquad \left . - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right . \\
+& \qquad \qquad \left . - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right )
 \end{align*}
 
 
@@ -271,7 +274,7 @@ Hence, each of the following sets of parameters can be jointly sampled:
 \item $\delta_1, \ \ldots, \ \delta_G$
 \end{enumerate}
 
-In order, these are the 8 steps of the Gibbs sampler.
+In order, these are the 8 steps of the Gibbs sampler. Alternatively, one could sample each triplet $(\phi_g, \alpha_g, \delta_g)$ jointly in a single Metropolis step using $p(\phi_g, \alpha_g, \delta_g \cdots)$.
 
 
 
@@ -307,14 +310,18 @@ p(\sigma_\phi \mid \cdots ) &\propto \left [ \prod_{g = 1}^G \text{N}( \phi_g \m
 \end{align*}
 
 \begin{align*}
-p(\alpha_g \mid \cdots) &\propto \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
+p(\alpha_g \mid \cdots) &\propto \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \\
+& \quad \times \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
 p(\theta_\alpha \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
 p(\sigma_\alpha \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ]  \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0})    \\
 p(\pi_\alpha \mid \cdots) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
-p(\delta_g \mid \cdots) &\propto \left [ \prod_{k(n) = 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right ] \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
+p(\delta_g \mid \cdots) &\propto \left [ \prod_{k(n) = 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right ] \\
+&\quad \times \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
 p(\theta_\delta \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ] \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2)   \\
 p(\sigma_\delta \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ]  \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0})    \\
 p(\pi_\delta \mid \cdots) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ] \cdot \text{Beta}(\pi_\delta \mid a_\delta, b_\delta)  \\
+p(\phi_g, \alpha_g, \delta_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
+& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}
 \end{align*}
 
 
@@ -733,9 +740,19 @@ p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + a_\tau, \ G_\delta + b_\t
 
 
 
+% joint \phi_g, \alpha_g, \delta_g
 
+\subsection{$p(\phi_g, \alpha_g, \delta_g \mid \cdots)$: Metropolis}
 
-
+\begin{align*}
+p(\phi_g, \alpha_g, \delta_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
+& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
+& \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \\
+& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
+& \propto  \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right . \\
+& \qquad \qquad \left . - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right . \\
+& \qquad \qquad \left . - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right )
+\end{align*}
 
 
 
@@ -851,6 +868,7 @@ where:
 \end{align*}
 
 where $N_\delta$ is the number of libraries in the second treatment group. 
+
 
 \end{flushleft}
 \newpage 
