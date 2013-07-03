@@ -582,20 +582,20 @@ lAlp = function(a, g, arg){ # device
   s = 0; 
   for(n in 1:a$N){
     if(a$grp[n] != 2){
-      a$tmp[1] = mu(a, n, a$phi[a$m$phi, g], arg, a$del[a$m$del, g]);
-      s = s + a$y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
-          a$eps[a$m$eps, n, g] + a$tmp1[1]);
+      tmp = mu(a, n, a$phi[a$m$phi, g], arg, a$del[a$m$del, g]);
+      s = s + a$y[n, g] * tmp - exp(a$c[a$m$c, n] + 
+          a$eps[a$m$eps, n, g] + tmp);
     }
   }
  
-  if(arg != 0){
-    a$tmp1[1] = -(arg - a$theAlp[a$m$theAlp])^2 / (2 * a$sigAlp[a$m$sigAlp]^2) -
+  if(arg * arg > 1e-6){
+    tmp = -(arg - a$theAlp[a$m$theAlp])^2 / (2 * a$sigAlp[a$m$sigAlp]^2) -
                 log(1 - a$piAlp[a$m$piAlp]);
   } else {
-    a$tmp1[1] = log(a$piAlp[a$m$piAlp])
+    tmp = log(a$piAlp[a$m$piAlp]);
   }
 
-  ret = s + a$tmp1[1];
+  ret = s + tmp;
   return(ret);
 }
 
@@ -604,22 +604,60 @@ lDel = function(a, g, arg){ # device
   s = 0; 
   for(n in 1:a$N){
     if(a$grp[n] != 2){
-      a$tmp[1] = mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$alp, g], arg);
-      s = s + a$y[n, g] * a$tmp1[1] - exp(a$c[a$m$c, n] + 
-          a$eps[a$m$eps, n, g] + a$tmp1[1]);
+      tmp = mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$alp, g], arg);
+      s = s + a$y[n, g] * tmp - exp(a$c[a$m$c, n] + 
+          a$eps[a$m$eps, n, g] + tmp);
     }
   }
  
-  if(arg != 0){
-    a$tmp1[1] = -(arg - a$theDel[a$m$theDel])^2 / (2 * a$sigDel[a$m$sigDel]^2) -
+  if(arg * arg > 1e-6){
+    tmp = -(arg - a$theDel[a$m$theDel])^2 / (2 * a$sigDel[a$m$sigDel]^2) -
                 log(1 - a$piDel[a$m$piDel]);
   } else {
-    a$tmp1[1] = log(a$piDel[a$m$piDel])
+    tmp = log(a$piDel[a$m$piDel]);
   }
 
-  ret = s + a$tmp1[1];
+  ret = s + tmp;
   return(ret);
 }
+
+lPhiAlpDel = function(a, g, argPhi, argAlp, argDel){ # device
+ 
+  s = 0; 
+  tmp = 0;
+
+  for(n in 1:a$N){
+    tmp = mu(a, n, argPhi, argAlp, argDel);
+    s = s + a$y[n, g] * tmp - exp(a$c[a$m$c, n] + 
+        a$eps[a$m$eps, n, g] + tmp);
+  }
+
+  # phi part 
+  ret = s - (argPhi - a$thePhi[a$m$thePhi])^2 / (2 * a$sigPhi[a$m$sigPhi]^2);
+
+  # alpha part
+  if(argAlp * argAlp > 1e-6){
+    tmp = -(argAlp - a$theAlp[a$m$theAlp])^2 / (2 * a$sigAlp[a$m$sigAlp]^2) -
+                log(1 - a$piAlp[a$m$piAlp]);
+  } else {
+    tmp = log(a$piAlp[a$m$piAlp]);
+  }
+
+  ret = ret + tmp;
+
+  # delta part
+  if(argDel * argDel > 1e-6){
+    tmp = -(argDel - a$theDel[a$m$theDel])^2 / (2 * a$sigDel[a$m$sigDel]^2) -
+                log(1 - a$piDel[a$m$piDel]);
+  } else {
+    tmp = log(a$piDel[a$m$piDel]);
+  }
+
+  ret = ret + tmp
+
+  return(ret);
+}
+
 
 
 # samplers
@@ -637,13 +675,14 @@ sampleC_kernel2 = function(a, n){ # kernel <<<1, 1>>>
     
   if(lu < lp){ # accept
     a$c[a$m$c + 1, n] = a$new[1, 1];
-    a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid getting 
-                                   # stuck in a mode
+    a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid  
+                                   # getting stuck in a mode
     a$acc$c[n] = a$acc$c[n] + 1;
   } else { # reject
     a$c[a$m$c + 1, n] = a$old[1, 1];
-    a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the proposal 
-                                   # variance to sample closer to the last accepted value.
+    a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the  
+                                   # proposal variance to sample closer to 
+                                   # the last accepted value.
   }
 
   a
@@ -983,35 +1022,40 @@ piAlpPrime = function(a, g, avg, s){ # device
   ret
 }
 
+alpProp = function(a, g){ # device
+  tmp = 0;
+  Nalp = 0;
+
+  for(n in 1:a$N)
+    if(a$grp[n] != 2){
+      tmp = tmp + a$y[n, g];
+      Nalp = Nalp + 1;
+    }
+      
+  avg = a$theAlp[a$m$theAlp] / a$gamAlp^2 + 
+       tmp / (Nalp * a$sigAlp[a$m$sigAlp]^2)
+  avg = avg / (1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2)
+
+  s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2);
+
+  u = runif(1);
+
+#  if(u < piAlpPrime(a, g, avg, s)) {
+  if(u < a$piAlp[a$m$piAlp]){
+    new = 0;
+  } else {
+    new = sampleNormal(avg, s);
+  }
+
+  return(new);
+}
+
 sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
 
     old = a$alp[a$m$alp, g];
-
-    tmp = 0;
-    Nalp = 0;
-
-    for(n in 1:a$N)
-      if(a$grp[n] != 2){
-        tmp = tmp + a$y[n, g];
-        Nalp = Nalp + 1;
-      }
-      
-    avg = a$theAlp[a$m$theAlp] / a$gamAlp^2 + 
-         tmp / (Nalp * a$sigAlp[a$m$sigAlp]^2)
-    avg = avg / (1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2)
-
-    s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2);
-
-    u = runif(1);
-
-#    if(u < piAlpPrime(a, g, avg, s)) {
-    if(u < a$piAlp[a$m$piAlp]){
-      new = 0;
-    } else {
-      new = sampleNormal(avg, s);
-    }
-
+    new = alpProp(a, g);
+    
     lp = min(0, lAlp(a, g, new) - lAlp(a, g, old));
     lu = log(runif(1));
     
@@ -1222,36 +1266,40 @@ piDelPrime = function(a, g, avg, s){ # device
   ret
 }
 
+delProp = function(a, g){ # device
+  tmp = 0;
+  Ndel = 0;
+
+  for(n in 1:a$N)
+    if(a$grp[n] != 2){
+      tmp = tmp + a$y[n, g];
+      Ndel = Ndel + 1;
+    }
+      
+  avg = a$theDel[a$m$theDel] / a$gamDel^2 + 
+       tmp / (Ndel * a$sigDel[a$m$sigDel]^2)
+  avg = avg / (1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2)
+
+  s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2);
+
+  u = runif(1);
+
+#  if(u < piDelPrime(a, g, avg, s)) {
+  if(u < a$piDel[a$m$piDel]){
+    new = 0;
+  } else {
+    new = sampleNormal(avg, s);
+  }
+
+  return(new)
+}
 
 sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
 
     old = a$del[a$m$del, g];
-
-    tmp = 0;
-    Ndel = 0;
-
-    for(n in 1:a$N)
-      if(a$grp[n] != 2){
-        tmp = tmp + a$y[n, g];
-        Ndel = Ndel + 1;
-      }
-      
-    avg = a$theDel[a$m$theDel] / a$gamDel^2 + 
-         tmp / (Ndel * a$sigDel[a$m$sigDel]^2)
-    avg = avg / (1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2)
-
-    s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2);
-
-    u = runif(1);
-
-#    if(u < piDelPrime(a, g, avg, s)) {
-    if(u < a$piDel[a$m$piDel]){
-      new = 0;
-    } else {
-      new = sampleNormal(avg, s);
-    }
-
+    new = delProp(a, g);
+    
     lp = min(0, lDel(a, g, new) - lDel(a, g, old));
     lu = log(runif(1));
     
@@ -1425,6 +1473,62 @@ samplePiDel = function(a){ # host
   return(a)
 }
 
+
+samplePhiAlpDel_kernel1 = function(a){ # kernel <<<G, 1>>>
+  for(g in 1:a$G){ # PARALLELIZE
+
+    oldPhi = a$phi[a$m$phi, g];
+    newPhi = sampleNormal(oldPhi, a$tun$phi[g]);
+
+    oldAlp = a$alp[a$m$alp, g];
+    newAlp = alpProp(a, g);
+
+    oldDel = a$del[a$m$del, g];
+    newDel = delProp(a, g);
+
+    lp = min(0, lPhiAlpDel(a, g, newPhi, newAlp, newDel) 
+              - lPhiAlpDel(a, g, oldPhi, oldAlp, oldDel));
+    lu = log(runif(1));
+    
+    if(lu < lp){ # accept
+      a$phi[a$m$phi + 1, g] = newPhi;
+      a$alp[a$m$alp + 1, g] = newAlp;
+      a$del[a$m$del + 1, g] = newDel;
+
+      a$tun$phi[g] = a$tun$phi[g] * 1.1; 
+      a$tun$alp[g] = a$tun$alp[g] * 1.1; 
+      a$tun$del[g] = a$tun$del[g] * 1.1; 
+
+      a$acc$phi[g] = a$acc$phi[g] + 1;
+      a$acc$alp[g] = a$acc$alp[g] + 1;
+      a$acc$del[g] = a$acc$del[g] + 1;
+    } else { # reject
+      a$phi[a$m$phi + 1, g] = oldPhi;
+      a$alp[a$m$alp + 1, g] = oldAlp;
+      a$del[a$m$del + 1, g] = oldDel;
+
+      a$tun$phi[g] = a$tun$phi[g] / 1.1;
+      a$tun$alp[g] = a$tun$alp[g] / 1.1;
+      a$tun$del[g] = a$tun$del[g] / 1.1; 
+    }
+  }
+
+  a
+}
+
+samplePhiAlpDel_kernel2 = function(a){ # kernel <<<1, 1>>>
+  a$m$phi = a$m$phi + 1;
+  a$m$alp = a$m$alp + 1;
+  a$m$del = a$m$del + 1;
+  a
+}
+
+samplePhiAlpDel = function(a){ # host
+  a = samplePhiAlpDel_kernel1(a);
+  a = samplePhiAlpDel_kernel2(a);
+  return(a)
+}
+
 runChain = function(a){ # host
   for(m in 1:a$M){
     print(paste(m))
@@ -1540,5 +1644,6 @@ run = function(){
   grp = h$grp
   a = newChain(y, grp, 100, 4, 100)
   a = runChain(a)
-  summarizeChain(a)
+  s = summarizeChain(a)
+  list(chain = a, summ = s)
 }
