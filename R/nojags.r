@@ -182,69 +182,29 @@ allocConfig = function(){
     piAlp = 0,
     piDel = 0,
 
-    skip = list(
-
-      sigC = 0,
+    constSigC = 0,
     
-      d = 0,
-      tau = 0,
+    constD = 0,
+    constTau = 0,
     
-      thePhi = 0,
-      theAlp = 0,
-      theDel = 0,
+    constThePhi = 0,
+    constTheAlp = 0,
+    constTheDel = 0,
 
-      sigPhi = 0,
-      sigAlp = 0,
-      sigDel = 0,
+    constSigPhi = 0,
+    constSigAlp = 0,
+    constSigDel = 0,
 
-      piAlp = 0,
-      piDel = 0, 
+    constPiAlp = 0,
+    constPiDel = 0
       
-    )
   );
 }
 
 getopts = function(){
-  cfg = allcoConfig();
+  cfg = allocConfig();
 
-  # initialization constants = -1 when unset
-
-  cfg$sigC0 = -1; 
-  cfg$d0 = -1; 
-
-  cfg$aTau = -1; 
-  cfg$aAlp = -1; 
-  cfg$aDel = -1; 
-
-  cfg$bTau = -1; 
-  cfg$bAlp = -1; 
-  cfg$bDel = -1; 
-  
-  cfg$gamPhi = -1; 
-  cfg$gamAlp = -1; 
-  cfg$gamDel = -1; 
-
-  cfg$sigPhi0 = -1; 
-  cfg$sigAlp0 = -1; 
-  cfg$sigDel0 = -1; 
-
-  cfg$skip$sigC = 0;
-
-  cfg$skip$d = 0;
-  cfg$skip$tau = 0;
-
-  cfg$skip$thePhi = 0;
-  cfg$skip$theAlp = 0;
-  cfg$skip$theDel = 0; 
-
-  cfg$skip$sigPhi = 0; 
-  cfg$skip$sigAlp = 0; 
-  cfg$skip$sigDel = 0; 
-
-  cfg$skip$piAlp = 0;
-  cfg$skip$piDel = 0;
-
-  # Use long getopt to parse command line args.
+  # default filenames and MCMC settings
 
   cfg$datafile = "~/heterosis/var/data/hammer/hammer.txt";
   cfg$groupfile = "~/heterosis/var/data/hammer/group.txt"; 
@@ -259,79 +219,77 @@ getopts = function(){
   burnin = 0;
   joint = 0;
 
-  if(cfg$sigC0 < 0)
-    cfg$sigC0 = 10; 
+  # default values for initialization constants 
 
-  if(cfg$d0 < 0)
-    cfg$d0 = 1e3; 
+  cfg$sigC0 = 10; 
+  cfg$d0 = 1e3; 
 
-  if(cfg$aTau < 0)
-    cfg$aTau = 1e2; 
+  cfg$aTau = 1e2; 
+  cfg$aAlp = 1; 
+  cfg$aDel = 1; 
 
-  if(cfg$aAlp < 0)
-    cfg$aAlp = 1; 
+  cfg$bTau = 1e2; 
+  cfg$bAlp = 1; 
+  cfg$bDel = 1; 
 
-  if(cfg$aDel < 0)
-    cfg$aDel = 1; 
+  cfg$gamPhi = 2; 
+  cfg$gamAlp = 2; 
+  cfg$gamDel = 2; 
 
-  if(cfg$bTau < 0)
-    cfg$bTau = 1e2; 
+  cfg$sigPhi0 = 2; 
+  cfg$sigAlp0 = 1e2;
+  cfg$sigDel0 = 1e2; 
 
-  if(cfg$bAlp < 0)
-    cfg$bAlp = 1; 
+  cfg$constSigC = 0;
+  cfg$constD = 0;
+  cfg$constTau = 0;
 
-  if(cfg$bDel < 0)
-    cfg$bDel = 1; 
-  
-  if(cfg$gamPhi < 0)
-    cfg$gamPhi = 2; 
+  cfg$constThePhi = 0;
+  cfg$constTheAlp = 0;
+  cfg$constTheDel = 0; 
 
-  if(cfg$gamAlp < 0)
-    cfg$gamAlp = 2; 
+  cfg$constSigPhi = 0; 
+  cfg$constSigAlp = 0; 
+  cfg$constSigDel = 0; 
 
-  if(cfg$gamDel < 0)
-    cfg$gamDel = 2; 
+  cfg$constPiAlp = 0;
+  cfg$constPiDel = 0;
 
-  if(cfg$sigPhi0 < 0)
-    cfg$sigPhi0 = 2; 
+  # Use long getopt to parse command line args.
 
-  if(cfg$sigAlp0 < 0)
-    cfg$sigAlp0 = 1e2;
+  # default initial values of hyperparameters
 
-  if(cfg$sigDel0 < 0)
-    cfg$sigDel0 = 1e2; 
-
-  if(!cfg$skip$sigC)
+  if(!cfg$constSigC)
     cfg$sigC = runif(1, 0, cfg$sigC0);
 
-  if(!cfg$skip$d)
+  if(!cfg$constD)
     cfg$d = runif(1, 0, cfg$d0);
 
-  if(!cfg$skip$tau)
+  if(!cfg$constTau)
     cfg$tau = sqrt(sampleGamma(shape = cfg$aTau, rate = cfg$bTau));
 
-  if(!cfg$skip$thePhi)
+  if(!cfg$constThePhi)
     cfg$thePhi = sampleNormal(0, cfg$gamPhi);
 
-  if(!cfg$skip$theAlp)
+  if(!cfg$constTheAlp)
     cfg$theAlp = sampleNormal(0, cfg$gamAlp);
 
-  if(!cfg$skip$theDel)
+  if(!cfg$constTheDel)
     cfg$theDel = sampleNormal(0, cfg$gamDel); 
 
-  if(!cfg$skip$sigPhi)
+  if(!cfg$constSigPhi)
     cfg$sigPhi = runif(1, 0, cfg$sigPhi0); 
 
-  if(!cfg$skip$sigAlp)
+  if(!cfg$constSigAlp)
     cfg$sigAlp = runif(1, 0, cfg$sigAlp0); 
 
-  if(!cfg$skip$sigDel)
+  if(!cfg$constSigDel)
     cfg$sigDel = runif(1, 0, cfg$sigDel0); 
 
-  if(!cfg$skip$piAlp)
+  if(!cfg$constPiAlp)
     cfg$piAlp = sampleBeta(cfg$aAlp, cfg$bAlp);
 
-  if(!cfg$skip$piDel)
+  if(!cfg$constPiDel)
     cfg$piDel = sampleBeta(cfg$aDel, cfg$bDel);
  
   cfg
@@ -412,52 +370,47 @@ allocChain = function(M, N, G){ # host (bunch of cudaMallocs)
     lOld = array(0, c(N, G)),
     lNew = array(0, c(N, G)),
 
-    # struct to store the current place in the chain for each parameter
+    # current place in the chain for each parameter
 
-    m = list(
-      c = 0,
-      sigC = 0,
+    mC = 0,
+    mSigC = 0,
 
-      eps = 0,
-      eta = 0,
-      d = 0,
-      tau = 0,
+    mEps = 0,
+    mEta = 0,
 
-      phi = 0,
-      alp = 0,
-      del = 0,
+    mD = 0,
+    mTau = 0,
 
-      thePhi = 0,
-      theAlp = 0,
-      theDel = 0,
+    mPhi = 0,
+    mAlp = 0,
+    mDel = 0,
 
-      sigPhi = 0,
-      sigAlp = 0,
-      sigDel = 0,
+    mThePhi = 0,
+    mTheAlp = 0,
+    mTheDel = 0,
 
-      piAlp = 0,
-      piDel = 0
-    ),
+    mSigPhi = 0,
+    mSigAlp = 0,
+    mSigDel = 0,
 
-    # tuning parameters for metropolis steps (std deviations of normal distributions)
+    mPiAlp = 0,
+    mPiDel = 0,
 
-    tun = list(
-      c = rep(0, N),
-      eps = array(0, c(N, G)),
-      d = 0,
-      phi = rep(0, G)
-    ),
+    # tuning parameters for metropolis steps (std devs of normal dists)
+
+    tuneC = rep(0, N),
+    tuneEps = array(0, c(N, G)),
+    tuneD = 0,
+    tunePhi = rep(0, G),
 
     # number of acceptances for metropolis steps
 
-    acc = list(
-      c = rep(0, N),
-      eps = array(0, c(N, G)),
-      d = 0,
-      phi = rep(0, G),
-      alp = rep(0, G),
-      del = rep(0, G)
-    )
+    accC = rep(0, N),
+    accEps = array(0, c(N, G)),
+    accD = 0,
+    accPhi = rep(0, G),
+    accAlp = rep(0, G),
+    accDel = rep(0, G)
   );
 }
 
@@ -493,58 +446,58 @@ newChain_kernel2 = function(a){ # kernel: 1 block, 1 thread
 
   # location in chain:
 
-  a$m$c = 1;
-  a$m$sigC = 1;
+  a$mC = 1;
+  a$mSigC = 1;
 
-  a$m$eps = 1;
-  a$m$eta = 1;
-  a$m$d = 1;
-  a$m$tau = 1;
+  a$mEps = 1;
+  a$mEta = 1;
+  a$mD = 1;
+  a$mTau = 1;
 
-  a$m$phi = 1;
-  a$m$alp = 1;
-  a$m$del = 1;
+  a$mPhi = 1;
+  a$mAlp = 1;
+  a$mDel = 1;
 
-  a$m$thePhi = 1;
-  a$m$theAlp = 1;
-  a$m$theDel = 1;
+  a$mThePhi = 1;
+  a$mTheAlp = 1;
+  a$mTheDel = 1;
 
-  a$m$sigPhi = 1;
-  a$m$sigAlp = 1;
-  a$m$sigDel = 1;
+  a$mSigPhi = 1;
+  a$mSigAlp = 1;
+  a$mSigDel = 1;
 
-  a$m$piAlp = 1;
-  a$m$piDel = 1;
+  a$mPiAlp = 1;
+  a$mPiDel = 1;
 
   # tuning parameters for metropolis steps (std deviations of normal dists): 
 
-  a$tun$d = 500;
+  a$tuneD = 500;
 
   for(n in 1:a$N)
-    a$tun$c[n] = 1;
+    a$tuneC[n] = 1;
 
   for(g in 1:a$G){
-    a$tun$phi[g] = 1;
+    a$tunePhi[g] = 1;
 
     for(n in 1:a$N)
-      a$tun$eps[n, g] = 1;
+      a$tuneEps[n, g] = 1;
   }
 
   # number of acceptances for metropolis steps
 
-  a$acc$d = 0;
+  a$accD = 0;
 
   for(n in 1:a$N){
-    a$acc$c[n] = 0;
+    a$accC[n] = 0;
   
     for(g in 1:a$G)
-      a$acc$eps[n, g] = 0;
+      a$accEps[n, g] = 0;
   }
 
   for(g in 1:a$G){
-    a$acc$phi[g] = 0;
-    a$acc$alp[g] = 0;
-    a$acc$del[g] = 0;
+    a$accPhi[g] = 0;
+    a$accAlp[g] = 0;
+    a$accDel[g] = 0;
   }
   
   a
@@ -664,8 +617,8 @@ mu = function(a, n, phi, alp, del){ # device
 
 lC_kernel1 = function(a, n){ # kernel <<<G, 1>>>
   for(g in 1:a$G) # PARALLELIZE
-    a$tmp1[g] = exp(a$eps[a$m$eps, n, g] + mu(a, n, a$phi[a$m$phi, g], 
-                                            a$alp[a$m$alp, g], a$del[a$m$del, g]));
+    a$tmp1[g] = exp(a$eps[a$mEps, n, g] + mu(a, n, a$phi[a$mPhi, g], 
+                                            a$alp[a$mAlp, g], a$del[a$mDel, g]));
 
   a
 }
@@ -687,7 +640,7 @@ lC_kernel3 = function(a, n, newArg){ # kernel <<<1, 1>>>
   }
 
   ret = arg * a$G * a$yMeanG[n] - exp(arg) * a$tmp2[1] - (arg*arg) / 
-        (2 * a$sigC[a$m$sigC] * a$sigC[a$m$sigC]);
+        (2 * a$sigC[a$mSigC] * a$sigC[a$mSigC]);
 
   if(newArg){
     a$lNew[1, 1] = ret;
@@ -708,17 +661,17 @@ lC = function(a, n, newArg){ # host
 lEps = function(a, n, g, arg){ # device
 
   ret = a$y[n, g] * arg - 
-        exp(a$c[a$m$c, n] + arg + mu(a, n, a$phi[a$m$phi, g], 
-                                     a$alp[a$m$alp, g], a$del[a$m$del, g])) 
-          - arg^2 / (2 * a$eta[a$m$eta, g]^2);
+        exp(a$c[a$mC, n] + arg + mu(a, n, a$phi[a$mPhi, g], 
+                                     a$alp[a$mAlp, g], a$del[a$mDel, g])) 
+          - arg^2 / (2 * a$eta[a$mEta, g]^2);
 
   return(ret);
 }
 
 lD_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
-    a$tmp1[g] = 2 * log(a$eta[a$m$eta, g]);
-    a$tmp2[g] = 1/(a$eta[a$m$eta, g] * a$eta[a$m$eta, g]);
+    a$tmp1[g] = 2 * log(a$eta[a$mEta, g]);
+    a$tmp2[g] = 1/(a$eta[a$mEta, g] * a$eta[a$mEta, g]);
   }
   a
 }
@@ -746,7 +699,7 @@ lD_kernel4 = function(a, newArg){ # kernel <<<1, 1>>>
     arg = a$old[1, 1];
   }
 
-  a$tmp1[1] = arg * a$tau[a$m$tau]^2 / 2;
+  a$tmp1[1] = arg * a$tau[a$mTau]^2 / 2;
 
   ret = -a$G * lgamma(arg/2) + (a$G * arg / 2) * log(a$tmp1[1]);
   ret = ret  - (arg/2 + 1) * a$s1 - a$tmp1[1] * a$s2;
@@ -789,12 +742,12 @@ lPhi = function(a, g, arg){ # device
   tmp = 0;
 
   for(n in 1:a$N){
-    tmp = mu(a, n, arg, a$alp[a$m$alp, g], a$del[a$m$del, g]);
-    s = s + a$y[n, g] * tmp - exp(a$c[a$m$c, n] + 
-        a$eps[a$m$eps, n, g] + tmp);
+    tmp = mu(a, n, arg, a$alp[a$mAlp, g], a$del[a$mDel, g]);
+    s = s + a$y[n, g] * tmp - exp(a$c[a$mC, n] + 
+        a$eps[a$mEps, n, g] + tmp);
   }
  
-  ret = s - (arg - a$thePhi[a$m$thePhi])^2 / (2 * a$sigPhi[a$m$sigPhi]^2);
+  ret = s - (arg - a$thePhi[a$mThePhi])^2 / (2 * a$sigPhi[a$mSigPhi]^2);
   return(ret);
 }
 
@@ -803,17 +756,17 @@ lAlp = function(a, g, arg){ # device
   s = 0; 
   for(n in 1:a$N){
     if(a$grp[n] != 2){
-      tmp = mu(a, n, a$phi[a$m$phi, g], arg, a$del[a$m$del, g]);
-      s = s + a$y[n, g] * tmp - exp(a$c[a$m$c, n] + 
-          a$eps[a$m$eps, n, g] + tmp);
+      tmp = mu(a, n, a$phi[a$mPhi, g], arg, a$del[a$mDel, g]);
+      s = s + a$y[n, g] * tmp - exp(a$c[a$mC, n] + 
+          a$eps[a$mEps, n, g] + tmp);
     }
   }
  
   if(arg * arg > 1e-6){
-    tmp = -(arg - a$theAlp[a$m$theAlp])^2 / (2 * a$sigAlp[a$m$sigAlp]^2) -
-                log(1 - a$piAlp[a$m$piAlp]);
+    tmp = -(arg - a$theAlp[a$mTheAlp])^2 / (2 * a$sigAlp[a$mSigAlp]^2) -
+                log(1 - a$piAlp[a$mPiAlp]);
   } else {
-    tmp = log(a$piAlp[a$m$piAlp]);
+    tmp = log(a$piAlp[a$mPiAlp]);
   }
 
   ret = s + tmp;
@@ -825,17 +778,17 @@ lDel = function(a, g, arg){ # device
   s = 0; 
   for(n in 1:a$N){
     if(a$grp[n] != 2){
-      tmp = mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$alp, g], arg);
-      s = s + a$y[n, g] * tmp - exp(a$c[a$m$c, n] + 
-          a$eps[a$m$eps, n, g] + tmp);
+      tmp = mu(a, n, a$phi[a$mPhi, g], a$alp[a$mAlp, g], arg);
+      s = s + a$y[n, g] * tmp - exp(a$c[a$mC, n] + 
+          a$eps[a$mEps, n, g] + tmp);
     }
   }
  
   if(arg * arg > 1e-6){
-    tmp = -(arg - a$theDel[a$m$theDel])^2 / (2 * a$sigDel[a$m$sigDel]^2) -
-                log(1 - a$piDel[a$m$piDel]);
+    tmp = -(arg - a$theDel[a$mTheDel])^2 / (2 * a$sigDel[a$mSigDel]^2) -
+                log(1 - a$piDel[a$mPiDel]);
   } else {
-    tmp = log(a$piDel[a$m$piDel]);
+    tmp = log(a$piDel[a$mPiDel]);
   }
 
   ret = s + tmp;
@@ -849,29 +802,29 @@ lPhiAlpDel = function(a, g, argPhi, argAlp, argDel){ # device
 
   for(n in 1:a$N){
     tmp = mu(a, n, argPhi, argAlp, argDel);
-    s = s + a$y[n, g] * tmp - exp(a$c[a$m$c, n] + 
-        a$eps[a$m$eps, n, g] + tmp);
+    s = s + a$y[n, g] * tmp - exp(a$c[a$mC, n] + 
+        a$eps[a$mEps, n, g] + tmp);
   }
 
   # phi part 
-  ret = s - (argPhi - a$thePhi[a$m$thePhi])^2 / (2 * a$sigPhi[a$m$sigPhi]^2);
+  ret = s - (argPhi - a$thePhi[a$mThePhi])^2 / (2 * a$sigPhi[a$mSigPhi]^2);
 
   # alpha part
   if(argAlp * argAlp > 1e-6){
-    tmp = -(argAlp - a$theAlp[a$m$theAlp])^2 / (2 * a$sigAlp[a$m$sigAlp]^2) -
-                log(1 - a$piAlp[a$m$piAlp]);
+    tmp = -(argAlp - a$theAlp[a$mTheAlp])^2 / (2 * a$sigAlp[a$mSigAlp]^2) -
+                log(1 - a$piAlp[a$mPiAlp]);
   } else {
-    tmp = log(a$piAlp[a$m$piAlp]);
+    tmp = log(a$piAlp[a$mPiAlp]);
   }
 
   ret = ret + tmp;
 
   # delta part
   if(argDel * argDel > 1e-6){
-    tmp = -(argDel - a$theDel[a$m$theDel])^2 / (2 * a$sigDel[a$m$sigDel]^2) -
-                log(1 - a$piDel[a$m$piDel]);
+    tmp = -(argDel - a$theDel[a$mTheDel])^2 / (2 * a$sigDel[a$mSigDel]^2) -
+                log(1 - a$piDel[a$mPiDel]);
   } else {
-    tmp = log(a$piDel[a$m$piDel]);
+    tmp = log(a$piDel[a$mPiDel]);
   }
 
   ret = ret + tmp
@@ -884,8 +837,8 @@ lPhiAlpDel = function(a, g, argPhi, argAlp, argDel){ # device
 # samplers
 
 sampleC_kernel1 = function(a, n){ # kernel <<<1, 1>>>
-  a$old[1, 1] = a$c[a$m$c, n];
-  a$new[1, 1] = sampleNormal(a$old[1, 1], a$tun$c[n]);
+  a$old[1, 1] = a$c[a$mC, n];
+  a$new[1, 1] = sampleNormal(a$old[1, 1], a$tuneC[n]);
 
   a
 }
@@ -895,13 +848,13 @@ sampleC_kernel2 = function(a, n){ # kernel <<<1, 1>>>
   lu = log(runif(1));
     
   if(lu < lp){ # accept
-    a$c[a$m$c + 1, n] = a$new[1, 1];
-    a$tun$c[n] = a$tun$c[n] * 1.1; # Increase the proposal variance to avoid  
+    a$c[a$mC + 1, n] = a$new[1, 1];
+    a$tuneC[n] = a$tuneC[n] * 1.1; # Increase the proposal variance to avoid  
                                    # getting stuck in a mode
-    a$acc$c[n] = a$acc$c[n] + 1;
+    a$accC[n] = a$accC[n] + 1;
   } else { # reject
-    a$c[a$m$c + 1, n] = a$old[1, 1];
-    a$tun$c[n] = a$tun$c[n] / 1.1; # If you're rejecting too often, decrease the  
+    a$c[a$mC + 1, n] = a$old[1, 1];
+    a$tuneC[n] = a$tuneC[n] / 1.1; # If you're rejecting too often, decrease the  
                                    # proposal variance to sample closer to 
                                    # the last accepted value.
   }
@@ -910,7 +863,7 @@ sampleC_kernel2 = function(a, n){ # kernel <<<1, 1>>>
 }
 
 sampleC_kernel3 = function(a){ # kernel <<<1, 1>>>
-  a$m$c = a$m$c + 1;
+  a$mC = a$mC + 1;
   a
 }
 
@@ -932,7 +885,7 @@ sampleC = function(a){ # host
 sampleSigC = function(a){ # kernel <<<1, 1>>>
 
   for(n in 1:a$N) 
-    a$tmp1[n] = a$c[a$m$c, n]^2;
+    a$tmp1[n] = a$c[a$mC, n]^2;
 
   rate = 0;
   for(n in 1:a$N) 
@@ -943,31 +896,31 @@ sampleSigC = function(a){ # kernel <<<1, 1>>>
   lb = 1 / a$sigC0^2  
 
   if(shape >= 1 && rate > 0){
-    a$sigC[a$m$sigC + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+    a$sigC[a$mSigC + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   } else {
-    a$sigC[a$m$sigC + 1] = a$sigC[a$m$sigC];
+    a$sigC[a$mSigC + 1] = a$sigC[a$mSigC];
   }
 
-  a$m$sigC = a$m$sigC + 1;
+  a$mSigC = a$mSigC + 1;
   return(a)
 }
 
 sampleEps_kernel1 = function(a){ # kernel <<<N, G>>>
   for(g in 1:a$G){
     for(n in 1:a$N){ 
-      old = a$eps[a$m$eps, n, g];
-      new = sampleNormal(old, a$tun$eps[n, g]);
+      old = a$eps[a$mEps, n, g];
+      new = sampleNormal(old, a$tuneEps[n, g]);
 
       lp = min(0, lEps(a, n, g, new) - lEps(a, n, g, old));
       lu = log(runif(1));
       
       if(lu < lp){ # accept
-        a$eps[a$m$eps + 1, n, g] = new;
-        a$tun$eps[n, g] = a$tun$eps[n, g] * 1.1;
-        a$acc$eps[n, g] = a$acc$eps[n, g] + 1; 
+        a$eps[a$mEps + 1, n, g] = new;
+        a$tuneEps[n, g] = a$tuneEps[n, g] * 1.1;
+        a$accEps[n, g] = a$accEps[n, g] + 1; 
       } else { # reject
-        a$eps[a$m$eps + 1, n, g] = old;
-        a$tun$eps[n, g] = a$tun$eps[n, g] / 1.1;
+        a$eps[a$mEps + 1, n, g] = old;
+        a$tuneEps[n, g] = a$tuneEps[n, g] / 1.1;
       }
     }
   }
@@ -976,7 +929,7 @@ sampleEps_kernel1 = function(a){ # kernel <<<N, G>>>
 }
 
 sampleEps_kernel2 = function(a){ # kernel <<<1, 1>>>
-  a$m$eps = a$m$eps + 1;
+  a$mEps = a$mEps + 1;
   a
 }
 
@@ -989,7 +942,7 @@ sampleEps = function(a){ # host
 }
 
 sampleEta_kernel1 = function(a){ # kernel <<<1, 1>>>
-  a$shape = (a$N + a$d[a$m$d]) / 2; 
+  a$shape = (a$N + a$d[a$mD]) / 2; 
   a
 }
 
@@ -997,25 +950,25 @@ sampleEta_kernel2 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){
 
     for(n in 1:a$N) 
-      a$tmp1[n] = a$eps[a$m$eps, n, g]^2;
+      a$tmp1[n] = a$eps[a$mEps, n, g]^2;
 
     rate = 0;
     for(n in 1:a$N) 
       rate = rate + a$tmp1[n];
   
-    rate = (rate + a$d[a$m$d] * a$tau[a$m$tau] * a$tau[a$m$tau]) / 2; 
+    rate = (rate + a$d[a$mD] * a$tau[a$mTau] * a$tau[a$mTau]) / 2; 
 
     if(a$shape >= 1 && rate > 0){
-      a$eta[a$m$eta + 1, g] = 1/sqrt(sampleGamma(a$shape, rate));
+      a$eta[a$mEta + 1, g] = 1/sqrt(sampleGamma(a$shape, rate));
     } else {
-      a$eta[a$m$eta + 1, g] = a$eta[a$m$eta, g];
+      a$eta[a$mEta + 1, g] = a$eta[a$mEta, g];
     }
   }
   a
 }
 
 sampleEta_kernel3 = function(a){ # kernel <<<1, 1>>>
-  a$m$eta = a$m$eta + 1;
+  a$mEta = a$mEta + 1;
   a
 }
 
@@ -1030,8 +983,8 @@ sampleEta = function(a){
 
 
 sampleD_kernel1 = function(a){ # kernel <<<1, 1>>>
-  a$old[1, 1] = a$d[a$m$d];
-  a$new[1, 1] = sampleNormal(a$old[1, 1], a$tun$d);
+  a$old[1, 1] = a$d[a$mD];
+  a$new[1, 1] = sampleNormal(a$old[1, 1], a$tuneD);
   a
 }
 
@@ -1040,17 +993,17 @@ sampleD_kernel2 = function(a){ # kernel <<<1, 1>>>
   lu = log(runif(1));
 
   if(lu < lp){ # accept
-    a$d[a$m$d + 1] = a$new[1, 1];
-    a$tun$d = a$tun$d * 1.1; # Increase the proposal variance to avoid getting 
+    a$d[a$mD + 1] = a$new[1, 1];
+    a$tuneD = a$tuneD * 1.1; # Increase the proposal variance to avoid getting 
                                  # stuck in a mode
-    a$acc$d = a$acc$d + 1;
+    a$accD = a$accD + 1;
   } else { # reject
-    a$d[a$m$d + 1] = a$old[1, 1];
-    a$tun$d = a$tun$d / 1.1; # If you're rejecting too often, decrease the proposal 
+    a$d[a$mD + 1] = a$old[1, 1];
+    a$tuneD = a$tuneD / 1.1; # If you're rejecting too often, decrease the proposal 
                                  # variance to sample closer to the last accepted value.
   }
 
-  a$m$d = a$m$d + 1;
+  a$mD = a$mD + 1;
   a
 }
 
@@ -1067,7 +1020,7 @@ sampleD = function(a){
 
 sampleTau_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G) # PARALLELIZE
-    a$tmp1[g] = 1/a$eta[a$m$eta, g]^2;
+    a$tmp1[g] = 1/a$eta[a$mEta, g]^2;
 
   a
 }
@@ -1082,16 +1035,16 @@ sampleTau_kernel2 = function(a){ # pairwise sum in Thrust
 }
 
 sampleTau_kernel3 = function(a){
-  rate = a$rate * a$d[a$m$d] / 2 + a$bTau;
-  shape = a$aTau + a$G * a$d[a$m$d] / 2;
+  rate = a$rate * a$d[a$mD] / 2 + a$bTau;
+  shape = a$aTau + a$G * a$d[a$mD] / 2;
 
   if(shape >= 1 && rate > 0){
-    a$tau[a$m$tau + 1] = 1/sqrt(sampleGamma(shape, rate));
+    a$tau[a$mTau + 1] = 1/sqrt(sampleGamma(shape, rate));
   } else {
-    a$tau[a$m$tau + 1] = a$tau[a$m$tau];
+    a$tau[a$mTau + 1] = a$tau[a$mTau];
   }
 
-  a$m$tau = a$m$tau + 1;
+  a$mTau = a$mTau + 1;
 
   a
 }
@@ -1107,19 +1060,19 @@ sampleTau = function(a){ # host
 samplePhi_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ # PARALLELIZE
 
-    old = a$phi[a$m$phi, g];
-    new = sampleNormal(old, a$tun$phi[g]);
+    old = a$phi[a$mPhi, g];
+    new = sampleNormal(old, a$tunePhi[g]);
 
     lp = min(0, lPhi(a, g, new) - lPhi(a, g, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
-      a$phi[a$m$phi + 1, g] = new;
-      a$tun$phi[g] = a$tun$phi[g] * 1.1; 
-      a$acc$phi[g] = a$acc$phi[g] + 1;
+      a$phi[a$mPhi + 1, g] = new;
+      a$tunePhi[g] = a$tunePhi[g] * 1.1; 
+      a$accPhi[g] = a$accPhi[g] + 1;
     } else { # reject
-      a$phi[a$m$phi + 1, g] = old;
-      a$tun$phi[g] = a$tun$phi[g] / 1.1; 
+      a$phi[a$mPhi + 1, g] = old;
+      a$tunePhi[g] = a$tunePhi[g] / 1.1; 
     }
   }
 
@@ -1127,7 +1080,7 @@ samplePhi_kernel1 = function(a){ # kernel <<<G, 1>>>
 }
 
 samplePhi_kernel2 = function(a){ # kernel <<<1, 1>>>
-  a$m$phi = a$m$phi + 1;
+  a$mPhi = a$mPhi + 1;
   a
 }
 
@@ -1140,21 +1093,21 @@ samplePhi = function(a){ # host
 sampleThePhi_kernel1 = function(a){ # pairwise sum in Thrust
   a$s1 = 0; 
   for(g in 1:a$G) # PARALLELIZE
-    a$s1 = a$s1 + a$phi[a$m$phi, g];
+    a$s1 = a$s1 + a$phi[a$mPhi, g];
 
   a
 }
 
 sampleThePhi_kernel2 = function(a){ # kernel <<<1, 1>>>
   gs = a$gamPhi^2;
-  ss = a$sigPhi[a$m$sigPhi]^2;
+  ss = a$sigPhi[a$mSigPhi]^2;
   den = (a$G * gs + ss);
 
   m = gs * a$s1 / den;
   s = gs * ss / den;
 
-  a$thePhi[a$m$thePhi + 1] = sampleNormal(m, s);
-  a$m$thePhi = a$m$thePhi + 1;
+  a$thePhi[a$mThePhi + 1] = sampleNormal(m, s);
+  a$mThePhi = a$mThePhi + 1;
 
   a
 }
@@ -1167,7 +1120,7 @@ sampleThePhi = function(a){ # host
 
 sampleSigPhi_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G) # PARALLELIZE
-    a$tmp1[g] = (a$phi[a$m$phi, g] - a$thePhi[a$m$thePhi])^2;
+    a$tmp1[g] = (a$phi[a$mPhi, g] - a$thePhi[a$mThePhi])^2;
 
   a
 }
@@ -1187,12 +1140,12 @@ sampleSigPhi_kernel3 = function(a){ # kernel <<<1, 1>>>
   lb = 1/a$sigPhi0^2;
 
   if(shape >= 1 && rate > 0){
-    a$sigPhi[a$m$sigPhi + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+    a$sigPhi[a$mSigPhi + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   } else {
-    a$sigPhi[a$m$sigPhi + 1] = a$sigPhi[a$m$sigPhi];
+    a$sigPhi[a$mSigPhi + 1] = a$sigPhi[a$mSigPhi];
   }
 
-  a$m$sigPhi = a$m$sigPhi + 1;
+  a$mSigPhi = a$mSigPhi + 1;
 
   a
 }
@@ -1212,12 +1165,12 @@ piAlpPrime = function(a, g, avg, s){ # device
 
   for(n in 1:a$N){
     if(a$grp[n] != 2){
-      tmp = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] +
-            mu(a, n, a$phi[a$m$phi, g], 0, a$del[a$m$del, g]);
+      tmp = a$c[a$mC, n] + a$eps[a$mEps, n, g] +
+            mu(a, n, a$phi[a$mPhi, g], 0, a$del[a$mDel, g]);
 
       den = exp(a$y[n, g] * tmp - exp(tmp));
 
-      i = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] + a$phi[a$m$phi, g]
+      i = a$c[a$mC, n] + a$eps[a$mEps, n, g] + a$phi[a$mPhi, g]
 
       A = -1/(2 * s * s) - 1/2;
 
@@ -1238,7 +1191,7 @@ piAlpPrime = function(a, g, avg, s){ # device
     }
   }
 
-  ret = ((1 - a$piAlp[a$m$piAlp]) / a$piAlp[a$m$piAlp]) * prod;
+  ret = ((1 - a$piAlp[a$mPiAlp]) / a$piAlp[a$mPiAlp]) * prod;
   ret = 1/(1 + ret);
   ret
 }
@@ -1253,16 +1206,16 @@ alpProp = function(a, g){ # device
       Nalp = Nalp + 1;
     }
       
-  avg = a$theAlp[a$m$theAlp] / a$gamAlp^2 + 
-       tmp / (Nalp * a$sigAlp[a$m$sigAlp]^2)
-  avg = avg / (1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2)
+  avg = a$theAlp[a$mTheAlp] / a$gamAlp^2 + 
+       tmp / (Nalp * a$sigAlp[a$mSigAlp]^2)
+  avg = avg / (1/a$gamAlp^2 + 1/a$sigAlp[a$mSigAlp]^2)
 
-  s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$m$sigAlp]^2);
+  s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$mSigAlp]^2);
 
   u = runif(1);
 
 #  if(u < piAlpPrime(a, g, avg, s)) {
-  if(u < a$piAlp[a$m$piAlp]){
+  if(u < a$piAlp[a$mPiAlp]){
     new = 0;
   } else {
     new = sampleNormal(avg, s);
@@ -1274,17 +1227,17 @@ alpProp = function(a, g){ # device
 sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
 
-    old = a$alp[a$m$alp, g];
+    old = a$alp[a$mAlp, g];
     new = alpProp(a, g);
     
     lp = min(0, lAlp(a, g, new) - lAlp(a, g, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
-      a$alp[a$m$alp + 1, g] = new;
-      a$acc$alp[g] = a$acc$alp[g] + 1;
+      a$alp[a$mAlp + 1, g] = new;
+      a$accAlp[g] = a$accAlp[g] + 1;
     } else { # reject
-      a$alp[a$m$alp + 1, g] = old;
+      a$alp[a$mAlp + 1, g] = old;
     }
   }
 
@@ -1292,7 +1245,7 @@ sampleAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
 }
 
 sampleAlp_kernel2 = function(a){ # kernel <<<1, 1>>>
-  a$m$alp = a$m$alp + 1;
+  a$mAlp = a$mAlp + 1;
   a
 }
 
@@ -1306,9 +1259,9 @@ sampleAlp = function(a){ # host
 
 sampleTheAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ # PARALLELIZE
-    if(a$alp[a$m$alp, g]){
+    if(a$alp[a$mAlp, g]){
       a$tmp1[g] = 1;
-      a$tmp2[g] = a$alp[a$m$alp, g];
+      a$tmp2[g] = a$alp[a$mAlp, g];
     } else {
       a$tmp1[g] = 0;
       a$tmp2[g] = 0;
@@ -1339,14 +1292,14 @@ sampleTheAlp_kernel3 = function(a){ # parallel pairwise sum in Thrust
 sampleTheAlp_kernel4 = function(a){ # kernel <<<1, 1>>>
 
   gs = a$gamAlp^2;
-  ss = a$sigAlp[a$m$sigAlp]^2;
+  ss = a$sigAlp[a$mSigAlp]^2;
   den = (a$s1 * gs + ss);
 
   m = gs * a$s2 / den;
   s = gs * ss / den;
 
-  a$theAlp[a$m$theAlp + 1] = sampleNormal(m, s);
-  a$m$theAlp = a$m$theAlp + 1;
+  a$theAlp[a$mTheAlp + 1] = sampleNormal(m, s);
+  a$mTheAlp = a$mTheAlp + 1;
 
   a
 }
@@ -1364,8 +1317,8 @@ sampleTheAlp = function(a){
 sampleSigAlp_kernel1 = function(a){ # kernel <<<G, 1>>>
 
   for(g in 1:a$G){ # PARALLELIZE
-    if(a$alp[a$m$alp, g]){
-      a$tmp1[g] = (a$alp[a$m$alp, g] - a$theAlp[a$m$theAlp])^2;
+    if(a$alp[a$mAlp, g]){
+      a$tmp1[g] = (a$alp[a$mAlp, g] - a$theAlp[a$mTheAlp])^2;
       a$tmp2[g] = 1;
     } else {
       a$tmp1[g] = 0;
@@ -1401,12 +1354,12 @@ sampleSigAlp_kernel4 = function(a){ # parallel pairwise sum in Thrust
   lb = 1/a$sigAlp0^2;
 
   if(shape >= 1 && rate > 0){
-    a$sigAlp[a$m$sigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+    a$sigAlp[a$mSigAlp + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   } else {
-    a$sigAlp[a$m$sigAlp + 1] = a$sigAlp[a$m$sigAlp]; 
+    a$sigAlp[a$mSigAlp + 1] = a$sigAlp[a$mSigAlp]; 
   }
 
-  a$m$sigAlp = a$m$sigAlp + 1;
+  a$mSigAlp = a$mSigAlp + 1;
 
   a;
 }
@@ -1424,7 +1377,7 @@ sampleSigAlp = function(a){ # host
 samplePiAlp_kernel1 = function(a){ # kernel <<<1, 1>>>
 
   for(g in 1:a$G){ 
-    if(a$alp[a$m$alp, g]){
+    if(a$alp[a$mAlp, g]){
       a$tmp1[g] = 1;
     } else {
       a$tmp1[g] = 0;
@@ -1444,8 +1397,8 @@ samplePiAlp_kernel2 = function(a){ # pairwise sum in Thrust
 }
 
 samplePiAlp_kernel3 = function(a){ # kernel <<<1, 1>>>
-  a$piAlp[a$m$piAlp + 1] = sampleBeta(a$G + a$s1 + a$aTau, a$s1 + a$bTau);
-  a$m$piAlp = a$m$piAlp + 1;
+  a$piAlp[a$mPiAlp + 1] = sampleBeta(a$G + a$s1 + a$aTau, a$s1 + a$bTau);
+  a$mPiAlp = a$mPiAlp + 1;
   a
 }
 
@@ -1463,12 +1416,12 @@ piDelPrime = function(a, g, avg, s){ # device
 
   for(n in 1:a$N){
     if(a$grp[n] == 2){
-      tmp = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] +
-            mu(a, n, a$phi[a$m$phi, g], a$alp[a$m$del, g], 0);
+      tmp = a$c[a$mC, n] + a$eps[a$mEps, n, g] +
+            mu(a, n, a$phi[a$mPhi, g], a$alp[a$mDel, g], 0);
 
       den = exp(a$y[n, g] * tmp - exp(tmp));
 
-      i = a$c[a$m$c, n] + a$eps[a$m$eps, n, g] + a$phi[a$m$phi, g]
+      i = a$c[a$mC, n] + a$eps[a$mEps, n, g] + a$phi[a$mPhi, g]
 
       A = -1/(2 * s * s) - 1/2;
       B = -i + avg/(s * s) + a$y[n, g] - 1;
@@ -1482,7 +1435,7 @@ piDelPrime = function(a, g, avg, s){ # device
     }
   }
 
-  ret = ((1 - a$piAlp[a$m$piAlp]) / a$piAlp[a$m$piAlp]) * prod;
+  ret = ((1 - a$piAlp[a$mPiAlp]) / a$piAlp[a$mPiAlp]) * prod;
   ret = 1/(1 + ret);
   ret
 }
@@ -1497,16 +1450,16 @@ delProp = function(a, g){ # device
       Ndel = Ndel + 1;
     }
       
-  avg = a$theDel[a$m$theDel] / a$gamDel^2 + 
-       tmp / (Ndel * a$sigDel[a$m$sigDel]^2)
-  avg = avg / (1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2)
+  avg = a$theDel[a$mTheDel] / a$gamDel^2 + 
+       tmp / (Ndel * a$sigDel[a$mSigDel]^2)
+  avg = avg / (1/a$gamDel^2 + 1/a$sigDel[a$mSigDel]^2)
 
-  s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$m$sigDel]^2);
+  s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$mSigDel]^2);
 
   u = runif(1);
 
 #  if(u < piDelPrime(a, g, avg, s)) {
-  if(u < a$piDel[a$m$piDel]){
+  if(u < a$piDel[a$mPiDel]){
     new = 0;
   } else {
     new = sampleNormal(avg, s);
@@ -1518,17 +1471,17 @@ delProp = function(a, g){ # device
 sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
 
-    old = a$del[a$m$del, g];
+    old = a$del[a$mDel, g];
     new = delProp(a, g);
     
     lp = min(0, lDel(a, g, new) - lDel(a, g, old));
     lu = log(runif(1));
     
     if(lu < lp){ # accept
-      a$del[a$m$del + 1, g] = new;
-      a$acc$del[g] = a$acc$del[g] + 1;
+      a$del[a$mDel + 1, g] = new;
+      a$accDel[g] = a$accDel[g] + 1;
     } else { # reject
-      a$del[a$m$del + 1, g] = old;
+      a$del[a$mDel + 1, g] = old;
     }
   }
 
@@ -1536,7 +1489,7 @@ sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>
 }
 
 sampleDel_kernel2 = function(a){ # kernel <<<1 1>>>
-  a$m$del = a$m$del + 1;
+  a$mDel = a$mDel + 1;
   a
 }
 
@@ -1549,9 +1502,9 @@ sampleDel = function(a){ # host
 
 sampleTheDel_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ 
-    if(a$del[a$m$del, g]){
+    if(a$del[a$mDel, g]){
       a$tmp1[g] = 1;
-      a$tmp2[g] = a$del[a$m$del, g];
+      a$tmp2[g] = a$del[a$mDel, g];
     } else {
       a$tmp1[g] = 0;
       a$tmp2[g] = 0;
@@ -1585,14 +1538,14 @@ sampleTheDel = function(a){ # host
   a = sampleTheDel_kernel2(a);
 
   gs = a$gamDel^2;
-  ss = a$sigDel[a$m$sigDel]^2;
+  ss = a$sigDel[a$mSigDel]^2;
   den = (a$s1 * gs + ss);
 
   m = gs * a$s2 / den;
   s = gs * ss / den;
 
-  a$theDel[a$m$theDel + 1] = sampleNormal(m, s);
-  a$m$theDel = a$m$theDel + 1;
+  a$theDel[a$mTheDel + 1] = sampleNormal(m, s);
+  a$mTheDel = a$mTheDel + 1;
   return(a)
 }
 
@@ -1600,8 +1553,8 @@ sampleTheDel = function(a){ # host
 sampleSigDel_kernel1 = function(a){ # kernel <<<G, 1>>>
 
   for(g in 1:a$G){ # PARALLELIZE
-    if(a$del[a$m$del, g]){
-      a$tmp1[g] = (a$del[a$m$del, g] - a$theDel[a$m$theDel])^2;
+    if(a$del[a$mDel, g]){
+      a$tmp1[g] = (a$del[a$mDel, g] - a$theDel[a$mTheDel])^2;
       a$tmp2[g] = 1;
     } else {
       a$tmp1[g] = 0;
@@ -1636,12 +1589,12 @@ sampleSigDel_kernel4 = function(a){ # kernel <<<1, 1>>>
   lb = 1/a$sigDel0^2;
 
   if(shape >= 1 && rate > 0){
-    a$sigDel[a$m$sigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
+    a$sigDel[a$mSigDel + 1] = 1/sqrt(sampleGamma(shape, rate, lb));
   } else {
-    a$sigDel[a$m$sigDel + 1] = a$sigDel[a$m$sigDel];
+    a$sigDel[a$mSigDel + 1] = a$sigDel[a$mSigDel];
   }
 
-  a$m$sigDel = a$m$sigDel + 1;
+  a$mSigDel = a$mSigDel + 1;
 
   a
 }
@@ -1659,7 +1612,7 @@ sampleSigDel = function(a){ # host
 samplePiDel_kernel1 = function(a){ # kernel <<<G, 1>>>
 
   for(g in 1:a$G){ # PARALLELIZE
-    if(a$del[a$m$del, g]){
+    if(a$del[a$mDel, g]){
       a$tmp1[g] = 1; 
     } else {
       a$tmp1[g] = 0;
@@ -1680,8 +1633,8 @@ samplePiDel_kernel2 = function(a){ # pairwise sum in Thrust
 }
 
 samplePiDel_kernel3 = function(a){ #kernel <<<1, 1>>>
-  a$piDel[a$m$piDel + 1] = sampleBeta(a$G + a$s1 + a$aTau, a$s1 + a$bTau);
-  a$m$piDel = a$m$piDel + 1;
+  a$piDel[a$mPiDel + 1] = sampleBeta(a$G + a$s1 + a$aTau, a$s1 + a$bTau);
+  a$mPiDel = a$mPiDel + 1;
 
   a
 }
@@ -1698,13 +1651,13 @@ samplePiDel = function(a){ # host
 samplePhiAlpDel_kernel1 = function(a){ # kernel <<<G, 1>>>
   for(g in 1:a$G){ # PARALLELIZE
 
-    oldPhi = a$phi[a$m$phi, g];
-    newPhi = sampleNormal(oldPhi, a$tun$phi[g]);
+    oldPhi = a$phi[a$mPhi, g];
+    newPhi = sampleNormal(oldPhi, a$tunePhi[g]);
 
-    oldAlp = a$alp[a$m$alp, g];
+    oldAlp = a$alp[a$mAlp, g];
     newAlp = alpProp(a, g);
 
-    oldDel = a$del[a$m$del, g];
+    oldDel = a$del[a$mDel, g];
     newDel = delProp(a, g);
 
     lp = min(0, lPhiAlpDel(a, g, newPhi, newAlp, newDel) 
@@ -1712,25 +1665,21 @@ samplePhiAlpDel_kernel1 = function(a){ # kernel <<<G, 1>>>
     lu = log(runif(1));
     
     if(lu < lp){ # accept
-      a$phi[a$m$phi + 1, g] = newPhi;
-      a$alp[a$m$alp + 1, g] = newAlp;
-      a$del[a$m$del + 1, g] = newDel;
+      a$phi[a$mPhi + 1, g] = newPhi;
+      a$alp[a$mAlp + 1, g] = newAlp;
+      a$del[a$mDel + 1, g] = newDel;
 
-      a$tun$phi[g] = a$tun$phi[g] * 1.1; 
-      a$tun$alp[g] = a$tun$alp[g] * 1.1; 
-      a$tun$del[g] = a$tun$del[g] * 1.1; 
+      a$tunePhi[g] = a$tunePhi[g] * 1.1; 
 
-      a$acc$phi[g] = a$acc$phi[g] + 1;
-      a$acc$alp[g] = a$acc$alp[g] + 1;
-      a$acc$del[g] = a$acc$del[g] + 1;
+      a$accPhi[g] = a$accPhi[g] + 1;
+      a$accAlp[g] = a$accAlp[g] + 1;
+      a$accDel[g] = a$accDel[g] + 1;
     } else { # reject
-      a$phi[a$m$phi + 1, g] = oldPhi;
-      a$alp[a$m$alp + 1, g] = oldAlp;
-      a$del[a$m$del + 1, g] = oldDel;
+      a$phi[a$mPhi + 1, g] = oldPhi;
+      a$alp[a$mAlp + 1, g] = oldAlp;
+      a$del[a$mDel + 1, g] = oldDel;
 
-      a$tun$phi[g] = a$tun$phi[g] / 1.1;
-      a$tun$alp[g] = a$tun$alp[g] / 1.1;
-      a$tun$del[g] = a$tun$del[g] / 1.1; 
+      a$tunePhi[g] = a$tunePhi[g] / 1.1;
     }
   }
 
@@ -1738,9 +1687,9 @@ samplePhiAlpDel_kernel1 = function(a){ # kernel <<<G, 1>>>
 }
 
 samplePhiAlpDel_kernel2 = function(a){ # kernel <<<1, 1>>>
-  a$m$phi = a$m$phi + 1;
-  a$m$alp = a$m$alp + 1;
-  a$m$del = a$m$del + 1;
+  a$mPhi = a$mPhi + 1;
+  a$mAlp = a$mAlp + 1;
+  a$mDel = a$mDel + 1;
   a
 }
 
@@ -1756,37 +1705,37 @@ runChain = function(a, cfg){ # host
 
     a = sampleC(a);
 
-    if(!cfg$skip$tau)
+    if(!cfg$constTau)
       a = sampleTau(a);
 
-    if(!cfg$skip$piAlp)
+    if(!cfg$constPiAlp)
       a = samplePiAlp(a);
 
-    if(!cfg$skip$piDel)
+    if(!cfg$constPiDel)
       a = samplePiDel(a);
 
-    if(!cfg$skip$d)
+    if(!cfg$constD)
       a = sampleD(a);
 
-    if(!cfg$skip$thePhi)
+    if(!cfg$constThePhi)
       a = sampleThePhi(a);
 
-    if(!cfg$skip$theAlp)
+    if(!cfg$constTheAlp)
       a = sampleTheAlp(a);
 
-    if(!cfg$skip$theDel)
+    if(!cfg$constTheDel)
       a = sampleTheDel(a);
 
-    if(!cfg$skip$sigC)
+    if(!cfg$constSigC)
       a = sampleSigC(a); 
 
-    if(!cfg$skip$sigPhi)
+    if(!cfg$constSigPhi)
       a = sampleSigPhi(a); 
 
-    if(!cfg$skip$sigAlp)
+    if(!cfg$constSigAlp)
       a = sampleSigAlp(a);  
 
-    if(!cfg$skip$sigDel)
+    if(!cfg$constSigDel)
       a = sampleSigDel(a);  
 
     a = sampleEta(a); 
@@ -1822,14 +1771,12 @@ allocSummary = function(a){ # device
     sigDel = rep(0, a$M),
     piDel = rep(0, a$M),
 
-    acc = list(
-      c = rep(0, a$N),
-      eps = array(0, c(a$N, a$G)),
-      d = 0,
-      phi = rep(0, a$G),
-      alp = rep(0, a$G),
-      del = rep(0, a$G)
-    )
+    accC = rep(0, a$N),
+    accEps = array(0, c(a$N, a$G)),
+    accD = 0,
+    accPhi = rep(0, a$G),
+    accAlp = rep(0, a$G),
+    accDel = rep(0, a$G)
   )
 
   return(ret)
@@ -1853,20 +1800,20 @@ summarizeChain = function(a){ # kernel <<<1, 1>>>
   ret$sigDel = a$sigDel;
   ret$piDel = a$piDel;
 
-  ret$acc$d = a$acc$d / a$M;
+  ret$accD = a$accD / a$M;
 
   for(n in 1:a$N){
-    ret$acc$c[n] = a$acc$c[n] / a$M;
+    ret$accC[n] = a$accC[n] / a$M;
 
     for(g in 1:a$G){
-      ret$acc$eps[n, g] = a$acc$eps[n, g] / a$M;
+      ret$accEps[n, g] = a$accEps[n, g] / a$M;
     }
   }
   
   for(g in 1:a$G){
-    ret$acc$phi[g] = a$acc$phi[g] / a$M;
-    ret$acc$alp[g] = a$acc$alp[g] / a$M;
-    ret$acc$del[g] = a$acc$del[g] / a$M;
+    ret$accPhi[g] = a$accPhi[g] / a$M;
+    ret$accAlp[g] = a$accAlp[g] / a$M;
+    ret$accDel[g] = a$accDel[g] / a$M;
   }
 
   ret
