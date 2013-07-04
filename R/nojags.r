@@ -9,6 +9,34 @@
 
 # sampling from known distributions
 
+mySampleInt = function(N, n){
+
+  ret = rep(0, n);
+
+  for(i in 1:n)
+    ret[i] = -1;
+
+  i = 1;
+  while(i < n + 1){
+    ret[i] = sample.int(N, 1);
+
+    repeats = 0;
+    j = 1;
+
+    while(j < i-1){
+      if(ret[j] == ret[i])
+        repeats = repeats + 1;
+ 
+      j = j + 1;
+    }
+
+    if(!repeats)
+      i = i + 1;
+  }
+
+  ret
+}
+
 sampleNormal = function(m = 0, s = 1){ # host, device
   u1 = runif(1);
   u2 = runif(1);
@@ -137,6 +165,7 @@ allocConfig = function(){ # host
     probsfile = "",
     hyperfile = "",
     ratesfile = "",
+    paramsfile = "",
 
     iter = 0,
     burnin = 0,
@@ -214,6 +243,7 @@ config = function(){ # host
   cfg$probsfile = "../out/probs.txt";
   cfg$hyperfile = "../out/hyperparameters.txt";
   cfg$ratesfile = "../out/acceptance-rates.txt";
+  cfg$paramsfile = "../out/example-parameters.txt",
 
   cfg$iter = 50;
   cfg$burnin = 0;
@@ -1800,6 +1830,8 @@ allocSummary = function(a){ # host, device
 
   ret = list(
 
+    # hyperparamters
+
     sigC = rep(0, a$M),
     d = rep(0, a$M),
     tau = rep(0, a$M),
@@ -1815,6 +1847,7 @@ allocSummary = function(a){ # host, device
     sigDel = rep(0, a$M),
     piDel = rep(0, a$M),
 
+    # acceptance rates of metropolis steps
 
     accC = rep(0, a$N),
     accEps = array(0, c(a$N, a$G)),
@@ -1823,16 +1856,28 @@ allocSummary = function(a){ # host, device
     accAlp = rep(0, a$G),
     accDel = rep(0, a$G),
 
+    # probabilities of differential expression and heterosis
+
     prob_de = rep(0, a$G),
     prob_hph = rep(0, a$G),
     prob_lph = rep(0, a$G),
-    prob_mph = rep(0, a$G)
+    prob_mph = rep(0, a$G),
+
+    # samples of parameters from 5 random example libraries 
+    #   and 5 random example genes
+
+    c = array(0, c(a$M, 5)),
+    eps = array(0, c(a$M, 5, 5)),
+    eta = array(0, c(a$M, 5)),
+    phi = array(0, c(a$M, 5)),
+    alp = array(0, c(a$M, 5)),
+    del = array(0, c(a$M, 5))
   )
 
   return(ret)
 }
 
-summarizeChain = function(a, heterosis){ # kernel <<<1, 1>>>
+summarizeChain = function(a, heterosis, getParams){ # kernel <<<1, 1>>>
   ret = allocSummary(a);
 
   ret$sigC = a$sigC;
@@ -1901,8 +1946,42 @@ summarizeChain = function(a, heterosis){ # kernel <<<1, 1>>>
     }
   }
 
+  if(getParams){
+
+    libs = mySampleInt(a$N, 5);
+    genes = mySampleInt(a$G, 5);
+
+    for(m in 1:a$M){
+      for(n in 1:5){
+        ret$c[m, n] = a$c[m, libs[n]];
+
+        for(g in 1:5){
+          ret$eps[m, n, g] = a$eps[m, libs[n], genes[g]];
+        }
+      }
+
+      for(g in 1:5){
+        ret$eta[m, g] = a$eta[m, genes[g]]; 
+        ret$phi[m, g] = a$phi[m, genes[g]];
+        ret$alp[m, g] = a$alp[m, genes[g]];
+        ret$del[m, g] = a$del[m, genes[g]];
+      }
+    }
+  }
+
   ret
 }
+
+printSummary = function(s, cfg){
+
+  cfg$probsfile = "../out/probs.txt";
+  cfg$hyperfile = "../out/hyperparameters.txt";
+  cfg$ratesfile = "../out/acceptance-rates.txt";
+  cfg$paramsfile = "../out/example-parameters.txt",
+
+
+}
+
 
 run = function(){
   cfg = config();

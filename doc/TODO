@@ -18,6 +18,8 @@
        -burnin [NUMBER-BURNIN]               # Burn-in for calculating the probabilities above
        -joint                                # Set to jointly sample phi_g, alpha_g, and delta_g.
 
+       -params [PARAMS-FILE]                 # Output example parameters
+
        # Input known initialization constants
 
        -sigc0 [SIGC0-VAL]
