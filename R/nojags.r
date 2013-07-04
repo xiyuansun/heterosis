@@ -11,6 +11,8 @@
 
 mySampleInt = function(N, n){
 
+  # sample without replacement
+
   ret = rep(0, n);
 
   for(i in 1:n)
@@ -23,7 +25,7 @@ mySampleInt = function(N, n){
     repeats = 0;
     j = 1;
 
-    while(j < i-1){
+    while(j < i){
       if(ret[j] == ret[i])
         repeats = repeats + 1;
  
@@ -32,6 +34,29 @@ mySampleInt = function(N, n){
 
     if(!repeats)
       i = i + 1;
+  }
+
+  # bubble sort
+
+  if(n < 2)
+    return(ret);
+
+  swap = 1;
+  while(swap){
+    swap = 0;
+    i = 2;
+
+    while(i <= n){
+      if(ret[i - 1] > ret[i]){
+        tmp = ret[i]; 
+        ret[i] = ret[i - 1];
+        ret[i - 1] = tmp;
+        
+        swap = 1;
+      }
+
+      i = i + 1;
+    }
   }
 
   ret
@@ -165,12 +190,20 @@ allocConfig = function(){ # host
     probsfile = "",
     hyperfile = "",
     ratesfile = "",
-    paramsfile = "",
+    parmsfile = "",
 
-    iter = 0,
+    probsFlag = 0,
+    hyperFlag = 0,
+    ratesFlag = 0,
+    parmsFlag = 0,
+
     burnin = 0,
     joint = 0,
     heterosis = 1,
+
+    M = 0,
+    N = 0,
+    G = 0,
 
     sigC0 = 0,
     d0 = 0,
@@ -229,12 +262,6 @@ allocConfig = function(){ # host
 config = function(){ # host
   cfg = allocConfig();
 
-  if(!file.exists("../data/"))
-    dir.create("../data/")
-
-  if(!file.exists("../out/"))
-    dir.create("../out/")
-
   # default filenames and MCMC settings
 
   cfg$datafile = "../data/data.txt";
@@ -243,11 +270,16 @@ config = function(){ # host
   cfg$probsfile = "../out/probs.txt";
   cfg$hyperfile = "../out/hyperparameters.txt";
   cfg$ratesfile = "../out/acceptance-rates.txt";
-  cfg$paramsfile = "../out/example-parameters.txt",
+  cfg$parmsfile = "../out/example-parameters.txt";
 
-  cfg$iter = 50;
+  cfg$probsFlag = 1;
+  cfg$hyperFlag = 1;
+  cfg$ratesFlag = 1;
+  cfg$parmsFlag = 1;
+
   cfg$burnin = 0;
   cfg$joint = 0;
+  cfg$M = 10;
 
   # default values for initialization constants 
 
@@ -267,8 +299,8 @@ config = function(){ # host
   cfg$gamDel = 2; 
 
   cfg$sigPhi0 = 2; 
-  cfg$sigAlp0 = 1e2;
-  cfg$sigDel0 = 1e2; 
+  cfg$sigAlp0 = 2;
+  cfg$sigDel0 = 2; 
 
   cfg$constSigC = 0;
   cfg$constD = 0;
@@ -435,9 +467,9 @@ allocChain = function(M, N, G){ # host (bunch of cudaMallocs)
 
     # number of acceptances for metropolis steps
 
+    accD = 0,
     accC = rep(0, N),
     accEps = array(0, c(N, G)),
-    accD = 0,
     accPhi = rep(0, G),
     accAlp = rep(0, G),
     accDel = rep(0, G)
@@ -575,7 +607,7 @@ newChain = function(cfg){ # host (bunch of cudaMemcpies and kernels)
 
   y = t(as.matrix(read.table(cfg$datafile)))
 
-  M = cfg$iter;
+  M = cfg$M;
   N = dim(y)[1];
   G = 50 # dim(y)[2];
 
@@ -584,6 +616,12 @@ newChain = function(cfg){ # host (bunch of cudaMemcpies and kernels)
   l = readGrp(cfg, N);
   cfg = l$cfg;
   grp = l$grp;
+
+  cfg$N = N;
+  cfg$G = G;
+
+  a$heterosis = cfg$heterosis; # CudaMemcpy
+  a$parmsFlag = cfg$parmsFlag; # CudaMemcpy
 
   # data
 
@@ -1832,26 +1870,26 @@ allocSummary = function(a){ # host, device
 
     # hyperparamters
 
-    sigC = rep(0, a$M),
-    d = rep(0, a$M),
-    tau = rep(0, a$M),
+    sigC = rep(0, a$M + 1),
+    d = rep(0, a$M + 1),
+    tau = rep(0, a$M + 1),
 
-    thePhi = rep(0, a$M),
-    sigPhi = rep(0, a$M),
+    thePhi = rep(0, a$M + 1),
+    theAlp = rep(0, a$M + 1),
+    theDel = rep(0, a$M + 1),
 
-    theAlp = rep(0, a$M),
-    sigAlp = rep(0, a$M),
-    piAlp = rep(0, a$M),
+    sigPhi = rep(0, a$M + 1),
+    sigAlp = rep(0, a$M + 1),
+    sigDel = rep(0, a$M + 1),
 
-    theDel = rep(0, a$M),
-    sigDel = rep(0, a$M),
-    piDel = rep(0, a$M),
+    piAlp = rep(0, a$M + 1),
+    piDel = rep(0, a$M + 1),
 
     # acceptance rates of metropolis steps
 
-    accC = rep(0, a$N),
-    accEps = array(0, c(a$N, a$G)),
     accD = 0,
+    accC = rep(0, a$N),
+    accEps = rep(0, a$G),
     accPhi = rep(0, a$G),
     accAlp = rep(0, a$G),
     accDel = rep(0, a$G),
@@ -1866,18 +1904,21 @@ allocSummary = function(a){ # host, device
     # samples of parameters from 5 random example libraries 
     #   and 5 random example genes
 
-    c = array(0, c(a$M, 5)),
-    eps = array(0, c(a$M, 5, 5)),
-    eta = array(0, c(a$M, 5)),
-    phi = array(0, c(a$M, 5)),
-    alp = array(0, c(a$M, 5)),
-    del = array(0, c(a$M, 5))
+    libs = rep(0, 5),
+    genes = rep(0, 5),
+
+    c = array(0, c(a$M + 1, 5)),
+    eps = array(0, c(a$M + 1, 5, 5)),
+    eta = array(0, c(a$M + 1, 5)),
+    phi = array(0, c(a$M + 1, 5)),
+    alp = array(0, c(a$M + 1, 5)),
+    del = array(0, c(a$M + 1, 5))
   )
 
   return(ret)
 }
 
-summarizeChain = function(a, heterosis, getParams){ # kernel <<<1, 1>>>
+summarizeChain = function(a){ # kernel <<<1, 1>>>
   ret = allocSummary(a);
 
   ret$sigC = a$sigC;
@@ -1897,23 +1938,24 @@ summarizeChain = function(a, heterosis, getParams){ # kernel <<<1, 1>>>
 
   ret$accD = a$accD / a$M;
 
-  for(n in 1:a$N){
+  for(n in 1:a$N)
     ret$accC[n] = a$accC[n] / a$M;
-
-    for(g in 1:a$G){
-      ret$accEps[n, g] = a$accEps[n, g] / a$M;
-    }
-  }
   
   for(g in 1:a$G){
+
+    for(n in 1:a$N)
+      ret$accEps[g] = ret$accEps[g] + a$accEps[n, g];
+
+    ret$accEps[g] = ret$accEps[g] / (a$M * a$N);
+
     ret$accPhi[g] = a$accPhi[g] / a$M;
     ret$accAlp[g] = a$accAlp[g] / a$M;
     ret$accDel[g] = a$accDel[g] / a$M;
 
     ret$prob_de[g] = 0;
-    ret$mph_de[g] = 0;
-    ret$hph_de[g] = 0;
-    ret$lph_de[g] = 0;
+    ret$prob_hph[g] = 0;
+    ret$prob_lph[g] = 0;
+    ret$prob_mph[g] = 0;
   }
 
   for(m in (2 + a$burnin):(a$M + 1)){
@@ -1922,7 +1964,7 @@ summarizeChain = function(a, heterosis, getParams){ # kernel <<<1, 1>>>
       if(a$alp[m, g] > 1e-6)
         ret$prob_de[g] = ret$prob_de[g] + 1;
 
-      if(heterosis){
+      if(a$heterosis){
 
         if(a$del[m, g] > sqrt(a$alp[m, g] * a$alp[m, g]))
           ret$prob_hph[g] = ret$prob_hph[g] + 1;
@@ -1937,21 +1979,26 @@ summarizeChain = function(a, heterosis, getParams){ # kernel <<<1, 1>>>
   }
 
   for(g in 1:a$G){
-    ret$prob_de[g] = ret$prob_de[g] / (a$M - a$burnin - 1);
+    ret$prob_de[g] = ret$prob_de[g] / (a$M - a$burnin);
 
-    if(heterosis){
-      ret$prob_hph[g] = ret$prob_hph[g] / (a$M - a$burnin - 1);
-      ret$prob_lph[g] = ret$prob_lph[g] / (a$M - a$burnin - 1);
-      ret$prob_mph[g] = ret$prob_mph[g] / (a$M - a$burnin - 1);
+    if(a$heterosis){
+      ret$prob_hph[g] = ret$prob_hph[g] / (a$M - a$burnin);
+      ret$prob_lph[g] = ret$prob_lph[g] / (a$M - a$burnin);
+      ret$prob_mph[g] = ret$prob_mph[g] / (a$M - a$burnin);
     }
   }
 
-  if(getParams){
+  if(a$parmsFlag){
 
     libs = mySampleInt(a$N, 5);
     genes = mySampleInt(a$G, 5);
 
-    for(m in 1:a$M){
+    for(i in 1:5){
+      ret$libs[i] = libs[i];
+      ret$genes[i] = genes[i];
+    }
+
+    for(m in 1:(a$M + 1)){
       for(n in 1:5){
         ret$c[m, n] = a$c[m, libs[n]];
 
@@ -1974,12 +2021,119 @@ summarizeChain = function(a, heterosis, getParams){ # kernel <<<1, 1>>>
 
 printSummary = function(s, cfg){
 
-  cfg$probsfile = "../out/probs.txt";
-  cfg$hyperfile = "../out/hyperparameters.txt";
-  cfg$ratesfile = "../out/acceptance-rates.txt";
-  cfg$paramsfile = "../out/example-parameters.txt",
+  if(cfg$probsFlag){
 
+    str = "de"
+    if(cfg$heterosis)
+      str = paste(str, "hph", "lph", "mph")
 
+    if(cfg$heterosis){
+      for(g in 1:cfg$G)
+        str = c(str, paste(c(s$prob_de[g], s$prob_hph[g], s$prob_lph[g], 
+                         s$prob_mph[g]), collapse = " "))
+    } else {
+      for(g in 1:cfg$G)
+        str = c(str, paste(s$prob_de[g]))
+    }
+
+    fp = file(cfg$probsfile);
+    writeLines(str, fp)
+    close(fp);
+  }
+
+  if(cfg$hyperFlag){
+
+    str = "sigC d tau thePhi theAlp theDel sigPhi sigAlp sigDel piAlp piDel"
+
+    for(m in 1:(cfg$M + 1))
+      str = c(str, paste(round(c(s$sigC[m], s$d[m], s$tau[m], s$thePhi[m], 
+                         s$theAlp[m], s$theDel[m], s$sigPhi[m], s$sigAlp[m],  
+                         s$sigDel[m], s$piAlp[m], s$piDel[m]), 2), 
+              collapse = " "))
+
+    fp = file(cfg$hyperfile);
+    writeLines(str, fp)
+    close(fp);
+
+  }
+
+  if(cfg$ratesFlag){
+
+    str = "d c meanEps phi alp del";
+
+    for(g in 1:cfg$G){
+      line = c();
+      
+      if(g == 1){
+        line = c(line, s$accD);
+      } else {
+        line = c(line, 0/0);
+      }
+
+      if(g <= cfg$N){
+        line = c(line, s$accC[g]);
+      } else {
+        line = c(line, 0/0);
+      }
+
+      line = c(line, s$accEps[g], s$accPhi[g], s$accAlp[g], s$accDel[g]);
+      line = round(line, 2);
+      line = paste(line, collapse = " ");
+
+      str = c(str, line);
+    }
+
+    fp = file(cfg$ratesfile);
+    writeLines(str, fp)
+    close(fp);
+
+  }
+
+  if(cfg$parmsFlag){
+    
+    str = paste("c", s$libs, sep = "");
+    str = c(str, paste(c("phi"), s$genes, sep = ""));
+    str = c(str, paste(c("alp"), s$genes, sep = ""));
+    str = c(str, paste(c("del"), s$genes, sep = ""));
+    str = c(str, paste(c("eta"), s$genes, sep = ""));  
+
+    for(n in 1:5)
+      for(g in 1:5)
+        str = c(str, paste("eps_lib", s$libs[n], "_gene", s$genes[g], sep=""));
+   
+    str = paste(str, collapse = " ");
+
+    for(m in 1:(cfg$M + 1)){
+      line = c();
+
+      for(n in 1:5)
+        line = c(line, s$c[m, n]);
+
+      for(g in 1:5)
+        line = c(line, s$phi[m, g]);
+
+      for(g in 1:5)
+        line = c(line, s$alp[m, g]);
+
+      for(g in 1:5)
+        line = c(line, s$del[m, g]);
+
+      for(g in 1:5)
+        line = c(line, s$eta[m, g]);
+
+      for(n in 1:5)
+        for(g in 1:5)
+          line = c(line, s$eps[m, n, g]);
+ 
+      line = round(line, 2);
+      line = paste(line, collapse = " ");
+      str = c(str, line);
+    }
+    
+    fp = file(cfg$parmsfile);
+    writeLines(str, fp)
+    close(fp);
+  }
 }
 
 
@@ -1990,7 +2144,7 @@ run = function(){
   cfg = l$cfg;
   a = l$a;
 
-  a = runChain(a, cfg)
-  s = summarizeChain(a, cfg$heterosis)
-  list(chain = a, summ = s)
+  a = runChain(a, cfg);
+  s = summarizeChain(a);
+  printSummary(s, cfg);
 }
