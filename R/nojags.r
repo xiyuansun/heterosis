@@ -7,9 +7,6 @@
 # between 2 treatment groups of an RNA-Seq dataset. See
 # writeup.pdf for the model.
 
-library(Biobase)
-library(coda)
-
 # sampling from known distributions
 
 sampleNormal = function(m = 0, s = 1){ # device
@@ -209,15 +206,15 @@ getopts = function(){
   cfg$datafile = "~/heterosis/var/data/hammer/hammer.txt";
   cfg$groupfile = "~/heterosis/var/data/hammer/group.txt"; 
 
-  heterosisfile = "";
-  diffexprfile = "";
+  cfg$heterosisfile = "";
+  cfg$diffexprfile = "";
 
-  hyperfile = "";
-  ratesfile = "";
+  cfg$hyperfile = "";
+  cfg$ratesfile = "";
 
-  iter = 50;
-  burnin = 0;
-  joint = 0;
+  cfg$iter = 50;
+  cfg$burnin = 0;
+  cfg$joint = 0;
 
   # default values for initialization constants 
 
@@ -505,12 +502,12 @@ newChain_kernel2 = function(a){ # kernel: 1 block, 1 thread
 
 newChain = function(cfg){ # host (bunch of cudaMemcpies and kernels)
 
-  y = t(matrix(read.table(cfg$datafile)))
-  group = scan(cfg$groupfile)
+  y = t(as.matrix(read.table(cfg$datafile)))
+  grp = scan(cfg$groupfile, quiet = T)
 
   M = cfg$iter;
   N = dim(y)[1];
-  G = dim(y)[2];
+  G = 50 # dim(y)[2];
 
   a = allocChain(M, N, G);
   
