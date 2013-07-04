@@ -237,7 +237,7 @@ library(methods)
 library(ggplot2)
 library(reshape2)
 
-d = read.csv("../../var/data/joint.csv")
+d = read.csv("joint.csv")
 colnames(d) = paste(colnames(d), " ")
 
 suppressMessages(f <- melt(d))

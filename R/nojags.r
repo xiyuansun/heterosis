@@ -9,13 +9,13 @@
 
 # sampling from known distributions
 
-sampleNormal = function(m = 0, s = 1){ # device
+sampleNormal = function(m = 0, s = 1){ # host, device
   u1 = runif(1);
   u2 = runif(1);
   return(sqrt(-2 * log(u1)) * sin(2 * 3.14159265 * u2) * s + m);
 }
 
-sampleGamma = function(shape = 1, rate = 1, lb = 0){ # device
+sampleGamma = function(shape = 1, rate = 1, lb = 0){ # host, device
   if(shape <= 0){
     print(paste("Error: bad shape:", shape));
     return(0/0);
@@ -121,7 +121,7 @@ sampleGamma = function(shape = 1, rate = 1, lb = 0){ # device
   }
 }
 
-sampleBeta = function(a, b){ # device
+sampleBeta = function(a, b){ # host, device
   x = sampleGamma(a, 1, 0);
   y = sampleGamma(b, 1, 0);
   return(x / (x + y));
@@ -129,14 +129,12 @@ sampleBeta = function(a, b){ # device
 
 # data structures and initialization
 
-allocConfig = function(){
+allocConfig = function(){ # host
   list(
     datafile = "",
     groupfile = "",
 
-    heterosisfile = "",
-    diffexprfile = "",
-
+    probsfile = "",
     hyperfile = "",
     ratesfile = "",
 
@@ -199,19 +197,23 @@ allocConfig = function(){
   );
 }
 
-getopts = function(){
+config = function(){ # host
   cfg = allocConfig();
+
+  if(!file.exists("../data/"))
+    dir.create("../data/")
+
+  if(!file.exists("../out/"))
+    dir.create("../out/")
 
   # default filenames and MCMC settings
 
-  cfg$datafile = "~/heterosis/var/data/hammer/hammer.txt";
-  cfg$groupfile = "~/heterosis/var/data/hammer/group.txt"; 
+  cfg$datafile = "../data/data.txt";
+  cfg$groupfile = "../data/group.txt"; 
 
-  cfg$heterosisfile = "";
-  cfg$diffexprfile = "";
-
-  cfg$hyperfile = "";
-  cfg$ratesfile = "";
+  cfg$probsfile = "../out/probs.txt";
+  cfg$hyperfile = "../out/hyperparameters.txt";
+  cfg$ratesfile = "../out/acceptance-rates.txt";
 
   cfg$iter = 50;
   cfg$burnin = 0;
@@ -1794,9 +1796,10 @@ runChain = function(a, cfg){ # host
   return(a)
 }
 
-allocSummary = function(a){ # device
+allocSummary = function(a){ # host, device
 
   ret = list(
+
     sigC = rep(0, a$M),
     d = rep(0, a$M),
     tau = rep(0, a$M),
@@ -1812,18 +1815,24 @@ allocSummary = function(a){ # device
     sigDel = rep(0, a$M),
     piDel = rep(0, a$M),
 
+
     accC = rep(0, a$N),
     accEps = array(0, c(a$N, a$G)),
     accD = 0,
     accPhi = rep(0, a$G),
     accAlp = rep(0, a$G),
-    accDel = rep(0, a$G)
+    accDel = rep(0, a$G),
+
+    prob_de = rep(0, a$G),
+    prob_hph = rep(0, a$G),
+    prob_lph = rep(0, a$G),
+    prob_mph = rep(0, a$G)
   )
 
   return(ret)
 }
 
-summarizeChain = function(a){ # kernel <<<1, 1>>>
+summarizeChain = function(a, heterosis){ # kernel <<<1, 1>>>
   ret = allocSummary(a);
 
   ret$sigC = a$sigC;
@@ -1855,19 +1864,54 @@ summarizeChain = function(a){ # kernel <<<1, 1>>>
     ret$accPhi[g] = a$accPhi[g] / a$M;
     ret$accAlp[g] = a$accAlp[g] / a$M;
     ret$accDel[g] = a$accDel[g] / a$M;
+
+    ret$prob_de[g] = 0;
+    ret$mph_de[g] = 0;
+    ret$hph_de[g] = 0;
+    ret$lph_de[g] = 0;
+  }
+
+  for(m in (2 + a$burnin):(a$M + 1)){
+    for(g in 1:a$G){
+
+      if(a$alp[m, g] > 1e-6)
+        ret$prob_de[g] = ret$prob_de[g] + 1;
+
+      if(heterosis){
+
+        if(a$del[m, g] > sqrt(a$alp[m, g] * a$alp[m, g]))
+          ret$prob_hph[g] = ret$prob_hph[g] + 1;
+
+        if(a$del[m, g] < -sqrt(a$alp[m, g] * a$alp[m, g]))
+          ret$prob_lph[g] = ret$prob_lph[g] + 1;
+
+        if(a$del[m, g] > 1e-6)
+          ret$prob_mph[g] = ret$prob_mph[g] + 1;
+      }
+    }
+  }
+
+  for(g in 1:a$G){
+    ret$prob_de[g] = ret$prob_de[g] / (a$M - a$burnin - 1);
+
+    if(heterosis){
+      ret$prob_hph[g] = ret$prob_hph[g] / (a$M - a$burnin - 1);
+      ret$prob_lph[g] = ret$prob_lph[g] / (a$M - a$burnin - 1);
+      ret$prob_mph[g] = ret$prob_mph[g] / (a$M - a$burnin - 1);
+    }
   }
 
   ret
 }
 
 run = function(){
-  cfg = getopts();
+  cfg = config();
 
   l = newChain(cfg);
   cfg = l$cfg;
   a = l$a;
 
   a = runChain(a, cfg)
-  s = summarizeChain(a)
+  s = summarizeChain(a, cfg$heterosis)
   list(chain = a, summ = s)
 }
