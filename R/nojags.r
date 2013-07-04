@@ -143,6 +143,7 @@ allocConfig = function(){
     iter = 0,
     burnin = 0,
     joint = 0,
+    heterosis = 1,
 
     sigC0 = 0,
     d0 = 0,
@@ -500,17 +501,58 @@ newChain_kernel2 = function(a){ # kernel: 1 block, 1 thread
   a
 }
 
+readGrp = function(cfg, N){
+  grp = scan(cfg$groupfile, quiet = T)
+
+  unique = rep(0, N);
+  nunique = 0;
+
+  for(i in 1:N){
+    
+    match = 0;
+
+    for(j in 1:max(1, nunique))
+      if(grp[i] == unique[j])
+        match = match + 1;
+
+    if(!match){
+      nunique = nunique + 1;
+      unique[nunique] = grp[i];
+    } 
+  }
+
+  if (nunique == 2){
+
+    cfg$heterosis = 0;
+    
+    for(n in 1:N){
+      if(grp[n] == unique[1]){
+        grp[n] = 1;
+      } else{
+        grp[n] = 3;
+      }
+    }
+  } else if (nunique != 3){
+    print("ERROR: bad experimental design.")
+  }
+
+  list(grp = grp, cfg = cfg);
+}
+
 newChain = function(cfg){ # host (bunch of cudaMemcpies and kernels)
 
   y = t(as.matrix(read.table(cfg$datafile)))
-  grp = scan(cfg$groupfile, quiet = T)
 
   M = cfg$iter;
   N = dim(y)[1];
   G = 50 # dim(y)[2];
 
   a = allocChain(M, N, G);
-  
+
+  l = readGrp(cfg, N);
+  cfg = l$cfg;
+  grp = l$grp;
+
   # data
 
   for(n in 1:N){
@@ -596,7 +638,7 @@ newChain = function(cfg){ # host (bunch of cudaMemcpies and kernels)
   a = newChain_kernel1(a);
   a = newChain_kernel2(a);
 
-  return(a);
+  list(a = a, cfg = cfg);
 }
 
 mu = function(a, n, phi, alp, del){ # device
@@ -1708,7 +1750,7 @@ runChain = function(a, cfg){ # host
     if(!cfg$constPiAlp)
       a = samplePiAlp(a);
 
-    if(!cfg$constPiDel)
+    if(!cfg$constPiDel && cfg$heterosis)
       a = samplePiDel(a);
 
     if(!cfg$constD)
@@ -1720,7 +1762,7 @@ runChain = function(a, cfg){ # host
     if(!cfg$constTheAlp)
       a = sampleTheAlp(a);
 
-    if(!cfg$constTheDel)
+    if(!cfg$constTheDel && cfg$heterosis)
       a = sampleTheDel(a);
 
     if(!cfg$constSigC)
@@ -1732,18 +1774,20 @@ runChain = function(a, cfg){ # host
     if(!cfg$constSigAlp)
       a = sampleSigAlp(a);  
 
-    if(!cfg$constSigDel)
+    if(!cfg$constSigDel && cfg$heterosis)
       a = sampleSigDel(a);  
 
     a = sampleEta(a); 
     a = sampleEps(a);
 
-    if(cfg$joint){
+    if(cfg$joint && cfg$heterosis){
       a = samplePhiAlpDel(a);
     } else {
       a = samplePhi(a);
       a = sampleAlp(a);
-      a = sampleDel(a);
+
+      if(cfg$heterosis)
+        a = sampleDel(a);
     }
   }
 
@@ -1816,17 +1860,13 @@ summarizeChain = function(a){ # kernel <<<1, 1>>>
   ret
 }
 
-init = function(){
-  h = hammer();
-  y = h$y
-  grp = h$grp
-  newChain(y, grp, 10, 4, 100)
-}
-
-
 run = function(){
   cfg = getopts();
-  a = newChain(cfg)
+
+  l = newChain(cfg);
+  cfg = l$cfg;
+  a = l$a;
+
   a = runChain(a, cfg)
   s = summarizeChain(a)
   list(chain = a, summ = s)
