@@ -67,6 +67,7 @@ Config *config(int argc, char **argv){
   cfg->constPiDel = 0;
   
   getopts(cfg, argc, argv);
+  srand(cfg->seed);
   
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.

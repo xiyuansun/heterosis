@@ -16,9 +16,10 @@ void getopts(Config *cfg, int argc, char **argv){
     {"probs", required_argument, 0, 'o'},  
     {"hyper", required_argument, 0, 'h'},
     {"rates", required_argument, 0, 'r'},
+    {"parms", required_argument, 0, 'p'},
     {"burnin", required_argument, 0, 'b'},
-    {"joint", no_argument, 0, 'j'},
-    {"parms", required_argument, 0, 'p'},  
+    {"joint", no_argument, 0, 'j'},  
+    {"seed", required_argument, 0, 's'},  
     {"sigma-c0", required_argument, 0, 'x'},
     {"d0", required_argument, 0, 'f'},
     {"a-tau", required_argument, 0, 'k'},
@@ -29,7 +30,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"b-delta", required_argument, 0, 'c'},
     {"gamma-phi", required_argument, 0, 'q'},
     {"gamma-alpha", required_argument, 0, 'e'},  
-    {"gamma-delta", required_argument, 0, 's'},
+    {"gamma-delta", required_argument, 0, '8'},
     {"sigma-phi0", required_argument, 0, 't'},
     {"sigma-alpha0", required_argument, 0, 'u'},
     {"sigma-delta0", required_argument, 0, 'v'},
@@ -51,7 +52,7 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-                    "a:b:c:d:e:f:g:h:i:jk:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z:1:2:3:4:5:6:7:",
+                    "a:b:c:d:e:f:g:h:i:jk:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8",
                     long_options, &option_index);
     
     if(c == -1)
@@ -80,6 +81,9 @@ void getopts(Config *cfg, int argc, char **argv){
     
     } else if(c == 'j') { /* joint */
       cfg->joint = atoi(optarg);
+
+    } else if(c == 's') { /* seed */
+      cfg->seed = atoi(optarg);
     
     } else if(c == 'x') { /* sigma-c0 */
       cfg->sigC0 = atoi(optarg);
@@ -111,7 +115,7 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'e') { /* gamma-alpha */
       cfg->gamAlp = atoi(optarg);
     
-    } else if(c == 's') { /* gamma-delta */
+    } else if(c == '8') { /* gamma-delta */
       cfg->gamDel = atoi(optarg);
     
     } else if(c == 't') { /* sigma-phi0 */

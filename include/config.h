@@ -20,6 +20,7 @@ typedef struct {
   int burnin; /* burn-in of chain. Defaults to M/2. */
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */
   int heterosis; /* indicate whether the program will test for heterosis */
+  int seed; /* seed for random number generators */
   
   int M; /* length of chain (not including initial values) */
   int N; /* number of libraries (samples) */

@@ -19,6 +19,7 @@ void printConfig(Config *cfg){
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);
   printf("heterosis = %d\n\n", cfg->heterosis);
+  printf("seed = %d\n\n", cfg->seed);
   
   printf("M = %d\n", cfg->M);
   printf("N = %d\n", cfg->N);
@@ -58,7 +59,7 @@ void printConfig(Config *cfg){
   printf("constTheDel = %d\n", cfg->constTheDel);
   printf("constSigPhi = %d\n", cfg->constSigPhi);
   printf("constSigAlp = %d\n", cfg->constSigAlp);
-  printf("constSigDel = %df\n", cfg->constSigDel);
+  printf("constSigDel = %d\n", cfg->constSigDel);
   printf("constPiAlp = %d\n", cfg->constPiAlp);
   printf("constPiDel = %d\n", cfg->constPiDel);
 }
