@@ -1306,21 +1306,15 @@ piAlpPrime = function(a, g, avg, s){ # device
 }
 
 alpProp = function(a, g){ # device
-  tmp = 0;
-  Nalp = 0;
-
-  for(n in 1:a$N)
-    if(a$grp[n] != 2){
-      tmp = tmp + a$y[n, g];
-      Nalp = Nalp + 1;
-    }
       
-  avg = a$theAlp[a$mTheAlp] / a$gamAlp^2 + 
-       tmp / (Nalp * a$sigAlp[a$mSigAlp]^2)
-  avg = avg / (1/a$gamAlp^2 + 1/a$sigAlp[a$mSigAlp]^2)
+  gam = a$gamAlp;
+  sig = a$sigAlp[a$mSigAlp];
 
-  s = 1/sqrt(1/a$gamAlp^2 + 1/a$sigAlp[a$mSigAlp]^2);
+  gprec = 1/(gam * gam);
+  sprec = 1/(sig * sig);
 
+  avg = (a$alp[a$mAlp, g] * sprec) / (gprec + sprec);
+  s = gam^2 + sig^2;
   u = runif(1);
 
 #  if(u < piAlpPrime(a, g, avg, s)) {
@@ -1550,21 +1544,15 @@ piDelPrime = function(a, g, avg, s){ # device
 }
 
 delProp = function(a, g){ # device
-  tmp = 0;
-  Ndel = 0;
-
-  for(n in 1:a$N)
-    if(a$grp[n] != 2){
-      tmp = tmp + a$y[n, g];
-      Ndel = Ndel + 1;
-    }
       
-  avg = a$theDel[a$mTheDel] / a$gamDel^2 + 
-       tmp / (Ndel * a$sigDel[a$mSigDel]^2)
-  avg = avg / (1/a$gamDel^2 + 1/a$sigDel[a$mSigDel]^2)
+  gam = a$gamDel;
+  sig = a$sigDel[a$mSigDel];
 
-  s = 1/sqrt(1/a$gamDel^2 + 1/a$sigDel[a$mSigDel]^2);
+  gprec = 1/(gam * gam);
+  sprec = 1/(sig * sig);
 
+  avg = (a$del[a$mDel, g] * sprec) / (gprec + sprec);
+  s = gam^2 + sig^2;
   u = runif(1);
 
 #  if(u < piDelPrime(a, g, avg, s)) {
@@ -1574,7 +1562,7 @@ delProp = function(a, g){ # device
     new = sampleNormal(avg, s);
   }
 
-  return(new)
+  return(new);
 }
 
 sampleDel_kernel1 = function(a){ # kernel <<<G, 1>>>

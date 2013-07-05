@@ -1,9 +1,8 @@
-1) output probabilities of differential expression and/or heterosis (lph and hph; fraction of nonzero alphas/deltas for each gene).
-2) double-check math
-3) implement in C
-4) debug with Valgrind
-5) implement in CUDA C
-6) validate with BaySeq
+1) double-check math
+2) implement in C
+3) debug with Valgrind
+4) implement in CUDA C
+5) validate with BaySeq
 
 ./mcmc -data [DATA-FILE] 
        -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 
