@@ -1,24 +1,46 @@
-CC=gcc
-CFLAGS="-c -Wall -pedantic -ansi -I../include"
-LDFLAGS=-lm
+#!/bin/bash
 
-DEP=(betaHost config freeConfig gammaHost getopts normalHost printConfig test uniformHost)
-OBJ=()
+function cpu {
+  echo Making CPU version.
 
-if [ ! -d ../obj ]
+  CC=gcc
+  CFLAGS="-c -Wall -pedantic -ansi -I../include"
+  LDFLAGS=-lm
+
+  DEP=(betaHost config freeConfig gammaHost getopts normalHost printConfig test uniformHost)
+  OBJ=()
+
+  if [ ! -d ../obj ]
+  then
+    mkdir ../obj
+  fi
+
+  if [ ! -d ../bin ]
+  then
+    mkdir ../bin
+  fi
+
+  for dep in ${DEP[@]}
+  do
+    OBJ+=(../obj/${dep}.o)
+    ${CC} ../src/${dep}.c -o ../obj/${dep}.o ${CFLAGS} 
+  done
+
+  $CC ${OBJ[@]} -o ../bin/test ${LDFLAGS}
+}
+
+function gpu {
+  echo Coming soon...
+}
+
+
+if [ $# -eq 0 ]
 then
-  mkdir ../obj
-fi
-
-if [ ! -d ../bin ]
+  cpu
+elif [[ $1 =~ [cC][pP][uU] ]]
 then
-  mkdir ../bin
+  cpu
+elif [[ $1 =~ [gG][pP][uU] ]]
+then
+  gpu
 fi
-
-for dep in ${DEP[@]}
-do
-  OBJ+=(../obj/${dep}.o)
-  ${CC} ../src/${dep}.c -o ../obj/${dep}.o ${CFLAGS} 
-done
-
-$CC ${OBJ[@]} -o ../bin/test ${LDFLAGS}
