@@ -1,8 +1,7 @@
-1) double-check math
-2) implement in C
-3) debug with Valgrind
-4) implement in CUDA C
-5) validate with BaySeq
+1) implement in C
+2) debug with Valgrind
+3) implement in CUDA C
+4) validate with BaySeq
 
 ./mcmc -data [DATA-FILE] 
        -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 
@@ -17,7 +16,7 @@
        -burnin [NUMBER-BURNIN]               # Burn-in for calculating the probabilities above
        -joint                                # Set to jointly sample phi_g, alpha_g, and delta_g.
 
-       -params [PARAMS-FILE]                 # Output example parameters
+       -parms [PARMS-FILE]                 # Output example parameters
 
        # Input known initialization constants
 
@@ -48,12 +47,12 @@
        -tau [TAU-FILE]
 
        -thephi [THEPHI-FILE]
-       -sigphi [SIGPHI-FILE]
-
        -thealp [THEALP-FILE]
-       -sigalp [SIGALP-FILE]
-       -pialp [PIALP-FILE]
-
        -thedel [THEDEL-FILE]
+
+       -sigphi [SIGPHI-FILE]
+       -sigalp [SIGALP-FILE]
        -sigdel [SIGDEL-FILE]
+
+       -pialp [PIALP-FILE]
        -pidel [PIDEL-FILE]
