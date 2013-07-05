@@ -1,3 +1,7 @@
+#include <chain.h>
+#include <config.h>
+#include <constant.h>
+#include <host_functions.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
