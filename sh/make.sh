@@ -33,6 +33,19 @@ function gpu {
   echo Coming soon...
 }
 
+function clean {
+
+  if [ -d ../obj ]
+  then
+    rm -rf ../obj
+  fi
+
+  if [ -d ../bin ]
+  then
+    rm -rf ../bin
+  fi
+}
+
 
 if [ $# -eq 0 ]
 then
@@ -43,4 +56,7 @@ then
 elif [[ $1 =~ [gG][pP][uU] ]]
 then
   gpu
+elif [[ $1 =~ [cC][lL][eE][aA][nN] ]]
+then
+  clean
 fi
