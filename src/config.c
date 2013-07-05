@@ -5,9 +5,10 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Config *config(int argc, char **argv){
-  Config cfg = malloc(sizeof(Config));
+  Config *cfg = malloc(sizeof(Config));
 
   cfg->dataFile = malloc(BUF * sizeof(char));
   cfg->groupFile = malloc(BUF * sizeof(char));
@@ -65,7 +66,7 @@ Config *config(int argc, char **argv){
   cfg->constPiAlp = 0;
   cfg->constPiDel = 0;
   
-  getopts(Config *cfg, int argc, char **argv);
+  getopts(cfg, argc, argv);
   
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.

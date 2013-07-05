@@ -1,7 +1,7 @@
 #ifndef CHAIN_H
-#define
+#define CHAIN_H
 
-#define typedef struct {
+typedef struct {
 
   int **y; /* data */
   int *yMeanG; /* gene-wise mean expression levels */

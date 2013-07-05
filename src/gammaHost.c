@@ -1,19 +1,21 @@
 #include <functions.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 float gammaHost(float shape, float rate, float lb){
    
-  float A, c, d, u, v, w, x, z, eps, eps0, lam;
+  float A, c, d, r, u, v, w, x, z, eps, eps0, 
+        haznaz, lam, ret, tmp1, tmp2;
 
   if(shape <= 0){
     printf("Error: bad shape: %0.3f", shape);
-    return(0/0);
+    return(NAN);
   }
   
   if(rate <= 0){
     printf("Error: bad rate: %0.3f", rate);
-    return(0/0);
+    return(NAN);
   }
 
   if(shape - 1 < lb * rate){ /* Chung (1998) */
@@ -52,7 +54,7 @@ float gammaHost(float shape, float rate, float lb){
       ret = d * v / rate;
 
       if(ret > lb){
-        u = uniformHost(1);
+        u = uniformHost(0, 1);
 
         if(u < 1 - 0.0331 * pow(x, 4))
           return(ret);
@@ -70,7 +72,7 @@ float gammaHost(float shape, float rate, float lb){
       ret = x / rate;
 
       if(ret > lb){
-        v = runiformHost(1);
+        v = uniformHost(0, 1);
 
         tmp1 = exp(-x/2);
         tmp2 = pow(x, shape - 1)* tmp1 * pow(2, 1 - shape) * pow(1 - tmp1, 1 - shape);
@@ -81,16 +83,16 @@ float gammaHost(float shape, float rate, float lb){
     }
   } else{ /* Martin and Liu (2013) */
    
-    while(1){ # 
+    while(1){  
       lam = 1/shape - 1;
       w = shape / (exp(1 - shape));
       r = 1 / (1 + w); 
-      u = sampleUniform(0, 1);
+      u = uniformHost(0, 1);
 
       if(u <= r){
         z = - log(u / r);
       } else {
-        z = log(sampleUniform(0, 1)) / lam;
+        z = log(uniformHost(0, 1)) / lam;
       }
       
       ret = exp(-z / shape) / rate;
@@ -102,7 +104,7 @@ float gammaHost(float shape, float rate, float lb){
           haznaz = 1 / (w * lam) * exp((lam - 1) * z - exp(z / shape));
         }
 
-        if(haznaz > sampleUniform(0, 1))
+        if(haznaz > uniformHost(0, 1))
           return(ret);
       }
     }

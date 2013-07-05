@@ -5,6 +5,7 @@
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void getopts(Config *cfg, int argc, char **argv){
   int c, option_index;
@@ -69,7 +70,7 @@ void getopts(Config *cfg, int argc, char **argv){
       strcpy(cfg->hyperFile, optarg);
     
     } else if(c == 'r') { /* rates */
-      strcpy(cfg->ratespFile, optarg);
+      strcpy(cfg->ratesFile, optarg);
     
     } else if(c == 'p') { /* parms */
       strcpy(cfg->parmsFile, optarg);

@@ -1,4 +1,6 @@
 #ifndef CONSTANTS_H
+#define CONSTANTS_H
+
 
 #define BUF 256
 

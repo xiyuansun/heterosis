@@ -1,7 +1,9 @@
 #ifndef CONFIG_H
+#define CONFIG_H
+
 #include <constants.h>
 
-#define typedef struct {
+typedef struct {
 
   char *dataFile; /* space-delimited text file with G rows and N columns */
   char *groupFile; /* space-delimited text file with 1 row and N entries */
@@ -56,6 +58,7 @@
   
   /* indicate choices to hold each hyperparameter constant */
   
+  int constSigC;
   int constD;
   int constTau;
   int constThePhi;
