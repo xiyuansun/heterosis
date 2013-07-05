@@ -1,11 +1,10 @@
 all: cpu
 
 cpu:
-	../sh/make.sh
+	../sh/make.sh cpu
 
 gpu:
-	../sh/makeGPU.sh
+	../sh/make.sh gpu
 
 clean:
-	rm -rf ../obj
-	rm -rf ../bin
+	../sh/make.sh clean
