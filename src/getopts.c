@@ -1,12 +1,12 @@
-#include <chain.h>
-#include <config.h>
-#include <constant.h>
-#include <host_functions.h>
+#include <Chain.h>
+#include <Config.h>
+#include <constants.h>
+#include <getopt.h>
+#include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
 
-void getopts(int argc, char **argv){
+void getopts(Config *cfg, int argc, char **argv){
   int c, option_index;
   
   struct option long_options[] = {
@@ -57,103 +57,114 @@ void getopts(int argc, char **argv){
       break;
       
     if(c == 'i'){ /* data */
-      printf("data\n");
+      strcpy(cfg->dataFile, optarg);
       
     } else if(c == 'g') { /* group */
-      printf("group\n");
-      
+      strcpy(cfg->groupFile, optarg);
+            
     } else if(c == 'o') { /* probs */
-      printf("probs\n");    
+      strcpy(cfg->probsFile, optarg);   
     
     } else if(c == 'h') { /* hyper */
-      printf("hyper\n");
+      strcpy(cfg->hyperFile, optarg);
     
     } else if(c == 'r') { /* rates */
-      printf("rates\n");
-    
-    } else if(c == 'b') { /* burnin */
-      printf("burnin\n");
-    
-    } else if(c == 'j') { /* joint */
-      printf("joint\n");
+      strcpy(cfg->ratespFile, optarg);
     
     } else if(c == 'p') { /* parms */
-      printf("parms\n");
+      strcpy(cfg->parmsFile, optarg);
+    
+    } else if(c == 'b') { /* burnin */
+      cfg->burnin = atoi(optarg);
+    
+    } else if(c == 'j') { /* joint */
+      cfg->joint = atoi(optarg);
     
     } else if(c == 'x') { /* sigma-c0 */
-      printf("sigma-c0\n");
+      cfg->sigC0 = atoi(optarg);
     
     } else if(c == 'f') { /* d0 */
-      printf("d0\n");
+      cfg->d0 = atoi(optarg);
     
     } else if(c == 'k') { /* a-tau */
-      printf("a-tau\n");
+      cfg->aTau = atoi(optarg);
     
     } else if(c == 'l') { /* a-alpha */
-      printf("a-alpha\n");
+      cfg->aAlp = atoi(optarg);
     
     } else if(c == 'm') { /* a-delta */
-      printf("a-delta\n");
+      cfg->aDel = atoi(optarg);
     
     } else if(c == 'n') { /* b-tau */
-      printf("b-tau\n");
+      cfg->bTau = atoi(optarg);
     
     } else if(c == 'a') { /* b-alpha */
-      printf("b-alpha\n");
+      cfg->bAlp = atoi(optarg);
           
     } else if(c == 'c') { /* b-delta */
-      printf("b-delta\n");    
+      cfg->bDel = atoi(optarg);    
     
     } else if(c == 'q') { /* gamma-phi */
-      printf("gamma-phi\n");    
+      cfg->gamPhi = atoi(optarg);    
 
     } else if(c == 'e') { /* gamma-alpha */
-      printf("gamma-alpha\n");
+      cfg->gamAlp = atoi(optarg);
     
     } else if(c == 's') { /* gamma-delta */
-      printf("gamma-delta\n");
+      cfg->gamDel = atoi(optarg);
     
     } else if(c == 't') { /* sigma-phi0 */
-      printf("sigma-phi0\n");
+      cfg->sigPhi0 = atoi(optarg);
     
     } else if(c == 'u') { /* sigma-alpha0 */
-      printf("sigma-alpha0\n");
+      cfg->sigAlp0 = atoi(optarg);
     
     } else if(c == 'v') { /* sigma-delta0 */
-      printf("sigma-delta0\n");
+      cfg->sigDel0 = atoi(optarg);
     
     } else if(c == 'w') { /* sigma-c */
-      printf("sigma-c\n");
+      cfg->sigC = atoi(optarg);
+      cfg->constSigC = 1;
     
     } else if(c == 'd') { /* d */
-      printf("d\n");
+      cfg->d = atoi(optarg);
+      cfg->constD = 1;
     
     } else if(c == 'y') { /* tau */
-      printf("tau\n"); 
+      cfg->tau = atoi(optarg);
+      cfg->constTau = 1;
          
     } else if(c == 'z') { /* theta-phi */
-      printf("theta-phi\n");
+      cfg->thePhi = atoi(optarg);
+      cfg->constThePhi = 1;
     
     } else if(c == '1') { /* theta-alpha */
-      printf("theta-alpha\n");
+      cfg->theAlp = atoi(optarg);
+      cfg->constTheAlp = 1;
     
     } else if(c == '2') { /* theta-delta */
-      printf("theta-delta\n");
+      cfg->theDel = atoi(optarg);
+      cfg->constTheDel = 1;
     
     } else if(c == '3') { /* sigma-phi */
-      printf("sigma-phi\n");
+      cfg->sigPhi = atoi(optarg);
+      cfg->constSigPhi = 1;
     
     } else if(c == '4') { /* sigma-alpha */
-      printf("sigma-alpha\n");
+      cfg->sigAlp = atoi(optarg);
+      cfg->constSigAlp = 1;
     
     } else if(c == '5') { /* sigma-delta */
-      printf("sigma-delta\n");
+      cfg->sigDel = atoi(optarg);
+      cfg->constSigDel = 1;
     
     } else if(c == '6') { /* pi-alpha */
-      printf("pi-alpha\n");
+      cfg->piAlp = atoi(optarg);
+      cfg->constPiAlp = 1;
     
     } else if(c == '7') { /* pi-delta */
-      printf("pi-delta\n");
+      cfg->piDel = atoi(optarg);
+      cfg->constPiDel = 1;
     
     }
   }

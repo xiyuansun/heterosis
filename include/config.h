@@ -3,12 +3,12 @@
 
 #define typedef struct {
 
-  char dataFile[BUF]; /* space-delimited text file with G rows and N columns */
-  char groupFile[BUF]; /* space-delimited text file with 1 row and N entries */
-  char probsFile[BUF]; /* main output: diff expression / heterosis probabilities */
-  char hyperFile[BUF]; /* optional output: hyperparameters */
-  char ratesFile[BUF]; /* optional output: acceptance rates of Metropolis steps */
-  char parmsFile[BUF]; /* optional output: example parameters */
+  char *dataFile; /* space-delimited text file with G rows and N columns */
+  char *groupFile; /* space-delimited text file with 1 row and N entries */
+  char *probsFile; /* main output: diff expression / heterosis probabilities */
+  char *hyperFile; /* optional output: hyperparameters */
+  char *ratesFile; /* optional output: acceptance rates of Metropolis steps */
+  char *parmsFile; /* optional output: example parameters */
 
   int probsFlag; /* indicate choice to output probs of diff expression / heterosis */
   int hyperFlag; /* indicate choice to output hyperparameters */
