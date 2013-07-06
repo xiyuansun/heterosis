@@ -1,0 +1,60 @@
+#include <Config.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int *readGrp(Config *cfg){
+
+  int i, j, n, *grp, match, nunique = 0, *unique;
+  FILE *fp;
+
+  if(cfg->N < 2){
+    printf("ERROR: bad experimental design.");
+    exit(EXIT_FAILURE);
+  }
+  
+  fp = fopen(cfg->groupFile, "r");
+  grp = malloc(cfg->N * sizeof(int));
+  unique = malloc(cfg->N * sizeof(int));
+  
+  for(n = 0; n < cfg->N; ++n)
+    fscanf(fp, "%d", grp + n);
+
+  for(i = 0; i < cfg->N; ++i){ 
+    match = 0;
+
+    for(j = 0; j < i; ++j)
+      if(grp[i] == unique[j])
+        ++match;
+
+    if(!match){
+      ++nunique;
+      unique[nunique - 1] = grp[i];
+    } 
+  }
+
+  if (nunique == 2){
+
+    cfg->heterosis = 0;
+    
+    for(n = 0; n < cfg->N; ++n){
+      if(grp[n] == unique[1]){
+        grp[n] = 1;
+      } else{
+        grp[n] = 3;
+      }
+    }
+  } else if (nunique == 3){
+    cfg->heterosis = 1;
+    
+  } else {  
+    printf("ERROR: bad experimental design.");
+    fclose(fp);
+    free(grp);
+    free(unique);
+    exit(EXIT_FAILURE);
+  }
+  
+  fclose(fp);
+  free(unique);
+  return grp;
+}
