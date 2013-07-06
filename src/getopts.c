@@ -1,8 +1,8 @@
-#include <Chain.h>
 #include <Config.h>
 #include <constants.h>
 #include <getopt.h>
 #include <functions.h>
+#include <numericTypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

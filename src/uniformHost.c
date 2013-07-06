@@ -1,7 +1,8 @@
 #include <math.h>
+#include <numericTypes.h>
 #include <stdlib.h>
 
-float uniformHost(float lb, float ub){
-  float u = ((float) rand()) / ((float) RAND_MAX);
+num_t uniformHost(num_t lb, num_t ub){
+  num_t u = ((num_t) rand()) / ((num_t) RAND_MAX);
   return (ub - lb) * u + lb;
 }

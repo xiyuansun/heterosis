@@ -1,11 +1,12 @@
 #include <functions.h>
 #include <math.h>
+#include <numericTypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-float gammaHost(float shape, float rate, float lb){
+num_t gammaHost(num_t shape, num_t rate, num_t lb){
    
-  float A, c, d, r, u, v, w, x, z, eps, eps0, 
+  num_t A, c, d, r, u, v, w, x, z, eps, eps0, 
         haznaz, lam, ret, tmp1, tmp2;
 
   if(shape <= 0){

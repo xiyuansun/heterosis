@@ -1,10 +1,12 @@
 #ifndef CHAIN_H
 #define CHAIN_H
 
+#include <numericTypes.h>
+
 typedef struct {
 
-  int **y; /* data */
-  int *yMeanG; /* gene-wise mean expression levels */
+  count_t **y; /* data */
+  num_t *yMeanG; /* gene-wise mean expression levels */
   int *grp; /* assignment of libraries (samples) to treatment groups */ 
 
   int M; /* length of chain */
@@ -13,58 +15,58 @@ typedef struct {
   
   /* initialization constants */
   
-  float sigC0;
-  float d0;
-  float aTau;
-  float aAlp;
-  float aDel;
-  float bTau;
-  float bAlp;
-  float bDel;
-  float gamPhi;
-  float gamAlp;
-  float gamDel;
-  float sigPhi0;
-  float sigAlp0;
-  float sigDel0;
+  num_t sigC0;
+  num_t d0;
+  num_t aTau;
+  num_t aAlp;
+  num_t aDel;
+  num_t bTau;
+  num_t bAlp;
+  num_t bDel;
+  num_t gamPhi;
+  num_t gamAlp;
+  num_t gamDel;
+  num_t sigPhi0;
+  num_t sigAlp0;
+  num_t sigDel0;
 
   /* samples of parameters and hyperparameters */
   
-  float **c;
-    float *sigC;
+  num_t **c;
+    num_t *sigC;
    
-  float ***eps;
-    float **eta;
-      float *d;
-      float *tau;
+  num_t ***eps;
+    num_t **eta;
+      num_t *d;
+      num_t *tau;
       
-  float **phi;
-    float *thePhi;
-    float *sigPhi;
+  num_t **phi;
+    num_t *thePhi;
+    num_t *sigPhi;
     
-  float **alp;
-    float *theAlp;
-    float *sigAlp;
-    float *piAlp;
+  num_t **alp;
+    num_t *theAlp;
+    num_t *sigAlp;
+    num_t *piAlp;
     
-  float **del;
-    float *theDel;
-    float *sigDel;
-    float *piDel;
+  num_t **del;
+    num_t *theDel;
+    num_t *sigDel;
+    num_t *piDel;
     
   /* temporary and return values of kernels */
 
-  float shape;
-  float rate;
+  num_t shape;
+  num_t rate;
   
-  float *tmp1;
-  float *tmp2;
+  num_t *tmp1;
+  num_t *tmp2;
   
-  float **Old;
-  float **New;
+  num_t **Old;
+  num_t **New;
   
-  float **lOld;
-  float **lNew;
+  num_t **lOld;
+  num_t **lNew;
   
   /* current place in the chain of each parameter */
   
@@ -92,10 +94,10 @@ typedef struct {
     
   /* tuning parameters for metropolis steps */
   
-  float tunC;
-  float tunEps;
-  float tunD;
-  float tunPhi;
+  num_t *tuneC;
+  num_t **tuneEps;
+  num_t tuneD;
+  num_t *tunePhi;
   
   /* number of acceptances for metropolis steps */
 

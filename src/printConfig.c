@@ -1,4 +1,5 @@
 #include <Config.h>
+#include <numericTypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 

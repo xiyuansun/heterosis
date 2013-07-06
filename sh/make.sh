@@ -7,7 +7,12 @@ function cpu {
   CFLAGS="-c -Wall -pedantic -ansi -I../include"
   LDFLAGS=-lm
 
-  DEP=(betaHost config freeConfig gammaHost getopts normalHost printConfig test uniformHost)
+  DEP=(config getopts printConfig freeConfig)
+  DEP+=(mySampleIntHost readGrp readData)
+  DEP+=(allocChainHost freeChainHost)
+  DEP+=(uniformHost normalHost gammaHost betaHost)
+  DEP+=(test)
+
   OBJ=()
 
   if [ ! -d ../obj ]

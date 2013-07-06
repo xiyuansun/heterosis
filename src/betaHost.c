@@ -1,11 +1,12 @@
 #include <functions.h>
 #include <math.h>
+#include <numericTypes.h>
 #include <stdlib.h>
 
-float betaHost(float a, float b){
+num_t betaHost(num_t a, num_t b){
 
-  float x = gammaHost(a, 1, 0);
-  float y = gammaHost(b, 1, 0);
+  num_t x = gammaHost(a, 1, 0);
+  num_t y = gammaHost(b, 1, 0);
   
   return x / (x + y);
 }

@@ -2,6 +2,7 @@
 #define CONFIG_H
 
 #include <constants.h>
+#include <numericTypes.h>
 
 typedef struct {
 
@@ -28,34 +29,34 @@ typedef struct {
     
   /* initialization constants */
   
-  float sigC0;
-  float d0;
-  float aTau;
-  float aAlp;
-  float aDel;
-  float bTau;
-  float bAlp;
-  float bDel;
-  float gamPhi;
-  float gamAlp;
-  float gamDel;
-  float sigPhi0;
-  float sigAlp0;
-  float sigDel0;
+  num_t sigC0;
+  num_t d0;
+  num_t aTau;
+  num_t aAlp;
+  num_t aDel;
+  num_t bTau;
+  num_t bAlp;
+  num_t bDel;
+  num_t gamPhi;
+  num_t gamAlp;
+  num_t gamDel;
+  num_t sigPhi0;
+  num_t sigAlp0;
+  num_t sigDel0;
   
   /* hyperparameters */
   
-  float sigC;
-  float d;
-  float tau;
-  float thePhi;
-  float theAlp;
-  float theDel;
-  float sigPhi;
-  float sigAlp;
-  float sigDel;
-  float piAlp;
-  float piDel;
+  num_t sigC;
+  num_t d;
+  num_t tau;
+  num_t thePhi;
+  num_t theAlp;
+  num_t theDel;
+  num_t sigPhi;
+  num_t sigAlp;
+  num_t sigDel;
+  num_t piAlp;
+  num_t piDel;
   
   /* indicate choices to hold each hyperparameter constant */
   
