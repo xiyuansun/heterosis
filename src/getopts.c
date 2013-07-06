@@ -13,18 +13,19 @@ void getopts(Config *cfg, int argc, char **argv){
   struct option long_options[] = {
     {"data", required_argument, 0, 'i'},
     {"group", required_argument, 0, 'g'},
-    {"probs", required_argument, 0, 'o'},  
-    {"hyper", required_argument, 0, 'h'},
-    {"rates", required_argument, 0, 'r'},
-    {"parms", required_argument, 0, 'p'},
+    {"iter", required_argument, 0, 'M'},
     {"burnin", required_argument, 0, 'b'},
+    {"probs", required_argument, 0, 'o'},
+    {"rates", required_argument, 0, 'r'},  
+    {"hyper", required_argument, 0, 'h'},
+    {"parms", required_argument, 0, 'p'},
     {"joint", no_argument, 0, 'j'},  
     {"seed", required_argument, 0, 's'},  
     {"sigma-c0", required_argument, 0, 'x'},
     {"d0", required_argument, 0, 'f'},
     {"a-tau", required_argument, 0, 'k'},
     {"a-alpha", required_argument, 0, 'l'},
-    {"a-delta", required_argument, 0, 'm'},  
+    {"a-delta", required_argument, 0, '9'},  
     {"b-tau", required_argument, 0, 'n'},
     {"b-alpha", required_argument, 0, 'a'},
     {"b-delta", required_argument, 0, 'c'},
@@ -52,8 +53,8 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-                    "a:b:c:d:e:f:g:h:i:jk:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8",
-                    long_options, &option_index);
+        "a:b:c:d:e:f:g:h:i:jk:l:m:M:n:o:p:q:r:s:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
+        long_options, &option_index);
     
     if(c == -1)
       break;
@@ -64,23 +65,30 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'g') { /* group */
       strcpy(cfg->groupFile, optarg);
             
-    } else if(c == 'o') { /* probs */
-      strcpy(cfg->probsFile, optarg);   
-    
-    } else if(c == 'h') { /* hyper */
-      strcpy(cfg->hyperFile, optarg);
-    
-    } else if(c == 'r') { /* rates */
-      strcpy(cfg->ratesFile, optarg);
-    
-    } else if(c == 'p') { /* parms */
-      strcpy(cfg->parmsFile, optarg);
+    } else if(c == 'm' || c == 'M') { /* iterations */
+      cfg->M = atoi(optarg);
     
     } else if(c == 'b') { /* burnin */
       cfg->burnin = atoi(optarg);
     
+    } else if(c == 'o') { /* probs */
+      strcpy(cfg->probsFile, optarg); 
+      cfg->probsFlag = 1;  
+    
+    } else if(c == 'r') { /* rates */
+      strcpy(cfg->ratesFile, optarg);
+      cfg->ratesFlag = 1;
+    
+    } else if(c == 'h') { /* hyper */
+      strcpy(cfg->hyperFile, optarg);
+      cfg->hyperFlag = 1;
+    
+    } else if(c == 'p') { /* parms */
+      strcpy(cfg->parmsFile, optarg);
+      cfg->parmsFlag = 1;
+    
     } else if(c == 'j') { /* joint */
-      cfg->joint = atoi(optarg);
+      cfg->joint = 1;
 
     } else if(c == 's') { /* seed */
       cfg->seed = atoi(optarg);
@@ -97,7 +105,7 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'l') { /* a-alpha */
       cfg->aAlp = atoi(optarg);
     
-    } else if(c == 'm') { /* a-delta */
+    } else if(c == '9') { /* a-delta */
       cfg->aDel = atoi(optarg);
     
     } else if(c == 'n') { /* b-tau */

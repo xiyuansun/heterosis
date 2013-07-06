@@ -22,14 +22,14 @@ Config *config(int argc, char **argv){
   strcpy(cfg->dataFile, "../data/data.txt"); 
   strcpy(cfg->groupFile, "../data/group.txt");
   strcpy(cfg->probsFile, "../out/probs.txt");
-  strcpy(cfg->hyperFile, "../out/hyperparameters.txt");
   strcpy(cfg->ratesFile, "../out/acceptance-rates.txt");
+  strcpy(cfg->hyperFile, "../out/hyperparameters.txt");
   strcpy(cfg->parmsFile, "../out/example-parameters.txt");        
 
-  cfg->probsFlag = 1;
-  cfg->hyperFlag = 1;
-  cfg->ratesFlag = 1;
-  cfg->parmsFlag = 1;
+  cfg->probsFlag = 0;
+  cfg->ratesFlag = 0;
+  cfg->hyperFlag = 0;
+  cfg->parmsFlag = 0;
 
   cfg->M = 10;  
   cfg->burnin = cfg->M / 2;

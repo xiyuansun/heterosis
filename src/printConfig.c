@@ -5,21 +5,21 @@
 void printConfig(Config *cfg){
   
   printf("dataFile = %s\n", cfg->dataFile);
-  printf("groupFile = %s\n", cfg->dataFile);
+  printf("groupFile = %s\n", cfg->groupFile);
   printf("probsFile = %s\n", cfg->probsFile);
-  printf("hyperFile = %s\n", cfg->hyperFile);
   printf("ratesFile = %s\n", cfg->ratesFile);
+  printf("hyperFile = %s\n", cfg->hyperFile);
   printf("parmsFile = %s\n\n", cfg->parmsFile);
 
   printf("probsFlag = %d\n", cfg->probsFlag);
-  printf("hyperFlag = %d\n", cfg->hyperFlag);
   printf("ratesFlag = %d\n", cfg->ratesFlag);
+  printf("hyperFlag = %d\n", cfg->hyperFlag);
   printf("parmsFlag = %d\n\n", cfg->parmsFlag);
   
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);
-  printf("heterosis = %d\n\n", cfg->heterosis);
   printf("seed = %d\n\n", cfg->seed);
+  printf("heterosis = %d\n\n", cfg->heterosis);
   
   printf("M = %d\n", cfg->M);
   printf("N = %d\n", cfg->N);
@@ -52,6 +52,7 @@ void printConfig(Config *cfg){
   printf("piAlp = %0.3f\n", cfg->piAlp);
   printf("piDel = %0.3f\n\n", cfg->piDel);
   
+  printf("constSigC = %d\n", cfg->constSigC);
   printf("constD = %d\n", cfg->constD);
   printf("constTau = %d\n", cfg->constTau);
   printf("constThePhi = %d\n", cfg->constThePhi);
