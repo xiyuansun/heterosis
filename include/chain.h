@@ -12,6 +12,9 @@ typedef struct {
   int M; /* length of chain */
   int N; /* number of libraries (samples) */
   int G; /* number of genes */
+  int burnin; 
+  int heterosis;
+  int parmsFlag;
   
   /* initialization constants */
   

@@ -6,29 +6,11 @@
 #include <stdio.h>
 
 int main(int argc, char **argv){
-  int g, n, *s, **y;
-  int *grp;
-  
   Config *cfg = config(argc, argv);
-  
-  y = readData(cfg);
-  
-  grp = readGrp(cfg);
-  
-
-  s = malloc(5 * sizeof(int));
- 
-  
-  for(n = 0; n < 10; ++n){
-    s = mySampleIntHost(5, 5);
-    
-  /*  for(g = 0; g < 5; ++g)
-      printf("%d ", s[g]);
-    printf("\n"); */
-  }  
-  
+  Chain *a = newChainHost(cfg);
+  printChain(a);
   
   freeConfig(cfg);
-  free(y);
+  freeChainHost(a, cfg);
   return 0;
 }
