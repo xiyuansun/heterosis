@@ -36,6 +36,8 @@ int main(int argc, char **argv){
      sampleSigPhi(a);
      sampleSigAlp(a);
      sampleSigDel(a);
+     samplePiAlp(a);
+     samplePiDel(a);
    }
   
   printChain(a);

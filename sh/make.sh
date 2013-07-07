@@ -16,6 +16,7 @@ function cpu {
   DEP+=(sigCHost etaHost tauHost)
   DEP+=(thePhiHost theAlpHost theDelHost)
   DEP+=(sigPhiHost sigAlpHost sigDelHost)
+  DEP+=(piAlpHost piDelHost)
   DEP+=(test)
 
   OBJ=()

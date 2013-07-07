@@ -124,4 +124,14 @@ void sampleSigDel_kernel3(Chain*);
 void sampleSigDel_kernel4(Chain*);
 void sampleSigDel(Chain*);
 
+void samplePiAlp_kernel1(Chain*);
+void samplePiAlp_kernel2(Chain*);
+void samplePiAlp_kernel3(Chain*);
+void samplePiAlp(Chain*);
+
+void samplePiDel_kernel1(Chain*);
+void samplePiDel_kernel2(Chain*);
+void samplePiDel_kernel3(Chain*);
+void samplePiDel(Chain*);
+
 #endif /* FUNCTIONS_H */
