@@ -43,7 +43,7 @@ void sampleC_kernel2(Chain*);
 void sampleC_kernel3(Chain*);
 void sampleC(Chain*);
 
-num_t lEps(Chain *, int, int, num_t);
+num_t lEps(Chain*, int, int, num_t);
 void sampleEps_kernel1(Chain*);
 void sampleEps_kernel2(Chain*);
 void sampleEps(Chain*);
@@ -78,5 +78,17 @@ num_t lPhiAlpDel(Chain*, int, num_t, num_t, num_t);
 void samplePhiAlpDel_kernel1(Chain*);
 void samplePhiAlpDel_kernel2(Chain*);
 void samplePhiAlpDel(Chain*);
+
+void sampleSigC(Chain*);
+
+void sampleEta_kernel1(Chain*);
+void sampleEta_kernel2(Chain*);
+void sampleEta_kernel3(Chain*);
+void sampleEta(Chain*);
+
+void sampleTau_kernel1(Chain*);
+void sampleTau_kernel2(Chain*);
+void sampleTau_kernel3(Chain*);
+void sampleTau(Chain*);
 
 #endif /* FUNCTIONS_H */

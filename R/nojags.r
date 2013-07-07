@@ -1154,7 +1154,6 @@ sampleTau_kernel3 = function(a){
   }
 
   a$mTau = a$mTau + 1;
-
   a
 }
 

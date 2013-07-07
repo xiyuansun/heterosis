@@ -13,6 +13,7 @@ function cpu {
   DEP+=(allocChainHost newChainHost printChain freeChainHost)
   DEP+=(mu uniformHost normalHost gammaHost betaHost)
   DEP+=(cHost epsHost dHost phiHost alpHost delHost phiAlpDelHost)
+  DEP+=(sigCHost etaHost tauHost)
   DEP+=(test)
 
   OBJ=()
