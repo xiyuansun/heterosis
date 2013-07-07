@@ -10,8 +10,7 @@ function cpu {
   DEP=(printArrays)
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(mySampleIntHost readGrp readData)
-  DEP+=(allocChainHost printChain freeChainHost)
-  DEP+=(newChainHost_kernel1 newChainHost_kernel2 newChainHost)
+  DEP+=(allocChainHost newChainHost printChain freeChainHost)
   DEP+=(uniformHost normalHost gammaHost betaHost)
   DEP+=(test)
 
