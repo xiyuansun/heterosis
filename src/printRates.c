@@ -7,10 +7,10 @@
 
 void printRates(Chain *a, Config *cfg){
 
-  int g, i, niter = cfg->M - cfg->burnin;
+  int n, i, niter = cfg->M - cfg->burnin;
   num_t accD, accC, accPhi, accAlp, accDel, accEps;
   FILE *fp;
-
+  
   if(cfg->ratesFlag){
     fp = fopen(cfg->ratesFile, "w");    
     fprintf(fp, "d c phi alp del meanEps\n");
@@ -31,8 +31,9 @@ void printRates(Chain *a, Config *cfg){
     accDel /= niter;
   
     accEps = 0;  
-    for(g = 0; g < cfg->G; ++g)
-      accEps += a->accEps[0][g];
+    for(n = 0; n < cfg->N; ++n)
+      accEps += a->accEps[n][0];
+    accEps /= (niter * cfg->N);
     
     fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
     fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");
@@ -40,8 +41,9 @@ void printRates(Chain *a, Config *cfg){
     fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
     fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
     fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
+    fprintf(fp, "\n");
 
-    for(i = 0; i < cfg->N; ++i){
+    for(i = 1; i < cfg->N; ++i){
     
       accC    = a->accC[i];
       accC   /= niter;
@@ -56,8 +58,9 @@ void printRates(Chain *a, Config *cfg){
       accDel /= niter;
   
       accEps = 0;  
-      for(g = 0; g < cfg->G; ++g)
-        accEps += a->accEps[i][g];
+      for(n = 0; n < cfg->N; ++n)
+        accEps += a->accEps[n][i];
+      accEps /= (niter * cfg->N);
       
       fprintf(fp, ". ");
       fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");
@@ -65,9 +68,11 @@ void printRates(Chain *a, Config *cfg){
       fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
+      fprintf(fp, "\n");
     }
     
     for(i = cfg->N; i < cfg->G; ++i){
+    
       accPhi  = a->accPhi[i];
       accPhi /= niter;
 
@@ -77,15 +82,20 @@ void printRates(Chain *a, Config *cfg){
       accDel  = a->accDel[i];
       accDel /= niter;
   
+      printf("%d\n", i);
+  
       accEps = 0;  
-      for(g = 0; g < cfg->G; ++g)
-        accEps += a->accEps[i][g];
+      
+      for(n = 0; n < cfg->N; ++n)
+        accEps += a->accEps[n][i];
+      accEps /= (niter * cfg->N);
       
       fprintf(fp, ". . ");
       fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
+      fprintf(fp, "\n");
     }
     
     fclose(fp);

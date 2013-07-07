@@ -39,7 +39,7 @@ function cpu {
     ${CC} ../src/${dep}.c -o ../obj/${dep}.o ${CFLAGS} 
   done
 
-  $CC ${OBJ[@]} -o ../bin/test ${LDFLAGS}
+  $CC ${OBJ[@]} -o ../bin/mcmc ${LDFLAGS}
 }
 
 function gpu {

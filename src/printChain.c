@@ -38,7 +38,7 @@ void printChain(Chain *a){
   pf2(a->c, a->M + 1, a->N, "c =\n");
   pf1(a->sigC, a->M + 1, "sigC =\n");
   pf3(a->eps, a->M + 1, a->N, a->G, "eps =\n");
-  pf2(a->eta, a->M + 1, a->N, "eta =\n");
+  pf2(a->eta, a->M + 1, a->G, "eta =\n");
   pf1(a->d, a->M + 1, "d =\n");
   pf1(a->tau, a->M + 1, "tau =\n");
   pf2(a->phi, a->M + 1, a->G, "phi =\n");
