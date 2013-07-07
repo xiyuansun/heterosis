@@ -10,12 +10,16 @@ num_t gammaHost(num_t shape, num_t rate, num_t lb){
         haznaz, lam, ret, tmp1, tmp2;
 
   if(shape <= 0){
-    printf("Error: bad shape: %0.3f", shape);
+    printf("Error: bad shape: ");
+    printf(NUM_TF, shape);
+    printf("\n");
     return(NAN);
   }
   
   if(rate <= 0){
-    printf("Error: bad rate: %0.3f", rate);
+    printf("Error: bad rate: ");
+    printf(NUM_TF, rate);
+    printf("\n");
     return(NAN);
   }
 

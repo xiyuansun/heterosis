@@ -1,5 +1,5 @@
+#include <constants.h>
 #include <math.h>
-#include <numericTypes.h>
 #include <stdlib.h>
 
 num_t uniformHost(num_t lb, num_t ub){

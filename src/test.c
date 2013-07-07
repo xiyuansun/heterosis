@@ -5,6 +5,8 @@
 #include <stdio.h>
 
 int main(int argc, char **argv){
+  int m;
+
   Config *cfg = config(argc, argv);
   
   Chain *a = newChainHost(cfg);
@@ -13,9 +15,14 @@ int main(int argc, char **argv){
     exit(EXIT_FAILURE);
   }
   
-  printConfig(cfg);
+ 
+  printChain(a);
   
-  printf("\n-----\n");
+   printf("\n-----\n");
+   
+   for(m = 0; m < a->M; ++m)
+     sampleC(a);
+  
   printChain(a);
   
   freeConfig(cfg);

@@ -34,4 +34,13 @@ num_t normalHost(num_t, num_t);
 num_t gammaHost(num_t, num_t, num_t);
 num_t betaHost(num_t, num_t);
 
+void lC_kernel1(Chain*, int);
+void lC_kernel2(Chain*, int);
+void lC_kernel3(Chain*, int, int);
+void lC(Chain*, int, int);
+void sampleC_kernel1(Chain*);
+void sampleC_kernel2(Chain*);
+void sampleC_kernel3(Chain*);
+void sampleC(Chain*);
+
 #endif /* FUNCTIONS_H */

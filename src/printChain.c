@@ -20,38 +20,38 @@ void printChain(Chain *a){
   pf1(a->yMeanG, a->N, "yMeanG =\n");
   pi1(a->grp, a->N, "grp =\n");
   
-  printf("sigC0   = %0.3f\n", a->sigC0);
-  printf("d0      = %0.3f\n", a->d0);
-  printf("aTau    = %0.3f\n", a->aTau);
-  printf("aAlp    = %0.3f\n", a->aAlp);
-  printf("aDel    = %0.3f\n", a->aDel);
-  printf("bTau    = %0.3f\n", a->bTau);
-  printf("bAlp    = %0.3f\n", a->bAlp);
-  printf("bDel    = %0.3f\n", a->bDel);  
-  printf("gamPhi  = %0.3f\n", a->gamPhi);
-  printf("gamAlp  = %0.3f\n", a->gamAlp);
-  printf("gamDel  = %0.3f\n", a->gamDel);
-  printf("sigPhi0 = %0.3f\n", a->sigPhi0);
-  printf("sigAlp0 = %0.3f\n", a->sigAlp0);
-  printf("sigDel0 = %0.3f\n\n", a->sigDel0);
+  printf("sigC0   = "); printf(NUM_TF, a->sigC0); printf("\n");
+  printf("d0      = "); printf(NUM_TF, a->d0); printf("\n");
+  printf("aTau    = "); printf(NUM_TF, a->aTau); printf("\n");
+  printf("aAlp    = "); printf(NUM_TF, a->aAlp); printf("\n");
+  printf("aDel    = "); printf(NUM_TF, a->aDel); printf("\n");
+  printf("bTau    = "); printf(NUM_TF, a->bTau); printf("\n");
+  printf("bAlp    = "); printf(NUM_TF, a->bAlp); printf("\n");
+  printf("bDel    = "); printf(NUM_TF, a->bDel); printf("\n");
+  printf("gamPhi  = "); printf(NUM_TF, a->gamPhi); printf("\n");
+  printf("gamAlp  = "); printf(NUM_TF, a->gamAlp); printf("\n");
+  printf("gamDel  = "); printf(NUM_TF, a->gamDel); printf("\n");
+  printf("sigPhi0 = "); printf(NUM_TF, a->sigPhi0); printf("\n");
+  printf("sigAlp0 = "); printf(NUM_TF, a->sigAlp0); printf("\n");
+  printf("sigDel0 = "); printf(NUM_TF, a->sigDel0); printf("\n\n");
   
-  pf2(a->c, a->M, a->N, "c =\n");
-  pf1(a->sigC, a->M, "sigC =\n");
-  pf3(a->eps, a->M, a->N, a->G, "eps =\n");
-  pf2(a->eta, a->M, a->N, "eta =\n");
-  pf1(a->d, a->M, "d =\n");
-  pf1(a->tau, a->M, "tau =\n");
-  pf2(a->phi, a->M, a->G, "phi =\n");
-  pf2(a->alp, a->M, a->G, "alp =\n");
-  pf2(a->del, a->M, a->G, "del =\n");
-  pf1(a->thePhi, a->M, "thePhi =\n");
-  pf1(a->theAlp, a->M, "theAlp =\n");
-  pf1(a->theDel, a->M, "theDel =\n");
-  pf1(a->sigPhi, a->M, "sigPhi =\n");
-  pf1(a->sigAlp, a->M, "sigAlp =\n");
-  pf1(a->sigDel, a->M, "sigDel =\n");
-  pf1(a->piAlp, a->M, "piAlp =\n");
-  pf1(a->piDel, a->M, "piDel =\n");
+  pf2(a->c, a->M + 1, a->N, "c =\n");
+  pf1(a->sigC, a->M + 1, "sigC =\n");
+  pf3(a->eps, a->M + 1, a->N, a->G, "eps =\n");
+  pf2(a->eta, a->M + 1, a->N, "eta =\n");
+  pf1(a->d, a->M + 1, "d =\n");
+  pf1(a->tau, a->M + 1, "tau =\n");
+  pf2(a->phi, a->M + 1, a->G, "phi =\n");
+  pf2(a->alp, a->M + 1, a->G, "alp =\n");
+  pf2(a->del, a->M + 1, a->G, "del =\n");
+  pf1(a->thePhi, a->M + 1, "thePhi =\n");
+  pf1(a->theAlp, a->M + 1, "theAlp =\n");
+  pf1(a->theDel, a->M + 1, "theDel =\n");
+  pf1(a->sigPhi, a->M + 1, "sigPhi =\n");
+  pf1(a->sigAlp, a->M + 1, "sigAlp =\n");
+  pf1(a->sigDel, a->M + 1, "sigDel =\n");
+  pf1(a->piAlp, a->M + 1, "piAlp =\n");
+  pf1(a->piDel, a->M + 1, "piDel =\n");
   
   printf("mC      = %d\n", a->mC);
   printf("mSigC   = %d\n", a->mSigC);
@@ -70,7 +70,7 @@ void printChain(Chain *a){
   printf("mSigDel = %d\n", a->mSigDel);
   printf("mPiDel  = %d\n\n", a->mPiDel);
   
-  printf("tuneD = %0.3f\n", a->tuneD);
+  printf("tuneD = "); printf(NUM_TF, a->tuneD); printf("\n");
   pf1(a->tuneC, a->N, "tuneC =\n");
   pf1(a->tunePhi, a->G, "tunePhi =\n");
   pf2(a->tuneEps, a->N, a->G, "tuneEps =\n");
@@ -82,8 +82,8 @@ void printChain(Chain *a){
   pi1(a->accDel, a->G, "accDel =\n");
   pi2(a->accEps, a->N, a->G, "accEps =\n");
     
-  printf("shape = %0.3f\n", a->shape);
-  printf("rate = %0.3f\n\n", a->rate);
+  printf("shape = "); printf(NUM_TF, a->shape); printf("\n");
+  printf("rate = "); printf(NUM_TF, a->rate); printf("\n\n");
   
   pf1(a->tmp1, a->G, "tmp1 =\n");
   pf1(a->tmp1, a->G, "tmp2 =\n");

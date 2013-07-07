@@ -10,7 +10,7 @@ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-void newChainHost_kernel1(Chain *a){
+void newChainHost_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g;
   num_t u;
 
@@ -39,7 +39,7 @@ void newChainHost_kernel1(Chain *a){
   }
 }
 
-void newChainHost_kernel2(Chain *a){
+void newChainHost_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g;
 
   a->mC = 0;
@@ -93,7 +93,7 @@ void newChainHost_kernel2(Chain *a){
   }
 }
 
-Chain *newChainHost(Config *cfg){
+Chain *newChainHost(Config *cfg){ /* host */
   int n, g, *grp;
   count_t **y;
   num_t *lqts, s = 0, tmp, *tmpv;

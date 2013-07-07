@@ -13,9 +13,10 @@ void pi1(int *v, int l, const char* m){
 void pf1(num_t *v, int l, const char* m){
   int i;
   printf("%s", m);
-  for(i = 0; i < l; ++i)
+  for(i = 0; i < l; ++i){
     printf(NUM_TF, v[i]);
     printf(" ");
+  }
   printf("\n\n"); 
 }
 
