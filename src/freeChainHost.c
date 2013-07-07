@@ -1,7 +1,6 @@
 #include <Chain.h>
 #include <Config.h>
 #include <functions.h>
-#include <numericTypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 

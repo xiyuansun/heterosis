@@ -1,6 +1,5 @@
 #include <Config.h>
 #include <functions.h>
-#include <numericTypes.h>
 #include <stdlib.h>
 
 void freeConfig(Config *cfg){

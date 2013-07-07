@@ -1,6 +1,6 @@
 #include <functions.h>
+#include <constants.h>
 #include <math.h>
-#include <numericTypes.h>
 #include <stdlib.h>
 
 num_t betaHost(num_t a, num_t b){

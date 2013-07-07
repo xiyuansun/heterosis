@@ -3,14 +3,14 @@
 
 #include <Chain.h>
 #include <Config.h>
-#include <numericTypes.h>
+#include <constants.h>
 
 void pi1(int*, int, const char*);
-void pf1(float*, int, const char*);
+void pf1(num_t*, int, const char*);
 void pi2(int**, int, int, const char*);
-void pf2(float**, int, int, const char*);
+void pf2(num_t**, int, int, const char*);
 void pi3(int***, int, int, int, const char*);
-void pf3(float***, int, int, int, const char*);
+void pf3(num_t***, int, int, int, const char*);
 
 Config *config(int, char**);
 void getopts(Config*, int, char**);
@@ -28,6 +28,7 @@ void newChainHost_kernel2(Chain*);
 void printChain(Chain*);
 void freeChainHost(Chain*, Config*);
 
+num_t mu(Chain*, int, num_t, num_t, num_t);
 num_t uniformHost(num_t, num_t);
 num_t normalHost(num_t, num_t);
 num_t gammaHost(num_t, num_t, num_t);

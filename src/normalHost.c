@@ -1,6 +1,6 @@
+#include <constants.h>
 #include <functions.h>
 #include <math.h>
-#include <numericTypes.h>
 #include <stdlib.h>
 
 num_t normalHost(num_t m, num_t s){

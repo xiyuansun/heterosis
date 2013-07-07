@@ -2,7 +2,6 @@
 #define CONFIG_H
 
 #include <constants.h>
-#include <numericTypes.h>
 
 typedef struct {
 

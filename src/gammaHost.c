@@ -1,6 +1,6 @@
 #include <functions.h>
+#include <constants.h>
 #include <math.h>
-#include <numericTypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 

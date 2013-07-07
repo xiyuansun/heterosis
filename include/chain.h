@@ -1,7 +1,7 @@
 #ifndef CHAIN_H
 #define CHAIN_H
 
-#include <numericTypes.h>
+#include <constants.h>
 
 typedef struct {
 
