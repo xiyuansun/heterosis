@@ -22,9 +22,9 @@ int *readGrp(Config*);
 count_t **readData(Config*);
 
 Chain *allocChainHost(Config*);
+Chain *newChainHost(Config*);
 void newChainHost_kernel1(Chain*);
 void newChainHost_kernel2(Chain*);
-Chain *newChainHost(Config*);
 void printChain(Chain*);
 void freeChainHost(Chain*, Config*);
 

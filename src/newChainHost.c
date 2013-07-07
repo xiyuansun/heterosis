@@ -104,5 +104,8 @@ Chain *newChainHost(Config *cfg){
   for(n = 0; n < cfg->N; ++n)
     a->c[0][n] = lqts[n] - s;
   
+  newChainHost_kernel1(a);
+  newChainHost_kernel2(a);
+    
   return a;
 }
