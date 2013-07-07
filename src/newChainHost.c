@@ -17,7 +17,19 @@ Chain *newChainHost(Config *cfg){
   Chain *a;
 
   y = readData(cfg);
+  
+  if(y == NULL)
+    return NULL;
+
   grp = readGrp(cfg);
+  
+  if(grp == NULL){
+    for(n = 0; n < cfg->N; ++n)
+      free(y[n]);
+    free(y);
+    
+    return NULL;
+  }
 
   a = allocChainHost(cfg);
 
@@ -28,7 +40,8 @@ Chain *newChainHost(Config *cfg){
   a->G = cfg->G;
   a->burnin = cfg->burnin;
   a->heterosis = cfg->heterosis;
-  a->parmsFlag = cfg->parmsFlag;
+  a->someParmsFlag = cfg->someParmsFlag;
+  a->allParmsFlag = cfg->allParmsFlag;
   
   for(n = 0; n < cfg->N; ++n){
     a->grp[n] = grp[n];
@@ -38,13 +51,10 @@ Chain *newChainHost(Config *cfg){
       a->y[n][g] = y[n][g];
       tmp += y[n][g];
     }
-          
-    
+           
     a->yMeanG[n] = tmp / cfg->G;
   }
-  
-
-  
+    
   /* initialization constants */
   
   a->sigC0   = cfg->sigC0;
@@ -84,7 +94,7 @@ Chain *newChainHost(Config *cfg){
     for(g = 0; g < cfg->G; ++g)
       tmpv[g] = y[n][g];
       
-    qsort(tmpv, cfg->N, sizeof(num_t), cmpfunc);
+    qsort(tmpv, cfg->N, sizeof(num_t), cmpfunc);    
     lqts[n] = log(tmpv[(int) floor(cfg->G * 0.75)]);
     s += lqts[n];
   }

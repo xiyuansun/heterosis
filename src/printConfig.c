@@ -10,12 +10,14 @@ void printConfig(Config *cfg){
   printf("probsFile = %s\n", cfg->probsFile);
   printf("ratesFile = %s\n", cfg->ratesFile);
   printf("hyperFile = %s\n", cfg->hyperFile);
-  printf("parmsFile = %s\n\n", cfg->parmsFile);
+  printf("someParmsFile = %s\n", cfg->someParmsFile);
+  printf("allParmsFile = %s\n\n", cfg->allParmsFile);
 
   printf("probsFlag = %d\n", cfg->probsFlag);
   printf("ratesFlag = %d\n", cfg->ratesFlag);
   printf("hyperFlag = %d\n", cfg->hyperFlag);
-  printf("parmsFlag = %d\n\n", cfg->parmsFlag);
+  printf("someParmsFlag = %d\n", cfg->someParmsFlag);
+  printf("allParmsFlag = %d\n\n", cfg->allParmsFlag);  
   
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);

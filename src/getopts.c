@@ -18,7 +18,8 @@ void getopts(Config *cfg, int argc, char **argv){
     {"probs", required_argument, 0, 'o'},
     {"rates", required_argument, 0, 'r'},  
     {"hyper", required_argument, 0, 'h'},
-    {"parms", required_argument, 0, 'p'},
+    {"some-parms", required_argument, 0, 'p'},
+    {"all-parms", required_argument, 0, 'a'},
     {"joint", no_argument, 0, 'j'},  
     {"seed", required_argument, 0, 's'},  
     {"sigma-c0", required_argument, 0, 'x'},
@@ -27,7 +28,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"a-alpha", required_argument, 0, 'l'},
     {"a-delta", required_argument, 0, '9'},  
     {"b-tau", required_argument, 0, 'n'},
-    {"b-alpha", required_argument, 0, 'a'},
+    {"b-alpha", required_argument, 0, 'A'},
     {"b-delta", required_argument, 0, 'c'},
     {"gamma-phi", required_argument, 0, 'q'},
     {"gamma-alpha", required_argument, 0, 'e'},  
@@ -53,7 +54,7 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "a:b:c:d:e:f:g:h:i:jk:l:m:M:n:o:p:q:r:s:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
+        "A:a:b:c:d:e:f:g:h:i:jk:l:m:M:n:o:p:q:r:s:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
         long_options, &option_index);
     
     if(c == -1)
@@ -83,9 +84,13 @@ void getopts(Config *cfg, int argc, char **argv){
       strcpy(cfg->hyperFile, optarg);
       cfg->hyperFlag = 1;
     
-    } else if(c == 'p') { /* parms */
-      strcpy(cfg->parmsFile, optarg);
-      cfg->parmsFlag = 1;
+    } else if(c == 'p') { /* some-parms */
+      strcpy(cfg->someParmsFile, optarg);
+      cfg->someParmsFlag = 1;
+    
+    } else if(c == 'a') { /* all-parms */
+      strcpy(cfg->allParmsFile, optarg);
+      cfg->allParmsFlag = 1;
     
     } else if(c == 'j') { /* joint */
       cfg->joint = 1;
@@ -111,7 +116,7 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'n') { /* b-tau */
       cfg->bTau = atoi(optarg);
     
-    } else if(c == 'a') { /* b-alpha */
+    } else if(c == 'A') { /* b-alpha */
       cfg->bAlp = atoi(optarg);
           
     } else if(c == 'c') { /* b-delta */

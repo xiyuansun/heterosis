@@ -7,7 +7,16 @@
 
 int main(int argc, char **argv){
   Config *cfg = config(argc, argv);
+  
   Chain *a = newChainHost(cfg);
+  if(a == NULL){
+    freeConfig(cfg);
+    exit(EXIT_FAILURE);
+  }
+  
+  printConfig(cfg);
+  
+  printf("\n-----\n");
   printChain(a);
   
   freeConfig(cfg);

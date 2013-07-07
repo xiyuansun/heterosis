@@ -10,6 +10,11 @@ void printChain(Chain *a){
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
   printf("G = %d\n\n", a->G);  
+  
+  printf("burnin = %d\n", a->burnin);
+  printf("heterosis = %d\n", a->heterosis);
+  printf("someParmsFlag = %d\n", a->someParmsFlag);
+  printf("allParmsFlag = %d\n\n", a->allParmsFlag); 
 
   pi2(a->y, a->N, a->G, "y = \n");
   pf1(a->yMeanG, a->N, "yMeanG =\n");

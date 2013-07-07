@@ -15,8 +15,9 @@ Config *config(int argc, char **argv){
   cfg->probsFile = malloc(BUF * sizeof(char));  
   cfg->hyperFile = malloc(BUF * sizeof(char));
   cfg->ratesFile = malloc(BUF * sizeof(char));
-  cfg->parmsFile = malloc(BUF * sizeof(char));
-        
+  cfg->someParmsFile = malloc(BUF * sizeof(char));
+  cfg->allParmsFile = malloc(BUF * sizeof(char));
+          
   /* default filenames */ 
         
   strcpy(cfg->dataFile, "../data/data.txt"); 
@@ -24,12 +25,14 @@ Config *config(int argc, char **argv){
   strcpy(cfg->probsFile, "../out/probs.txt");
   strcpy(cfg->ratesFile, "../out/acceptance-rates.txt");
   strcpy(cfg->hyperFile, "../out/hyperparameters.txt");
-  strcpy(cfg->parmsFile, "../out/example-parameters.txt");        
+  strcpy(cfg->someParmsFile, "../out/example-parameters.txt");        
+  strcpy(cfg->allParmsFile, "../out/all-parameters.txt");
 
   cfg->probsFlag = 0;
   cfg->ratesFlag = 0;
   cfg->hyperFlag = 0;
-  cfg->parmsFlag = 0;
+  cfg->someParmsFlag = 0;
+  cfg->allParmsFlag = 0;
 
   cfg->M = 10;  
   cfg->burnin = cfg->M / 2;

@@ -8,11 +8,18 @@ int *readGrp(Config *cfg){
   FILE *fp;
 
   if(cfg->N < 2){
-    printf("ERROR: bad experimental design.");
+    printf("ERROR: bad experimental design.\n");
     exit(EXIT_FAILURE);
   }
   
   fp = fopen(cfg->groupFile, "r");
+  
+  if(fp == NULL){
+    printf("ERROR: group file \"%s\" not found.\n", cfg->groupFile);
+    fclose(fp);
+    return NULL;
+  }
+  
   grp = malloc(cfg->N * sizeof(int));
   unique = malloc(cfg->N * sizeof(int));
   

@@ -11,12 +11,14 @@ typedef struct {
   char *probsFile; /* main output: diff expression / heterosis probabilities */
   char *ratesFile; /* optional output: acceptance rates of Metropolis steps */
   char *hyperFile; /* optional output: hyperparameters */
-  char *parmsFile; /* optional output: example parameters */
+  char *someParmsFile; /* optional output: example parameters */
+  char *allParmsFile; /* optional output: all parameters */
 
-  int probsFlag; /* indicate choice to output probs of diff expression / heterosis */
-  int ratesFlag; /* indicate choice to output acceptance rates */
-  int hyperFlag; /* indicate choice to output hyperparameters */
-  int parmsFlag; /* indicate choice to output example parameters */
+  int probsFlag; /* choice to output probs of diff expression / heterosis */
+  int ratesFlag; /* choice to output acceptance rates */
+  int hyperFlag; /* choice to output hyperparameters */
+  int someParmsFlag; /* choice to output parameters for first few genes and samples */
+  int allParmsFlag; /* choice to output all parameters */
    
   int burnin; /* burn-in of chain. Defaults to M/2. */
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */

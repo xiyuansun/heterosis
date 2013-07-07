@@ -9,6 +9,7 @@ void freeConfig(Config *cfg){
   free(cfg->probsFile);
   free(cfg->ratesFile);
   free(cfg->hyperFile);
-  free(cfg->parmsFile);
+  free(cfg->someParmsFile);
+  free(cfg->allParmsFile);
   free(cfg);
 }
