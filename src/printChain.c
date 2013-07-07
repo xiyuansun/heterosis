@@ -55,6 +55,7 @@ void printChain(Chain *a){
   
   printf("mC      = %d\n", a->mC);
   printf("mSigC   = %d\n", a->mSigC);
+  printf("mEps    = %d\n", a->mEps);
   printf("mEta    = %d\n", a->mEta);
   printf("mD      = %d\n", a->mD);
   printf("mTau    = %d\n", a->mTau);
@@ -84,6 +85,9 @@ void printChain(Chain *a){
     
   printf("shape = "); printf(NUM_TF, a->shape); printf("\n");
   printf("rate = "); printf(NUM_TF, a->rate); printf("\n\n");
+    
+  printf("s1 = "); printf(NUM_TF, a->s1); printf("\n");
+  printf("s2 = "); printf(NUM_TF, a->s2); printf("\n\n");
   
   pf1(a->tmp1, a->G, "tmp1 =\n");
   pf1(a->tmp1, a->G, "tmp2 =\n");

@@ -20,8 +20,11 @@ int main(int argc, char **argv){
   
    printf("\n-----\n");
    
-   for(m = 0; m < a->M; ++m)
+   for(m = 0; m < a->M; ++m){
      sampleC(a);
+     sampleEps(a);
+     sampleD(a);
+   }
   
   printChain(a);
   

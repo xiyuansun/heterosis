@@ -43,4 +43,17 @@ void sampleC_kernel2(Chain*);
 void sampleC_kernel3(Chain*);
 void sampleC(Chain*);
 
+num_t lEps(Chain *, int, int, num_t);
+void sampleEps_kernel1(Chain*);
+void sampleEps_kernel2(Chain*);
+void sampleEps(Chain*);
+
+void lD_kernel1(Chain*);
+void lD_kernel2(Chain*);
+void lD_kernel3(Chain*);
+void lD_kernel4(Chain*, int);
+void lD(Chain*, int);
+void sampleD_kernel1(Chain*);
+void sampleD_kernel2(Chain*);
+void sampleD(Chain*);
 #endif /* FUNCTIONS_H */

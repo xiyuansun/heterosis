@@ -63,6 +63,9 @@ typedef struct {
   num_t shape;
   num_t rate;
   
+  num_t s1;
+  num_t s2;
+  
   num_t *tmp1;
   num_t *tmp2;
   
