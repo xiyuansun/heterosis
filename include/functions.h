@@ -143,6 +143,6 @@ void printProbs(Chain*, Config*);
 void printRates(Chain*, Config*);
 void printHyper(Chain*, Config*);
 void printParms(Chain*, Config*);
-void summarizechain(Chain*, Config*);
+void summarizeChain(Chain*, Config*);
 
 #endif /* FUNCTIONS_H */

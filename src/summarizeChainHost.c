@@ -1,9 +1,10 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <functions.h>
 #include <Summary.h>
 #include <stdio.h>
-#include <stlib.h>
+#include <stdlib.h>
 
 void summarizeChain(Chain *a, Config *cfg){
   printProbs(a, cfg);

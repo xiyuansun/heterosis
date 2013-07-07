@@ -3,26 +3,36 @@
 #include <constants.h>
 #include <Summary.h>
 #include <stdio.h>
-#include <stlib.h>
+#include <stdlib.h>
 
 void printRates(Chain *a, Config *cfg){
 
-  int m, n, g, i, nlibs, ngenes, niter = cfg->M - cfg->burnin;
-  num_t tmp, phi, alp, del, alp2, delp2;
-  num_t prob_de, prob_hph, prob_lph, prob_mph;
-  num_t accD, accC, accPhi, accAlp, accDel, acceps;
+  int g, i, niter = cfg->M - cfg->burnin;
+  num_t accD, accC, accPhi, accAlp, accDel, accEps;
   FILE *fp;
 
   if(cfg->ratesFlag){
     fp = fopen(cfg->ratesFile, "w");    
     fprintf(fp, "d c phi alp del meanEps\n");
     
-    accD   = a->accD;
-    accC   = a->accC[0];
-    accPhi = a->accPhi[0];
-    accAlp = a->accAlp[0];
-    accDel = a->accDel[0];
-    accEps = a->accEps[0];
+    accD    = a->accD;
+    accD   /= niter;
+    
+    accC    = a->accC[0];
+    accC   /= niter;
+    
+    accPhi  = a->accPhi[0];
+    accPhi /= niter;
+
+    accAlp  = a->accAlp[0];
+    accAlp /= niter;
+    
+    accDel  = a->accDel[0];
+    accDel /= niter;
+  
+    accEps = 0;  
+    for(g = 0; g < cfg->G; ++g)
+      accEps += a->accEps[0][g];
     
     fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
     fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");
@@ -32,27 +42,46 @@ void printRates(Chain *a, Config *cfg){
     fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
 
     for(i = 0; i < cfg->N; ++i){
-      accC   = a->accC[i];
-      accPhi = a->accPhi[i];
-      accAlp = a->accAlp[i];
-      accDel = a->accDel[i];
-      accEps = a->accEps[i];
+    
+      accC    = a->accC[i];
+      accC   /= niter;
+    
+      accPhi  = a->accPhi[i];
+      accPhi /= niter;
+
+      accAlp  = a->accAlp[i];
+      accAlp /= niter;
+    
+      accDel  = a->accDel[i];
+      accDel /= niter;
+  
+      accEps = 0;  
+      for(g = 0; g < cfg->G; ++g)
+        accEps += a->accEps[i][g];
       
-      fprintf(fp, fprintf(fp, ". ");
+      fprintf(fp, ". ");
       fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");
       fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");, 
+      fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
     }
     
     for(i = cfg->N; i < cfg->G; ++i){
-      accPhi = a->accPhi[i];
-      accAlp = a->accAlp[i];
-      accDel = a->accDel[i];
-      accEps = a->accEps[i];
+      accPhi  = a->accPhi[i];
+      accPhi /= niter;
+
+      accAlp  = a->accAlp[i];
+      accAlp /= niter;
+    
+      accDel  = a->accDel[i];
+      accDel /= niter;
+  
+      accEps = 0;  
+      for(g = 0; g < cfg->G; ++g)
+        accEps += a->accEps[i][g];
       
-      fprintf(fp, fprintf(fp, ". . ");
+      fprintf(fp, ". . ");
       fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
       fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
