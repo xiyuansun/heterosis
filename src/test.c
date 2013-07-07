@@ -1,3 +1,4 @@
+#include <Chain.h>
 #include <Config.h>
 #include <constants.h>
 #include <functions.h>
@@ -23,21 +24,19 @@ int main(int argc, char **argv){
    for(m = 0; m < a->M; ++m){
      sampleC(a);
      sampleEps(a);
-     sampleD(a);
-     samplePhi(a);
-     sampleAlp(a);
-     sampleDel(a);
+     sampleD(a, cfg);
+     samplePhiAlpDel(a, cfg);
      sampleSigC(a);
      sampleEta(a);
-     sampleTau(a);
-     sampleThePhi(a);
-     sampleTheAlp(a);
-     sampleTheDel(a);
-     sampleSigPhi(a);
-     sampleSigAlp(a);
-     sampleSigDel(a);
-     samplePiAlp(a);
-     samplePiDel(a);
+     sampleTau(a, cfg);
+     sampleThePhi(a, cfg);
+     sampleTheAlp(a, cfg);
+     sampleTheDel(a, cfg);
+     sampleSigPhi(a, cfg);
+     sampleSigAlp(a, cfg);
+     sampleSigDel(a, cfg);
+     samplePiAlp(a, cfg);
+     samplePiDel(a, cfg);
    }
   
   printChain(a);

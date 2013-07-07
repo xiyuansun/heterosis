@@ -95,5 +95,17 @@ void printChain(Chain *a){
   pf2(a->Old, a->N, a->G, "Old =\n");
   pf2(a->New, a->N, a->G, "New =\n");
   pf2(a->lOld, a->N, a->G, "lOld =\n");
-  pf2(a->lNew, a->N, a->G, "lNew =\n");
+  pf2(a->lNew, a->N, a->G, "lNew =\n\n");
+  
+  printf("constSigC = %d\n", a->constSigC);
+  printf("constD = %d\n", a->constD);
+  printf("constTau = %d\n", a->constTau);
+  printf("constThePhi = %d\n", a->constThePhi);
+  printf("constTheAlp = %d\n", a->constTheAlp);
+  printf("constTheDel = %d\n", a->constTheDel);
+  printf("constSigPhi = %d\n", a->constSigPhi);
+  printf("constSigAlp = %d\n", a->constSigAlp);
+  printf("constSigDel = %d\n", a->constSigDel);
+  printf("constPiAlp = %d\n", a->constPiAlp);
+  printf("constPiDel = %d\n", a->constPiDel);
 }

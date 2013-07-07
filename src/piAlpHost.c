@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -31,7 +32,10 @@ void samplePiAlp_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   a->mPiAlp = a->mPiAlp + 1;
 }
 
-void samplePiAlp(Chain *a){ /* host */
+void samplePiAlp(Chain *a, Config *cfg){ /* host */
+  if(cfg->constPiAlp)
+    return;
+
   samplePiAlp_kernel1(a);
   samplePiAlp_kernel2(a);  
   samplePiAlp_kernel3(a);

@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -31,7 +32,10 @@ void samplePiDel_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   a->mPiDel = a->mPiDel + 1;
 }
 
-void samplePiDel(Chain *a){ /* host */
+void samplePiDel(Chain *a, Config *cfg){ /* host */
+  if(cfg->constPiDel)
+    return;
+
   samplePiDel_kernel1(a);
   samplePiDel_kernel2(a);
   samplePiDel_kernel3(a);

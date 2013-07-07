@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -52,7 +53,10 @@ void sampleSigDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
   a->mSigDel = a->mSigDel + 1;
 }
 
-void sampleSigDel(Chain *a){ /* host */
+void sampleSigDel(Chain *a, Config *cfg){ /* host */
+  if(cfg->constSigDel)
+    return;
+
   sampleSigDel_kernel1(a);
   sampleSigDel_kernel2(a);
   sampleSigDel_kernel3(a);

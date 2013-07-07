@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -51,7 +52,10 @@ void sampleTheAlp_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
   a->mTheAlp = a->mTheAlp + 1;
 }
 
-void sampleTheAlp(Chain *a){ /* host */
+void sampleTheAlp(Chain *a, Config *cfg){ /* host */
+  if(cfg->constTheAlp)
+    return;
+
   sampleTheAlp_kernel1(a);
   sampleTheAlp_kernel2(a);
   sampleTheAlp_kernel3(a);

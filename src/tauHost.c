@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -35,7 +36,10 @@ void sampleTau_kernel3(Chain *a){ /* kernel<<<1, 1>>> */
   a->mTau = a->mTau + 1;
 }
 
-void sampleTau(Chain *a){ /* host */
+void sampleTau(Chain *a, Config *cfg){ /* host */
+  if(cfg->constTau)
+    return;
+
   sampleTau_kernel1(a);
   sampleTau_kernel2(a);
   sampleTau_kernel3(a);

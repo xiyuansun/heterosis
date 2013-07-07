@@ -169,6 +169,20 @@ Chain *newChainHost(Config *cfg){ /* host */
   a->piAlp[0]  = cfg->piAlp;
   a->piDel[0]  = cfg->piDel;
   
+  /* choices to hold hyperparameters constant */
+  
+  a->constSigC   = cfg->constSigC;
+  a->constD      = cfg->constD;
+  a->constTau    = cfg->constTau;
+  a->constThePhi = cfg->constThePhi;
+  a->constTheAlp = cfg->constTheAlp;
+  a->constTheDel = cfg->constTheDel;
+  a->constSigPhi = cfg->constSigPhi;
+  a->constSigAlp = cfg->constSigAlp;
+  a->constSigDel = cfg->constSigDel;
+  a->constPiAlp  = cfg->constPiAlp;
+  a->constPiDel  = cfg->constPiDel;
+  
   lqts = malloc(cfg->N * sizeof(num_t));
   tmpv = malloc(cfg->G * sizeof(num_t));
   

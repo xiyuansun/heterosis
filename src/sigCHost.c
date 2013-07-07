@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -8,6 +9,9 @@
 void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
   int n;
   num_t rate, shape, lb;
+
+  if(a->constSigC)
+    return;
 
   rate = 0;
   for(n = 0; n < a->N; ++n) 

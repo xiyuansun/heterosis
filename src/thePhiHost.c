@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -25,7 +26,10 @@ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->mThePhi = a->mThePhi + 1;
 }
 
-void sampleThePhi(Chain *a){ /* host */
+void sampleThePhi(Chain *a, Config *cfg){ /* host */
+  if(cfg->constThePhi)
+    return;
+
   sampleThePhi_kernel1(a);
   sampleThePhi_kernel2(a);
 }

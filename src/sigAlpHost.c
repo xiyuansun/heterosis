@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -53,7 +54,10 @@ void sampleSigAlp_kernel4(Chain *a){ /* parallel pairwise sum in Thrust */
   a->mSigAlp = a->mSigAlp + 1;
 }
 
-void sampleSigAlp(Chain *a){ /* host */
+void sampleSigAlp(Chain *a, Config *cfg){ /* host */
+  if(cfg->constSigAlp)
+    return;
+
   sampleSigAlp_kernel1(a);
   sampleSigAlp_kernel2(a);
   sampleSigAlp_kernel3(a);

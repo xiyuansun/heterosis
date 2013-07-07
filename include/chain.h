@@ -114,6 +114,20 @@ typedef struct {
   int *accPhi;
   int *accAlp;
   int *accDel;
+  
+  /* indicate choices to hold each hyperparameter constant */
+  
+  int constSigC;
+  int constD;
+  int constTau;
+  int constThePhi;
+  int constTheAlp;
+  int constTheDel;
+  int constSigPhi;
+  int constSigAlp;
+  int constSigDel;
+  int constPiAlp;
+  int constPiDel;
 
 } Chain;
 

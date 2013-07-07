@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -35,7 +36,10 @@ void sampleSigPhi_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   a->mSigPhi = a->mSigPhi + 1;
 }
 
-void sampleSigPhi(Chain *a){ /* host */
+void sampleSigPhi(Chain *a, Config *cfg){ /* host */
+  if(cfg->constSigPhi)
+    return;
+
   sampleSigPhi_kernel1(a);
   sampleSigPhi_kernel2(a);
   sampleSigPhi_kernel3(a);

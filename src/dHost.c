@@ -1,4 +1,5 @@
 #include <Chain.h>
+#include <Config.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
@@ -94,8 +95,10 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->mD = a->mD + 1;
 }
 
-void sampleD(Chain *a){ 
-
+void sampleD(Chain *a, Config *cfg){ /* host */
+  if(cfg->constD)
+    return;
+   
   sampleD_kernel1(a);
 
   lD(a, 1);

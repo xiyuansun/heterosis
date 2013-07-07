@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-num_t lPhiAlpDel(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
+num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
  
   int n;
   num_t ret, s = 0, tmp = 0;
@@ -40,7 +40,7 @@ num_t lPhiAlpDel(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* 
   return ret + tmp;
 }
 
-void samplePhiAlpDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
   num_t oldPhi, newPhi, oldAlp, newAlp, oldDel, newDel;
   num_t dl, lp, lu;
@@ -56,8 +56,8 @@ void samplePhiAlpDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     oldDel = a->del[a->mDel][g];
     newDel = delProp(a, g);
 
-    dl = lPhiAlpDel(a, g, newPhi, newAlp, newDel) 
-       - lPhiAlpDel(a, g, oldPhi, oldAlp, oldDel);
+    dl = lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
+       - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel);
     lp = 0 < dl ? 0 : dl;
     lu = log(uniformHost(0, 1));
     
@@ -81,13 +81,13 @@ void samplePhiAlpDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void samplePhiAlpDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
+void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->mPhi = a->mPhi + 1;
   a->mAlp = a->mAlp + 1;
   a->mDel = a->mDel + 1;
 }
 
-void samplePhiAlpDel(Chain *a){ /* host */
-  samplePhiAlpDel_kernel1(a);
-  samplePhiAlpDel_kernel2(a);
+void samplePhiAlpDelJoint(Chain *a){ /* host */
+  samplePhiAlpDelJoint_kernel1(a);
+  samplePhiAlpDelJoint_kernel2(a);
 }
