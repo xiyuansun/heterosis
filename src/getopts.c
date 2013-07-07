@@ -98,90 +98,95 @@ void getopts(Config *cfg, int argc, char **argv){
       cfg->seed = atoi(optarg);
     
     } else if(c == 'x') { /* sigma-c0 */
-      cfg->sigC0 = atoi(optarg);
+      cfg->sigC0 = atof(optarg);
     
     } else if(c == 'f') { /* d0 */
-      cfg->d0 = atoi(optarg);
+      cfg->d0 = atof(optarg);
     
     } else if(c == 'k') { /* a-tau */
-      cfg->aTau = atoi(optarg);
+      cfg->aTau = atof(optarg);
     
     } else if(c == 'l') { /* a-alpha */
-      cfg->aAlp = atoi(optarg);
+      cfg->aAlp = atof(optarg);
     
     } else if(c == '9') { /* a-delta */
-      cfg->aDel = atoi(optarg);
+      cfg->aDel = atof(optarg);
     
     } else if(c == 'n') { /* b-tau */
-      cfg->bTau = atoi(optarg);
+      cfg->bTau = atof(optarg);
     
     } else if(c == 'A') { /* b-alpha */
-      cfg->bAlp = atoi(optarg);
+      cfg->bAlp = atof(optarg);
           
     } else if(c == 'c') { /* b-delta */
-      cfg->bDel = atoi(optarg);    
+      cfg->bDel = atof(optarg);    
     
     } else if(c == 'q') { /* gamma-phi */
-      cfg->gamPhi = atoi(optarg);    
+      cfg->gamPhi = atof(optarg);    
 
     } else if(c == 'e') { /* gamma-alpha */
-      cfg->gamAlp = atoi(optarg);
+      cfg->gamAlp = atof(optarg);
     
     } else if(c == '8') { /* gamma-delta */
-      cfg->gamDel = atoi(optarg);
+      cfg->gamDel = atof(optarg);
     
     } else if(c == 't') { /* sigma-phi0 */
-      cfg->sigPhi0 = atoi(optarg);
+      cfg->sigPhi0 = atof(optarg);
     
     } else if(c == 'u') { /* sigma-alpha0 */
-      cfg->sigAlp0 = atoi(optarg);
+      cfg->sigAlp0 = atof(optarg);
     
     } else if(c == 'v') { /* sigma-delta0 */
-      cfg->sigDel0 = atoi(optarg);
+      cfg->sigDel0 = atof(optarg);
     
     } else if(c == 'w') { /* sigma-c */
-      cfg->sigC = atoi(optarg);
+      cfg->sigC = atof(optarg);
       cfg->constSigC = 1;
     
     } else if(c == 'd') { /* d */
-      cfg->d = atoi(optarg);
+      cfg->d = atof(optarg);
       cfg->constD = 1;
     
     } else if(c == 'y') { /* tau */
-      cfg->tau = atoi(optarg);
+      cfg->tau = atof(optarg);
       cfg->constTau = 1;
          
     } else if(c == 'z') { /* theta-phi */
-      cfg->thePhi = atoi(optarg);
+      cfg->thePhi = atof(optarg);
       cfg->constThePhi = 1;
     
     } else if(c == '1') { /* theta-alpha */
-      cfg->theAlp = atoi(optarg);
+      cfg->theAlp = atof(optarg);
       cfg->constTheAlp = 1;
     
     } else if(c == '2') { /* theta-delta */
-      cfg->theDel = atoi(optarg);
+      cfg->theDel = atof(optarg);
       cfg->constTheDel = 1;
     
     } else if(c == '3') { /* sigma-phi */
-      cfg->sigPhi = atoi(optarg);
+      cfg->sigPhi = atof(optarg);
       cfg->constSigPhi = 1;
     
     } else if(c == '4') { /* sigma-alpha */
-      cfg->sigAlp = atoi(optarg);
+      cfg->sigAlp = atof(optarg);
       cfg->constSigAlp = 1;
     
     } else if(c == '5') { /* sigma-delta */
-      cfg->sigDel = atoi(optarg);
+      cfg->sigDel = atof(optarg);
       cfg->constSigDel = 1;
     
     } else if(c == '6') { /* pi-alpha */
-      cfg->piAlp = atoi(optarg);
+      cfg->piAlp = atof(optarg);
       cfg->constPiAlp = 1;
     
     } else if(c == '7') { /* pi-delta */
-      cfg->piDel = atoi(optarg);
+      cfg->piDel = atof(optarg);
       cfg->constPiDel = 1;
+    
+    } else { /* error */
+      printf("Argument error. See usage.\n");
+      free(cfg);
+      exit(EXIT_FAILURE);
     
     }
   }

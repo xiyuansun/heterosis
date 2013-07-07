@@ -23,7 +23,7 @@ num_t gammaHost(num_t shape, num_t rate, num_t lb){
     return(NAN);
   }
 
-  if(shape - 1 < lb * rate){ /* Chung (1998) */
+  if((shape >= 1) && (shape - 1 < lb * rate)){ /* Chung (1998) */
 
     c = lb * rate;
     eps0 = (c - shape + sqrt(pow(c - shape, 2) + 4 * c))/(2 * c);

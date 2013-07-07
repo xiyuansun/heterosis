@@ -69,13 +69,14 @@ Config *config(int argc, char **argv){
   cfg->constPiDel = 0;
   
   getopts(cfg, argc, argv);
+  
   srand(cfg->seed);
     
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.
    *  All the others must be given initial values.
    */
-  
+ 
   if(!cfg->constSigC)
     cfg->sigC = uniformHost(0, cfg->sigC0);
   
@@ -108,8 +109,6 @@ Config *config(int argc, char **argv){
 
   if(!cfg->constPiDel)
     cfg->piDel = betaHost(cfg->aDel, cfg->bDel);
-  
-  printConfig(cfg);
   
   return cfg;
 }

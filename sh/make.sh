@@ -17,7 +17,8 @@ function cpu {
   DEP+=(thePhiHost theAlpHost theDelHost)
   DEP+=(sigPhiHost sigAlpHost sigDelHost)
   DEP+=(piAlpHost piDelHost)
-  DEP+=(runChain test)
+  DEP+=(runChain oneChain)
+  DEP+=(main)
 
   OBJ=()
 
