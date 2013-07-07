@@ -1395,10 +1395,10 @@ sampleTheAlp_kernel4 = function(a){ # kernel <<<1, 1>>>
 
   gs = a$gamAlp^2;
   ss = a$sigAlp[a$mSigAlp]^2;
-  den = (a$s1 * gs + ss);
+  den = a$s1 * gs + ss;
 
   m = gs * a$s2 / den;
-  s = gs * ss / den;
+  s = sqrt(gs * ss / den);
 
   a$theAlp[a$mTheAlp + 1] = sampleNormal(m, s);
   a$mTheAlp = a$mTheAlp + 1;
@@ -1628,21 +1628,29 @@ sampleTheDel_kernel3 = function(a){ # pairwise sum in Thrust
   a
 }
 
-sampleTheDel = function(a){ # host
-
-  a = sampleTheDel_kernel1(a);
-  a = sampleTheDel_kernel2(a);
+sampleTheDel_kernel4 = function(a){ # kernel <<<1, 1>>>
 
   gs = a$gamDel^2;
   ss = a$sigDel[a$mSigDel]^2;
-  den = (a$s1 * gs + ss);
+  den = a$s1 * gs + ss;
 
   m = gs * a$s2 / den;
-  s = gs * ss / den;
+  s = sqrt(gs * ss / den);
 
   a$theDel[a$mTheDel + 1] = sampleNormal(m, s);
   a$mTheDel = a$mTheDel + 1;
-  return(a)
+
+  a
+}
+
+sampleTheDel = function(a){
+  
+  a = sampleTheDel_kernel1(a);
+  a = sampleTheDel_kernel2(a);
+  a = sampleTheDel_kernel3(a);
+  a = sampleTheDel_kernel4(a);
+ 
+  return(a);
 }
 
 

@@ -24,11 +24,18 @@ int main(int argc, char **argv){
      sampleC(a);
      sampleEps(a);
      sampleD(a);
-     samplePhiAlpDel(a);
+     samplePhi(a);
+     sampleAlp(a);
+     sampleDel(a);
      sampleSigC(a);
      sampleEta(a);
      sampleTau(a);
      sampleThePhi(a);
+     sampleTheAlp(a);
+     sampleTheDel(a);
+     sampleSigPhi(a);
+     sampleSigAlp(a);
+     sampleSigDel(a);
    }
   
   printChain(a);

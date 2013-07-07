@@ -95,4 +95,33 @@ void sampleThePhi_kernel1(Chain*);
 void sampleThePhi_kernel2(Chain*);
 void sampleThePhi(Chain*);
 
+void sampleTheAlp_kernel1(Chain*);
+void sampleTheAlp_kernel2(Chain*);
+void sampleTheAlp_kernel3(Chain*);
+void sampleTheAlp_kernel4(Chain*);
+void sampleTheAlp(Chain*);
+
+void sampleTheDel_kernel1(Chain*);
+void sampleTheDel_kernel2(Chain*);
+void sampleTheDel_kernel3(Chain*);
+void sampleTheDel_kernel4(Chain*);
+void sampleTheDel(Chain*);
+
+void sampleSigPhi_kernel1(Chain*);
+void sampleSigPhi_kernel2(Chain*);
+void sampleSigPhi_kernel3(Chain*);
+void sampleSigPhi(Chain*);
+
+void sampleSigAlp_kernel1(Chain*);
+void sampleSigAlp_kernel2(Chain*);
+void sampleSigAlp_kernel3(Chain*);
+void sampleSigAlp_kernel4(Chain*);
+void sampleSigAlp(Chain*);
+
+void sampleSigDel_kernel1(Chain*);
+void sampleSigDel_kernel2(Chain*);
+void sampleSigDel_kernel3(Chain*);
+void sampleSigDel_kernel4(Chain*);
+void sampleSigDel(Chain*);
+
 #endif /* FUNCTIONS_H */

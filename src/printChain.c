@@ -60,15 +60,15 @@ void printChain(Chain *a){
   printf("mD      = %d\n", a->mD);
   printf("mTau    = %d\n", a->mTau);
   printf("mPhi    = %d\n", a->mPhi);
-  printf("mThePhi = %d\n", a->mThePhi);
-  printf("mSigPhi = %d\n", a->mSigPhi);
   printf("mAlp    = %d\n", a->mAlp);
-  printf("mTheAlp = %d\n", a->mTheAlp);
-  printf("mSigAlp = %d\n", a->mSigAlp);
-  printf("mPiAlp  = %d\n", a->mPiAlp);
   printf("mDel    = %d\n", a->mDel);
+  printf("mThePhi = %d\n", a->mThePhi);
+  printf("mTheAlp = %d\n", a->mTheAlp);
   printf("mTheDel = %d\n", a->mTheDel);
+  printf("mSigPhi = %d\n", a->mSigPhi);
+  printf("mSigAlp = %d\n", a->mSigAlp);
   printf("mSigDel = %d\n", a->mSigDel);
+  printf("mPiAlp  = %d\n", a->mPiAlp);
   printf("mPiDel  = %d\n\n", a->mPiDel);
   
   printf("tuneD = "); printf(NUM_TF, a->tuneD); printf("\n");
