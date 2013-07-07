@@ -68,9 +68,11 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
       a->tunePhi[g] = a->tunePhi[g] * 1.1; 
 
-      a->accPhi[g] = a->accPhi[g] + 1;
-      a->accAlp[g] = a->accAlp[g] + 1;
-      a->accDel[g] = a->accDel[g] + 1;
+      if(a->mPhi >= a->burnin){
+        ++a->accPhi[g];
+        ++a->accAlp[g];
+        ++a->accDel[g];
+      }
     } else { /* reject */
       a->phi[a->mPhi + 1][g] = oldPhi;
       a->alp[a->mAlp + 1][g] = oldAlp;

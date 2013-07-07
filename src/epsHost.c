@@ -28,7 +28,9 @@ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
       if(lu < lp){ /* accept */
         a->eps[a->mEps + 1][n][g] = new;
         a->tuneEps[n][g] = a->tuneEps[n][g] * 1.1;
-        a->accEps[n][g] = a->accEps[n][g] + 1; 
+        
+        if(a->mEps >= a->burnin)
+          ++a->accEps[n][g]; 
       } else { /* reject */
         a->eps[a->mEps + 1][n][g] = old;
         a->tuneEps[n][g] = a->tuneEps[n][g] / 1.1;

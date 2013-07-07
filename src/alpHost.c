@@ -35,7 +35,7 @@ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   for(n = 0; n < a->N; ++n){
     if(a->grp[n] != 2){
       tmp = mu(a, n, a->phi[a->mPhi][g], arg, a->del[a->mDel][g]);
-      s = s + a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
+      s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
           a->eps[a->mEps][n][g] + tmp);
     }
   }
@@ -66,7 +66,9 @@ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     
     if(lu < lp){ /* accept */
       a->alp[a->mAlp + 1][g] = new;
-      a->accAlp[g] = a->accAlp[g] + 1;
+      
+      if(a->mAlp >= a->burnin)
+        ++a->accAlp[g];
     } else { /* reject */
       a->alp[a->mAlp + 1][g] = old;
     }

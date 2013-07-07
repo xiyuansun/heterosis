@@ -139,4 +139,10 @@ void samplePiDel(Chain*, Config*);
 void runChain(Chain*, Config*);
 void oneChain(int, char**);
 
+void printProbs(Chain*, Config*);
+void printRates(Chain*, Config*);
+void printHyper(Chain*, Config*);
+void printParms(Chain*, Config*);
+void summarizechain(Chain*, Config*);
+
 #endif /* FUNCTIONS_H */

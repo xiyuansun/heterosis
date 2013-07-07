@@ -69,7 +69,9 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
       a->c[a->mC + 1][n] = a->New[0][n];
       a->tuneC[n] = a->tuneC[n] * 1.1; /* Increase the proposal variance to avoid  
                                        getting stuck in a mode */
-      a->accC[n] = a->accC[n] + 1;
+                                       
+      if(a->mC >= a->burnin)                                 
+        ++a->accC[n];
     } else { /* reject */
       a->c[a->mC + 1][n] = a->Old[0][n];
       a->tuneC[n] = a->tuneC[n] / 1.1; /* If you're rejecting too often, decrease the  

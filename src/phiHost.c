@@ -35,7 +35,9 @@ void samplePhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     if(lu < lp){ /* accept */
       a->phi[a->mPhi + 1][g] = new;
       a->tunePhi[g] = a->tunePhi[g] * 1.1; 
-      a->accPhi[g] = a->accPhi[g] + 1;
+      
+      if(a->mPhi >= a->burnin)
+        ++a->accPhi[g];
     } else { /* reject */
       a->phi[a->mPhi + 1][g] = old;
       a->tunePhi[g] = a->tunePhi[g] / 1.1; 
