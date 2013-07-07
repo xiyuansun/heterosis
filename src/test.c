@@ -28,6 +28,7 @@ int main(int argc, char **argv){
      sampleSigC(a);
      sampleEta(a);
      sampleTau(a);
+     sampleThePhi(a);
    }
   
   printChain(a);

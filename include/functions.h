@@ -91,4 +91,8 @@ void sampleTau_kernel2(Chain*);
 void sampleTau_kernel3(Chain*);
 void sampleTau(Chain*);
 
+void sampleThePhi_kernel1(Chain*);
+void sampleThePhi_kernel2(Chain*);
+void sampleThePhi(Chain*);
+
 #endif /* FUNCTIONS_H */
