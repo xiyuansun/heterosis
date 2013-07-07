@@ -65,7 +65,7 @@ void newChainHost_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->mPiAlp = 0;
   a->mPiDel = 0;
 
-  a->tuneD = 500;
+  a->tuneD = 100;
 
   for(n = 0; n < a->N; ++n)
     a->tuneC[n] = 1;

@@ -56,4 +56,22 @@ void lD(Chain*, int);
 void sampleD_kernel1(Chain*);
 void sampleD_kernel2(Chain*);
 void sampleD(Chain*);
+
+num_t lPhi(Chain*, int, num_t);
+void samplePhi_kernel1(Chain*);
+void samplePhi_kernel2(Chain*);
+void samplePhi(Chain*);
+
+num_t alpProp(Chain*, int);
+num_t lAlp(Chain*, int, num_t);
+void sampleAlp_kernel1(Chain*);
+void sampleAlp_kernel2(Chain*);
+void sampleAlp(Chain*);
+
+num_t delProp(Chain*, int);
+num_t lDel(Chain*, int, num_t);
+void sampleDel_kernel1(Chain*);
+void sampleDel_kernel2(Chain*);
+void sampleDel(Chain*);
+
 #endif /* FUNCTIONS_H */

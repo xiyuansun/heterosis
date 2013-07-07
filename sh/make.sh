@@ -12,7 +12,7 @@ function cpu {
   DEP+=(mySampleIntHost readGrp readData)
   DEP+=(allocChainHost newChainHost printChain freeChainHost)
   DEP+=(mu uniformHost normalHost gammaHost betaHost)
-  DEP+=(cHost epsHost dHost)
+  DEP+=(cHost epsHost dHost phiHost alpHost delHost)
   DEP+=(test)
 
   OBJ=()
