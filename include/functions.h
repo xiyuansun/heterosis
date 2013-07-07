@@ -74,4 +74,9 @@ void sampleDel_kernel1(Chain*);
 void sampleDel_kernel2(Chain*);
 void sampleDel(Chain*);
 
+num_t lPhiAlpDel(Chain*, int, num_t, num_t, num_t);
+void samplePhiAlpDel_kernel1(Chain*);
+void samplePhiAlpDel_kernel2(Chain*);
+void samplePhiAlpDel(Chain*);
+
 #endif /* FUNCTIONS_H */
