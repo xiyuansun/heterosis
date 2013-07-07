@@ -15,6 +15,7 @@ void newChainHost_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   num_t u;
 
   for(g = 0; g < a->G; ++g){
+
     a->phi[0][g] = normalHost(a->thePhi[0], a->sigPhi[0]);
 
     u = uniformHost(0, 1);
@@ -36,6 +37,7 @@ void newChainHost_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
     for(n = 0; n < a->N; ++n)
       a->eps[0][n][g] = normalHost(0, a->eta[0][g]);
+    
   }
 }
 

@@ -54,7 +54,7 @@ void sampleSigDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleSigDel(Chain *a, Config *cfg){ /* host */
-  if(cfg->constSigDel)
+  if(cfg->constSigDel || !cfg->heterosis)
     return;
 
   sampleSigDel_kernel1(a);

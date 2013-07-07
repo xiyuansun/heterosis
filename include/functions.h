@@ -136,4 +136,6 @@ void samplePiDel_kernel2(Chain*);
 void samplePiDel_kernel3(Chain*);
 void samplePiDel(Chain*, Config*);
 
+void runChain(Chain*, Config*);
+
 #endif /* FUNCTIONS_H */

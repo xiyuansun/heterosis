@@ -70,7 +70,7 @@ Config *config(int argc, char **argv){
   
   getopts(cfg, argc, argv);
   srand(cfg->seed);
-  
+    
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.
    *  All the others must be given initial values.
@@ -108,6 +108,8 @@ Config *config(int argc, char **argv){
 
   if(!cfg->constPiDel)
     cfg->piDel = betaHost(cfg->aDel, cfg->bDel);
+  
+  printConfig(cfg);
   
   return cfg;
 }

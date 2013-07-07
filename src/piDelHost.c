@@ -33,7 +33,7 @@ void samplePiDel_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void samplePiDel(Chain *a, Config *cfg){ /* host */
-  if(cfg->constPiDel)
+  if(cfg->constPiDel || !cfg->heterosis)
     return;
 
   samplePiDel_kernel1(a);

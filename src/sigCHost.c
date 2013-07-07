@@ -11,7 +11,7 @@ void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
   num_t rate, shape, lb;
 
   if(a->constSigC)
-    return;
+    return; 
 
   rate = 0;
   for(n = 0; n < a->N; ++n) 

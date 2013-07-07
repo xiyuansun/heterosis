@@ -53,7 +53,7 @@ void sampleTheDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleTheDel(Chain *a, Config *cfg){ /* host */
-  if(cfg->constTheDel)
+  if(cfg->constTheDel || !cfg->heterosis)
     return;
 
   sampleTheDel_kernel1(a);
