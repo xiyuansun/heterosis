@@ -11,7 +11,13 @@ void printRates(Chain *a, Config *cfg){
   FILE *fp;
   
   if(cfg->ratesFlag){
-    fp = fopen(cfg->ratesFile, "w");    
+    fp = fopen(cfg->ratesFile, "w");  
+    
+    if(fp == NULL){
+      printf("ERROR: unable to create file, %s\n", cfg->ratesFile);
+      return;
+    }
+       
     fprintf(fp, "d c phi alp del meanEps\n");
     
     accD    = a->accD;

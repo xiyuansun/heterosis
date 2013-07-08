@@ -15,6 +15,11 @@ void printHyper(Chain *a, Config *cfg){
   if(cfg->hyperFlag){
     fp = fopen(cfg->hyperFile, "w");
     
+    if(fp == NULL){
+      printf("ERROR: unable to create file, %s\n", cfg->hyperFile);
+      return;
+    }
+    
     fprintf(fp, "sigC d tau thePhi theAlp theDel sigPhi sigAlp sigDel piAlp piDel\n");
     
     for(m = 0; m <= cfg->M; ++m){

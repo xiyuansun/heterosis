@@ -13,10 +13,22 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
   if(cfg->someParmsFlag || cfg->allParmsFlag){   
     if(cfg->someParmsFlag && some){
       fp = fopen(cfg->someParmsFile, "w");
+      
+      if(fp == NULL){
+        printf("ERROR: unable to create file, %s\n", cfg->someParmsFile);
+        return;
+      }
+      
       nlibs = 5 < cfg->N ? 5 : cfg->N;
       ngenes = 5 < cfg->G ? 5 : cfg->G;
     } else if(cfg->allParmsFlag && !some){
       fp = fopen(cfg->allParmsFile, "w");
+      
+      if(fp == NULL){
+        printf("ERROR: unable to create file, %s\n", cfg->allParmsFile);
+        return;
+      }
+      
       nlibs = cfg->N;
       ngenes = cfg->G;
     } else {

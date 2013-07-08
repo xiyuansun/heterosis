@@ -14,6 +14,11 @@ void printProbs(Chain *a, Config *cfg){
   if(cfg->probsFlag){
     fp = fopen(cfg->probsFile, "w");
     
+    if(fp == NULL){
+      printf("ERROR: unable to create file, %s\n", cfg->probsFile);
+      return;
+    }
+    
     fprintf(fp, "de ");
     if(cfg->heterosis)
       fprintf(fp, "hph lph mph");
