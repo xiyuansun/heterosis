@@ -106,7 +106,11 @@ Chain *newChain(Config *cfg){ /* host */
   num_t *lqts, s = 0, tmp, *tmpv;
   Chain *a;
 
+printf("-1\n");
+
   y = readData(cfg);
+  
+  printf("0\n");
   
   if(y == NULL)
     return NULL;
