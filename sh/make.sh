@@ -1,15 +1,25 @@
 #!/bin/bash
 
 function mkdirs {
-  
+
+  if [ ! -d ../bin ]
+  then
+    mkdir ../bin
+  fi
+
   if [ ! -d ../obj ]
   then
     mkdir ../obj
   fi
 
-  if [ ! -d ../bin ]
+  if [ ! -d ../obj/cpu ]
   then
-    mkdir ../bin
+    mkdir ../obj/cpu
+  fi
+
+  if [ ! -d ../obj/gpu ]
+  then
+    mkdir ../obj/gpu
   fi
 
 }
@@ -24,24 +34,24 @@ function cpu {
 
   DEP=(printArrays)
   DEP+=(config getopts printConfig freeConfig)
-  DEP+=(mySampleIntHost readGrp readData)
-  DEP+=(allocChainHost newChainHost printChain freeChainHost)
-  DEP+=(muHost uniformHost normalHost gammaHost betaHost)
-  DEP+=(cHost sigCHost epsHost etaHost dHost tauHost)
-  DEP+=(phiHost alpHost delHost phiAlpDelJointHost phiAlpDel)
-  DEP+=(thePhiHost theAlpHost theDelHost)
-  DEP+=(sigPhiHost sigAlpHost sigDelHost)
-  DEP+=(piAlpHost piDelHost)
+  DEP+=(mySampleInt readGrp readData)
+  DEP+=(allocChain newChain printChain freeChain)
+  DEP+=(mu runiform rnormal rgamma rbeta)
+  DEP+=(c sigC eps eta d tau)
+  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
+  DEP+=(thePhi theAlp theDel)
+  DEP+=(sigPhi sigAlp sigDel)
+  DEP+=(piAlp piDel)
   DEP+=(runChain oneChain summarizeChain)
-  DEP+=(printProbsHost printRatesHost printHyperHost printParmsHost)
+  DEP+=(printProbs printRates printHyper printParms)
   DEP+=(main)
 
   OBJ=()
 
   for dep in ${DEP[@]}
   do
-    OBJ+=(../obj/${dep}.o)
-    ${CC} ../src/${dep}.c -o ../obj/${dep}.o ${CFLAGS} 
+    OBJ+=(../obj/cpu/${dep}.o)
+    ${CC} ../src/cpu/${dep}.c -o ../obj/cpu/${dep}.o ${CFLAGS} 
   done
 
   $CC ${OBJ[@]} -o ../bin/mcmc ${LDFLAGS}
@@ -52,24 +62,23 @@ function gpu {
   echo Making GPU version...
 
   CC=nvcc
-  CFLAGS="-I../include -c --compiler-options -Wall --compiler-options -pedantic "
+  CFLAGS="-I../include -c -Wall -pedantic "
   LDFLAGS=-lm 
 
   DEP=(printArrays)
-  DEP+=(uniformHost normalHost gammaHost betaHost)
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(readGrp readData)
-  DEP+=(testgpu)
+  DEP+=(main)
 
   OBJ=()
 
   for dep in ${DEP[@]}
   do
-    OBJ+=(../obj/${dep}.o)
-    ${CC} ../src/${dep}.c -o ../obj/${dep}.o ${CFLAGS} 
+    OBJ+=(../obj/gpu/${dep}.o)
+    ${CC} ../src/gpu/${dep}.c -o ../obj/gpu/${dep}.o ${CFLAGS} 
   done
 
-  $CC ${OBJ[@]} -o ../bin/gpu_mcmc ${LDFLAGS}
+  $CC ${OBJ[@]} -o ../bin/gpumcmc ${LDFLAGS}
 
 }
 
@@ -83,6 +92,11 @@ function clean {
   if [ -d ../bin ]
   then
     rm -rf ../bin
+  fi
+
+  if [ -d ../out ]
+  then
+    rm -rf ../out
   fi
 }
 
