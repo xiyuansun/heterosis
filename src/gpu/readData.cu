@@ -40,7 +40,7 @@ count_t *readData(Config *cfg){
       cfg->G = g;
   }
   
-  y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t*));
+  y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t));
   rewind(fp);
 
   G = cfg->G;
