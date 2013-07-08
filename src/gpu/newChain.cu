@@ -114,8 +114,6 @@ Chain *newChain(Config *cfg){ /* host */
   grp = readGrp(cfg);
   
   if(grp == NULL){
-    for(n = 0; n < cfg->N; ++n)
-      free(y[n]);
     free(y);
     
     return NULL;
@@ -214,10 +212,6 @@ Chain *newChain(Config *cfg){ /* host */
   free(lqts);
   free(tmpv);
   free(grp);
-  
-  for(n = 0; n < cfg->N; ++n)
-    free(y[n]);
-
   free(y);
     
   return a;

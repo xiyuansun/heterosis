@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-count_t **readData(Config *cfg){
+count_t *readData(Config *cfg){
   int g = 0, n = 0, N, G; 
   count_t *y;
   char *buf, row[MAXROW];
