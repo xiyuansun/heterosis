@@ -13,14 +13,14 @@ num_t gammaHost(num_t shape, num_t rate, num_t lb){
     printf("Error: bad shape: ");
     printf(NUM_TF, shape);
     printf("\n");
-    return(NAN);
+    return(-1);
   }
   
   if(rate <= 0){
     printf("Error: bad rate: ");
     printf(NUM_TF, rate);
     printf("\n");
-    return(NAN);
+    return(-1);
   }
 
   if((shape >= 1) && (shape - 1 < lb * rate)){ /* Chung (1998) */
