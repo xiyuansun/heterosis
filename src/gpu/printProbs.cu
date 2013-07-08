@@ -7,7 +7,7 @@
 
 void printProbs(Chain *a, Config *cfg){
   int m, g, niter = cfg->M - cfg->burnin;
-  num_t phi, alp, del;
+  num_t alp, del;
   num_t prob_de, prob_hph, prob_lph, prob_mph;
   FILE *fp;
   
@@ -43,7 +43,6 @@ void printProbs(Chain *a, Config *cfg){
         prob_mph = 0;
       
         for(m = cfg->burnin + 1; m <= cfg->M; ++m){
-          phi = a->phi[m][g];
           alp = a->alp[m][g];
           del = a->del[m][g];
           
