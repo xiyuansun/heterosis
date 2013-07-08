@@ -5,7 +5,7 @@
 
 typedef struct {
 
-  count_t **y; /* data */
+  count_t *y; /* data */
   num_t *yMeanG; /* gene-wise mean expression levels */
   int *grp; /* assignment of libraries (samples) to treatment groups */ 
 
