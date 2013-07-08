@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-__gloabal__ void allocChain(Chain *a, int M, int N, int G){
+__global__ void allocChain(Chain *a, int M, int N, int G){
   int m, n;
   
   a = (Chain*) malloc(sizeof(Chain));
