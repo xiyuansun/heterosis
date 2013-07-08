@@ -185,8 +185,8 @@ Chain *newChain(Config *cfg){ /* host */
   a->constPiAlp  = cfg->constPiAlp;
   a->constPiDel  = cfg->constPiDel;
   
-  lqts = malloc(cfg->N * sizeof(num_t));
-  tmpv = malloc(cfg->G * sizeof(num_t));
+  lqts = (num_t*) malloc(cfg->N * sizeof(num_t));
+  tmpv = (num_t*) malloc(cfg->G * sizeof(num_t));
   
   s = 0;
   for(n = 0; n < cfg->N; ++n){
