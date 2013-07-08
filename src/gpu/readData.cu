@@ -42,7 +42,7 @@ count_t **readData(Config *cfg){
   rewind(fp);
   
   for(n = 0; n < cfg->N; ++n)
-    y[n] = malloc(cfg->G * sizeof(count_t)); 
+    y[n] = (int*) malloc(cfg->G * sizeof(count_t)); 
   
   for(g = 0; g < cfg->G; ++g)
     for(n = 0; n < cfg->N; ++n)
