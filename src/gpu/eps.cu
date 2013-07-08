@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
-  int M = a->M, N = a->N, G = a->G;
+  int N = a->N, G = a->G;
 
   return a->y[iNG(n, g)] * arg - exp(a->c[iMN(a->mC, n)] + arg + mu(a, n, a->phi[iMG(a->mPhi, g)], 
                                      a->alp[iMG(a->mAlp, g)], a->del[iMG(a->mDel, g)])) 
@@ -15,7 +15,7 @@ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 
 void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
   int n, g;
-  int M = a->M, N = a->N, G = a->G;
+  int N = a->N, G = a->G;
   num_t Old;
   num_t New;
   num_t dl;

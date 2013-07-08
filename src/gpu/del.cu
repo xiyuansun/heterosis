@@ -30,7 +30,7 @@ num_t delProp(Chain *a, int g){ /* device */
 
 num_t lDel(Chain *a, int g, num_t arg){ /* device */ 
   int n;
-  int M = a->M, N = a->N, G = a->G;
+  int N = a->N, G = a->G;
   
   num_t s = 0, tmp; 
   
@@ -54,7 +54,7 @@ num_t lDel(Chain *a, int g, num_t arg){ /* device */
 
 void sampleDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
   
   num_t Old, New, dl, lp, lu;
 
