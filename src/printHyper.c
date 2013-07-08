@@ -1,7 +1,8 @@
 #include <Chain.h>
 #include <Config.h>
+#include <Chain.h>
+#include <Config.h>
 #include <constants.h>
-#include <Summary.h>
 #include <stdio.h>
 #include <stdlib.h>
 

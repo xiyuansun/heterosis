@@ -2,7 +2,6 @@
 #include <Config.h>
 #include <constants.h>
 #include <math.h>
-#include <Summary.h>
 #include <stdio.h>
 #include <stdlib.h>
 

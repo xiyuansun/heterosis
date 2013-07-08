@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <constants.h>
+#include "constants.h"
 
 typedef struct {
 

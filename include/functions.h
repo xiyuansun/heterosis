@@ -1,9 +1,9 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include <Chain.h>
-#include <Config.h>
-#include <constants.h>
+#include "Chain.h"
+#include "Config.h"
+#include "constants.h"
 
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);
