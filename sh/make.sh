@@ -5,7 +5,7 @@ function cpu {
 
   CC=gcc
   CFLAGS="-c -Wall -pedantic -I../include"
-  LDFLAGS=-lm
+  LDFLAGS=-lm 
 
   DEP=(printArrays)
   DEP+=(config getopts printConfig freeConfig)
