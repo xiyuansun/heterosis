@@ -40,10 +40,10 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
     arg = a->Old[0];
   }
 
-  a->tmp1[1] = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
+  a->tmp1[0] = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
 
-  ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(a->tmp1[1]);
-  ret = ret  - (arg/2 + 1) * a->s1 - a->tmp1[1] * a->s2;
+  ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(a->tmp1[0]);
+  ret = ret  - (arg/2 + 1) * a->s1 - a->tmp1[0] * a->s2;
 
   if(newArg){
     a->lNew[0] = ret;

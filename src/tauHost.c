@@ -20,11 +20,11 @@ void sampleTau_kernel2(Chain *a){ /* pairwise sum in Thrust */
   for(g = 0; g < a->G; ++g) 
     tmp = tmp + a->tmp1[g];
 
-  a->rate = tmp;
+  a->s1 = tmp;
 }
 
 void sampleTau_kernel3(Chain *a){ /* kernel<<<1, 1>>> */
-  num_t rate = a->rate * a->d[a->mD] / 2 + a->bTau;
+  num_t rate = a->s1 * a->d[a->mD] / 2 + a->bTau;
   num_t shape = a->aTau + a->G * a->d[a->mD] / 2;
 
   if(shape >= 1 && rate > 0){

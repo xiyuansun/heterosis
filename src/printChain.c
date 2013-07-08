@@ -83,9 +83,6 @@ void printChain(Chain *a){
   pi1(a->accDel, a->G, "accDel =\n");
   pi2(a->accEps, a->N, a->G, "accEps =\n");
     
-  printf("shape = "); printf(NUM_TF, a->shape); printf("\n");
-  printf("rate = "); printf(NUM_TF, a->rate); printf("\n\n");
-    
   printf("s1 = "); printf(NUM_TF, a->s1); printf("\n");
   printf("s2 = "); printf(NUM_TF, a->s2); printf("\n\n");
   

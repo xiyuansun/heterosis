@@ -60,9 +60,6 @@ typedef struct {
     
   /* temporary and return values of kernels */
 
-  num_t shape;
-  num_t rate;
-  
   num_t s1;
   num_t s2;
   

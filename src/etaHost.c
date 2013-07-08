@@ -6,12 +6,12 @@
 #include <stdlib.h>
 
 void sampleEta_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
-  a->shape = (a->N + a->d[a->mD]) / 2; 
+  a->s1 = (a->N + a->d[a->mD]) / 2; 
 }
 
 void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g;
-  num_t rate;
+  num_t shape = a->s1, rate;
 
   for(g = 0; g < a->G; ++g){
 
@@ -21,8 +21,8 @@ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   
     rate = (rate + a->d[a->mD] * a->tau[a->mTau] * a->tau[a->mTau]) / 2; 
 
-    if(a->shape >= 1 && rate > 0){
-      a->eta[a->mEta + 1][g] = 1/sqrt(gammaHost(a->shape, rate, 0));
+    if(a->s1 >= 1 && rate > 0){
+      a->eta[a->mEta + 1][g] = 1/sqrt(gammaHost(shape, rate, 0));
     } else {
       a->eta[a->mEta + 1][g] = a->eta[a->mEta][g];
     }

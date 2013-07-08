@@ -55,8 +55,8 @@ Chain *allocChainHost(Config *cfg){
   
   /* temporary and return values */
   
-  a->tmp1 = malloc(mx * sizeof(num_t));
-  a->tmp2 = malloc(mx * sizeof(num_t));
+  a->tmp1 = malloc(cfg->G * sizeof(num_t));
+  a->tmp2 = malloc(cfg->G * sizeof(num_t));
 
   a->Old   = malloc(cfg->N * sizeof(num_t));
   a->New   = malloc(cfg->N * sizeof(num_t));
