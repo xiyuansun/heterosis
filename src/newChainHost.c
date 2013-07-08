@@ -205,6 +205,15 @@ Chain *newChainHost(Config *cfg){ /* host */
   
   newChainHost_kernel1(a);
   newChainHost_kernel2(a);
+  
+  free(lqts);
+  free(tmpv);
+  free(grp);
+  
+  for(n = 0; n < cfg->N; ++n)
+    free(y[n]);
+
+  free(y);
     
   return a;
 }
