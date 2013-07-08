@@ -26,7 +26,7 @@ function cpu {
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(mySampleIntHost readGrp readData)
   DEP+=(allocChainHost newChainHost printChain freeChainHost)
-  DEP+=(mu uniformHost normalHost gammaHost betaHost)
+  DEP+=(muHost uniformHost normalHost gammaHost betaHost)
   DEP+=(cHost sigCHost epsHost etaHost dHost tauHost)
   DEP+=(phiHost alpHost delHost phiAlpDelJointHost phiAlpDel)
   DEP+=(thePhiHost theAlpHost theDelHost)
@@ -52,13 +52,14 @@ function gpu {
   echo Making GPU version...
 
   CC=nvcc
-  CFLAGS="-I../include -c -Wall -pedantic "
+  CFLAGS="-I../include -c --compiler-options -Wall --compiler-options -pedantic "
   LDFLAGS=-lm 
 
   DEP=(printArrays)
+  DEP+=(uniformHost normalHost gammaHost betaHost)
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(readGrp readData)
-  DEP+=(main)
+  DEP+=(testgpu)
 
   OBJ=()
 
