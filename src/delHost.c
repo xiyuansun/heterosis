@@ -34,7 +34,7 @@ num_t lDel(Chain *a, int g, num_t arg){ /* device */
   for(n = 0; n < a->N; ++n){
     if(a->grp[n] != 2){
       tmp = mu(a, n, a->phi[a->mPhi][g], a->alp[a->mAlp][g], arg);
-      s = s + a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
+      s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
           a->eps[a->mEps][n][g] + tmp);
     }
   }
@@ -74,7 +74,7 @@ void sampleDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 }
 
 void sampleDel_kernel2(Chain *a){ /* kernel <<<1 1>>> */
-  a->mDel = a->mDel + 1;
+  ++a->mDel;
 }
 
 void sampleDel(Chain *a){ /* host */

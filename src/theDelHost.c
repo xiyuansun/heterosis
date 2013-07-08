@@ -24,7 +24,7 @@ void sampleTheDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
   int g, Gdel = 0;
   
   for(g = 0; g < a->G; ++g)   
-    Gdel = Gdel + a->tmp1[g];
+    Gdel += a->tmp1[g];
 
   a->s1 = Gdel;
 }
@@ -34,7 +34,7 @@ void sampleTheDel_kernel3(Chain *a){ /* pairwise sum in Thrust */
   num_t sm = 0;
   
   for(g = 0; g < a->G; ++g) 
-    sm = sm + a->tmp2[g];
+    sm += a->tmp2[g];
 
   a->s2 = sm;
 }
@@ -49,7 +49,7 @@ void sampleTheDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
   num_t s = sqrt(gs * ss / den);
 
   a->theDel[a->mTheDel + 1] = normalHost(m, s);
-  a->mTheDel = a->mTheDel + 1;
+  ++a->mTheDel;
 }
 
 void sampleTheDel(Chain *a, Config *cfg){ /* host */

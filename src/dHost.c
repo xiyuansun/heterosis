@@ -42,7 +42,7 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 
   tmp = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
   ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(tmp);
-  ret = ret  - (arg/2 + 1) * a->s1 - tmp * a->s2;
+  ret -= (arg/2 + 1) * a->s1 - tmp * a->s2;
 
   if(newArg){
     a->lNew[0] = ret;
@@ -93,7 +93,7 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
                                   variance to sample closer to the last accepted value. */
   }
 
-  a->mD = a->mD + 1;
+  ++a->mD;
 }
 
 void sampleD(Chain *a, Config *cfg){ /* host */

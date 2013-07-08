@@ -17,7 +17,7 @@ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 
     rate = 0;
     for(n = 0; n < a->N; ++n) 
-      rate = rate + a->eps[a->mEps][n][g] * a->eps[a->mEps][n][g];
+      rate += a->eps[a->mEps][n][g] * a->eps[a->mEps][n][g];
   
     rate = (rate + a->d[a->mD] * a->tau[a->mTau] * a->tau[a->mTau]) / 2; 
 
@@ -30,7 +30,7 @@ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 }
 
 void sampleEta_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
-  a->mEta = a->mEta + 1;
+  ++a->mEta;
 }
 
 void sampleEta(Chain *a){

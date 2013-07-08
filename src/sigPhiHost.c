@@ -18,7 +18,7 @@ void sampleSigPhi_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
   num_t rate = 0;
   
   for(g = 0; g < a->G; ++g)
-    rate = rate + a->tmp1[g];
+    rate += a->tmp1[g];
   a->s1 = rate;  
 }
 
@@ -33,7 +33,7 @@ void sampleSigPhi_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
     a->sigPhi[a->mSigPhi + 1] = a->sigPhi[a->mSigPhi];
   }
 
-  a->mSigPhi = a->mSigPhi + 1;
+  ++a->mSigPhi;
 }
 
 void sampleSigPhi(Chain *a, Config *cfg){ /* host */

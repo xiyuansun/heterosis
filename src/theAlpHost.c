@@ -24,7 +24,7 @@ void sampleTheAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
   int g, Galp = 0;
   
   for(g = 0; g < a->G; ++g) 
-    Galp = Galp + a->tmp1[g];
+    Galp += a->tmp1[g];
 
   a->s1 = Galp;
 }
@@ -34,7 +34,7 @@ void sampleTheAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
   num_t sm = 0;
   
   for(g = 0; g < a->G; ++g) 
-    sm = sm + a->tmp2[g];
+    sm += a->tmp2[g];
 
   a->s2 = sm;
 }
@@ -49,7 +49,7 @@ void sampleTheAlp_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
   num_t s = sqrt(gs * ss / den);
 
   a->theAlp[a->mTheAlp + 1] = normalHost(m, s);
-  a->mTheAlp = a->mTheAlp + 1;
+  ++a->mTheAlp;
 }
 
 void sampleTheAlp(Chain *a, Config *cfg){ /* host */

@@ -18,7 +18,7 @@ void sampleTau_kernel2(Chain *a){ /* pairwise sum in Thrust */
   num_t tmp = 0;
   
   for(g = 0; g < a->G; ++g) 
-    tmp = tmp + a->tmp1[g];
+    tmp += a->tmp1[g];
 
   a->s1 = tmp;
 }
@@ -33,7 +33,7 @@ void sampleTau_kernel3(Chain *a){ /* kernel<<<1, 1>>> */
     a->tau[a->mTau + 1] = a->tau[a->mTau];
   }
 
-  a->mTau = a->mTau + 1;
+  ++a->mTau;
 }
 
 void sampleTau(Chain *a, Config *cfg){ /* host */

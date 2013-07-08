@@ -76,7 +76,7 @@ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 }
 
 void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  a->mAlp = a->mAlp + 1;
+  ++a->mAlp;
 }
 
 

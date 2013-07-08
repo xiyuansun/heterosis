@@ -11,7 +11,7 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
 
   for(n = 0; n < a->N; ++n){
     tmp = mu(a, n, arg, a->alp[a->mAlp][g], a->del[a->mDel][g]);
-    s = s + a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
+    s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
         a->eps[a->mEps][n][g] + tmp);
   }
  
@@ -34,19 +34,19 @@ void samplePhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     
     if(lu < lp){ /* accept */
       a->phi[a->mPhi + 1][g] = new;
-      a->tunePhi[g] = a->tunePhi[g] * 1.1; 
+      a->tunePhi[g] *= 1.1; 
       
       if(a->mPhi >= a->burnin)
         ++a->accPhi[g];
     } else { /* reject */
       a->phi[a->mPhi + 1][g] = old;
-      a->tunePhi[g] = a->tunePhi[g] / 1.1; 
+      a->tunePhi[g] /= 1.1; 
     }
   }
 }
 
 void samplePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  a->mPhi = a->mPhi + 1;
+  ++a->mPhi;
 }
 
 void samplePhi(Chain *a){ /* host */

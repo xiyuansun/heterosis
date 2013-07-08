@@ -9,9 +9,9 @@
 void sampleThePhi_kernel1(Chain *a){ /* pairwise sum in Thrust */
   int g;
   
-  a->s1 = 0; 
+  a->tmp1[0] = 0; 
   for(g = 0; g < a->G; ++g)
-    a->s1 = a->s1 + a->phi[a->mPhi][g];
+    a->tmp1[0] += a->phi[a->mPhi][g];
 }
 
 void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
@@ -19,11 +19,11 @@ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t ss = a->sigPhi[a->mSigPhi] * a->sigPhi[a->mSigPhi];
   num_t den = (a->G * gs + ss);
 
-  num_t m = gs * a->s1 / den;
+  num_t m = gs * a->tmp1[0] / den;
   num_t s = gs * ss / den;
 
   a->thePhi[a->mThePhi + 1] = normalHost(m, s);
-  a->mThePhi = a->mThePhi + 1;
+  ++a->mThePhi;
 }
 
 void sampleThePhi(Chain *a, Config *cfg){ /* host */

@@ -67,14 +67,14 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
       
     if(lu < lp){ /* accept */
       a->c[a->mC + 1][n] = a->New[n];
-      a->tuneC[n] = a->tuneC[n] * 1.1; /* Increase the proposal variance to avoid  
+      a->tuneC[n] *= 1.1; /* Increase the proposal variance to avoid  
                                        getting stuck in a mode */
                                        
       if(a->mC >= a->burnin)                                 
         ++a->accC[n];
     } else { /* reject */
       a->c[a->mC + 1][n] = a->Old[n];
-      a->tuneC[n] = a->tuneC[n] / 1.1; /* If you're rejecting too often, decrease the  
+      a->tuneC[n] /= 1.1; /* If you're rejecting too often, decrease the  
                                        proposal variance to sample closer to 
                                        the last accepted value. */
     }
@@ -82,7 +82,7 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
 }
 
 void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
-  a->mC = a->mC + 1;
+  ++a->mC;
 }
 
 void sampleC(Chain *a){ /* host */

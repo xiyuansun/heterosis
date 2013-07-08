@@ -22,14 +22,14 @@ void samplePiAlp_kernel2(Chain *a){ /* pairwise sum in Thrust */
   int g, Galp = 0;
   
   for(g = 0; g < a->G; ++g)
-    Galp = Galp + a->tmp1[g];
+    Galp += a->tmp1[g];
 
   a->s1 = Galp; 
 }
 
 void samplePiAlp_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   a->piAlp[a->mPiAlp + 1] = betaHost(a->G + a->s1 + a->aTau, a->s1 + a->bTau);
-  a->mPiAlp = a->mPiAlp + 1;
+  ++a->mPiAlp;
 }
 
 void samplePiAlp(Chain *a, Config *cfg){ /* host */

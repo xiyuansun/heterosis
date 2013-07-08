@@ -25,7 +25,7 @@ void sampleSigDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
   num_t rate = 0;
   
   for(g = 0; g < a->G; ++g) 
-    rate = rate + a->tmp1[g];
+    rate += a->tmp1[g];
 
   a->s1 = rate;
 }
@@ -34,7 +34,7 @@ void sampleSigDel_kernel3(Chain *a){ /* pairwise sum in Thrust */
   int g, Gdel = 0;
   
   for(g = 0; g < a->G; ++g) 
-    Gdel = Gdel + a->tmp2[g];
+    Gdel += a->tmp2[g];
 
   a->s2 = Gdel;
 }
@@ -50,7 +50,7 @@ void sampleSigDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
     a->sigDel[a->mSigDel + 1] = a->sigDel[a->mSigDel];
   }
 
-  a->mSigDel = a->mSigDel + 1;
+  ++a->mSigDel;
 }
 
 void sampleSigDel(Chain *a, Config *cfg){ /* host */

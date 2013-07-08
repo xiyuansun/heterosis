@@ -12,8 +12,8 @@ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel)
 
   for(n = 0; n < a->N; ++n){
     tmp = mu(a, n, argPhi, argAlp, argDel);
-    s = s + a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
-        a->eps[a->mEps][n][g] + tmp);
+    s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
+         a->eps[a->mEps][n][g] + tmp);
   }
 
   /* phi part */
@@ -66,7 +66,7 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
       a->alp[a->mAlp + 1][g] = newAlp;
       a->del[a->mDel + 1][g] = newDel;
 
-      a->tunePhi[g] = a->tunePhi[g] * 1.1; 
+      a->tunePhi[g] *= 1.1; 
 
       if(a->mPhi >= a->burnin){
         ++a->accPhi[g];
@@ -78,15 +78,15 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
       a->alp[a->mAlp + 1][g] = oldAlp;
       a->del[a->mDel + 1][g] = oldDel;
 
-      a->tunePhi[g] = a->tunePhi[g] / 1.1;
+      a->tunePhi[g] /= 1.1;
     }
   }
 }
 
 void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  a->mPhi = a->mPhi + 1;
-  a->mAlp = a->mAlp + 1;
-  a->mDel = a->mDel + 1;
+  ++a->mPhi;
+  ++a->mAlp;
+  ++a->mDel;
 }
 
 void samplePhiAlpDelJoint(Chain *a){ /* host */

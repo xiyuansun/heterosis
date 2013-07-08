@@ -25,7 +25,7 @@ void sampleSigAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
   num_t rate = 0;  
 
   for(g = 0; g < a->G; ++g)
-    rate = rate + a->tmp1[g];
+    rate += a->tmp1[g];
 
   a->s1 = rate;
 }
@@ -34,7 +34,7 @@ void sampleSigAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
   int g, Galp = 0;
   
   for(g = 0; g < a->G; ++g) 
-    Galp = Galp + a->tmp2[g];  
+    Galp += a->tmp2[g];  
 
   a->s2 = Galp;
 }
@@ -51,7 +51,7 @@ void sampleSigAlp_kernel4(Chain *a){ /* parallel pairwise sum in Thrust */
     a->sigAlp[a->mSigAlp + 1] = a->sigAlp[a->mSigAlp]; 
   }
 
-  a->mSigAlp = a->mSigAlp + 1;
+  ++a->mSigAlp;
 }
 
 void sampleSigAlp(Chain *a, Config *cfg){ /* host */

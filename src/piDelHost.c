@@ -22,14 +22,14 @@ void samplePiDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
 
   int g, Gdel = 0;
   for(g = 0; g < a->G; ++g) 
-     Gdel = Gdel + a->tmp1[g];
+     Gdel += a->tmp1[g];
 
   a->s1 = Gdel;
 }
 
 void samplePiDel_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   a->piDel[a->mPiDel + 1] = betaHost(a->G + a->s1 + a->aTau, a->s1 + a->bTau);
-  a->mPiDel = a->mPiDel + 1;
+  ++a->mPiDel;
 }
 
 void samplePiDel(Chain *a, Config *cfg){ /* host */

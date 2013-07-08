@@ -40,7 +40,7 @@ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
 }
 
 void sampleEps_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  a->mEps = a->mEps + 1;
+  ++a->mEps;
 }
 
 void sampleEps(Chain *a){ /* host */

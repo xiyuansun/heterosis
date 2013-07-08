@@ -15,7 +15,7 @@ void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
 
   rate = 0;
   for(n = 0; n < a->N; ++n) 
-    rate = rate + a->c[a->mC][n] * a->c[a->mC][n];
+    rate += a->c[a->mC][n] * a->c[a->mC][n];
   
   shape = (a->N - 1) / 2; 
   rate = rate / 2;
@@ -27,5 +27,5 @@ void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
     a->sigC[a->mSigC + 1] = a->sigC[a->mSigC];
   }
 
-  a->mSigC = a->mSigC + 1;
+  ++a->mSigC;
 }
