@@ -35,9 +35,9 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   num_t arg, ret;
  
   if(newArg){
-    arg = a->New[0][0];
+    arg = a->New[0];
   } else{
-    arg = a->Old[0][0];
+    arg = a->Old[0];
   }
 
   a->tmp1[1] = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
@@ -46,20 +46,20 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   ret = ret  - (arg/2 + 1) * a->s1 - a->tmp1[1] * a->s2;
 
   if(newArg){
-    a->lNew[0][0] = ret;
+    a->lNew[0] = ret;
   } else{
-    a->lOld[0][0] = ret;
+    a->lOld[0] = ret;
   }
 }
 
 void lD(Chain *a, int newArg){ /* host */
   
   if(newArg){
-    if(a->New[0][0] <= 0 || a->New[0][0] > a->d0)
-      a->lNew[0][0] = NUM_TMIN;
+    if(a->New[0] <= 0 || a->New[0] > a->d0)
+      a->lNew[0] = NUM_TMIN;
   } else {
-    if(a->Old[0][0] <= 0 || a->Old[0][0] > a->d0)
-      a->lOld[0][0] = NUM_TMIN; 
+    if(a->Old[0] <= 0 || a->Old[0] > a->d0)
+      a->lOld[0] = NUM_TMIN; 
   }
 
   lD_kernel1(a);
@@ -69,27 +69,27 @@ void lD(Chain *a, int newArg){ /* host */
 }
 
 void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
-  a->Old[0][0] = a->d[a->mD];
+  a->Old[0] = a->d[a->mD];
   
   do {
-    a->New[0][0] = normalHost(a->Old[0][0], a->tuneD);
-  } while(a->New[0][0] < 0);
+    a->New[0] = normalHost(a->Old[0], a->tuneD);
+  } while(a->New[0] < 0);
 }
 
 void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  num_t dl = a->lNew[0][0] - a->lOld[0][0];
+  num_t dl = a->lNew[0] - a->lOld[0];
   num_t lp = 0 < dl ? 0 : dl;
   num_t lu = log(uniformHost(0, 1));
 
   if(lu < lp){ /* accept */
-    a->d[a->mD + 1] = a->New[0][0];
+    a->d[a->mD + 1] = a->New[0];
     a->tuneD = a->tuneD * 1.1; /* Increase the proposal variance to avoid getting 
                                   stuck in a mode */
     
     if(a->mD >= a->burnin) 
       ++a->accD;
   } else { /* reject */
-    a->d[a->mD + 1] = a->Old[0][0];
+    a->d[a->mD + 1] = a->Old[0];
     a->tuneD = a->tuneD / 1.1; /* If you're rejecting too often, decrease the proposal 
                                   variance to sample closer to the last accepted value. */
   }

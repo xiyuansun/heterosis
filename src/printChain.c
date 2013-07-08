@@ -92,10 +92,10 @@ void printChain(Chain *a){
   pf1(a->tmp1, a->G, "tmp1 =\n");
   pf1(a->tmp1, a->G, "tmp2 =\n");
   
-  pf2(a->Old, a->N, a->G, "Old =\n");
-  pf2(a->New, a->N, a->G, "New =\n");
-  pf2(a->lOld, a->N, a->G, "lOld =\n");
-  pf2(a->lNew, a->N, a->G, "lNew =\n\n");
+  pf1(a->Old, a->N, "Old =\n");
+  pf1(a->New, a->N, "New =\n");
+  pf1(a->lOld, a->N, "lOld =\n");
+  pf1(a->lNew, a->N, "lNew =\n");
   
   printf("constSigC = %d\n", a->constSigC);
   printf("constD = %d\n", a->constD);

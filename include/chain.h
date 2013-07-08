@@ -69,11 +69,11 @@ typedef struct {
   num_t *tmp1;
   num_t *tmp2;
   
-  num_t **Old;
-  num_t **New;
+  num_t *Old;
+  num_t *New;
   
-  num_t **lOld;
-  num_t **lNew;
+  num_t *lOld;
+  num_t *lNew;
   
   /* current place in the chain of each parameter */
   

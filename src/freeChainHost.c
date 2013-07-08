@@ -52,13 +52,6 @@ void freeChainHost(Chain *a, Config *cfg){
   
   /* temporary and return values */
   
-  for(n = 0; n < cfg->N; ++n){
-    free(a->Old[n]);
-    free(a->New[n]);
-    free(a->lOld[n]);
-    free(a->lNew[n]);
-  }
-  
   free(a->tmp1);
   free(a->tmp2);
 

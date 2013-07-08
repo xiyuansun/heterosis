@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 Chain *allocChainHost(Config *cfg){
-  int m, n, mx;
+  int m, n;
   Chain *a;
   
   a = malloc(sizeof(Chain));
@@ -55,23 +55,14 @@ Chain *allocChainHost(Config *cfg){
   
   /* temporary and return values */
   
-  mx = cfg->G > cfg->N ? cfg->G : cfg->N;
-  
   a->tmp1 = malloc(mx * sizeof(num_t));
   a->tmp2 = malloc(mx * sizeof(num_t));
 
-  a->Old   = malloc(cfg->N * sizeof(num_t*));
-  a->New   = malloc(cfg->N * sizeof(num_t*));
-  a->lOld  = malloc(cfg->N * sizeof(num_t*));
-  a->lNew  = malloc(cfg->N * sizeof(num_t*));
+  a->Old   = malloc(cfg->N * sizeof(num_t));
+  a->New   = malloc(cfg->N * sizeof(num_t));
+  a->lOld  = malloc(cfg->N * sizeof(num_t));
+  a->lNew  = malloc(cfg->N * sizeof(num_t));
 
-  for(n = 0; n < cfg->N; ++n){
-    a->Old[n]  = malloc(mx * sizeof(num_t));
-    a->New[n]  = malloc(mx * sizeof(num_t));
-    a->lOld[n] = malloc(mx * sizeof(num_t));
-    a->lNew[n] = malloc(mx * sizeof(num_t));
-  }
-  
   /* tuning parameters for Metropolis steps */
   
   a->tuneC = malloc(cfg->N * sizeof(num_t));
