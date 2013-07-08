@@ -6,8 +6,6 @@
 
 void freeChain(Chain *a, Config *cfg){
   
-  int m, n;
-  
   /* data */  
 
   free(a->y);

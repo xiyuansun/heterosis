@@ -7,7 +7,7 @@
 
 void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  int N = a->N, G = a->G;
   
   for(g = 0; g < G; ++g)
     a->tmp1[g] = exp(a->eps[iMNG(a->mEps, n, g)] + mu(a, n, a->phi[iMG(a->mPhi, g)], 
@@ -16,7 +16,7 @@ void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
 
 void lC_kernel2(Chain *a, int n){ /* parallel pairwise sum */
   int g;
-  int M = a->M, N = a->N, G = a->G;;
+  int G = a->G;;
   a->tmp2[0] = 0;
   
   for(g = 0; g < G; ++g)
@@ -25,7 +25,7 @@ void lC_kernel2(Chain *a, int n){ /* parallel pairwise sum */
 
 void lC_kernel3(Chain *a, int n, int newArg){ /* kernel <<<1, 1>>> */
   num_t arg, ret;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
 
   if(newArg){
     arg = a->New[n];
@@ -51,7 +51,7 @@ void lC(Chain *a, int n, int newArg){ /* host */
 
 void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
   int n;
-  int M = a->M, N = a->N, G = a->G;
+  int N = a->N;
   
   for(n = 0; n < N; ++n){
     a->Old[n] = a->c[iMN(a->mC, n)];
@@ -61,7 +61,7 @@ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
 
 void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
   int n;
-  int M = a->M, N = a->N, G = a->G;
+  int N = a->N;
   num_t dl, lp, lu;
 
   for(n = 0; n < N; ++n){ 
@@ -92,7 +92,7 @@ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 
 void sampleC(Chain *a){ /* host */
   int n;
-  int M = a->M, N = a->N, G = a->G;
+  int N = a->N;
   sampleC_kernel1(a);
 
   for(n = 0; n < N; ++n){ 

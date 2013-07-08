@@ -8,7 +8,7 @@
 
 void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
 
   for(g = 0; g < G; ++g){ 
     a->tmp1[g] = 2 * log(a->eta[iMG(a->mEta, g)]);
@@ -18,7 +18,7 @@ void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 void lD_kernel2(Chain *a){ /* kernel: pairwise sum in Thrust */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
   
   a->s1 = 0;
 
@@ -28,7 +28,7 @@ void lD_kernel2(Chain *a){ /* kernel: pairwise sum in Thrust */
 
 void lD_kernel3(Chain *a){ /* kernel: pairwise sum in Thrust */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
   
   a->s2 = 0;
 
@@ -37,7 +37,7 @@ void lD_kernel3(Chain *a){ /* kernel: pairwise sum in Thrust */
 }
 
 void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
   num_t arg, ret, tmp;
  
   if(newArg){

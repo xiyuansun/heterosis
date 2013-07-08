@@ -100,7 +100,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 Chain *newChain(Config *cfg){ /* host */
   int n, g, *grp;
-  int M = cfg->M, N = cfg->N, G = cfg->G;
+  int N = cfg->N, G = cfg->G;
   
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv;
