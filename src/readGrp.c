@@ -16,8 +16,7 @@ int *readGrp(Config *cfg){
   
   if(fp == NULL){
     printf("ERROR: group file \"%s\" not found.\n", cfg->groupFile);
-    fclose(fp);
-    exit(1);
+    return NULL;
   }
   
   grp = malloc(cfg->N * sizeof(int));
