@@ -29,6 +29,8 @@ void sampleTau_kernel3(Chain *a){ /* kernel<<<1, 1>>> */
   num_t rate = a->s1 * a->d[a->mD] / 2 + a->bTau;
   num_t shape = a->aTau + a->G * a->d[a->mD] / 2;
 
+  printf("%0.3f %0.3f\n", shape, rate);
+
   if(shape >= 1 && rate > 0){
     a->tau[a->mTau + 1] = 1/sqrt(rgamma(shape, rate, 0));
   } else {
