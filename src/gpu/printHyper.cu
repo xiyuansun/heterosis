@@ -10,7 +10,7 @@
 void printHyper(Chain *a, Config *cfg){
 
   int m;
-  int M = cfg->M, N = cfg->N, G = cfg->G;
+
   num_t tmp;
   FILE *fp;
   

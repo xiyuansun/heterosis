@@ -8,7 +8,7 @@
 
 void printProbs(Chain *a, Config *cfg){
   int m, g, niter = cfg->M - cfg->burnin;
-  int M = cfg->M, N = cfg->N, G = cfg->G;
+  int G = cfg->G;
   num_t alp, del;
   num_t prob_de, prob_hph, prob_lph, prob_mph;
   FILE *fp;

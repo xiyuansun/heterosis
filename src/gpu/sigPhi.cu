@@ -16,7 +16,6 @@ void sampleSigPhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 void sampleSigPhi_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
   int g;
-  int G = a->G;
   
   num_t rate = 0;
   

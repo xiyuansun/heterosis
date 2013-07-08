@@ -8,7 +8,7 @@
 
 void samplePiAlp_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
     if(pow(a->alp[iMG(a->mAlp, g)], 2) > 1e-6){
@@ -21,7 +21,6 @@ void samplePiAlp_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
 
 void samplePiAlp_kernel2(Chain *a){ /* pairwise sum in Thrust */
   int g, Galp = 0;
-  int M = a->M, N = a->N, G = a->G;
   
   for(g = 0; g < a->G; ++g)
     Galp += a->tmp1[g];

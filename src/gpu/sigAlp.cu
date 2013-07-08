@@ -42,7 +42,7 @@ void sampleSigAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
 
 
 void sampleSigAlp_kernel4(Chain *a){ /* parallel pairwise sum in Thrust */
-  int M = a->M, N = a->N, G = a->G;
+
   num_t shape = (a->s2 - 1) / 2;
   num_t rate = a->s1 / 2;
   num_t lb = 1/pow(a->sigAlp0, 2);
