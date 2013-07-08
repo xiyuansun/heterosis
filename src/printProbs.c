@@ -12,7 +12,7 @@ void printProbs(Chain *a, Config *cfg){
   FILE *fp;
   
   if(cfg->probsFlag){
-    fp = fopen(cfg->probsFile, "w");
+    fp = fopen(cfg->probsFile, "w"); 
     
     if(fp == NULL){
       printf("ERROR: unable to create file, %s\n", cfg->probsFile);
