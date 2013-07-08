@@ -1,6 +1,7 @@
+library(rstan)
 
 # Simulate data
-#G = 30000
+G = 30000
 k = rep(c(-1,1), each=3)
 
 # Gene specific parameters
@@ -48,8 +49,8 @@ diffexp_model = '
 
 diffexp_data = list(G=G, N=nrow(d), y=d$y, gene=d$gene, treatment=d$treatment)
 
-fit <- stan(model_code = diffexp_model, data=diffexp_data, iter=4, chains=4)
-fit1 <- stan(fit = fit, data=diffexp_data, iter=4, chains=4)
+fit <- stan(model_code = diffexp_model, data=diffexp_data, iter=1000, chains=4)
+fit1 <- stan(fit = fit, data=diffexp_data, iter=1000, chains=4)
 
 
 
