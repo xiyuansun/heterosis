@@ -68,6 +68,7 @@ function gpu {
   DEP=(printArrays)
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(readGrp readData)
+  DEP+=(mu runiform rnormal rgamma rbeta)
   DEP+=(testgpu)
 
   OBJ=()
