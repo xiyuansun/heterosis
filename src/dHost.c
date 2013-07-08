@@ -20,7 +20,7 @@ void lD_kernel2(Chain *a){ /* kernel: pairwise sum in Thrust */
   a->s1 = 0;
 
   for(g = 0; g < a->G; ++g) /* PARALLELIZE */
-    a->s1 = a->s1 + a->tmp1[g];
+    a->s1 += a->tmp1[g];
 }
 
 void lD_kernel3(Chain *a){ /* kernel: pairwise sum in Thrust */
@@ -28,11 +28,11 @@ void lD_kernel3(Chain *a){ /* kernel: pairwise sum in Thrust */
   a->s2 = 0;
 
   for(g = 0; g < a->G; ++g) /* PARALLELIZE */
-    a->s2 = a->s2 + a->tmp2[g];
+    a->s2 += a->tmp2[g];
 }
 
 void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
-  num_t arg, ret;
+  num_t arg, ret, tmp;
  
   if(newArg){
     arg = a->New[0];
@@ -40,10 +40,9 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
     arg = a->Old[0];
   }
 
-  a->tmp1[0] = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
-
-  ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(a->tmp1[0]);
-  ret = ret  - (arg/2 + 1) * a->s1 - a->tmp1[0] * a->s2;
+  tmp = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
+  ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(tmp);
+  ret = ret  - (arg/2 + 1) * a->s1 - tmp * a->s2;
 
   if(newArg){
     a->lNew[0] = ret;
@@ -83,14 +82,14 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
   if(lu < lp){ /* accept */
     a->d[a->mD + 1] = a->New[0];
-    a->tuneD = a->tuneD * 1.1; /* Increase the proposal variance to avoid getting 
+    a->tuneD *= 1.1; /* Increase the proposal variance to avoid getting 
                                   stuck in a mode */
     
     if(a->mD >= a->burnin) 
       ++a->accD;
   } else { /* reject */
     a->d[a->mD + 1] = a->Old[0];
-    a->tuneD = a->tuneD / 1.1; /* If you're rejecting too often, decrease the proposal 
+    a->tuneD /= 1.1; /* If you're rejecting too often, decrease the proposal 
                                   variance to sample closer to the last accepted value. */
   }
 

@@ -21,7 +21,7 @@ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   
     rate = (rate + a->d[a->mD] * a->tau[a->mTau] * a->tau[a->mTau]) / 2; 
 
-    if(a->s1 >= 1 && rate > 0){
+    if(shape >= 1 && rate > 0){
       a->eta[a->mEta + 1][g] = 1/sqrt(gammaHost(shape, rate, 0));
     } else {
       a->eta[a->mEta + 1][g] = a->eta[a->mEta][g];
