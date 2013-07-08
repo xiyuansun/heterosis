@@ -46,9 +46,9 @@ void printProbs(Chain *a, Config *cfg){
           alp = a->alp[m][g];
           del = a->del[m][g];
           
-          prob_hph += (del > fabs(alp));
-          prob_lph += (del < -fabs(alp));
-          prob_mph += (fabs(del) > 1e-6);
+          prob_hph += (del > sqrt(alp * alp));
+          prob_lph += (del < -sqrt(alp * alp));
+          prob_mph += (del * del > 1e-6);
         }
       
         prob_hph /= niter;
