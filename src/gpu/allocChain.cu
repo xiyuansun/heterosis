@@ -9,7 +9,7 @@
 
 __host__ Chain *allocChain(Config *cfg){
   Chain *a;
-  CUDA_CALL(cudaMalloc((Chain**) &a, sizeof(Chain)));
+  cudaMalloc((void**) &a, sizeof(Chain));
   allocChain_kernel<<<1, 1>>>(a, cfg->M, cfg->N, cfg->G);
   return a;
 }
