@@ -7,6 +7,6 @@
 
 int main(int argc, char **argv){
   Config *cfg = config(argc, argv);
-  Chain *a = allocChain<<<1, 1>>>(a, cfg->M, cfg->N, cfg->G);
+  Chain *a = allocChain(cfg);
   return 0;
 }
