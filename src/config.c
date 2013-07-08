@@ -8,7 +8,7 @@
 #include <string.h>
 
 Config *config(int argc, char **argv){
-  Config *cfg = malloc(sizeof(Config));
+  Config *cfg = calloc(1, sizeof(Config));
 
   cfg->dataFile = malloc(BUF * sizeof(char));
   cfg->groupFile = malloc(BUF * sizeof(char));
