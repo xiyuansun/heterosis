@@ -8,7 +8,7 @@
 
 void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
     if(pow(a->del[iMG(a->mDel, g)], 2) > 1e-6){
@@ -23,7 +23,6 @@ void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 void sampleSigDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
   int g;
-  int M = a->M, N = a->N, G = a->G;
   num_t rate = 0;
   
   for(g = 0; g < a->G; ++g) 
@@ -34,7 +33,6 @@ void sampleSigDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
 
 void sampleSigDel_kernel3(Chain *a){ /* pairwise sum in Thrust */
   int g, Gdel = 0;
-  int M = a->M, N = a->N, G = a->G;
   
   for(g = 0; g < a->G; ++g) 
     Gdel += a->tmp2[g];

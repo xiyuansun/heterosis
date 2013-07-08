@@ -8,7 +8,7 @@
 
 void sampleSigAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
 
   for(g = 0; g < a->G; ++g){
     if(pow(a->alp[iMG(a->mAlp, g)], 2) > 1e-6){
@@ -23,7 +23,6 @@ void sampleSigAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 void sampleSigAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
   int g;
-  int M = a->M, N = a->N, G = a->G;
   num_t rate = 0;  
 
   for(g = 0; g < a->G; ++g)
@@ -34,7 +33,6 @@ void sampleSigAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
 
 void sampleSigAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
   int g, Galp = 0;
-  int M = a->M, N = a->N, G = a->G;
   
   for(g = 0; g < a->G; ++g) 
     Galp += a->tmp2[g];  

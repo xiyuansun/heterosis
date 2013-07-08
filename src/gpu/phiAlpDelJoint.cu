@@ -8,7 +8,7 @@
 num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
  
   int n;
-   N = a->N, G = a->G;
+  int N = a->N, G = a->G;
   
   num_t ret, s = 0, tmp = 0;
 

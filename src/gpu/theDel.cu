@@ -23,7 +23,6 @@ void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 void sampleTheDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
   int g, Gdel = 0;
-  int N = a->N, G = a->G;
   
   for(g = 0; g < a->G; ++g)   
     Gdel += a->tmp1[g];

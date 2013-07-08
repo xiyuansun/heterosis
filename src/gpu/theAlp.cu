@@ -32,7 +32,7 @@ void sampleTheAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
 
 void sampleTheAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
   int g;
-  int M = a->M, N = a->N, G = a->G;
+  
   num_t sm = 0;
   
   for(g = 0; g < a->G; ++g) 
