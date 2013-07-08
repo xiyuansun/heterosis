@@ -106,11 +106,7 @@ Chain *newChain(Config *cfg){ /* host */
   num_t *lqts, s = 0, tmp, *tmpv;
   Chain *a;
 
-printf("-1\n");
-
   y = readData(cfg);
-  
-  printf("0\n");
   
   if(y == NULL)
     return NULL;
@@ -122,8 +118,6 @@ printf("-1\n");
     
     return NULL;
   }
-
-printf("1\n");
 
   a = allocChain(cfg);
 
@@ -148,8 +142,6 @@ printf("1\n");
            
     a->yMeanG[n] = tmp / cfg->G;
   }
-   
-   printf("2\n");
     
   /* initialization constants */
   
@@ -209,14 +201,10 @@ printf("1\n");
     s += lqts[n];
   }
   
-  printf("3\n");
-  
   s /= cfg->N;
   
   for(n = 0; n < cfg->N; ++n)
     a->c[iMN(0, n)] = lqts[n] - s;
-  
-  printf("4\n");
   
   newChain_kernel1(a);
   newChain_kernel2(a);

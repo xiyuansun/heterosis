@@ -15,7 +15,12 @@ void oneChain(int argc, char **argv){
     exit(EXIT_FAILURE);
   }
   
+  printf("1\n");
+  
   runChain(a, cfg);
+  
+  printf("2\n");
+  
   summarizeChain(a, cfg);  
 
   freeChain(a, cfg);
