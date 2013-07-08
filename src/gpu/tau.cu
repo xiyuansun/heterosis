@@ -42,7 +42,7 @@ void sampleTau(Chain *a, Config *cfg){ /* host */
   if(cfg->constTau)
     return;
 
-  sampleTau_kernel1(a);
-  sampleTau_kernel2(a);
-  sampleTau_kernel3(a);
+  sampleTau_kernel1(a); printf("taukernel1\n");
+  sampleTau_kernel2(a);printf("taukernel2\n");
+  sampleTau_kernel3(a);printf("taukernel3\n");
 }
