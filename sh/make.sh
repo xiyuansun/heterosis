@@ -71,7 +71,7 @@ function gpu {
   DEP+=(allocChain testgpu)
 
 #  DEP+=(allocChain newChain printChain freeChain)
-#  DEP+=(mu runiform rnormal rgamma rbeta)
+  DEP+=(mu runiform rnormal rgamma rbeta)
 #  DEP+=(c sigC eps eta d tau)
 #  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
 #  DEP+=(thePhi theAlp theDel)
