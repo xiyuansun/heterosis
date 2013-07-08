@@ -22,10 +22,10 @@
 
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);
-void pi2(int**, int, int, const char*);
-void pf2(num_t**, int, int, const char*);
-void pi3(int***, int, int, int, const char*);
-void pf3(num_t***, int, int, int, const char*);
+void pi2(int*, int, int, const char*);
+void pf2(num_t*, int, int, const char*);
+void pi3(int*, int, int, int, const char*);
+void pf3(num_t*, int, int, int, const char*);
 
 Config *config(int, char**);
 void getopts(Config*, int, char**);
@@ -34,7 +34,7 @@ void freeConfig(Config*);
 
 int *mySampleInt(int, int);
 int *readGrp(Config*);
-count_t **readData(Config*);
+count_t *readData(Config*);
 
 __host__ Chain *allocChain(Config*);
 
