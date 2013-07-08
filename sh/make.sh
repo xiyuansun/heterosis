@@ -1,7 +1,22 @@
 #!/bin/bash
 
+function mkdirs {
+  
+  if [ ! -d ../obj ]
+  then
+    mkdir ../obj
+  fi
+
+  if [ ! -d ../bin ]
+  then
+    mkdir ../bin
+  fi
+
+}
+
+
 function cpu {
-  echo Making CPU version.
+  echo Making CPU version...
 
   CC=gcc
   CFLAGS="-c -Wall -pedantic -I../include"
@@ -17,21 +32,11 @@ function cpu {
   DEP+=(thePhiHost theAlpHost theDelHost)
   DEP+=(sigPhiHost sigAlpHost sigDelHost)
   DEP+=(piAlpHost piDelHost)
-  DEP+=(runChain oneChain summarizeChainHost)
-  DEP+=(printProbs printRates printHyper printParms)
+  DEP+=(runChain oneChain summarizeChain)
+  DEP+=(printProbsHost printRatesHost printHyperHost printParmsHost)
   DEP+=(main)
 
   OBJ=()
-
-  if [ ! -d ../obj ]
-  then
-    mkdir ../obj
-  fi
-
-  if [ ! -d ../bin ]
-  then
-    mkdir ../bin
-  fi
 
   for dep in ${DEP[@]}
   do
@@ -43,7 +48,28 @@ function cpu {
 }
 
 function gpu {
-  echo Coming soon...
+  
+  echo Making GPU version...
+
+  CC=nvcc
+  CFLAGS="-I../include -c -Wall -pedantic "
+  LDFLAGS=-lm 
+
+  DEP=(printArrays)
+  DEP+=(config getopts printConfig freeConfig)
+  DEP+=(readGrp readData)
+  DEP+=(main)
+
+  OBJ=()
+
+  for dep in ${DEP[@]}
+  do
+    OBJ+=(../obj/${dep}.o)
+    ${CC} ../src/${dep}.c -o ../obj/${dep}.o ${CFLAGS} 
+  done
+
+  $CC ${OBJ[@]} -o ../bin/gpu_mcmc ${LDFLAGS}
+
 }
 
 function clean {
@@ -59,6 +85,7 @@ function clean {
   fi
 }
 
+mkdirs
 
 if [ $# -eq 0 ]
 then
