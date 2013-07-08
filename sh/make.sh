@@ -62,7 +62,7 @@ function gpu {
   echo Making GPU version...
 
   CC=nvcc
-  CFLAGS="-I../include -c -Wall -pedantic "
+  CFLAGS="-I../include -c --compiler-options -Wall --compiler-options -pedantic "
   LDFLAGS=-lm 
 
   DEP=(printArrays)
