@@ -119,6 +119,8 @@ Chain *newChain(Config *cfg){ /* host */
     return NULL;
   }
 
+printf("1\n");
+
   a = allocChain(cfg);
 
   /* data and configuration info */
@@ -142,6 +144,8 @@ Chain *newChain(Config *cfg){ /* host */
            
     a->yMeanG[n] = tmp / cfg->G;
   }
+   
+   printf("2\n");
     
   /* initialization constants */
   
@@ -201,10 +205,14 @@ Chain *newChain(Config *cfg){ /* host */
     s += lqts[n];
   }
   
+  printf("3\n");
+  
   s /= cfg->N;
   
   for(n = 0; n < cfg->N; ++n)
     a->c[iMN(0, n)] = lqts[n] - s;
+  
+  printf("4\n");
   
   newChain_kernel1(a);
   newChain_kernel2(a);

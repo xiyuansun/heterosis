@@ -7,34 +7,17 @@
 
 void oneChain(int argc, char **argv){
 
-  printf("hi-1\n");
-
   Config *cfg = config(argc, argv);  
-  
-    printf("hi0\n");
   Chain *a = newChain(cfg);
-  
-  printf("hi1\n");
   
   if(a == NULL){
     freeConfig(cfg);
     exit(EXIT_FAILURE);
   }
-    printf("hi2\n");
   
   runChain(a, cfg);
-
-  printf("hi3\n");
-
   summarizeChain(a, cfg);  
 
-  printf("hi4\n");
-
   freeChain(a, cfg);
-  
-    printf("hi5\n");
-  
   freeConfig(cfg);
-  
-    printf("hi6\n");
 }
