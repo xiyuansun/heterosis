@@ -17,6 +17,6 @@ void oneChain(int argc, char **argv){
   runChain(a, cfg);
   summarizeChain(a, cfg);  
 
-  freeConfig(cfg);
   freeChainHost(a, cfg);
+  freeConfig(cfg);
 }
