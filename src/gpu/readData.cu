@@ -6,7 +6,7 @@
 
 count_t **readData(Config *cfg){
   int g = 0, n = 0, N, G; 
-  coun_t *y;
+  count_t *y;
   char *buf, row[MAXROW];
   FILE *fp = fopen(cfg->dataFile, "r");
   
