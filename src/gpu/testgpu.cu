@@ -7,6 +7,6 @@
 
 int main(int argc, char **argv){
   Config *cfg = config(argc, argv);
-  printConfig(cfg);
+  Chain *a = allocChain(cfg);
   return 0;
 }
