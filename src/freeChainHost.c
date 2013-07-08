@@ -74,9 +74,9 @@ void freeChainHost(Chain *a, Config *cfg){
   for(n = 0; n < cfg->N; ++n)
     free(a->accEps[n]);
 
-  free(a->accC);
+  /*free(a->accC);
   free(a->accPhi);
   free(a->accAlp);
   free(a->accDel);
-  free(a->accEps);
+  free(a->accEps);*/
 }
