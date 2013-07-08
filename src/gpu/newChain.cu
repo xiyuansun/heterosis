@@ -12,7 +12,7 @@ int cmpfunc (const void *a, const void *b){
 
 void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g;
-  int M = a->M, N = a->N, G = a->G;
+  int N = a->N, G = a->G;
   
   num_t u;
 
@@ -45,7 +45,7 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g;
-  int M = a->M, N = a->N, G = a->G;
+  int G = a->G;
 
   a->mC = 0;
   a->mSigC = 0;

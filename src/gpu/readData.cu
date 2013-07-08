@@ -6,7 +6,7 @@
 #include <string.h>
 
 count_t *readData(Config *cfg){
-  int g = 0, n = 0, N, G; 
+  int g = 0, n = 0, G; 
   count_t *y;
   char *buf, row[MAXROW];
   FILE *fp = fopen(cfg->dataFile, "r");
@@ -42,8 +42,7 @@ count_t *readData(Config *cfg){
   
   y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t*));
   rewind(fp);
-  
-  N = cfg->N;
+
   G = cfg->G;
   
   for(g = 0; g < cfg->G; ++g)
