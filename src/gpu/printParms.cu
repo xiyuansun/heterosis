@@ -1,12 +1,15 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void printParms_oneFile(Chain *a, Config *cfg, int some){
 
   int m, n, g, nlibs, ngenes;
+  int M = cfg->M, N = cfg->N, G = cfg->G;
+  
   num_t tmp;
   FILE *fp;
   

@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 Chain *allocChain(Config *cfg){
-  int m, n;
   int M = cfg->M, N = cfg->N, G = cfg->G;
   
   Chain *a;
