@@ -14,7 +14,7 @@ Chain *allocChain(Config *cfg){
   
   /* data */  
   
-  a->y = (count_t*) malloc(N * G * sizeof(count_t));
+  a->y = malloc(N * G * sizeof(count_t));
   a->yMeanG = (num_t*) malloc(N * sizeof(num_t));
   a->grp = (int*) malloc(N * sizeof(int));
 
