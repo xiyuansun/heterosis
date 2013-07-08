@@ -9,16 +9,16 @@ Chain *allocChain(Config *cfg){
   int m, n;
   Chain *a;
   
-  a = malloc(sizeof(Chain));
+  a = (Chain*) malloc(sizeof(Chain));
   
   /* data */  
   
-  a->y = malloc(cfg->N * sizeof(count_t*));
+  a->y = (count_t**) malloc(cfg->N * sizeof(count_t*));
   for(n = 0; n < cfg->N; ++n)
-    a->y[n] = malloc(cfg->G * sizeof(count_t));
+    a->y[n] = (count_t*) malloc(cfg->G * sizeof(count_t));
 
-  a->yMeanG = malloc(cfg->N * sizeof(count_t));
-  a->grp = malloc(cfg->N * sizeof(count_t));
+  a->yMeanG = (num_t*) malloc(cfg->N * sizeof(num_t));
+  a->grp = (int*) malloc(cfg->N * sizeof(int));
 
   /* parameters */
 
