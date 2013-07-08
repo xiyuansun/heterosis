@@ -74,14 +74,14 @@ Chain *allocChain(Config *cfg){
 
   /* number of acceptances for Metropolis steps */
 
-  a->accC   = malloc(cfg->N * sizeof(num_t));
-  a->accPhi = malloc(cfg->G * sizeof(num_t));
-  a->accAlp = malloc(cfg->G * sizeof(num_t));
-  a->accDel = malloc(cfg->G * sizeof(num_t));
+  a->accC   = malloc(cfg->N * sizeof(int));
+  a->accPhi = malloc(cfg->G * sizeof(int));
+  a->accAlp = malloc(cfg->G * sizeof(int));
+  a->accDel = malloc(cfg->G * sizeof(int));
   
-  a->accEps = malloc(cfg->N * sizeof(num_t*));
+  a->accEps = malloc(cfg->N * sizeof(int*));
   for(n = 0; n < cfg->N; ++n)
-    a->accEps[n] = malloc(cfg->G * sizeof(num_t));
+    a->accEps[n] = malloc(cfg->G * sizeof(int));
     
   return a;
 }
