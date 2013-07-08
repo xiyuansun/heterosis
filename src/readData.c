@@ -11,7 +11,6 @@ count_t **readData(Config *cfg){
   
   if(fp == NULL){
     printf("ERROR: data file \"%s\" not found.\n", cfg->dataFile);
-    fclose(fp);
     return NULL;
   }
 
