@@ -16,15 +16,15 @@ num_t delProp(Chain *a, int g){ /* device */
   num_t avg = (a->del[a->mDel][g] * sprec) / (gprec + sprec);
   num_t s = gam * gam + sig * sig;
   num_t u = runiform(0, 1);
-  num_t new;
+  num_t New;
 
   if(u < a->piDel[a->mPiDel]){
-    new = 0;
+    New = 0;
   } else {
-    new = rnormal(avg, s);
+    New = rnormal(avg, s);
   }
 
-  return new;
+  return New;
 }
 
 num_t lDel(Chain *a, int g, num_t arg){ /* device */ 
@@ -51,24 +51,24 @@ num_t lDel(Chain *a, int g, num_t arg){ /* device */
 
 void sampleDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
-  num_t old, new, dl, lp, lu;
+  num_t Old, New, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){ 
 
-    old = a->del[a->mDel][g];
-    new = delProp(a, g);
+    Old = a->del[a->mDel][g];
+    New = delProp(a, g);
     
-    dl = lDel(a, g, new) - lDel(a, g, old);
+    dl = lDel(a, g, New) - lDel(a, g, Old);
     lp = 0 < dl? 0 : dl;
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->del[a->mDel + 1][g] = new;
+      a->del[a->mDel + 1][g] = New;
       
       if(a->mDel >= a->burnin)
         ++a->accDel[g];
     } else { /* reject */
-      a->del[a->mDel + 1][g] = old;
+      a->del[a->mDel + 1][g] = Old;
     }
   }
 }

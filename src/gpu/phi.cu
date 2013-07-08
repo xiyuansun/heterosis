@@ -21,25 +21,25 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
 
 void samplePhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
-  num_t old, new, dl, lp, lu;
+  num_t Old, New, dl, lp, lu;
   
   for(g = 0; g < a->G; ++g){ 
 
-    old = a->phi[a->mPhi][g];
-    new = rnormal(old, a->tunePhi[g]);
+    Old = a->phi[a->mPhi][g];
+    New = rnormal(Old, a->tunePhi[g]);
 
-    dl = lPhi(a, g, new) - lPhi(a, g, old);
+    dl = lPhi(a, g, New) - lPhi(a, g, Old);
     lp = 0 < dl ? 0 : dl;
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->phi[a->mPhi + 1][g] = new;
+      a->phi[a->mPhi + 1][g] = New;
       a->tunePhi[g] *= 1.1; 
       
       if(a->mPhi >= a->burnin)
         ++a->accPhi[g];
     } else { /* reject */
-      a->phi[a->mPhi + 1][g] = old;
+      a->phi[a->mPhi + 1][g] = Old;
       a->tunePhi[g] /= 1.1; 
     }
   }
