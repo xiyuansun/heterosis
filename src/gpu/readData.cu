@@ -5,7 +5,8 @@
 #include <string.h>
 
 count_t **readData(Config *cfg){
-  int g = 0, n = 0, **y;
+  int g = 0, n = 0, N, G; 
+  coun_t *y;
   char *buf, row[MAXROW];
   FILE *fp = fopen(cfg->dataFile, "r");
   
@@ -38,15 +39,15 @@ count_t **readData(Config *cfg){
       cfg->G = g;
   }
   
-  y = (count_t**) malloc(cfg->N * sizeof(count_t*));
+  y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t*));
   rewind(fp);
   
-  for(n = 0; n < cfg->N; ++n)
-    y[n] = (count_t*) malloc(cfg->G * sizeof(count_t)); 
+  N = cfg->N;
+  G = cfg->G;
   
   for(g = 0; g < cfg->G; ++g)
     for(n = 0; n < cfg->N; ++n)
-      fscanf(fp, "%d", y[n] + g);
+      fscanf(fp, "%d", y[iNG(n, g)]);
   
   fclose(fp);
   return y;

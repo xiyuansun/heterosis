@@ -20,7 +20,7 @@ void pf1(num_t *v, int l, const char* m){
   printf("\n\n"); 
 }
 
-void pi2(int **v, int l1, int l2, const char* m){
+void pi2(int *v, int l1, int l2, const char* m){
   int i, j;
   printf("%s", m);
   for(i = 0; i < l1; ++i){
@@ -31,7 +31,7 @@ void pi2(int **v, int l1, int l2, const char* m){
   printf("\n"); 
 }
 
-void pf2(num_t **v, int l1, int l2, const char* m){
+void pf2(num_t *v, int l1, int l2, const char* m){
   int i, j;
   printf("%s", m);
   for(i = 0; i < l1; ++i){
@@ -44,7 +44,7 @@ void pf2(num_t **v, int l1, int l2, const char* m){
   printf("\n"); 
 }
 
-void pi3(int ***v, int l1, int l2, int l3, const char* m){
+void pi3(int *v, int l1, int l2, int l3, const char* m){
   int i, j, k;
   printf("%s", m);
   for(i = 0; i < l1; ++i){
@@ -57,7 +57,7 @@ void pi3(int ***v, int l1, int l2, int l3, const char* m){
   }
 }
 
-void pf3(num_t ***v, int l1, int l2, int l3, const char* m){
+void pf3(num_t *v, int l1, int l2, int l3, const char* m){
   int i, j, k;
   printf("%s", m);
   for(i = 0; i < l1; ++i){

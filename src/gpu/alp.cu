@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 num_t alpProp(Chain *a, int g){ /* device */
+  int G = a->G;
       
   num_t gam = a->gamAlp;
   num_t sig = a->sigAlp[a->mSigAlp];

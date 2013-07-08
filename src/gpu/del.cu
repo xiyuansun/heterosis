@@ -6,7 +6,8 @@
 #include <stdlib.h>
 
 num_t delProp(Chain *a, int g){ /* device */
-      
+  int G = a->G;      
+
   num_t gam = a->gamDel;
   num_t sig = a->sigDel[a->mSigDel];
 

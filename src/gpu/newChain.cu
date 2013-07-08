@@ -102,7 +102,7 @@ Chain *newChain(Config *cfg){ /* host */
   int n, g, *grp;
   int M = cfg->M, N = cfg->N, G = cfg->G;
   
-  count_t **y;
+  count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv;
   Chain *a;
 
