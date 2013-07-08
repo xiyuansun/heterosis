@@ -15,7 +15,7 @@ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
   int n, g;
   num_t old;
-  num_t new
+  num_t new;
   num_t dl;
   num_t lp;
   num_t lu;
