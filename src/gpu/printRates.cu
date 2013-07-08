@@ -8,7 +8,7 @@
 void printRates(Chain *a, Config *cfg){
 
   int n, i, niter = cfg->M - cfg->burnin;
-  int M = cfg->M, N = cfg->N, G = cfg->G;
+  int G = cfg->G;
   num_t accD, accC, accPhi, accAlp, accDel, accEps;
   FILE *fp;
   

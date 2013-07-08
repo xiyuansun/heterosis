@@ -8,7 +8,7 @@
 void printParms_oneFile(Chain *a, Config *cfg, int some){
 
   int m, n, g, nlibs, ngenes;
-  int G = cfg->G;
+  int N = cfg->N, G = cfg->G;
   
   num_t tmp;
   FILE *fp;
