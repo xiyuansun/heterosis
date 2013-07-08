@@ -8,6 +8,8 @@
 num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
  
   int n;
+  int M = a->M, N = a->N, G = a->G;
+  
   num_t ret, s = 0, tmp = 0;
 
   for(n = 0; n < a->N; ++n){
@@ -42,6 +44,8 @@ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel)
 
 void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
+  int M = a->M, N = a->N, G = a->G;
+  
   num_t oldPhi, newPhi, oldAlp, newAlp, oldDel, newDel;
   num_t dl, lp, lu;
 

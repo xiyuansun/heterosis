@@ -8,6 +8,7 @@
 
 void sampleSigPhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
+  int M = a->M, N = a->N, G = a->G;
 
   for(g = 0; g < a->G; ++g) 
     a->tmp1[g] = pow(a->phi[a->mPhi][g] - a->thePhi[a->mThePhi], 2);
@@ -15,6 +16,8 @@ void sampleSigPhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 void sampleSigPhi_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
   int g;
+  int M = a->M, N = a->N, G = a->G;
+  
   num_t rate = 0;
   
   for(g = 0; g < a->G; ++g)

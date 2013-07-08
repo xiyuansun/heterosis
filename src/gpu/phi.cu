@@ -7,9 +7,11 @@
 
 num_t lPhi(Chain *a, int g, num_t arg){ /* device */
   int n;
+  int M = a->M, N = a->N, G = a->G;
+  
   num_t ret, s = 0, tmp = 0; 
 
-  for(n = 0; n < a->N; ++n){
+  for(n = 0; n < N; ++n){
     tmp = mu(a, n, arg, a->alp[a->mAlp][g], a->del[a->mDel][g]);
     s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
         a->eps[a->mEps][n][g] + tmp);
@@ -21,9 +23,11 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
 
 void samplePhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
+  int M = a->M, N = a->N, G = a->G;
+  
   num_t Old, New, dl, lp, lu;
   
-  for(g = 0; g < a->G; ++g){ 
+  for(g = 0; g < G; ++g){ 
 
     Old = a->phi[a->mPhi][g];
     New = rnormal(Old, a->tunePhi[g]);

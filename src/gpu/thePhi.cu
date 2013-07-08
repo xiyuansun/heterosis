@@ -8,6 +8,7 @@
 
 void sampleThePhi_kernel1(Chain *a){ /* pairwise sum in Thrust */
   int g;
+  int M = a->M, N = a->N, G = a->G;
   
   a->tmp1[0] = 0; 
   for(g = 0; g < a->G; ++g)

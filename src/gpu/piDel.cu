@@ -8,6 +8,7 @@
 
 void samplePiDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
+  int M = a->M, N = a->N, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
     if(pow(a->del[a->mDel][g], 2) > 1e-6){
@@ -21,6 +22,8 @@ void samplePiDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 void samplePiDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
 
   int g, Gdel = 0;
+  int M = a->M, N = a->N, G = a->G;
+  
   for(g = 0; g < a->G; ++g) 
      Gdel += a->tmp1[g];
 

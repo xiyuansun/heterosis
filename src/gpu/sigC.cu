@@ -8,6 +8,7 @@
 
 void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
   int n;
+  int M = a->M, N = a->N, G = a->G;
   num_t rate, shape, lb;
 
   if(a->constSigC)

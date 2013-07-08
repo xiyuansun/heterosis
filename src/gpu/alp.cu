@@ -31,9 +31,10 @@ num_t alpProp(Chain *a, int g){ /* device */
 num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   
   int n;
+  int M = a->M, N = a->N, G = a->G;
   num_t s = 0, tmp;
    
-  for(n = 0; n < a->N; ++n){
+  for(n = 0; n < N; ++n){
     if(a->grp[n] != 2){
       tmp = mu(a, n, a->phi[a->mPhi][g], arg, a->del[a->mDel][g]);
       s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
@@ -54,9 +55,10 @@ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
 void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
   int g;
+  int M = a->M, N = a->N, G = a->G;
   num_t Old, New, dl, lp, lu;
 
-  for(g = 0; g < a->G; ++g){ 
+  for(g = 0; g < G; ++g){ 
 
     Old = a->alp[a->mAlp][g];
     New = alpProp(a, g);

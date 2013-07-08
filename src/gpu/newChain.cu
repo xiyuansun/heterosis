@@ -12,9 +12,11 @@ int cmpfunc (const void *a, const void *b){
 
 void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g;
+  int M = a->M, N = a->N, G = a->G;
+  
   num_t u;
 
-  for(g = 0; g < a->G; ++g){
+  for(g = 0; g < G; ++g){
 
     a->phi[0][g] = rnormal(a->thePhi[0], a->sigPhi[0]);
 
@@ -35,7 +37,7 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     a->eta[0][g] = 1/sqrt(rgamma(a->d[0] / 2, 
                    a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
 
-    for(n = 0; n < a->N; ++n)
+    for(n = 0; n < N; ++n)
       a->eps[0][n][g] = rnormal(0, a->eta[0][g]);
     
   }
@@ -43,6 +45,7 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g;
+  int M = a->M, N = a->N, G = a->G;
 
   a->mC = 0;
   a->mSigC = 0;
@@ -97,6 +100,8 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 Chain *newChain(Config *cfg){ /* host */
   int n, g, *grp;
+  int M = cfg->M, N = cfg->N, G = cfg->G;
+  
   count_t **y;
   num_t *lqts, s = 0, tmp, *tmpv;
   Chain *a;

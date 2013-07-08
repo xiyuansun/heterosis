@@ -7,10 +7,11 @@
 void freeChain(Chain *a, Config *cfg){
   
   int m, n;
+  int M = cfg->M, N = cfg->N;
   
   /* data */  
 
-  for(n = 0; n < cfg->N; ++n)
+  for(n = 0; n < N; ++n)
     free(a->y[n]);
 
   free(a->y);
@@ -19,9 +20,9 @@ void freeChain(Chain *a, Config *cfg){
 
   /* parameters */
   
-  for(m = 0; m <= cfg->M; ++m){
+  for(m = 0; m <= M; ++m){
 
-    for(n = 0; n < cfg->N; ++n)
+    for(n = 0; n < N; ++n)
       free(a->eps[m][n]);
       
     free(a->c[m]);
@@ -62,7 +63,7 @@ void freeChain(Chain *a, Config *cfg){
   
   /* tuning parameters for Metropolis steps */
 
-  for(n = 0; n < cfg->N; ++n)
+  for(n = 0; n < N; ++n)
     free(a->tuneEps[n]);
   
   free(a->tuneC);
@@ -71,7 +72,7 @@ void freeChain(Chain *a, Config *cfg){
 
   /* number of acceptances for Metropolis steps */
 
-  for(n = 0; n < cfg->N; ++n)
+  for(n = 0; n < N; ++n)
     free(a->accEps[n]);
 
   free(a->accC);

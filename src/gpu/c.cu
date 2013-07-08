@@ -7,22 +7,25 @@
 
 void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
   int g;
+  int M = a->M, N = a->N, G = a->G;
   
-  for(g = 0; g < a->G; ++g)
+  for(g = 0; g < G; ++g)
     a->tmp1[g] = exp(a->eps[a->mEps][n][g] + mu(a, n, a->phi[a->mPhi][g], 
                     a->alp[a->mAlp][g], a->del[a->mDel][g]));
 }
 
 void lC_kernel2(Chain *a, int n){ /* parallel pairwise sum */
   int g;
+  int M = a->M, N = a->N, G = a->G;;
   a->tmp2[0] = 0;
   
-  for(g = 0; g < a->G; ++g)
+  for(g = 0; g < G; ++g)
     a->tmp2[0] += a->tmp1[g];
 }
 
 void lC_kernel3(Chain *a, int n, int newArg){ /* kernel <<<1, 1>>> */
   num_t arg, ret;
+  int M = a->M, N = a->N, G = a->G;
 
   if(newArg){
     arg = a->New[n];
@@ -30,7 +33,7 @@ void lC_kernel3(Chain *a, int n, int newArg){ /* kernel <<<1, 1>>> */
     arg = a->Old[n];
   }
 
-  ret = arg * a->G * a->yMeanG[n] - exp(arg) * a->tmp2[0] - (arg*arg) / 
+  ret = arg * G * a->yMeanG[n] - exp(arg) * a->tmp2[0] - (arg*arg) / 
         (2 * a->sigC[a->mSigC] * a->sigC[a->mSigC]);
 
   if(newArg){
@@ -48,8 +51,9 @@ void lC(Chain *a, int n, int newArg){ /* host */
 
 void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
   int n;
+  int M = a->M, N = a->N, G = a->G;
   
-  for(n = 0; n < a->N; ++n){
+  for(n = 0; n < N; ++n){
     a->Old[n] = a->c[a->mC][n];
     a->New[n] = rnormal(a->Old[n], a->tuneC[n]);
   }
@@ -57,9 +61,10 @@ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
 
 void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
   int n;
+  int M = a->M, N = a->N, G = a->G;
   num_t dl, lp, lu;
 
-  for(n = 0; n < a->N; ++n){ 
+  for(n = 0; n < N; ++n){ 
 
     dl = a->lNew[n] - a->lOld[n];
     lp = 0 < dl ? 0 : dl;
@@ -87,9 +92,10 @@ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 
 void sampleC(Chain *a){ /* host */
   int n;
+  int M = a->M, N = a->N, G = a->G;
   sampleC_kernel1(a);
 
-  for(n = 0; n < a->N; ++n){ 
+  for(n = 0; n < N; ++n){ 
     lC(a, n, 1);
     lC(a, n, 0);
   }
