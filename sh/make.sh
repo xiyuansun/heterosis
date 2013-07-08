@@ -67,9 +67,17 @@ function gpu {
 
   DEP=(printArrays)
   DEP+=(config getopts printConfig freeConfig)
-  DEP+=(readGrp readData)
+  DEP+=(mySampleInt readGrp readData)
+  DEP+=(allocChain newChain printChain freeChain)
   DEP+=(mu runiform rnormal rgamma rbeta)
-  DEP+=(testgpu)
+  DEP+=(c sigC eps eta d tau)
+  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
+  DEP+=(thePhi theAlp theDel)
+  DEP+=(sigPhi sigAlp sigDel)
+  DEP+=(piAlp piDel)
+  DEP+=(runChain oneChain summarizeChain)
+  DEP+=(printProbs printRates printHyper printParms)
+  DEP+=(main)
 
   OBJ=()
 
