@@ -1,7 +1,5 @@
-1) implement in C
-2) debug with Valgrind
-3) implement in CUDA C
-4) validate with BaySeq
+1) implement in CUDA C
+2) validate with BaySeq
 
 ./mcmc -data [DATA-FILE] 
        -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 
