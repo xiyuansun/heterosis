@@ -80,7 +80,7 @@ function gpu {
   DEP+=(main)
 
   OBJ=()
-
+ 
   for dep in ${DEP[@]}
   do
     OBJ+=(../obj/gpu/${dep}.o)
