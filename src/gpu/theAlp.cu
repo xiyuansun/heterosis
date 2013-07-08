@@ -11,9 +11,9 @@ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int M = a->M, N = a->N, G = a->G;
 
   for(g = 0; g < a->G; ++g){
-    if(pow(a->alp[a->mAlp][g], 2) > 1e-6){
+    if(pow(a->alp[iMG(a->mAlp, g)], 2) > 1e-6){
       a->tmp1[g] = 1;
-      a->tmp2[g] = a->alp[a->mAlp][g];
+      a->tmp2[g] = a->alp[iMG(a->mAlp, g)];
     } else {
       a->tmp1[g] = 0;
       a->tmp2[g] = 0;

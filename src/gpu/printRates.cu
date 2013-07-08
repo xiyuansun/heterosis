@@ -37,7 +37,7 @@ void printRates(Chain *a, Config *cfg){
   
     accEps = 0;  
     for(n = 0; n < cfg->N; ++n)
-      accEps += a->accEps[n][0];
+      accEps += a->accEps[iNG(n, 0)];
     accEps /= (niter * cfg->N);
     
     fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
@@ -64,7 +64,7 @@ void printRates(Chain *a, Config *cfg){
   
       accEps = 0;  
       for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[n][i];
+        accEps += a->accEps[iNG(n, i)];
       accEps /= (niter * cfg->N);
       
       fprintf(fp, ". ");
@@ -90,7 +90,7 @@ void printRates(Chain *a, Config *cfg){
       accEps = 0;  
       
       for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[n][i];
+        accEps += a->accEps[iNG(n, i)];
       accEps /= (niter * cfg->N);
       
       fprintf(fp, ". . ");

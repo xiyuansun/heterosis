@@ -58,33 +58,33 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
     
     for(m = 0; m <= cfg->M; ++m){
       for(n = 0; n < nlibs; ++n){
-        tmp = a->c[m][n];
+        tmp = a->c[iMN(m, n)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
       
       for(g = 0; g < ngenes; ++g){
-        tmp = a->phi[m][g];
+        tmp = a->phi[iMG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
 
       for(g = 0; g < ngenes; ++g){
-        tmp = a->alp[m][g];
+        tmp = a->alp[iMG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
       
       for(g = 0; g < ngenes; ++g){
-        tmp = a->del[m][g];
+        tmp = a->del[iMG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }      
 
       for(g = 0; g < ngenes; ++g){
-        tmp = a->eta[m][g];
+        tmp = a->eta[iMG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }    
       
       for(n = 0; n < nlibs; ++n)
         for(g = 0; g < ngenes; ++g){
-          tmp = a->eps[m][n][g];
+          tmp = a->eps[iMNG(m, n, g)];
           fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
         }
       

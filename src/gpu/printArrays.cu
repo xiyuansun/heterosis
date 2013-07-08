@@ -25,7 +25,7 @@ void pi2(int **v, int l1, int l2, const char* m){
   printf("%s", m);
   for(i = 0; i < l1; ++i){
     for(j = 0; j < l2; ++j)
-      printf("%d ", v[i][j]);
+      printf("%d ", v[l2 * i + j]);
     printf("\n");
   }
   printf("\n"); 
@@ -36,7 +36,7 @@ void pf2(num_t **v, int l1, int l2, const char* m){
   printf("%s", m);
   for(i = 0; i < l1; ++i){
     for(j = 0; j < l2; ++j){
-      printf(NUM_TF, v[i][j]);
+      printf(NUM_TF, v[l2 * i + j]);
       printf(" ");
     }
     printf("\n");
@@ -50,7 +50,7 @@ void pi3(int ***v, int l1, int l2, int l3, const char* m){
   for(i = 0; i < l1; ++i){
     for(j = 0; j < l2; ++j){
       for(k = 0; k < l3; ++k)
-        printf("%d ", v[i][j][k]);
+        printf("%d ", v[l2 * l3 * i + l3 * j + k]);
       printf("\n");
     }
     printf("\n"); 
@@ -63,7 +63,7 @@ void pf3(num_t ***v, int l1, int l2, int l3, const char* m){
   for(i = 0; i < l1; ++i){
     for(j = 0; j < l2; ++j){
       for(k = 0; k < l3; ++k){
-        printf(NUM_TF, v[i][j][k]);
+        printf(NUM_TF, v[l2 * l3 * i + l3 * j + k]);
         printf(" "); 
       }
       printf("\n");
@@ -71,4 +71,3 @@ void pf3(num_t ***v, int l1, int l2, int l3, const char* m){
     printf("\n"); 
   }
 }
-

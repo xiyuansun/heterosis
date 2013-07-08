@@ -5,6 +5,13 @@
 #include "Config.h"
 #include "constants.h"
 
+/* indexing functions */
+
+#define iMNG(m, n, g) (N * G * m + G * n + g)
+#define iMN(m, n) (N * m + n)
+#define iMG(m, g) (G * m + g)
+#define iNG(n, g) (G * n + g)
+
 #define CUDA_CALL(x) do { if((x) != cudaSuccess) { \
     printf("Error at %s:%d\n",__FILE__,__LINE__); \
     return EXIT_FAILURE;}} while(0)

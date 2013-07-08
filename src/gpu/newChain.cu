@@ -18,27 +18,27 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
   for(g = 0; g < G; ++g){
 
-    a->phi[0][g] = rnormal(a->thePhi[0], a->sigPhi[0]);
+    a->phi[iMG(0, g)] = rnormal(a->thePhi[0], a->sigPhi[0]);
 
     u = runiform(0, 1);
     if(u < a->piAlp[0]){
-      a->alp[0][g] = 0;
+      a->alp[iMG(0, g)] = 0;
     } else {
-      a->alp[0][g] = rnormal(a->theAlp[0], a->sigAlp[0]);
+      a->alp[iMG(0, g)] = rnormal(a->theAlp[0], a->sigAlp[0]);
     }
     
     u = runiform(0, 1);
     if(u < a->piDel[0]){
-      a->del[0][g] = 0;
+      a->del[iMG(0, g)] = 0;
     } else {
-      a->del[0][g] = rnormal(a->theDel[0], a->sigDel[0]);
+      a->del[iMG(0, g)] = rnormal(a->theDel[0], a->sigDel[0]);
     }
  
-    a->eta[0][g] = 1/sqrt(rgamma(a->d[0] / 2, 
+    a->eta[iMG(0, g)] = 1/sqrt(rgamma(a->d[0] / 2, 
                    a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
 
     for(n = 0; n < N; ++n)
-      a->eps[0][n][g] = rnormal(0, a->eta[0][g]);
+      a->eps[iMNG(0, n, g)] = rnormal(0, a->eta[iMG(0, g)]);
     
   }
 }
@@ -79,7 +79,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->tunePhi[g] = 1;
 
     for(n = 0; n < a->N; ++n)
-      a->tuneEps[n][g] = 1;
+      a->tuneEps[iNG(n, g)] = 1;
   }
   
   a->accD = 0;
@@ -88,7 +88,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->accC[n] = 0;
   
     for(g = 0; g < a->G; ++g)
-      a->accEps[n][g] = 0;
+      a->accEps[iNG(n, g)] = 0;
   }
 
   for(g = 0; g < a->G; ++g){
@@ -138,8 +138,8 @@ Chain *newChain(Config *cfg){ /* host */
     tmp = 0;
     
     for(g = 0; g < cfg->G; ++g){
-      a->y[n][g] = y[n][g];
-      tmp += y[n][g];
+      a->y[iNG(n, g)] = y[iNG(n, g)];
+      tmp += y[iNG(n, g)];
     }
            
     a->yMeanG[n] = tmp / cfg->G;
@@ -196,7 +196,7 @@ Chain *newChain(Config *cfg){ /* host */
   s = 0;
   for(n = 0; n < cfg->N; ++n){
     for(g = 0; g < cfg->G; ++g)
-      tmpv[g] = y[n][g];
+      tmpv[g] = y[iNG(n, g)];
       
     qsort(tmpv, cfg->N, sizeof(num_t), cmpfunc);    
     lqts[n] = log(tmpv[(int) floor(cfg->G * 0.75)]);
@@ -206,7 +206,7 @@ Chain *newChain(Config *cfg){ /* host */
   s /= cfg->N;
   
   for(n = 0; n < cfg->N; ++n)
-    a->c[0][n] = lqts[n] - s;
+    a->c[iMN(0, n)] = lqts[n] - s;
   
   newChain_kernel1(a);
   newChain_kernel2(a);

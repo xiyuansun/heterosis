@@ -12,7 +12,7 @@ void sampleThePhi_kernel1(Chain *a){ /* pairwise sum in Thrust */
   
   a->tmp1[0] = 0; 
   for(g = 0; g < a->G; ++g)
-    a->tmp1[0] += a->phi[a->mPhi][g];
+    a->tmp1[0] += a->phi[iMG(a->mPhi, g)];
 }
 
 void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */

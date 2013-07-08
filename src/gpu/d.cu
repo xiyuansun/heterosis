@@ -11,8 +11,8 @@ void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int M = a->M, N = a->N, G = a->G;
 
   for(g = 0; g < G; ++g){ 
-    a->tmp1[g] = 2 * log(a->eta[a->mEta][g]);
-    a->tmp2[g] = 1/(a->eta[a->mEta][g] * a->eta[a->mEta][g]);
+    a->tmp1[g] = 2 * log(a->eta[iMG(a->mEta, g)]);
+    a->tmp2[g] = 1/(a->eta[iMG(a->mEta, g)] * a->eta[iMG(a->mEta, g)]);
   }
 }
 

@@ -10,8 +10,8 @@ void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
   int M = a->M, N = a->N, G = a->G;
   
   for(g = 0; g < G; ++g)
-    a->tmp1[g] = exp(a->eps[a->mEps][n][g] + mu(a, n, a->phi[a->mPhi][g], 
-                    a->alp[a->mAlp][g], a->del[a->mDel][g]));
+    a->tmp1[g] = exp(a->eps[iMNG(a->mEps, n, g)] + mu(a, n, a->phi[iMG(a->mPhi, g)], 
+                    a->alp[iMG(a->mAlp, g)], a->del[iMG(a->mDel, g)]));
 }
 
 void lC_kernel2(Chain *a, int n){ /* parallel pairwise sum */
@@ -54,7 +54,7 @@ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
   int M = a->M, N = a->N, G = a->G;
   
   for(n = 0; n < N; ++n){
-    a->Old[n] = a->c[a->mC][n];
+    a->Old[n] = a->c[iMN(a->mC, n)];
     a->New[n] = rnormal(a->Old[n], a->tuneC[n]);
   }
 }
@@ -71,14 +71,14 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
     lu = log(runiform(0, 1));
       
     if(lu < lp){ /* accept */
-      a->c[a->mC + 1][n] = a->New[n];
+      a->c[iMN(a->mC + 1, n)] = a->New[n];
       a->tuneC[n] *= 1.1; /* Increase the proposal variance to avoid  
                                        getting stuck in a mode */
                                        
       if(a->mC >= a->burnin)                                 
         ++a->accC[n];
     } else { /* reject */
-      a->c[a->mC + 1][n] = a->Old[n];
+      a->c[iMN(a->mC + 1, n)] = a->Old[n];
       a->tuneC[n] /= 1.1; /* If you're rejecting too often, decrease the  
                                        proposal variance to sample closer to 
                                        the last accepted value. */

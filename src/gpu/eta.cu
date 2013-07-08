@@ -19,14 +19,14 @@ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 
     rate = 0;
     for(n = 0; n < N; ++n) 
-      rate += a->eps[a->mEps][n][g] * a->eps[a->mEps][n][g];
+      rate += a->eps[iMNG(a->mEps, n, g)] * a->eps[iMNG(a->mEps, n, g)];
   
     rate = (rate + a->d[a->mD] * a->tau[a->mTau] * a->tau[a->mTau]) / 2; 
 
     if(shape >= 1 && rate > 0){
-      a->eta[a->mEta + 1][g] = 1/sqrt(rgamma(shape, rate, 0));
+      a->eta[iMG(a->mEta + 1, g)] = 1/sqrt(rgamma(shape, rate, 0));
     } else {
-      a->eta[a->mEta + 1][g] = a->eta[a->mEta][g];
+      a->eta[iMG(a->mEta + 1, g)] = a->eta[iMG(a->mEta, g)];
     }
   }
 }

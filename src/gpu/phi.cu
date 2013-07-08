@@ -12,9 +12,9 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
   num_t ret, s = 0, tmp = 0; 
 
   for(n = 0; n < N; ++n){
-    tmp = mu(a, n, arg, a->alp[a->mAlp][g], a->del[a->mDel][g]);
-    s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
-        a->eps[a->mEps][n][g] + tmp);
+    tmp = mu(a, n, arg, a->alp[iMG(a->mAlp, g)], a->del[iMG(a->mDel, g)]);
+    s += a->y[iNG(n, g)] * tmp - exp(a->c[iMG(a->mC, n)] + 
+        a->eps[iMNG(a->mEps, n, g)] + tmp);
   }
  
   ret = s - pow(arg - a->thePhi[a->mThePhi], 2) / (2 * pow(a->sigPhi[a->mSigPhi], 2));
@@ -29,7 +29,7 @@ void samplePhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   
   for(g = 0; g < G; ++g){ 
 
-    Old = a->phi[a->mPhi][g];
+    Old = a->phi[iMG(a->mPhi, g)];
     New = rnormal(Old, a->tunePhi[g]);
 
     dl = lPhi(a, g, New) - lPhi(a, g, Old);
@@ -37,13 +37,13 @@ void samplePhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->phi[a->mPhi + 1][g] = New;
+      a->phi[iMG(a->mPhi + 1, g)] = New;
       a->tunePhi[g] *= 1.1; 
       
       if(a->mPhi >= a->burnin)
         ++a->accPhi[g];
     } else { /* reject */
-      a->phi[a->mPhi + 1][g] = Old;
+      a->phi[iMG(a->mPhi + 1, g)] = Old;
       a->tunePhi[g] /= 1.1; 
     }
   }

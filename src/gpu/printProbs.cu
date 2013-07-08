@@ -28,7 +28,7 @@ void printProbs(Chain *a, Config *cfg){
       prob_de = 0;
       
       for(m = cfg->burnin + 1; m <= cfg->M; ++m){
-        alp = a->alp[m][g];
+        alp = a->alp[iMG(m, g)];
         prob_de += ((alp * alp) > 1e-6);
       }
       
@@ -43,8 +43,8 @@ void printProbs(Chain *a, Config *cfg){
         prob_mph = 0;
       
         for(m = cfg->burnin + 1; m <= cfg->M; ++m){
-          alp = a->alp[m][g];
-          del = a->del[m][g];
+          alp = a->alp[iMG(m, g)];
+          del = a->del[iMG(m, g)];
           
           prob_hph += (del > sqrt(alp * alp));
           prob_lph += (del < -sqrt(alp * alp));
