@@ -29,7 +29,7 @@ int *mySampleInt(int, int);
 int *readGrp(Config*);
 count_t **readData(Config*);
 
-__global__ void allocChain(Chain*, int, int, int);
+__host__ Chain *allocChain(Config*);
 
 Chain *newChain(Config*);
 void newChain_kernel1(Chain*);
