@@ -10,13 +10,13 @@
 Config *config(int argc, char **argv){
   Config *cfg = (Config*) calloc(1, sizeof(Config));
 
-  cfg->dataFile = malloc(BUF * sizeof(char));
-  cfg->groupFile = malloc(BUF * sizeof(char));
-  cfg->probsFile = malloc(BUF * sizeof(char));  
-  cfg->hyperFile = malloc(BUF * sizeof(char));
-  cfg->ratesFile = malloc(BUF * sizeof(char));
-  cfg->someParmsFile = malloc(BUF * sizeof(char));
-  cfg->allParmsFile = malloc(BUF * sizeof(char));
+  cfg->dataFile = (char*) malloc(BUF * sizeof(char));
+  cfg->groupFile = (char*) malloc(BUF * sizeof(char));
+  cfg->probsFile = (char*) malloc(BUF * sizeof(char));  
+  cfg->hyperFile = (char*) malloc(BUF * sizeof(char));
+  cfg->ratesFile = (char*) malloc(BUF * sizeof(char));
+  cfg->someParmsFile = (char*) malloc(BUF * sizeof(char));
+  cfg->allParmsFile = (char*) malloc(BUF * sizeof(char));
           
   /* default filenames */ 
         
