@@ -41,7 +41,7 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   }
 
   tmp = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
-  ret = -a->G * lgammaf(arg/2) + (a->G * arg / 2) * log(tmp);
+  ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(tmp);
   ret -= (arg/2 + 1) * a->s1 - tmp * a->s2;
 
   if(newArg){
