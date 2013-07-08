@@ -1,5 +1,5 @@
 #include <Config.h>
-#include <gpuFunctions.h>
+#include <functions.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
