@@ -4,7 +4,7 @@ function cpu {
   echo Making CPU version.
 
   CC=gcc
-  CFLAGS="-c -Wall -pedantic -ansi -I../include"
+  CFLAGS="-c -Wall -pedantic -I../include"
   LDFLAGS=-lm
 
   DEP=(printArrays)
