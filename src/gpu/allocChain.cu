@@ -1,6 +1,8 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
