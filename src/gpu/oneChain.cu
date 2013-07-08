@@ -6,7 +6,12 @@
 #include <stdio.h>
 
 void oneChain(int argc, char **argv){
+
+  printf("hi-1\n");
+
   Config *cfg = config(argc, argv);  
+  
+    printf("hi0\n");
   Chain *a = newChain(cfg);
   
   printf("hi1\n");
