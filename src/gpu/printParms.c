@@ -65,7 +65,7 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
       }
       
       for(g = 0; g < ngenes; ++g){
-        tmp = a->phi[m][g];
+        tmp = a->phi[iG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
 

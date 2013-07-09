@@ -16,7 +16,7 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
   for(g = 0; g < a->G; ++g){
 
-    a->phi[0][g] = rnormal(a->thePhi[0], a->sigPhi[0]);
+    a->phi[iG(0, g)] = rnormal(a->thePhi[0], a->sigPhi[0]);
 
     u = runiform(0, 1);
     if(u < a->piAlp[0]){

@@ -25,7 +25,7 @@ Chain *allocChain(Config *cfg){
   a->eta    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->d      = malloc((cfg->M + 1) * sizeof(num_t));  
   a->tau    = malloc((cfg->M + 1) * sizeof(num_t));
-  a->phi    = malloc((cfg->M + 1) * sizeof(num_t*));
+  a->phi    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->thePhi = malloc((cfg->M + 1) * sizeof(num_t));
   a->sigPhi = malloc((cfg->M + 1) * sizeof(num_t));
   a->alp    = malloc((cfg->M + 1) * sizeof(num_t*));
@@ -39,7 +39,6 @@ Chain *allocChain(Config *cfg){
   
   for(m = 0; m <= cfg->M; ++m){
   
-    a->phi[m] = malloc(cfg->G * sizeof(num_t));
     a->alp[m] = malloc(cfg->G * sizeof(num_t));
     a->del[m] = malloc(cfg->G * sizeof(num_t));
 

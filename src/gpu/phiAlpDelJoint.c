@@ -41,13 +41,13 @@ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel)
 }
 
 void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+  int g, G = a->G;
   num_t oldPhi, newPhi, oldAlp, newAlp, oldDel, newDel;
   num_t dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){
 
-    oldPhi = a->phi[a->mPhi][g];
+    oldPhi = a->phi[iG(a->mPhi, g)];
     newPhi = rnormal(oldPhi, a->tunePhi[g]);
 
     oldAlp = a->alp[a->mAlp][g];
@@ -62,7 +62,7 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->phi[a->mPhi + 1][g] = newPhi;
+      a->phi[iG(a->mPhi + 1, g)] = newPhi;
       a->alp[a->mAlp + 1][g] = newAlp;
       a->del[a->mDel + 1][g] = newDel;
 
@@ -74,7 +74,7 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
         ++a->accDel[g];
       }
     } else { /* reject */
-      a->phi[a->mPhi + 1][g] = oldPhi;
+      a->phi[iG(a->mPhi + 1, g)] = oldPhi;
       a->alp[a->mAlp + 1][g] = oldAlp;
       a->del[a->mDel + 1][g] = oldDel;
 

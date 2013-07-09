@@ -44,7 +44,7 @@ typedef struct {
       num_t *d;
       num_t *tau;
       
-  num_t **phi;
+  num_t *phi;
     num_t *thePhi;
     num_t *sigPhi;
     
