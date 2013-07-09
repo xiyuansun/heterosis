@@ -9,7 +9,8 @@ __host__ void printChain(Chain *a, Config *cfg, int onHost){
 
   Chain *host_a = onHost ? a : chainDeviceToHost(a, cfg);
 
-  printf("M = %d\n", host_a->M);
+ printf("1\n");
+  printf("M = %d\n", host_a->M); printf("2\n");
   printf("N = %d\n", host_a->N);
   printf("G = %d\n\n", host_a->G);  
   
