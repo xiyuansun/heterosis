@@ -20,6 +20,7 @@
   printf("CURAND error at %s:%d\n",__FILE__,__LINE__); \
   exit(EXIT_FAILURE);}} 
 
+#define ALLOC(x, cast, size, onHost) {if(onHost){(x) = cast malloc(size);} else {cudaMalloc((void **) &(x), size);}}
 #define FREE(x, onHost) {if(onHost){free(x);} else {CUDA_CALL(cudaFree(x));}}
 
 void pi1(int*, int, const char*);

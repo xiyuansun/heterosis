@@ -7,62 +7,67 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-__host__ Chain *allocChain(Config *cfg){
+__host__ Chain *allocChain(Config *cfg, int onHost){
 
   Chain *a = NULL, *host_a = (Chain*) malloc(sizeof(Chain));
-  CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
   
   /* data */  
     
-  CUDA_CALL(cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t))); 
-  CUDA_CALL(cudaMalloc((void **) &(host_a->yMeanG), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->grp), cfg->N * sizeof(int)));
+  ALLOC(host_a->y, (count_t*), cfg->N * cfg->G * sizeof(count_t), onHost);
+  ALLOC(host_a->yMeanG, cfg->N * sizeof(num_t), (num_t*), onHost);
+  ALLOC(host_a->grp, cfg->N * sizeof(int), (int*), onHost);
 
   /* parameters */
-
-  CUDA_CALL(cudaMalloc((void **) &(host_a->c), (cfg->M + 1) * cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->sigC), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->eps), (cfg->M + 1) * cfg->N * cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->eta), (cfg->M + 1) * cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->d), (cfg->M + 1) * sizeof(num_t)));  
-  CUDA_CALL(cudaMalloc((void **) &(host_a->tau), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->phi), (cfg->M + 1) * cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->thePhi), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->sigPhi), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->alp), (cfg->M + 1) * cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->theAlp), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->sigAlp), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->piAlp), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->del), (cfg->M + 1) * cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->theDel), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->sigDel), (cfg->M + 1) * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->piDel), (cfg->M + 1) * sizeof(num_t)));
+  
+  ALLOC(host_a->c, (num_t*), (cfg->M + 1) * cfg->N * sizeof(num_t), onHost);
+  ALLOC(host_a->sigC, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->eps, (num_t*), (cfg->M + 1) * cfg->N * cfg->G * sizeof(num_t), onHost);
+  ALLOC(host_a->eta, (num_t*), (cfg->M + 1) * cfg->G * sizeof(num_t), onHost);
+  ALLOC(host_a->d, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->tau, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->phi, (num_t*), (cfg->M + 1) * cfg->G * sizeof(num_t), onHost);
+  ALLOC(host_a->thePhi, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->sigPhi, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->alp, (num_t*), (cfg->M + 1) * cfg->G * sizeof(num_t), onHost);
+  ALLOC(host_a->theAlp, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->sigAlp, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->piAlp, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->del, (num_t*), (cfg->M + 1) * cfg->G * sizeof(num_t), onHost);
+  ALLOC(host_a->theDel, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->sigDel, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
+  ALLOC(host_a->piDel, (num_t*), (cfg->M + 1) * sizeof(num_t), onHost);
   
   /* temporary and return values */
+    
+  ALLOC(host_a->tmp1, (num_t*), cfg->G * sizeof(num_t), onHost);
+  ALLOC(host_a->tmp2, (num_t*), cfg->G * sizeof(num_t), onHost);
   
-  CUDA_CALL(cudaMalloc((void **) &(host_a->tmp1), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->tmp2), cfg->G * sizeof(num_t)));
-
-  CUDA_CALL(cudaMalloc((void **) &(host_a->Old), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->New), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->lOld), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->lNew), cfg->N * sizeof(num_t)));
+  ALLOC(host_a->Old, (num_t*), cfg->N * sizeof(num_t), onHost);
+  ALLOC(host_a->New, (num_t*), cfg->N * sizeof(num_t), onHost);
+  ALLOC(host_a->lOld, (num_t*), cfg->N * sizeof(num_t), onHost);
+  ALLOC(host_a->lNew, (num_t*), cfg->N * sizeof(num_t), onHost);
 
   /* tuning parameters for Metropolis steps */
   
-  CUDA_CALL(cudaMalloc((void **) &(host_a->tuneC), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->tunePhi), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->tuneEps), cfg->N * cfg->G * sizeof(num_t)));
+  ALLOC(host_a->tuneC, (num_t*), cfg->N * sizeof(num_t), onHost);
+  ALLOC(host_a->tunePhi, (num_t*), cfg->G * sizeof(num_t), onHost);
+  ALLOC(host_a->tuneEps, (num_t*), cfg->N * cfg->G * sizeof(num_t), onHost);
 
   /* number of acceptances for Metropolis steps */
-
-  CUDA_CALL(cudaMalloc((void **) &(host_a->accC), cfg->N * sizeof(int)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->accPhi), cfg->G * sizeof(int)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->accAlp), cfg->G * sizeof(int)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->accDel), cfg->G * sizeof(int)));
-  CUDA_CALL(cudaMalloc((void **) &(host_a->accEps), cfg->N * cfg->G * sizeof(int)));
+  
+  ALLOC(host_a->accC, (int*), cfg->N * sizeof(int), onHost);
+  ALLOC(host_a->accPhi, (int*), cfg->G * sizeof(int), onHost);
+  ALLOC(host_a->accAlp, (int*), cfg->G * sizeof(int), onHost);
+  ALLOC(host_a->accDel, (int*), cfg->G * sizeof(int), onHost);
+  ALLOC(host_a->accEps, (int*), cfg->N * cfg->G * sizeof(int), onHost);
+   
+  if(onHost){
+    a = host_a;
+  } else {
+    CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
+    CUDA_CALL(cudaMemcpy(a, host_a, sizeof(Chain), cudaMemcpyHostToDevice));
+    free(host_a);
+  }
     
-  CUDA_CALL(cudaMemcpy(a, host_a, sizeof(Chain), cudaMemcpyHostToDevice));
-  free(host_a);
   return a;
 }

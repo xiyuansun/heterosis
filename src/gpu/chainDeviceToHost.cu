@@ -9,14 +9,12 @@
 
 __host__ Chain *chainDeviceToHost(Chain *a, Config *cfg){
 
-printf("1\n");
-
   Chain *host_a = (Chain*) calloc(1, sizeof(Chain)); printf("2\n");
   
   /* program options */
   
-  CUDA_CALL(cudaMemcpy(&(host_a->M), &(a->M), sizeof(int), cudaMemcpyDeviceToHost)); printf("3\n");
-  CUDA_CALL(cudaMemcpy(&(host_a->N), &(a->N), sizeof(int), cudaMemcpyDeviceToHost)); printf("4\n");
+  CUDA_CALL(cudaMemcpy(&(host_a->M), &(a->M), sizeof(int), cudaMemcpyDeviceToHost)); 
+  CUDA_CALL(cudaMemcpy(&(host_a->N), &(a->N), sizeof(int), cudaMemcpyDeviceToHost)); 
   CUDA_CALL(cudaMemcpy(&(host_a->G), &(a->G), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(host_a->burnin), &(a->burnin), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(host_a->heterosis), &(a->heterosis), sizeof(int), cudaMemcpyDeviceToHost));
