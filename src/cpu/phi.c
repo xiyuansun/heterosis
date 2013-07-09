@@ -21,19 +21,19 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
 
 void samplePhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
-  num_t old, new, dl, lp, lu;
+  num_t old, nw, dl, lp, lu;
   
   for(g = 0; g < a->G; ++g){ 
 
     old = a->phi[iG(a->mPhi, g)];
-    new = rnormal(old, a->tunePhi[g]);
+    nw = rnormal(old, a->tunePhi[g]);
 
-    dl = lPhi(a, g, new) - lPhi(a, g, old);
+    dl = lPhi(a, g, nw) - lPhi(a, g, old);
     lp = 0 < dl ? 0 : dl;
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->phi[iG(a->mPhi + 1, g)] = new;
+      a->phi[iG(a->mPhi + 1, g)] = nw;
       a->tunePhi[g] *= 1.1; 
       
       if(a->mPhi >= a->burnin)
