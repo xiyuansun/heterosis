@@ -9,7 +9,7 @@
 
 __host__ Chain *chainDeviceToHost(Chain *a, Config *cfg){
 
-  Chain *host_a = (Chain*) calloc(1, sizeof(Chain)); printf("2\n");
+  Chain *host_a = allocChain(cfg, 1);
   
   /* program options */
   

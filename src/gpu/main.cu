@@ -11,7 +11,7 @@ int main(int argc, char **argv){
  /* oneChain(argc, argv);*/
  
   Config *cfg = config(argc, argv); 
-  Chain *a = allocChain(cfg); 
+  Chain *a = allocChain(cfg, 0); 
   printChain(a, cfg, 0); 
   freeChain(a, cfg, 0);
  

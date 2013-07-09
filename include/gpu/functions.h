@@ -39,7 +39,7 @@ __host__ int *mySampleInt(int, int);
 __host__ int *readGrp(Config*);
 __host__ count_t *readData(Config*);
 
-__host__ Chain *allocChain(Config*);
+__host__ Chain *allocChain(Config*, int);
 Chain *newChain(Config*);
 void newChain_kernel1(Chain*);
 void newChain_kernel2(Chain*);
