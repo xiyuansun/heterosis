@@ -13,11 +13,8 @@ __host__ void allocChain(Chain *a, Config *cfg){
   CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
   
   /* data */  
-  
-  printf("%d\n", cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t)) != cudaSuccess);
-  
-  
- /* CUDA_CALL(cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t))); */
+    
+  CUDA_CALL(cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t))); 
   CUDA_CALL(cudaMalloc((void **) &(host_a->yMeanG), cfg->N * sizeof(num_t)));
   CUDA_CALL(cudaMalloc((void **) &(host_a->grp), cfg->N * sizeof(int)));
 

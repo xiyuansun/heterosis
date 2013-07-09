@@ -11,7 +11,7 @@
 #define iN(m, n) ((m) * N + (n))
 #define iG(n, g) ((n) * G + (g))
 
-#define CUDA_CALL(x) {} /*{if((x) != cudaSuccess) {printf("CUDA error at %s:%d\n",__FILE__,__LINE__);  return EXIT_FAILURE;}} */
+#define CUDA_CALL(x) {} {if((x) != cudaSuccess){} /*{printf("CUDA error at %s:%d\n",__FILE__,__LINE__);  return EXIT_FAILURE;}} */
 #define CURAND_CALL(x) { if((x) != CURAND_STATUS_SUCCESS) { printf("CURAND error at %s:%d\n",__FILE__,__LINE__); return EXIT_FAILURE;}} 
 
 void pi1(int*, int, const char*);
