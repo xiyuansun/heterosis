@@ -10,10 +10,10 @@
 int main(int argc, char **argv){
  /* oneChain(argc, argv);*/
  
-  Config *cfg = config(argc, argv);  
-  Chain *a = allocChain(cfg);
-  printChain(a, cfg, 0);
-  freeChain(a, cfg, 0);
+  Config *cfg = config(argc, argv);  pritnf("1\n");
+  Chain *a = allocChain(cfg); pritnf("2\n");
+  printChain(a, cfg, 0); pritnf("3\n");
+  freeChain(a, cfg, 0);pritnf("4\n");
  
   return EXIT_SUCCESS;
 }
