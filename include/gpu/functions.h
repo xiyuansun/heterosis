@@ -42,7 +42,7 @@ __host__ Chain *allocChain(Config*);
 Chain *newChain(Config*);
 void newChain_kernel1(Chain*);
 void newChain_kernel2(Chain*);
-void chainDeviceToHost(Chain*, Config*);
+Chain *chainDeviceToHost(Chain*, Config*);
 void printChain(Chain*, Config*, int);
 __host__ void freeChain(Chain*, Config*, int);
 

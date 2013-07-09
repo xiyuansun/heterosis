@@ -17,9 +17,9 @@ __host__ void freeChain(Chain *a, Config *cfg, int onHost){
   
   /* data */  
 
-  FREE(host_a->y, onHost));
-  FREE(host_a->yMeanG, onHost));
-  FREE(host_a->grp, onHost));
+  FREE(host_a->y, onHost);
+  FREE(host_a->yMeanG, onHost);
+  FREE(host_a->grp, onHost);
 
   /* parameters */
   
