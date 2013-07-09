@@ -84,7 +84,7 @@ function gpu {
   for dep in ${DEP[@]}
   do
     OBJ+=(../obj/gpu/${dep}.o)
-    ${CC} ../src/gpu/${dep}.c -o ../obj/gpu/${dep}.o ${CFLAGS} 
+    ${CC} ../src/gpu/${dep}.cu -o ../obj/gpu/${dep}.o ${CFLAGS} 
   done
 
   $CC ${OBJ[@]} -o ../bin/gpumcmc ${LDFLAGS}
