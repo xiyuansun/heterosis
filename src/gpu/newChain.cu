@@ -117,7 +117,7 @@ Chain *newChain(Config *cfg){ /* host */
     return NULL;
   }
 
-  a = allocChain(cfg);
+  allocChain(a, cfg);
 
   /* data and configuration info */
   

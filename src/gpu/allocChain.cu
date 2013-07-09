@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-__host__ Chain *allocChain(Config *cfg){
+__host__ void allocChain(Chain *a, Config *cfg){
 
   Chain *a, *host_a = (Chain*) malloc(sizeof(Chain));
   
@@ -64,6 +64,4 @@ __host__ Chain *allocChain(Config *cfg){
   CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
   CUDA_CALL(cudaMemcpy(a, host_a, sizeof(Chain), cudaMemcpyHostToDevice));
   free(host_a);
-    
-  return a;
 }
