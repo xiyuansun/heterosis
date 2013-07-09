@@ -13,6 +13,7 @@
 
 #define CUDA_CALL(x) {if((x) != cudaSuccess){ \
   printf("CUDA error at %s:%d\n",__FILE__,__LINE__); \
+  printf("  %s\n", cudaGetErrorString(cudaGetLastError())); \
   exit(EXIT_FAILURE);}} 
   
 #define CURAND_CALL(x) {if((x) != CURAND_STATUS_SUCCESS) { \
