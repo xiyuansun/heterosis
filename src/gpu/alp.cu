@@ -18,15 +18,15 @@ num_t alpProp(Chain *a, int g){ /* device */
   num_t avg = (a->alp[iG(a->mAlp, g)] * sprec) / (gprec + sprec);
   num_t s = gam * gam + sig * sig;
   num_t u = runiform(0, 1);
-  num_t New;
+  num_t nw;
   
   if(u < a->piAlp[a->mPiAlp]){
-    New = 0;
+    nw = 0;
   } else {
-    New = rnormal(avg, s);
+    nw = rnormal(avg, s);
   }
 
-  return New;
+  return nw;
 }
 
 num_t lAlp(Chain *a, int g, num_t arg){ /* device */
@@ -55,19 +55,19 @@ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
 void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
   int g, G = a->G;
-  num_t old, New, dl, lp, lu;
+  num_t old, nw, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){ 
 
     old = a->alp[iG(a->mAlp, g)];
-    New = alpProp(a, g);
+    nw = alpProp(a, g);
     
-    dl = lAlp(a, g, New) - lAlp(a, g, old);
+    dl = lAlp(a, g, nw) - lAlp(a, g, old);
     lp = 0 < dl ? 0 : dl;
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->alp[iG(a->mAlp + 1, g)] = New;
+      a->alp[iG(a->mAlp + 1, g)] = nw;
       
       if(a->mAlp >= a->burnin)
         ++a->accAlp[g];
