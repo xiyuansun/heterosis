@@ -40,6 +40,7 @@ __host__ Chain *allocChain(Config*);
 Chain *newChain(Config*);
 void newChain_kernel1(Chain*);
 void newChain_kernel2(Chain*);
+void printChain(Chain*);
 __host__ void freeChain(Chain*, Config*);
 
 num_t mu(Chain*, int, num_t, num_t, num_t);
