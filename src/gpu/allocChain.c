@@ -51,10 +51,7 @@ Chain *allocChain(Config *cfg){
   
   a->tuneC = malloc(cfg->N * sizeof(num_t));
   a->tunePhi = malloc(cfg->G * sizeof(num_t));
-  
-  a->tuneEps = malloc(cfg->N * sizeof(num_t*));
-  for(n = 0; n < cfg->N; ++n)
-    a->tuneEps[n] = malloc(cfg->G * sizeof(num_t));
+  a->tuneEps = malloc(cfg->N * cfg->G * sizeof(num_t));
 
   /* number of acceptances for Metropolis steps */
 

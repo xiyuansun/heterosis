@@ -45,9 +45,6 @@ void freeChain(Chain *a, Config *cfg){
   free(a->lNew);
   
   /* tuning parameters for Metropolis steps */
-
-  for(n = 0; n < cfg->N; ++n)
-    free(a->tuneEps[n]);
   
   free(a->tuneC);
   free(a->tunePhi);

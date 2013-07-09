@@ -42,7 +42,7 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 }
 
 void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  int n, g;
+  int n, g, G = a->G;
 
   a->mC = 0;
   a->mSigC = 0;
@@ -76,7 +76,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->tunePhi[g] = 1;
 
     for(n = 0; n < a->N; ++n)
-      a->tuneEps[n][g] = 1;
+      a->tuneEps[iG(n, g)] = 1;
   }
   
   a->accD = 0;

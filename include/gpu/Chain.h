@@ -99,7 +99,7 @@ typedef struct {
   /* tuning parameters for metropolis steps */
   
   num_t *tuneC;
-  num_t **tuneEps;
+  num_t *tuneEps;
   num_t tuneD;
   num_t *tunePhi;
   

@@ -19,7 +19,7 @@ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
   for(g = 0; g < a->G; ++g){
     for(n = 0; n < a->N; ++n){ 
       old = a->eps[iNG(a->mEps, n, g)];
-      new = rnormal(old, a->tuneEps[n][g]);
+      new = rnormal(old, a->tuneEps[iG(n, g)]);
 
       dl = lEps(a, n, g, new) - lEps(a, n, g, old);
       lp = 0 < dl ? 0 : dl;
@@ -27,13 +27,13 @@ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
       
       if(lu < lp){ /* accept */
         a->eps[iNG(a->mEps + 1, n, g)] = new;
-        a->tuneEps[n][g] = a->tuneEps[n][g] * 1.1;
+        a->tuneEps[iG(n, g)] *= 1.1;
         
         if(a->mEps >= a->burnin)
           ++a->accEps[n][g]; 
       } else { /* reject */
         a->eps[iNG(a->mEps + 1, n, g)] = old;
-        a->tuneEps[n][g] = a->tuneEps[n][g] / 1.1;
+        a->tuneEps[iG(n, g)] /= 1.1;
       }
     }
   }
