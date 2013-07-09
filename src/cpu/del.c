@@ -6,14 +6,15 @@
 #include <stdlib.h>
 
 num_t delProp(Chain *a, int g){ /* device */
-      
+  int G = a->G;      
+
   num_t gam = a->gamDel;
   num_t sig = a->sigDel[a->mSigDel];
 
   num_t gprec = 1/(gam * gam);
   num_t sprec = 1/(sig * sig);
 
-  num_t avg = (a->del[a->mDel][g] * sprec) / (gprec + sprec);
+  num_t avg = (a->del[iG(a->mDel, g)] * sprec) / (gprec + sprec);
   num_t s = gam * gam + sig * sig;
   num_t u = runiform(0, 1);
   num_t new;
@@ -28,14 +29,14 @@ num_t delProp(Chain *a, int g){ /* device */
 }
 
 num_t lDel(Chain *a, int g, num_t arg){ /* device */ 
-  int n;
+  int n, N = a->N, G = a->G;
   num_t s = 0, tmp; 
   
   for(n = 0; n < a->N; ++n){
     if(a->grp[n] != 2){
-      tmp = mu(a, n, a->phi[a->mPhi][g], a->alp[a->mAlp][g], arg);
-      s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
-          a->eps[a->mEps][n][g] + tmp);
+      tmp = mu(a, n, a->phi[iG(a->mPhi, g)], a->alp[iG(a->mAlp, g)], arg);
+      s += a->y[iG(n, g)] * tmp - exp(a->c[iN(a->mC, n)] + 
+          a->eps[iNG(a->mEps, n, g)] + tmp);
     }
   }
  
@@ -50,12 +51,12 @@ num_t lDel(Chain *a, int g, num_t arg){ /* device */
 }
 
 void sampleDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+  int g, G = a->G;
   num_t old, new, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){ 
 
-    old = a->del[a->mDel][g];
+    old = a->del[iG(a->mDel, g)];
     new = delProp(a, g);
     
     dl = lDel(a, g, new) - lDel(a, g, old);
@@ -63,12 +64,12 @@ void sampleDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->del[a->mDel + 1][g] = new;
+      a->del[iG(a->mDel + 1, g)] = new;
       
       if(a->mDel >= a->burnin)
         ++a->accDel[g];
     } else { /* reject */
-      a->del[a->mDel + 1][g] = old;
+      a->del[iG(a->mDel + 1, g)] = old;
     }
   }
 }

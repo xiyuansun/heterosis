@@ -7,11 +7,11 @@
 #include <stdlib.h>
 
 void sampleSigAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+  int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){
-    if(pow(a->alp[a->mAlp][g], 2) > 1e-6){
-      a->tmp1[g] = pow(a->alp[a->mAlp][g] - a->theAlp[a->mTheAlp], 2);
+    if(pow(a->alp[iG(a->mAlp, g)], 2) > 1e-6){
+      a->tmp1[g] = pow(a->alp[iG(a->mAlp, g)] - a->theAlp[a->mTheAlp], 2);
       a->tmp2[g] = 1;
     } else {
       a->tmp1[g] = 0;

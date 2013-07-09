@@ -6,52 +6,34 @@
 #include <stdlib.h>
 
 Chain *allocChain(Config *cfg){
-  int m, n;
-  Chain *a;
-  
-  a = malloc(sizeof(Chain));
+
+  Chain *a = malloc(sizeof(Chain));
   
   /* data */  
   
-  a->y = malloc(cfg->N * sizeof(count_t*));
-  for(n = 0; n < cfg->N; ++n)
-    a->y[n] = malloc(cfg->G * sizeof(count_t));
-
+  a->y = malloc(cfg->N * cfg->G * sizeof(count_t));
   a->yMeanG = malloc(cfg->N * sizeof(num_t));
   a->grp = malloc(cfg->N * sizeof(int));
 
   /* parameters */
 
-  a->c      = malloc((cfg->M + 1) * sizeof(num_t*));
+  a->c      = malloc((cfg->M + 1) * cfg->N * sizeof(num_t));
   a->sigC   = malloc((cfg->M + 1) * sizeof(num_t));
-  a->eps    = malloc((cfg->M + 1) * sizeof(num_t**));
-  a->eta    = malloc((cfg->M + 1) * sizeof(num_t*));
+  a->eps    = malloc((cfg->M + 1) * cfg->N * cfg->G * sizeof(num_t));
+  a->eta    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->d      = malloc((cfg->M + 1) * sizeof(num_t));  
   a->tau    = malloc((cfg->M + 1) * sizeof(num_t));
-  a->phi    = malloc((cfg->M + 1) * sizeof(num_t*));
+  a->phi    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->thePhi = malloc((cfg->M + 1) * sizeof(num_t));
   a->sigPhi = malloc((cfg->M + 1) * sizeof(num_t));
-  a->alp    = malloc((cfg->M + 1) * sizeof(num_t*));
+  a->alp    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->theAlp = malloc((cfg->M + 1) * sizeof(num_t));
   a->sigAlp = malloc((cfg->M + 1) * sizeof(num_t));
   a->piAlp  = malloc((cfg->M + 1) * sizeof(num_t));
-  a->del    = malloc((cfg->M + 1) * sizeof(num_t*));
+  a->del    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->theDel = malloc((cfg->M + 1) * sizeof(num_t));
   a->sigDel = malloc((cfg->M + 1) * sizeof(num_t));
   a->piDel  = malloc((cfg->M + 1) * sizeof(num_t));
-  
-  for(m = 0; m <= cfg->M; ++m){
-  
-    a->c[m]   = malloc(cfg->N * sizeof(num_t));
-    a->eps[m] = malloc(cfg->N * sizeof(num_t*)); 
-    a->eta[m] = malloc(cfg->G * sizeof(num_t));
-    a->phi[m] = malloc(cfg->G * sizeof(num_t));
-    a->alp[m] = malloc(cfg->G * sizeof(num_t));
-    a->del[m] = malloc(cfg->G * sizeof(num_t));
-    
-    for(n = 0; n < cfg->N; ++n)
-      a->eps[m][n] = malloc(cfg->G * sizeof(num_t));
-  }
   
   /* temporary and return values */
   
@@ -67,10 +49,7 @@ Chain *allocChain(Config *cfg){
   
   a->tuneC = malloc(cfg->N * sizeof(num_t));
   a->tunePhi = malloc(cfg->G * sizeof(num_t));
-  
-  a->tuneEps = malloc(cfg->N * sizeof(num_t*));
-  for(n = 0; n < cfg->N; ++n)
-    a->tuneEps[n] = malloc(cfg->G * sizeof(num_t));
+  a->tuneEps = malloc(cfg->N * cfg->G * sizeof(num_t));
 
   /* number of acceptances for Metropolis steps */
 
@@ -78,10 +57,7 @@ Chain *allocChain(Config *cfg){
   a->accPhi = malloc(cfg->G * sizeof(int));
   a->accAlp = malloc(cfg->G * sizeof(int));
   a->accDel = malloc(cfg->G * sizeof(int));
-  
-  a->accEps = malloc(cfg->N * sizeof(int*));
-  for(n = 0; n < cfg->N; ++n)
-    a->accEps[n] = malloc(cfg->G * sizeof(int));
+  a->accEps = malloc(cfg->N * cfg->G * sizeof(int));
     
   return a;
 }

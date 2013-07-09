@@ -65,10 +65,10 @@ function gpu {
   CFLAGS="-c -I../include/gpu -Wall -pedantic"
   LDFLAGS=-lm 
 
-  DEP=() #printArrays
+  DEP=(printArrays)
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(mySampleInt readGrp readData)
-  DEP+=(allocChain newChain freeChain) #printChain
+  DEP+=(allocChain newChain freeChain printChain)
   DEP+=(mu runiform rnormal rgamma rbeta)
   DEP+=(c sigC eps eta d tau)
   DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
