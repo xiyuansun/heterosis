@@ -10,6 +10,8 @@
 __host__ void allocChain(Chain *a, Config *cfg){
 
   Chain *host_a = (Chain*) malloc(sizeof(Chain));
+  a = host_a;
+  CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
   
   /* data */  
   

@@ -13,7 +13,6 @@ int main(int argc, char **argv){
   Config *cfg = config(argc, argv);  
   Chain *a;
   
-  CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
   allocChain(a, cfg);
   freeChain(a, cfg);
  
