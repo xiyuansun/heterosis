@@ -10,9 +10,6 @@ __host__ void freeChain(Chain *a, Config *cfg){
   
   Chain *host_a = (Chain*) malloc(sizeof(Chain));
   
-  if(a == NULL)
-    printf("null a\n");
-  
   CUDA_CALL(cudaMemcpy(host_a, a, sizeof(Chain), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaFree(a)); 
   
