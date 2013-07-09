@@ -32,11 +32,11 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
       a->del[0][g] = rnormal(a->theDel[0], a->sigDel[0]);
     }
  
-    a->eta[0][g] = 1/sqrt(rgamma(a->d[0] / 2, 
+    a->eta[iG(0, g)] = 1/sqrt(rgamma(a->d[0] / 2, 
                    a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
 
     for(n = 0; n < a->N; ++n)
-      a->eps[iNG(0, n, g)] = rnormal(0, a->eta[0][g]);
+      a->eps[iNG(0, n, g)] = rnormal(0, a->eta[iG(0, g)]);
     
   }
 }

@@ -7,11 +7,11 @@
 #include <stdlib.h>
 
 void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+  int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    a->tmp1[g] = 2 * log(a->eta[a->mEta][g]);
-    a->tmp2[g] = 1/(a->eta[a->mEta][g] * a->eta[a->mEta][g]);
+    a->tmp1[g] = 2 * log(a->eta[iG(a->mEta, g)]);
+    a->tmp2[g] = 1/(a->eta[iG(a->mEta, g)] * a->eta[iG(a->mEta, g)]);
   }
 }
 

@@ -9,7 +9,7 @@ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
   int N = a->N, G = a->G;
   return a->y[iG(n, g)] * arg - exp(a->c[iN(a->mC, n)] + arg + mu(a, n, a->phi[a->mPhi][g], 
                                      a->alp[a->mAlp][g], a->del[a->mDel][g])) 
-                          - (arg * arg) / (2 * a->eta[a->mEta][g] * a->eta[a->mEta][g]);
+                          - (arg * arg) / (2 * pow(a->eta[iG(a->mEta, g)], 2));
 }
 
 void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */

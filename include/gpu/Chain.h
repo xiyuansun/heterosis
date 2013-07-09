@@ -40,7 +40,7 @@ typedef struct {
     num_t *sigC;
    
   num_t *eps;
-    num_t **eta;
+    num_t *eta;
       num_t *d;
       num_t *tau;
       

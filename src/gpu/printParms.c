@@ -80,7 +80,7 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
       }      
 
       for(g = 0; g < ngenes; ++g){
-        tmp = a->eta[m][g];
+        tmp = a->eta[iG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }    
       
