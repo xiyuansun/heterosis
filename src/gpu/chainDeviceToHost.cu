@@ -22,16 +22,16 @@ __host__ Chain *chainDeviceToHost(Chain *a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(host_a->allParmsFlag), &(a->allParmsFlag), sizeof(int), cudaMemcpyDeviceToHost));
   
   /* data */
-  
+  /*
   printf("%d\n", host_a->y[0]);
   CUDA_CALL(cudaMemcpy(host_a->y, a->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyDeviceToHost)); printf("3\n");
   CUDA_CALL(cudaMemcpy(host_a->yMeanG, a->yMeanG, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));printf("4\n");
   CUDA_CALL(cudaMemcpy(host_a->grp, a->grp, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));printf("5\n");
-  
+  */
   
   /* initialization constants */
-  
-  CUDA_CALL(cudaMemcpy(&(host_a->sigC0), &(a->sigC0), sizeof(num_t), cudaMemcpyDeviceToHost));
+  printf("5\n");
+  CUDA_CALL(cudaMemcpy(&(host_a->sigC0), &(a->sigC0), sizeof(num_t), cudaMemcpyDeviceToHost));printf("5\n");
   CUDA_CALL(cudaMemcpy(&(host_a->d0), &(a->d0), sizeof(num_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(host_a->aTau), &(a->aTau), sizeof(num_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(host_a->aAlp), &(a->aAlp), sizeof(num_t), cudaMemcpyDeviceToHost));
