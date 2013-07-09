@@ -13,7 +13,9 @@ __host__ Chain *allocChain(Config *cfg){
   
   /* data */  
   
-  CUDA_CALL(cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t)));
+  cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t));
+  
+  /*CUDA_CALL(cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t)));*/
   CUDA_CALL(cudaMalloc((void **) &(host_a->yMeanG), cfg->N * sizeof(num_t)));
   CUDA_CALL(cudaMalloc((void **) &(host_a->grp), cfg->N * sizeof(int)));
 
