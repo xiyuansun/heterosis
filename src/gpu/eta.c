@@ -10,14 +10,14 @@ void sampleEta_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g;
+  int n, g, N = a->N, G = a->G;
   num_t shape = a->s1, rate;
 
   for(g = 0; g < a->G; ++g){
 
     rate = 0;
     for(n = 0; n < a->N; ++n) 
-      rate += a->eps[a->mEps][n][g] * a->eps[a->mEps][n][g];
+      rate += pow(a->eps[iMNG(a->mEps, n, g)], 2);
   
     rate = (rate + a->d[a->mD] * a->tau[a->mTau] * a->tau[a->mTau]) / 2; 
 

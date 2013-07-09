@@ -8,7 +8,7 @@
 void printParms_oneFile(Chain *a, Config *cfg, int some){
 
   int m, n, g, nlibs, ngenes;
-  int N = a->N;
+  int N = a->N, G = a->G;
   num_t tmp;
   FILE *fp;
   
@@ -86,7 +86,7 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
       
       for(n = 0; n < nlibs; ++n)
         for(g = 0; g < ngenes; ++g){
-          tmp = a->eps[m][n][g];
+          tmp = a->eps[iMNG(m, n, g)];
           fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
         }
       

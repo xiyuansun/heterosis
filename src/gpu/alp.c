@@ -37,7 +37,7 @@ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
     if(a->grp[n] != 2){
       tmp = mu(a, n, a->phi[a->mPhi][g], arg, a->del[a->mDel][g]);
       s += a->y[iNG(n, g)] * tmp - exp(a->c[iMN(a->mC, n)] + 
-          a->eps[a->mEps][n][g] + tmp);
+          a->eps[iMNG(a->mEps, n, g)] + tmp);
     }
   }
  

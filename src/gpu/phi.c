@@ -12,7 +12,7 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
   for(n = 0; n < a->N; ++n){
     tmp = mu(a, n, arg, a->alp[a->mAlp][g], a->del[a->mDel][g]);
     s += a->y[iNG(n, g)] * tmp - exp(a->c[iMN(a->mC, n)] + 
-        a->eps[a->mEps][n][g] + tmp);
+        a->eps[iMNG(a->mEps, n, g)] + tmp);
   }
  
   ret = s - pow(arg - a->thePhi[a->mThePhi], 2) / (2 * pow(a->sigPhi[a->mSigPhi], 2));

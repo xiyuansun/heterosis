@@ -5,6 +5,7 @@
 #include "Config.h"
 #include "constants.h"
 
+#define iMNG(m, n, g) ((m) * N * G + (n) * G + (g))
 #define iMN(m, n) ((m) * N + (n))
 #define iNG(n, g) ((n) * G + (g))
 

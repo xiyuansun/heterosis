@@ -6,10 +6,10 @@
 #include <stdlib.h>
 
 void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
-  int g;
+  int g, N = a->N, G = a->G;
   
   for(g = 0; g < a->G; ++g)
-    a->tmp1[g] = exp(a->eps[a->mEps][n][g] + mu(a, n, a->phi[a->mPhi][g], 
+    a->tmp1[g] = exp(a->eps[iMNG(a->mEps, n, g)] + mu(a, n, a->phi[a->mPhi][g], 
                     a->alp[a->mAlp][g], a->del[a->mDel][g]));
 }
 

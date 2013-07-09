@@ -11,7 +11,7 @@ int cmpfunc (const void *a, const void *b){
 }
 
 void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g;
+  int n, g, N = a->N, G = a->G;
   num_t u;
 
   for(g = 0; g < a->G; ++g){
@@ -36,7 +36,7 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
                    a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
 
     for(n = 0; n < a->N; ++n)
-      a->eps[0][n][g] = rnormal(0, a->eta[0][g]);
+      a->eps[iMNG(0, n, g)] = rnormal(0, a->eta[0][g]);
     
   }
 }
