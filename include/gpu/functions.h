@@ -20,6 +20,8 @@
   printf("CURAND error at %s:%d\n",__FILE__,__LINE__); \
   exit(EXIT_FAILURE);}} 
 
+#define FREE(x, onHost) {if(onHost){free(x)} else {CUDA_CALL(cudaFree(x))}}
+
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);
 void pi2(int*, int, int, const char*);
@@ -40,8 +42,9 @@ __host__ Chain *allocChain(Config*);
 Chain *newChain(Config*);
 void newChain_kernel1(Chain*);
 void newChain_kernel2(Chain*);
-void printChain(Chain*);
-__host__ void freeChain(Chain*, Config*);
+void chainDeviceToHost(Chain*, Config*);
+void printChain(Chain*, Config*, int);
+__host__ void freeChain(Chain*, Config*, int);
 
 num_t mu(Chain*, int, num_t, num_t, num_t);
 num_t runiform(num_t, num_t);

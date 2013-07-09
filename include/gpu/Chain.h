@@ -112,7 +112,7 @@ typedef struct {
   int *accAlp;
   int *accDel;
   
-  /* indicate choices to hold each hyperparameter constant */
+  /* choices to hold hyperparameters constant */
   
   int constSigC;
   int constD;
