@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Config *config(int argc, char **argv){
+__host__ Config *config(int argc, char **argv){
   Config *cfg = (Config*) malloc(sizeof(Config));
 
   cfg->dataFile = (char*) malloc(BUF * sizeof(char));

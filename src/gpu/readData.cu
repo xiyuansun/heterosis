@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-count_t *readData(Config *cfg){
+__host__ count_t *readData(Config *cfg){
   int g = 0, n = 0, G, *y;
   char *buf, row[MAXROW];
   FILE *fp = fopen(cfg->dataFile, "r");

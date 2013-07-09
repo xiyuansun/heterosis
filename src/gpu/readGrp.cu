@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *readGrp(Config *cfg){
+__host__ int *readGrp(Config *cfg){
 
   int i, j, n, *grp, match, nunique = 0, *unique;
   FILE *fp;

@@ -4,10 +4,15 @@
 #include "Chain.h"
 #include "Config.h"
 #include "constants.h"
+#include <cuda.h>
+#include <cuda_runtime.h>
 
 #define iNG(m, n, g) ((m) * N * G + (n) * G + (g))
 #define iN(m, n) ((m) * N + (n))
 #define iG(n, g) ((n) * G + (g))
+
+#define CUDA_CALL(x)  {if((x) != cudaSuccess) {printf("CUDA error at %s:%d\n",__FILE__,__LINE__);  return EXIT_FAILURE;}}
+#define CURAND_CALL(x) { if((x) != CURAND_STATUS_SUCCESS) { printf("CURAND error at %s:%d\n",__FILE__,__LINE__); return EXIT_FAILURE;}} 
 
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);
@@ -16,21 +21,20 @@ void pf2(num_t*, int, int, const char*);
 void pi3(int*, int, int, int, const char*);
 void pf3(num_t*, int, int, int, const char*);
 
-Config *config(int, char**);
-void getopts(Config*, int, char**);
-void printConfig(Config*);
-void freeConfig(Config*);
+__host__ Config *config(int, char**);
+__host__ void getopts(Config*, int, char**);
+__host__ void printConfig(Config*);
+__host__ void freeConfig(Config*);
 
-int *mySampleInt(int, int);
-int *readGrp(Config*);
-count_t *readData(Config*);
+__host__ int *mySampleInt(int, int);
+__host__ int *readGrp(Config*);
+__host__ count_t *readData(Config*);
 
-Chain *allocChain(Config*);
+__host__ Chain *allocChain(Config*);
 Chain *newChain(Config*);
 void newChain_kernel1(Chain*);
 void newChain_kernel2(Chain*);
-void printChain(Chain*);
-void freeChain(Chain*, Config*);
+__host__ void freeChain(Chain*, Config*);
 
 num_t mu(Chain*, int, num_t, num_t, num_t);
 num_t runiform(num_t, num_t);

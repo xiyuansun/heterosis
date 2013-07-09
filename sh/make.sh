@@ -65,18 +65,18 @@ function gpu {
   CFLAGS="-c -I../include/gpu"
   LDFLAGS=-lm 
 
-  DEP=(printArrays)
+#  DEP=(printArrays)
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(mySampleInt readGrp readData)
-  DEP+=(allocChain newChain freeChain printChain)
-  DEP+=(mu runiform rnormal rgamma rbeta)
-  DEP+=(c sigC eps eta d tau)
-  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
-  DEP+=(thePhi theAlp theDel)
-  DEP+=(sigPhi sigAlp sigDel)
-  DEP+=(piAlp piDel)
-  DEP+=(runChain oneChain summarizeChain)
-  DEP+=(printProbs printRates printHyper printParms)
+  DEP+=(allocChain  freeChain) #newChain
+#  DEP+=(mu runiform rnormal rgamma rbeta)
+#  DEP+=(c sigC eps eta d tau)
+#  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
+#  DEP+=(thePhi theAlp theDel)
+#  DEP+=(sigPhi sigAlp sigDel)
+#  DEP+=(piAlp piDel)
+#  DEP+=(runChain oneChain summarizeChain)
+#  DEP+=(printProbs printRates printHyper printParms)
   DEP+=(main)
 
   OBJ=()

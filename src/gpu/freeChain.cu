@@ -4,57 +4,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void freeChain(Chain *a, Config *cfg){
+__host__ void freeChain(Chain *a, Config *cfg){
+  
+  Chain *host_a = (Chain*) malloc(sizeof(Chain));
+  CUDA_CALL(cudaMemcpy(host_a, a, sizeof(Chain), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaFree(a));
   
   /* data */  
 
-  free(a->y);
-  free(a->yMeanG);
-  free(a->grp);
+  CUDA_CALL(cudaFree(host_a->y));
+  CUDA_CALL(cudaFree(host_a->yMeanG));
+  CUDA_CALL(cudaFree(host_a->grp));
 
   /* parameters */
   
-  free(a->c);
-  free(a->sigC);
-  free(a->eps);
-  free(a->eta);
-  free(a->d);
-  free(a->tau);
-  free(a->phi);
-  free(a->thePhi);
-  free(a->sigPhi);
-  free(a->alp);
-  free(a->theAlp);
-  free(a->sigAlp);
-  free(a->piAlp);
-  free(a->del);
-  free(a->theDel);
-  free(a->sigDel);
-  free(a->piDel);
+  CUDA_CALL(cudaFree(host_a->c));
+  CUDA_CALL(cudaFree(host_a->sigC));
+  CUDA_CALL(cudaFree(host_a->eps));
+  CUDA_CALL(cudaFree(host_a->eta));
+  CUDA_CALL(cudaFree(host_a->d));
+  CUDA_CALL(cudaFree(host_a->tau));
+  CUDA_CALL(cudaFree(host_a->phi));
+  CUDA_CALL(cudaFree(host_a->thePhi));
+  CUDA_CALL(cudaFree(host_a->sigPhi));
+  CUDA_CALL(cudaFree(host_a->alp));
+  CUDA_CALL(cudaFree(host_a->theAlp));
+  CUDA_CALL(cudaFree(host_a->sigAlp));
+  CUDA_CALL(cudaFree(host_a->piAlp));
+  CUDA_CALL(cudaFree(host_a->del));
+  CUDA_CALL(cudaFree(host_a->theDel));
+  CUDA_CALL(cudaFree(host_a->sigDel));
+  CUDA_CALL(cudaFree(host_a->piDel));
   
   /* temporary and return values */
   
-  free(a->tmp1);
-  free(a->tmp2);
+  CUDA_CALL(cudaFree(host_a->tmp1));
+  CUDA_CALL(cudaFree(host_a->tmp2));
 
-  free(a->Old);
-  free(a->New);
-  free(a->lOld);
-  free(a->lNew);
+  CUDA_CALL(cudaFree(host_a->Old));
+  CUDA_CALL(cudaFree(host_a->New));
+  CUDA_CALL(cudaFree(host_a->lOld));
+  CUDA_CALL(cudaFree(host_a->lNew));
   
   /* tuning parameters for Metropolis steps */
   
-  free(a->tuneC);
-  free(a->tunePhi);
-  free(a->tuneEps);
+  CUDA_CALL(cudaFree(host_a->tuneC));
+  CUDA_CALL(cudaFree(host_a->tunePhi));
+  CUDA_CALL(cudaFree(host_a->tuneEps));
 
   /* number of acceptances for Metropolis steps */
 
-  free(a->accC);
-  free(a->accPhi);
-  free(a->accAlp);
-  free(a->accDel);
-  free(a->accEps);
+  CUDA_CALL(cudaFree(host_a->accC));
+  CUDA_CALL(cudaFree(host_a->accPhi));
+  CUDA_CALL(cudaFree(host_a->accAlp));
+  CUDA_CALL(cudaFree(host_a->accDel));
+  CUDA_CALL(cudaFree(host_a->accEps));
   
-  free(a);
+  free(host_a);
 }

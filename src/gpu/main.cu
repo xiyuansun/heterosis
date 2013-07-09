@@ -6,6 +6,11 @@
 #include <stdio.h>
 
 int main(int argc, char **argv){
-  oneChain(argc, argv);
+ /* oneChain(argc, argv);*/
+ 
+  Config *cfg = config(argc, argv);  
+  Chain *a = allocChain(cfg);
+  freeChain(a);
+ 
   return EXIT_SUCCESS;
 }
