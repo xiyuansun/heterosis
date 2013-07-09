@@ -17,15 +17,15 @@ num_t delProp(Chain *a, int g){ /* device */
   num_t avg = (a->del[iG(a->mDel, g)] * sprec) / (gprec + sprec);
   num_t s = gam * gam + sig * sig;
   num_t u = runiform(0, 1);
-  num_t new;
+  num_t New;
 
   if(u < a->piDel[a->mPiDel]){
-    new = 0;
+    New = 0;
   } else {
-    new = rnormal(avg, s);
+    New = rnormal(avg, s);
   }
 
-  return new;
+  return New;
 }
 
 num_t lDel(Chain *a, int g, num_t arg){ /* device */ 
@@ -52,19 +52,19 @@ num_t lDel(Chain *a, int g, num_t arg){ /* device */
 
 void sampleDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
-  num_t old, new, dl, lp, lu;
+  num_t old, New, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){ 
 
     old = a->del[iG(a->mDel, g)];
-    new = delProp(a, g);
+    New = delProp(a, g);
     
-    dl = lDel(a, g, new) - lDel(a, g, old);
+    dl = lDel(a, g, New) - lDel(a, g, old);
     lp = 0 < dl? 0 : dl;
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->del[iG(a->mDel + 1, g)] = new;
+      a->del[iG(a->mDel + 1, g)] = New;
       
       if(a->mDel >= a->burnin)
         ++a->accDel[g];

@@ -14,19 +14,19 @@ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 
 void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
   int n, g, N = a->N, G = a->G;
-  num_t old, new, dl, lp, lu;
+  num_t old, New, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){
     for(n = 0; n < a->N; ++n){ 
       old = a->eps[iNG(a->mEps, n, g)];
-      new = rnormal(old, a->tuneEps[iG(n, g)]);
+      New = rnormal(old, a->tuneEps[iG(n, g)]);
 
-      dl = lEps(a, n, g, new) - lEps(a, n, g, old);
+      dl = lEps(a, n, g, New) - lEps(a, n, g, old);
       lp = 0 < dl ? 0 : dl;
       lu = log(runiform(0, 1));
       
       if(lu < lp){ /* accept */
-        a->eps[iNG(a->mEps + 1, n, g)] = new;
+        a->eps[iNG(a->mEps + 1, n, g)] = New;
         a->tuneEps[iG(n, g)] *= 1.1;
         
         if(a->mEps >= a->burnin)
