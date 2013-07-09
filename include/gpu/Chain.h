@@ -107,7 +107,7 @@ typedef struct {
 
   int accD;
   int *accC;
-  int **accEps;
+  int *accEps;
   int *accPhi;
   int *accAlp;
   int *accDel;

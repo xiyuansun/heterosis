@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 Chain *allocChain(Config *cfg){
-  int n;
+
   Chain *a;
   
   a = malloc(sizeof(Chain));
@@ -59,10 +59,7 @@ Chain *allocChain(Config *cfg){
   a->accPhi = malloc(cfg->G * sizeof(int));
   a->accAlp = malloc(cfg->G * sizeof(int));
   a->accDel = malloc(cfg->G * sizeof(int));
-  
-  a->accEps = malloc(cfg->N * sizeof(int*));
-  for(n = 0; n < cfg->N; ++n)
-    a->accEps[n] = malloc(cfg->G * sizeof(int));
+  a->accEps = malloc(cfg->N * cfg->G * sizeof(int));
     
   return a;
 }

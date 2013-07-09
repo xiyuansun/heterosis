@@ -85,7 +85,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->accC[n] = 0;
   
     for(g = 0; g < a->G; ++g)
-      a->accEps[n][g] = 0;
+      a->accEps[iG(n, g)] = 0;
   }
 
   for(g = 0; g < a->G; ++g){

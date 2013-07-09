@@ -6,8 +6,6 @@
 
 void freeChain(Chain *a, Config *cfg){
   
-  int n;
-  
   /* data */  
 
   free(a->y);
@@ -51,9 +49,6 @@ void freeChain(Chain *a, Config *cfg){
   free(a->tuneEps);
 
   /* number of acceptances for Metropolis steps */
-
-  for(n = 0; n < cfg->N; ++n)
-    free(a->accEps[n]);
 
   free(a->accC);
   free(a->accPhi);
