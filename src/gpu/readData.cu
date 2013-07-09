@@ -1,11 +1,12 @@
 #include <Config.h>
 #include <constants.h>
+#include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-count_t **readData(Config *cfg){
-  int g = 0, n = 0, **y;
+__host__ count_t *readData(Config *cfg){
+  int g = 0, n = 0, G, *y;
   char *buf, row[MAXROW];
   FILE *fp = fopen(cfg->dataFile, "r");
   
@@ -38,15 +39,14 @@ count_t **readData(Config *cfg){
       cfg->G = g;
   }
   
-  y = (count_t**) malloc(cfg->N * sizeof(count_t*));
+  y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t));
   rewind(fp);
   
-  for(n = 0; n < cfg->N; ++n)
-    y[n] = (count_t*) malloc(cfg->G * sizeof(count_t)); 
+  G = cfg->G;
   
   for(g = 0; g < cfg->G; ++g)
     for(n = 0; n < cfg->N; ++n)
-      fscanf(fp, "%d", y[n] + g);
+      fscanf(fp, "%d", y + iG(n, g));
   
   fclose(fp);
   return y;

@@ -7,11 +7,11 @@
 #include <stdlib.h>
 
 void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+  int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    if(pow(a->del[a->mDel][g], 2) > 1e-6){
-      a->tmp1[g] = pow(a->del[a->mDel][g] - a->theDel[a->mTheDel], 2);
+    if(pow(a->del[iG(a->mDel, g)], 2) > 1e-6){
+      a->tmp1[g] = pow(a->del[iG(a->mDel, g)] - a->theDel[a->mTheDel], 2);
       a->tmp2[g] = 1;
     } else {
       a->tmp1[g] = 0;

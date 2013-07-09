@@ -7,37 +7,38 @@
 #include <stdlib.h>
 
 num_t alpProp(Chain *a, int g){ /* device */
-      
+  int G = a->G;
+
   num_t gam = a->gamAlp;
   num_t sig = a->sigAlp[a->mSigAlp];
 
   num_t gprec = 1/(gam * gam);
   num_t sprec = 1/(sig * sig);
 
-  num_t avg = (a->alp[a->mAlp][g] * sprec) / (gprec + sprec);
+  num_t avg = (a->alp[iG(a->mAlp, g)] * sprec) / (gprec + sprec);
   num_t s = gam * gam + sig * sig;
   num_t u = runiform(0, 1);
-  num_t new;
+  num_t nw;
   
   if(u < a->piAlp[a->mPiAlp]){
-    new = 0;
+    nw = 0;
   } else {
-    new = rnormal(avg, s);
+    nw = rnormal(avg, s);
   }
 
-  return new;
+  return nw;
 }
 
 num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   
-  int n;
+  int n, N = a->N, G = a->G;
   num_t s = 0, tmp;
    
   for(n = 0; n < a->N; ++n){
     if(a->grp[n] != 2){
-      tmp = mu(a, n, a->phi[a->mPhi][g], arg, a->del[a->mDel][g]);
-      s += a->y[n][g] * tmp - exp(a->c[a->mC][n] + 
-          a->eps[a->mEps][n][g] + tmp);
+      tmp = mu(a, n, a->phi[iG(a->mPhi, g)], arg, a->del[iG(a->mDel, g)]);
+      s += a->y[iG(n, g)] * tmp - exp(a->c[iN(a->mC, n)] + 
+          a->eps[iNG(a->mEps, n, g)] + tmp);
     }
   }
  
@@ -53,25 +54,25 @@ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
 
 void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
-  int g;
-  num_t old, new, dl, lp, lu;
+  int g, G = a->G;
+  num_t old, nw, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){ 
 
-    old = a->alp[a->mAlp][g];
-    new = alpProp(a, g);
+    old = a->alp[iG(a->mAlp, g)];
+    nw = alpProp(a, g);
     
-    dl = lAlp(a, g, new) - lAlp(a, g, old);
+    dl = lAlp(a, g, nw) - lAlp(a, g, old);
     lp = 0 < dl ? 0 : dl;
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->alp[a->mAlp + 1][g] = new;
+      a->alp[iG(a->mAlp + 1, g)] = nw;
       
       if(a->mAlp >= a->burnin)
         ++a->accAlp[g];
     } else { /* reject */
-      a->alp[a->mAlp + 1][g] = old;
+      a->alp[iG(a->mAlp + 1, g)] = old;
     }
   }
 }

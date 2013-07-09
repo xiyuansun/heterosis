@@ -5,7 +5,7 @@
 
 typedef struct {
 
-  count_t **y; /* data */
+  count_t *y; /* data */
   num_t *yMeanG; /* gene-wise mean expression levels */
   int *grp; /* assignment of libraries (samples) to treatment groups */ 
 
@@ -36,24 +36,24 @@ typedef struct {
 
   /* samples of parameters and hyperparameters */
   
-  num_t **c;
+  num_t *c;
     num_t *sigC;
    
-  num_t ***eps;
-    num_t **eta;
+  num_t *eps;
+    num_t *eta;
       num_t *d;
       num_t *tau;
       
-  num_t **phi;
+  num_t *phi;
     num_t *thePhi;
     num_t *sigPhi;
     
-  num_t **alp;
+  num_t *alp;
     num_t *theAlp;
     num_t *sigAlp;
     num_t *piAlp;
     
-  num_t **del;
+  num_t *del;
     num_t *theDel;
     num_t *sigDel;
     num_t *piDel;
@@ -99,7 +99,7 @@ typedef struct {
   /* tuning parameters for metropolis steps */
   
   num_t *tuneC;
-  num_t **tuneEps;
+  num_t *tuneEps;
   num_t tuneD;
   num_t *tunePhi;
   
@@ -107,7 +107,7 @@ typedef struct {
 
   int accD;
   int *accC;
-  int **accEps;
+  int *accEps;
   int *accPhi;
   int *accAlp;
   int *accDel;

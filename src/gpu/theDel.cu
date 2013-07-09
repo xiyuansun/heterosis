@@ -7,12 +7,12 @@
 #include <stdlib.h>
 
 void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+  int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    if(pow(a->del[a->mDel][g], 2) > 1e-6){
+    if(pow(a->del[iG(a->mDel, g)], 2) > 1e-6){
       a->tmp1[g] = 1;
-      a->tmp2[g] = a->del[a->mDel][g];
+      a->tmp2[g] = a->del[iG(a->mDel, g)];
     } else {
       a->tmp1[g] = 0;
       a->tmp2[g] = 0;

@@ -1,12 +1,13 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void printRates(Chain *a, Config *cfg){
 
-  int n, i, niter = cfg->M - cfg->burnin;
+  int n, i, G = a->G, niter = cfg->M - cfg->burnin;
   num_t accD, accC, accPhi, accAlp, accDel, accEps;
   FILE *fp;
   
@@ -37,7 +38,7 @@ void printRates(Chain *a, Config *cfg){
   
     accEps = 0;  
     for(n = 0; n < cfg->N; ++n)
-      accEps += a->accEps[n][0];
+      accEps += a->accEps[iG(n, 0)];
     accEps /= (niter * cfg->N);
     
     fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
@@ -64,7 +65,7 @@ void printRates(Chain *a, Config *cfg){
   
       accEps = 0;  
       for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[n][i];
+        accEps += a->accEps[iG(n, i)];
       accEps /= (niter * cfg->N);
       
       fprintf(fp, ". ");
@@ -90,7 +91,7 @@ void printRates(Chain *a, Config *cfg){
       accEps = 0;  
       
       for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[n][i];
+        accEps += a->accEps[iG(n, i)];
       accEps /= (niter * cfg->N);
       
       fprintf(fp, ". . ");

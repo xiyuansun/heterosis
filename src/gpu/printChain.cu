@@ -5,7 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printChain(Chain *a){
+__host__ void printChain(Chain *a){
+
+  
 
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);

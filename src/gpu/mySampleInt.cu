@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *mySampleInt(int N, int n){
+__host__ int *mySampleInt(int N, int n){
 
   int i, j, repeats, *ret = (int*) malloc(n * sizeof(int)), swap, tmp;
 

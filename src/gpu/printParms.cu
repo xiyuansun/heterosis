@@ -1,12 +1,14 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void printParms_oneFile(Chain *a, Config *cfg, int some){
 
   int m, n, g, nlibs, ngenes;
+  int N = a->N, G = a->G;
   num_t tmp;
   FILE *fp;
   
@@ -58,33 +60,33 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
     
     for(m = 0; m <= cfg->M; ++m){
       for(n = 0; n < nlibs; ++n){
-        tmp = a->c[m][n];
+        tmp = a->c[iN(m, n)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
       
       for(g = 0; g < ngenes; ++g){
-        tmp = a->phi[m][g];
+        tmp = a->phi[iG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
 
       for(g = 0; g < ngenes; ++g){
-        tmp = a->alp[m][g];
+        tmp = a->alp[iG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
       
       for(g = 0; g < ngenes; ++g){
-        tmp = a->del[m][g];
+        tmp = a->del[iG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }      
 
       for(g = 0; g < ngenes; ++g){
-        tmp = a->eta[m][g];
+        tmp = a->eta[iG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }    
       
       for(n = 0; n < nlibs; ++n)
         for(g = 0; g < ngenes; ++g){
-          tmp = a->eps[m][n][g];
+          tmp = a->eps[iNG(m, n, g)];
           fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
         }
       

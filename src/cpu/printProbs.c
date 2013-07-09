@@ -1,12 +1,13 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <functions.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void printProbs(Chain *a, Config *cfg){
-  int m, g, niter = cfg->M - cfg->burnin;
+  int m, g, G = a->G, niter = cfg->M - cfg->burnin;
   num_t alp, del;
   num_t prob_de, prob_hph, prob_lph, prob_mph;
   FILE *fp;
@@ -28,7 +29,7 @@ void printProbs(Chain *a, Config *cfg){
       prob_de = 0;
       
       for(m = cfg->burnin + 1; m <= cfg->M; ++m){
-        alp = a->alp[m][g];
+        alp = a->alp[iG(m, g)];
         prob_de += ((alp * alp) > 1e-6);
       }
       
@@ -43,8 +44,8 @@ void printProbs(Chain *a, Config *cfg){
         prob_mph = 0;
       
         for(m = cfg->burnin + 1; m <= cfg->M; ++m){
-          alp = a->alp[m][g];
-          del = a->del[m][g];
+          alp = a->alp[iG(m, g)];
+          del = a->del[iG(m, g)];
           
           prob_hph += (del > fabs(alp));
           prob_lph += (del < -fabs(alp));

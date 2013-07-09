@@ -62,15 +62,13 @@ function gpu {
   echo Making GPU version...
 
   CC=nvcc
-  CFLAGS="-I../include/gpu -c"
+  CFLAGS="-c -I../include/gpu"
   LDFLAGS=-lm 
 
-  DEP=(printArrays)
+#  DEP=(printArrays)
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(mySampleInt readGrp readData)
-  DEP+=(allocChain testgpu)
-
-#  DEP+=(allocChain newChain printChain freeChain)
+  DEP+=(allocChain  freeChain) #newChain
   DEP+=(mu runiform rnormal rgamma rbeta)
 #  DEP+=(c sigC eps eta d tau)
 #  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
@@ -79,7 +77,7 @@ function gpu {
 #  DEP+=(piAlp piDel)
 #  DEP+=(runChain oneChain summarizeChain)
 #  DEP+=(printProbs printRates printHyper printParms)
-#  DEP+=(main)
+  DEP+=(main)
 
   OBJ=()
  

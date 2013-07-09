@@ -7,10 +7,10 @@
 #include <stdlib.h>
 
 void samplePiAlp_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
-  int g;
+  int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    if(pow(a->alp[a->mAlp][g], 2) > 1e-6){
+    if(pow(a->alp[iG(a->mAlp, g)], 2) > 1e-6){
       a->tmp1[g] = 1;
     } else {
       a->tmp1[g] = 0;

@@ -7,10 +7,10 @@
 #include <stdlib.h>
 
 void sampleTau_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+  int g, G = a->G;
   
   for(g = 0; g < a->G; ++g)
-    a->tmp1[g] = 1/pow(a->eta[a->mEta][g], 2);
+    a->tmp1[g] = 1/pow(a->eta[iG(a->mEta, g)], 2);
 }
 
 void sampleTau_kernel2(Chain *a){ /* pairwise sum in Thrust */

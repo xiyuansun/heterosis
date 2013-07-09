@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-Config *config(int argc, char **argv){
-  Config *cfg = (Config*) calloc(1, sizeof(Config));
+__host__ Config *config(int argc, char **argv){
+  Config *cfg = (Config*) malloc(sizeof(Config));
 
   cfg->dataFile = (char*) malloc(BUF * sizeof(char));
   cfg->groupFile = (char*) malloc(BUF * sizeof(char));

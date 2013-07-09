@@ -19,8 +19,8 @@ int *readGrp(Config *cfg){
     return NULL;
   }
   
-  grp = malloc(cfg->N * sizeof(int));
-  unique = malloc(cfg->N * sizeof(int));
+  grp = (int*) malloc(cfg->N * sizeof(int));
+  unique = (int*) malloc(cfg->N * sizeof(int));
   
   for(n = 0; n < cfg->N; ++n)
     fscanf(fp, "%d", grp + n);
