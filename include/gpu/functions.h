@@ -5,27 +5,14 @@
 #include "Config.h"
 #include "constants.h"
 
-/* indexing functions */
-
-#define iMNG(m, n, g) (N * G * m + G * n + g)
-#define iMN(m, n) (N * m + n)
-#define iMG(m, g) (G * m + g)
-#define iNG(n, g) (G * n + g)
-
-#define CUDA_CALL(x) do { if((x) != cudaSuccess) { \
-    printf("Error at %s:%d\n",__FILE__,__LINE__); \
-    return EXIT_FAILURE;}} while(0)
-
-#define CURAND_CALL(x) do { if((x) != CURAND_STATUS_SUCCESS) { \
-    printf("Error at %s:%d\n",__FILE__,__LINE__); \
-    return EXIT_FAILURE;}} while(0)
+#define iNG(n, g) (n * G + g)
 
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);
-void pi2(int*, int, int, const char*);
-void pf2(num_t*, int, int, const char*);
-void pi3(int*, int, int, int, const char*);
-void pf3(num_t*, int, int, int, const char*);
+void pi2(int**, int, int, const char*);
+void pf2(num_t**, int, int, const char*);
+void pi3(int***, int, int, int, const char*);
+void pf3(num_t***, int, int, int, const char*);
 
 Config *config(int, char**);
 void getopts(Config*, int, char**);
@@ -36,8 +23,7 @@ int *mySampleInt(int, int);
 int *readGrp(Config*);
 count_t *readData(Config*);
 
-__host__ Chain *allocChain(Config*);
-
+Chain *allocChain(Config*);
 Chain *newChain(Config*);
 void newChain_kernel1(Chain*);
 void newChain_kernel2(Chain*);

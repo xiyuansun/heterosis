@@ -61,14 +61,14 @@ function gpu {
   
   echo Making GPU version...
 
-  CC=nvcc
-  CFLAGS="-I../include/gpu -c"
+  CC=gcc
+  CFLAGS="-c -I../include/gpu -Wall -pedantic"
   LDFLAGS=-lm 
 
-  DEP=(printArrays)
+  DEP=() #printArrays
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(mySampleInt readGrp readData)
-  DEP+=(allocChain newChain printChain freeChain)
+  DEP+=(allocChain newChain freeChain) #printChain
   DEP+=(mu runiform rnormal rgamma rbeta)
   DEP+=(c sigC eps eta d tau)
   DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
@@ -84,7 +84,7 @@ function gpu {
   for dep in ${DEP[@]}
   do
     OBJ+=(../obj/gpu/${dep}.o)
-    ${CC} ../src/gpu/${dep}.cu -o ../obj/gpu/${dep}.o ${CFLAGS} 
+    ${CC} ../src/gpu/${dep}.c -o ../obj/gpu/${dep}.o ${CFLAGS} 
   done
 
   $CC ${OBJ[@]} -o ../bin/gpumcmc ${LDFLAGS}
