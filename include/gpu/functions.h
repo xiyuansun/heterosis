@@ -20,7 +20,7 @@
   printf("CURAND error at %s:%d\n",__FILE__,__LINE__); \
   exit(EXIT_FAILURE);}} 
 
-#define FREE(x, onHost) {if(onHost){free(x)} else {CUDA_CALL(cudaFree(x))}}
+#define FREE(x, onHost) {if(onHost){free(x);} else {CUDA_CALL(cudaFree(x));}}
 
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);
