@@ -96,12 +96,14 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 Chain *newChain(Config *cfg){ /* host */
-  int n, g, G, *grp;
+  int n, g, N, G, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv;
   Chain *a;
 
   y = readData(cfg);
+  
+  N = cfg->N;
   G = cfg->G;
   
   if(y == NULL)
@@ -200,7 +202,7 @@ Chain *newChain(Config *cfg){ /* host */
   s /= cfg->N;
   
   for(n = 0; n < cfg->N; ++n)
-    a->c[0][n] = lqts[n] - s;
+    a->c[iMN(0, n)] = lqts[n] - s;
   
   newChain_kernel1(a);
   newChain_kernel2(a);

@@ -199,10 +199,10 @@ Chain *newChain(Config *cfg){ /* host */
   }
   
   s /= cfg->N;
-  
+
   for(n = 0; n < cfg->N; ++n)
     a->c[0][n] = lqts[n] - s;
-  
+
   newChain_kernel1(a);
   newChain_kernel2(a);
   

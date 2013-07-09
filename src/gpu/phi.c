@@ -6,12 +6,12 @@
 #include <stdlib.h>
 
 num_t lPhi(Chain *a, int g, num_t arg){ /* device */
-  int n, G = a->G;
+  int n, N = a->N, G = a->G;
   num_t ret, s = 0, tmp = 0; 
 
   for(n = 0; n < a->N; ++n){
     tmp = mu(a, n, arg, a->alp[a->mAlp][g], a->del[a->mDel][g]);
-    s += a->y[iNG(n, g)] * tmp - exp(a->c[a->mC][n] + 
+    s += a->y[iNG(n, g)] * tmp - exp(a->c[iMN(a->mC, n)] + 
         a->eps[a->mEps][n][g] + tmp);
   }
  

@@ -6,8 +6,8 @@
 #include <stdlib.h>
 
 num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
-  int G = a->G;
-  return a->y[iNG(n, g)] * arg - exp(a->c[a->mC][n] + arg + mu(a, n, a->phi[a->mPhi][g], 
+  int N = a->N, G = a->G;
+  return a->y[iNG(n, g)] * arg - exp(a->c[iMN(a->mC, n)] + arg + mu(a, n, a->phi[a->mPhi][g], 
                                      a->alp[a->mAlp][g], a->del[a->mDel][g])) 
                           - (arg * arg) / (2 * a->eta[a->mEta][g] * a->eta[a->mEta][g]);
 }

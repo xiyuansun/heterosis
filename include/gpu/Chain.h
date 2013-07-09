@@ -36,7 +36,7 @@ typedef struct {
 
   /* samples of parameters and hyperparameters */
   
-  num_t **c;
+  num_t *c;
     num_t *sigC;
    
   num_t ***eps;

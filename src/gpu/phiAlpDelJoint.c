@@ -7,12 +7,12 @@
 
 num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
  
-  int n, G = a->G;
+  int n, N = a->N, G = a->G;
   num_t ret, s = 0, tmp = 0;
 
   for(n = 0; n < a->N; ++n){
     tmp = mu(a, n, argPhi, argAlp, argDel);
-    s += a->y[iNG(n, g)] * tmp - exp(a->c[a->mC][n] + 
+    s += a->y[iNG(n, g)] * tmp - exp(a->c[iMN(a->mC, n)] + 
          a->eps[a->mEps][n][g] + tmp);
   }
 

@@ -52,6 +52,7 @@ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
   for(n = 0; n < a->N; ++n){
     a->Old[n] = a->c[a->mC][n];
     a->New[n] = rnormal(a->Old[n], a->tuneC[n]);
+
   }
 }
 
@@ -64,7 +65,7 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
     dl = a->lNew[n] - a->lOld[n];
     lp = 0 < dl ? 0 : dl;
     lu = log(runiform(0, 1));
-      
+
     if(lu < lp){ /* accept */
       a->c[a->mC + 1][n] = a->New[n];
       a->tuneC[n] *= 1.1; /* Increase the proposal variance to avoid  

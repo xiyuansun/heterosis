@@ -5,7 +5,8 @@
 #include "Config.h"
 #include "constants.h"
 
-#define iNG(n, g) (n * G + g)
+#define iMN(m, n) ((m) * N + (n))
+#define iNG(n, g) ((n) * G + (g))
 
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);

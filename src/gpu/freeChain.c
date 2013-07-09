@@ -20,8 +20,7 @@ void freeChain(Chain *a, Config *cfg){
 
     for(n = 0; n < cfg->N; ++n)
       free(a->eps[m][n]);
-      
-    free(a->c[m]);
+
     free(a->eps[m]);
     free(a->eta[m]);
     free(a->phi[m]);

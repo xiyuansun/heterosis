@@ -1,12 +1,14 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void printParms_oneFile(Chain *a, Config *cfg, int some){
 
   int m, n, g, nlibs, ngenes;
+  int N = a->N;
   num_t tmp;
   FILE *fp;
   
@@ -58,7 +60,7 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
     
     for(m = 0; m <= cfg->M; ++m){
       for(n = 0; n < nlibs; ++n){
-        tmp = a->c[m][n];
+        tmp = a->c[iMN(m, n)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
       
