@@ -12,7 +12,7 @@ int main(int argc, char **argv){
  
   Config *cfg = config(argc, argv);  
   Chain *a = allocChain(cfg);
-  freeChain(a);
+  freeChain(a, cfg);
  
   return EXIT_SUCCESS;
 }
