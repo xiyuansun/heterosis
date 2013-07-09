@@ -59,8 +59,8 @@ __host__ Chain *allocChain(Config *cfg){
   CUDA_CALL(cudaMalloc((void **) &(host_a->accDel), cfg->G * sizeof(int)));
   CUDA_CALL(cudaMalloc((void **) &(host_a->accEps), cfg->N * cfg->G * sizeof(int)));
     
-  CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain));
-  CUDA_CALL(cudaMemcpy(a, host_a, sizeof(Chain), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
+  CUDA_CALL(cudaMemcpy(a, host_a, sizeof(Chain), cudaMemcpyHostToDevice)));
   free(host_a);
     
   return a;
