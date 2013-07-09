@@ -14,7 +14,10 @@ __host__ void allocChain(Chain *a, Config *cfg){
   
   /* data */  
   
-  CUDA_CALL(cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t)));
+  if((cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t))) != cudaSuccess) {printf("CUDA error at %s:%d\n",__FILE__,__LINE__);  return EXIT_FAILURE;}
+  
+  
+ /* CUDA_CALL(cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t))); */
   CUDA_CALL(cudaMalloc((void **) &(host_a->yMeanG), cfg->N * sizeof(num_t)));
   CUDA_CALL(cudaMalloc((void **) &(host_a->grp), cfg->N * sizeof(int)));
 
