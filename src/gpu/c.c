@@ -10,7 +10,7 @@ void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
   
   for(g = 0; g < a->G; ++g)
     a->tmp1[g] = exp(a->eps[iNG(a->mEps, n, g)] + mu(a, n, a->phi[iG(a->mPhi, g)], 
-                    a->alp[a->mAlp][g], a->del[a->mDel][g]));
+                    a->alp[iG(a->mAlp, g)], a->del[iG(a->mDel, g)]));
 }
 
 void lC_kernel2(Chain *a, int n){ /* parallel pairwise sum */

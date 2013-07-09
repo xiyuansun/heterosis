@@ -70,12 +70,12 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
       }
 
       for(g = 0; g < ngenes; ++g){
-        tmp = a->alp[m][g];
+        tmp = a->alp[iG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
       
       for(g = 0; g < ngenes; ++g){
-        tmp = a->del[m][g];
+        tmp = a->del[iG(m, g)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }      
 

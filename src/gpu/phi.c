@@ -10,7 +10,7 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
   num_t ret, s = 0, tmp = 0; 
 
   for(n = 0; n < a->N; ++n){
-    tmp = mu(a, n, arg, a->alp[a->mAlp][g], a->del[a->mDel][g]);
+    tmp = mu(a, n, arg, a->alp[iG(a->mAlp, g)], a->del[iG(a->mDel, g)]);
     s += a->y[iG(n, g)] * tmp - exp(a->c[iN(a->mC, n)] + 
         a->eps[iNG(a->mEps, n, g)] + tmp);
   }

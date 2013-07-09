@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 Chain *allocChain(Config *cfg){
-  int m, n;
+  int n;
   Chain *a;
   
   a = malloc(sizeof(Chain));
@@ -28,21 +28,14 @@ Chain *allocChain(Config *cfg){
   a->phi    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->thePhi = malloc((cfg->M + 1) * sizeof(num_t));
   a->sigPhi = malloc((cfg->M + 1) * sizeof(num_t));
-  a->alp    = malloc((cfg->M + 1) * sizeof(num_t*));
+  a->alp    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->theAlp = malloc((cfg->M + 1) * sizeof(num_t));
   a->sigAlp = malloc((cfg->M + 1) * sizeof(num_t));
   a->piAlp  = malloc((cfg->M + 1) * sizeof(num_t));
-  a->del    = malloc((cfg->M + 1) * sizeof(num_t*));
+  a->del    = malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
   a->theDel = malloc((cfg->M + 1) * sizeof(num_t));
   a->sigDel = malloc((cfg->M + 1) * sizeof(num_t));
   a->piDel  = malloc((cfg->M + 1) * sizeof(num_t));
-  
-  for(m = 0; m <= cfg->M; ++m){
-  
-    a->alp[m] = malloc(cfg->G * sizeof(num_t));
-    a->del[m] = malloc(cfg->G * sizeof(num_t));
-
-  }
   
   /* temporary and return values */
   

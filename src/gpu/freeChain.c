@@ -6,7 +6,7 @@
 
 void freeChain(Chain *a, Config *cfg){
   
-  int m, n;
+  int n;
   
   /* data */  
 
@@ -15,12 +15,6 @@ void freeChain(Chain *a, Config *cfg){
   free(a->grp);
 
   /* parameters */
-  
-  for(m = 0; m <= cfg->M; ++m){
-
-    free(a->alp[m]);
-    free(a->del[m]);
-  }
   
   free(a->c);
   free(a->sigC);

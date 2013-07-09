@@ -48,12 +48,12 @@ typedef struct {
     num_t *thePhi;
     num_t *sigPhi;
     
-  num_t **alp;
+  num_t *alp;
     num_t *theAlp;
     num_t *sigAlp;
     num_t *piAlp;
     
-  num_t **del;
+  num_t *del;
     num_t *theDel;
     num_t *sigDel;
     num_t *piDel;

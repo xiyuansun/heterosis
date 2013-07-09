@@ -8,7 +8,7 @@
 num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
   int N = a->N, G = a->G;
   return a->y[iG(n, g)] * arg - exp(a->c[iN(a->mC, n)] + arg + mu(a, n, a->phi[iG(a->mPhi, g)], 
-                                     a->alp[a->mAlp][g], a->del[a->mDel][g])) 
+                                     a->alp[iG(a->mAlp, g)], a->del[iG(a->mDel, g)])) 
                           - (arg * arg) / (2 * pow(a->eta[iG(a->mEta, g)], 2));
 }
 

@@ -20,16 +20,16 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
     u = runiform(0, 1);
     if(u < a->piAlp[0]){
-      a->alp[0][g] = 0;
+      a->alp[iG(0, g)] = 0;
     } else {
-      a->alp[0][g] = rnormal(a->theAlp[0], a->sigAlp[0]);
+      a->alp[iG(0, g)] = rnormal(a->theAlp[0], a->sigAlp[0]);
     }
     
     u = runiform(0, 1);
     if(u < a->piDel[0]){
-      a->del[0][g] = 0;
+      a->del[iG(0, g)] = 0;
     } else {
-      a->del[0][g] = rnormal(a->theDel[0], a->sigDel[0]);
+      a->del[iG(0, g)] = rnormal(a->theDel[0], a->sigDel[0]);
     }
  
     a->eta[iG(0, g)] = 1/sqrt(rgamma(a->d[0] / 2, 
