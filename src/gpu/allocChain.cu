@@ -14,8 +14,8 @@ __host__ Chain *allocChain(Config *cfg, int onHost){
   /* data */  
     
   ALLOC(host_a->y, (count_t*), cfg->N * cfg->G * sizeof(count_t), onHost);
-  ALLOC(host_a->yMeanG, cfg->N * sizeof(num_t), (num_t*), onHost);
-  ALLOC(host_a->grp, cfg->N * sizeof(int), (int*), onHost);
+  ALLOC(host_a->yMeanG, (num_t*), cfg->N * sizeof(num_t), onHost);
+  ALLOC(host_a->grp, (int*), cfg->N * sizeof(int), onHost);
 
   /* parameters */
   
