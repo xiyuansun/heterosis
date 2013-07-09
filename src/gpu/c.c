@@ -9,7 +9,7 @@ void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
   int g, N = a->N, G = a->G;
   
   for(g = 0; g < a->G; ++g)
-    a->tmp1[g] = exp(a->eps[iMNG(a->mEps, n, g)] + mu(a, n, a->phi[a->mPhi][g], 
+    a->tmp1[g] = exp(a->eps[iNG(a->mEps, n, g)] + mu(a, n, a->phi[a->mPhi][g], 
                     a->alp[a->mAlp][g], a->del[a->mDel][g]));
 }
 
@@ -50,7 +50,7 @@ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
   int n, N = a->N;
   
   for(n = 0; n < a->N; ++n){
-    a->Old[n] = a->c[iMN(a->mC, n)];
+    a->Old[n] = a->c[iN(a->mC, n)];
     a->New[n] = rnormal(a->Old[n], a->tuneC[n]);
     
   }
@@ -67,15 +67,15 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
     lu = log(runiform(0, 1));
       
     if(lu < lp){ /* accept */
-      a->c[iMN(a->mC + 1, n)] = a->New[n];
+      a->c[iN(a->mC + 1, n)] = a->New[n];
       a->tuneC[n] *= 1.1; /* Increase the proposal variance to avoid  
-                                       getting stuck in a mode */
+                                       gettiG stuck in a mode */
                                        
       if(a->mC >= a->burnin)                                 
         ++a->accC[n];
     } else { /* reject */
-      a->c[iMN(a->mC + 1, n)] = a->Old[n];
-      a->tuneC[n] /= 1.1; /* If you're rejecting too often, decrease the  
+      a->c[iN(a->mC + 1, n)] = a->Old[n];
+      a->tuneC[n] /= 1.1; /* If you're rejectiG too often, decrease the  
                                        proposal variance to sample closer to 
                                        the last accepted value. */
     }

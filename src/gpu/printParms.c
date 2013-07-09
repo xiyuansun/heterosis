@@ -60,7 +60,7 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
     
     for(m = 0; m <= cfg->M; ++m){
       for(n = 0; n < nlibs; ++n){
-        tmp = a->c[iMN(m, n)];
+        tmp = a->c[iN(m, n)];
         fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
       }
       
@@ -86,7 +86,7 @@ void printParms_oneFile(Chain *a, Config *cfg, int some){
       
       for(n = 0; n < nlibs; ++n)
         for(g = 0; g < ngenes; ++g){
-          tmp = a->eps[iMNG(m, n, g)];
+          tmp = a->eps[iNG(m, n, g)];
           fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
         }
       

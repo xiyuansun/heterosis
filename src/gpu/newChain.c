@@ -36,7 +36,7 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
                    a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
 
     for(n = 0; n < a->N; ++n)
-      a->eps[iMNG(0, n, g)] = rnormal(0, a->eta[0][g]);
+      a->eps[iNG(0, n, g)] = rnormal(0, a->eta[0][g]);
     
   }
 }
@@ -134,8 +134,8 @@ Chain *newChain(Config *cfg){ /* host */
     tmp = 0;
     
     for(g = 0; g < cfg->G; ++g){
-      a->y[iNG(n, g)] = y[iNG(n, g)];
-      tmp += y[iNG(n, g)];
+      a->y[iG(n, g)] = y[iG(n, g)];
+      tmp += y[iG(n, g)];
     }
            
     a->yMeanG[n] = tmp / cfg->G;
@@ -192,7 +192,7 @@ Chain *newChain(Config *cfg){ /* host */
   s = 0;
   for(n = 0; n < cfg->N; ++n){
     for(g = 0; g < cfg->G; ++g)
-      tmpv[g] = y[iNG(n, g)];
+      tmpv[g] = y[iG(n, g)];
       
     qsort(tmpv, cfg->N, sizeof(num_t), cmpfunc);    
     lqts[n] = log(tmpv[(int) floor(cfg->G * 0.75)]);
@@ -202,7 +202,7 @@ Chain *newChain(Config *cfg){ /* host */
   s /= cfg->N;
   
   for(n = 0; n < cfg->N; ++n)
-    a->c[iMN(0, n)] = lqts[n] - s;
+    a->c[iN(0, n)] = lqts[n] - s;
   
   newChain_kernel1(a);
   newChain_kernel2(a);

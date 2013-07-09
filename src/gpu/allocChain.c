@@ -56,7 +56,7 @@ Chain *allocChain(Config *cfg){
   a->lOld  = malloc(cfg->N * sizeof(num_t));
   a->lNew  = malloc(cfg->N * sizeof(num_t));
 
-  /* tuning parameters for Metropolis steps */
+  /* tuniG parameters for Metropolis steps */
   
   a->tuneC = malloc(cfg->N * sizeof(num_t));
   a->tunePhi = malloc(cfg->G * sizeof(num_t));
