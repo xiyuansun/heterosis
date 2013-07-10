@@ -10,6 +10,12 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
+__global__ void curand_setup_kernel(Chain *a, unsigned int seed){
+
+  int id = GENE;
+  curand_init(seed, id, 0, &(a->states[id]));
+}
+
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g = GENE, N = a->N, G = a->G;
   num_t u;
@@ -41,39 +47,39 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g, G = a->G;
 
-  a->mC = -1;
-  a->mSigC = -1;
+  a->mC = 0;
+  a->mSigC = 0;
 
-  a->mEps = -1;
-  a->mEta = -1;
-  a->mD = -1;
-  a->mTau = -1;
+  a->mEps = 0;
+  a->mEta = 0;
+  a->mD = 0;
+  a->mTau = 0;
 
-  a->mPhi = -1;
-  a->mAlp = -1;
-  a->mDel = -1;
+  a->mPhi = 0;
+  a->mAlp = 0;
+  a->mDel = 0;
 
-  a->mThePhi = -1;
-  a->mTheAlp = -1;
-  a->mTheDel = -1;
+  a->mThePhi = 0;
+  a->mTheAlp = 0;
+  a->mTheDel = 0;
 
-  a->mSigPhi = -1;
-  a->mSigAlp = -1;
-  a->mSigDel = -1;
+  a->mSigPhi = 0;
+  a->mSigAlp = 0;
+  a->mSigDel = 0;
 
-  a->mPiAlp = -1;
-  a->mPiDel = -1;
+  a->mPiAlp = 0;
+  a->mPiDel = 0;
 
   a->tuneD = 100;
 
   for(n = 0; n < a->N; ++n)
-    a->tuneC[n] = -1;
+    a->tuneC[n] = 1;
 
   for(g = 0; g < a->G; ++g){
-    a->tunePhi[g] = -1;
+    a->tunePhi[g] = 1;
 
     for(n = 0; n < a->N; ++n)
-      a->tuneEps[iG(n, g)] = -1;
+      a->tuneEps[iG(n, g)] = 1;
   }
   
   a->accD = 0;
@@ -82,13 +88,13 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->accC[n] = 0;
   
     for(g = 0; g < a->G; ++g)
-      a->accEps[iG(n, g)] = -1;
+      a->accEps[iG(n, g)] = 0;
   }
 
   for(g = 0; g < a->G; ++g){
-    a->accPhi[g] = -1;
-    a->accAlp[g] = -1;
-    a->accDel[g] = -1;
+    a->accPhi[g] = 0;
+    a->accAlp[g] = 0;
+    a->accDel[g] = 0;
   }
 }
 
@@ -96,6 +102,8 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   int n, g, G, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
+
+  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
 
   y = readData(cfg);
   G = cfg->G;

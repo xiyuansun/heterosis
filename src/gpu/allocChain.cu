@@ -2,6 +2,7 @@
 #include <Config.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <curand_kernel.h>
 #include <constants.h>
 #include <functions.h>
 #include <stdio.h>
@@ -72,6 +73,10 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->y), cfg->N * cfg->G * sizeof(count_t))); 
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->yMeanG), cfg->N * sizeof(num_t)));
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->grp), cfg->N * sizeof(int)));
+
+  /* curand states */
+  
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->G * sizeof(curandState)));
 
   /* parameters */
 
