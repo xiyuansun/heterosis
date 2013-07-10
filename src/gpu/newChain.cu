@@ -11,13 +11,14 @@ __host__ int cmpfunc (const void *a, const void *b){
 }
 
 __global__ void curand_setup_kernel(Chain *a, unsigned int seed){
-
+  int G = a->G;
   int id = GENE;
   curand_init(seed, id, 0, &(a->states[id]));
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g = GENE, N = a->N, G = a->G;
+  int n, N = a->N, G = a->G;
+  int g = GENE;
   num_t u;
 
   a->phi[iG(0, g)] = 1; /* rnormal(a->thePhi[0], a->sigPhi[0]);*/
