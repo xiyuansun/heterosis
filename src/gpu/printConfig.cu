@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printConfig(Config *cfg){
+__host__ void printConfig(Config *cfg){
   
   printf("dataFile = %s\n", cfg->dataFile);
   printf("groupFile = %s\n", cfg->groupFile);

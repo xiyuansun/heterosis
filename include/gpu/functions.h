@@ -159,14 +159,14 @@ void samplePiDel_kernel2(Chain*);
 void samplePiDel_kernel3(Chain*);
 void samplePiDel(Chain*, Config*);
 
-void runChain(Chain*, Config*);
-void oneChain(int, char**);
+__host__ void runChain(Chain*, Config*);
+__host__ void oneChain(int, char**);
 
-void printProbs(Chain*, Config*);
-void printRates(Chain*, Config*);
-void printHyper(Chain*, Config*);
-void printParms_oneFile(Chain*, Config*, int);
-void printParms(Chain*, Config*);
-void summarizeChain(Chain*, Config*);
+__host__ void printProbs(Chain*, Config*);
+__host__ void printRates(Chain*, Config*);
+__host__ void printHyper(Chain*, Config*);
+__host__ void printParms_oneFile(Chain*, Config*, int);
+__host__ void printParms(Chain*, Config*);
+__host__ void summarizeChain(Chain*, Chain*, Config*);
 
 #endif /* FUNCTIONS_H */

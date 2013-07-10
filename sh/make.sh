@@ -75,8 +75,8 @@ function gpu {
 #  DEP+=(thePhi theAlp theDel)
 #  DEP+=(sigPhi sigAlp sigDel)
 #  DEP+=(piAlp piDel)
-#  DEP+=(runChain oneChain summarizeChain)
-#  DEP+=(printProbs printRates printHyper printParms)
+  DEP+=(runChain oneChain summarizeChain)
+  DEP+=(printProbs printRates printHyper printParms)
   DEP+=(main)
 
   OBJ=()

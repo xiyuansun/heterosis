@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printHyper(Chain *a, Config *cfg){
+__host__ void printHyper(Chain *a, Config *cfg){
 
   int m;
   num_t tmp;

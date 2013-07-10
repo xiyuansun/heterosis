@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printParms_oneFile(Chain *a, Config *cfg, int some){
+__host__ void printParms_oneFile(Chain *a, Config *cfg, int some){
 
   int m, n, g, nlibs, ngenes;
   int N = a->N, G = a->G;

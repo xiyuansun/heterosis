@@ -7,6 +7,8 @@
 #include <stdlib.h>
 
 void runChain(Chain *a, Config *cfg){
+
+/*
   int m;
   
   for(m = 0; m < a->M; ++m){
@@ -26,4 +28,5 @@ void runChain(Chain *a, Config *cfg){
     sampleEps(a);
     samplePhiAlpDel(a, cfg);
   }
+  */
 }
