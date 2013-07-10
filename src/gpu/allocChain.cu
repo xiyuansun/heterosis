@@ -101,7 +101,7 @@ __host__ Chain *allocChain(Config *cfg, int onHost){
   ALLOC(tmp2, (num_t*), cfg->G * sizeof(num_t), onHost);
   
   ALLOC(Old, (num_t*), cfg->N * sizeof(num_t), onHost);
-  ALLOC(New, (num_t*), cfg->N * sizeof(num_t), onHost);
+  ALLOC(Nw, (num_t*), cfg->N * sizeof(num_t), onHost);
   ALLOC(lOld, (num_t*), cfg->N * sizeof(num_t), onHost);
   ALLOC(lNew, (num_t*), cfg->N * sizeof(num_t), onHost);
 
