@@ -22,7 +22,9 @@ __host__ Chain *chainDeviceToHost(Chain *a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(host_a->allParmsFlag), &(a->allParmsFlag), sizeof(int), cudaMemcpyDeviceToHost));
   
   /* data */
-printf("2\n");
+printf("%d %d %d\n", host_a->M, host_a->N, host_a->G);
+
+
   CUDA_CALL(cudaMemcpy(host_a->y, a->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyDeviceToHost)); printf("3\n"); 
   CUDA_CALL(cudaMemcpy(host_a->yMeanG, a->yMeanG, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));printf("4\n");
   CUDA_CALL(cudaMemcpy(host_a->grp, a->grp, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));printf("5\n");
