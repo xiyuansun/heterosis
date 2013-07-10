@@ -3,6 +3,7 @@
 #include <constants.h>
 #include <cuda.h>
 #include <curand_kernel.h>
+#include <deviceFunctions.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
@@ -88,8 +89,8 @@ __global__ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 
 __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int n, N = cfg->N;
-  int nthreads = (N < maxThreadsPerBlock ? N : maxThreadsPerBlock);
-  int nblocks = ceil(G / NTHREADS);
+  int nthreads = (N < MAXTHREADS ? N : MAXTHREADS);
+  int nblocks = ceil(cfg->G / NTHREADS);
   
   sampleC_kernel1<<<nblocks, nthreads>>>(dev_a);
 
