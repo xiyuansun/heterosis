@@ -3,7 +3,6 @@
 #include <constants.h>
 #include <cuda.h>
 #include <curand_kernel.h>
-#include <deviceFunctions.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>

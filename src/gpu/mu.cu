@@ -2,4 +2,4 @@
 #include <constants.h>
 #include <stdlib.h>
 
-/* see deviceFunctions.h */
+/* see functions.h */
