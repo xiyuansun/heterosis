@@ -114,9 +114,14 @@ __host__ Chain *newChain(Config *cfg){ /* host */
     return NULL;
   }
 
+ printf("1\n");
   a = allocChain(cfg, 0);
 
+ printf("2\n");
+
   /* data and configuration info */
+  
+   
   
   CUDA_CALL(cudaMemcpy(&(a->M), &(cfg->M), sizeof(int), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&(a->N), &(cfg->N), sizeof(int), cudaMemcpyHostToDevice));
@@ -203,10 +208,9 @@ __host__ Chain *newChain(Config *cfg){ /* host */
     tmp = lqts[n] - s;
     CUDA_CALL(cudaMemcpy(&(a->c[iN(0, n)]), &(tmp), sizeof(num_t), cudaMemcpyHostToDevice));
   }
+  
   newChain_kernel1<<<NBLOCKS, NTHREADS>>>(a);
   newChain_kernel2<<<1, 1>>>(a);
-  
-  printf("good here\n");
   
   free(lqts);
   free(tmpv);
