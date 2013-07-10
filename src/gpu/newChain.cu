@@ -103,10 +103,10 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
 
-  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
-
   y = readData(cfg);
   G = cfg->G;
+  
+  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
   
   if(y == NULL)
     return;

@@ -3,6 +3,7 @@
 #include <constants.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <curand_kerne.h>
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +28,10 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(allHost_a->y, host_a->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(allHost_a->yMeanG, host_a->yMeanG, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(allHost_a->grp, host_a->grp, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));
+  
+  /* curand states */
+  
+  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->G * sizeof(curandState), cudaMemcpyDeviceToHost));
   
   /* initialization constants */
   CUDA_CALL(cudaMemcpy(&(allHost_a->sigC0), &(dev_a->sigC0), sizeof(num_t), cudaMemcpyDeviceToHost));
