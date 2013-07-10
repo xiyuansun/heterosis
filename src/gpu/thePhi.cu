@@ -24,7 +24,7 @@ __global__ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
   a->thePhi[a->mThePhi + 1] = rnormalDevice(a, 1, m, s);
   ++a->mThePhi;
-}
+} 
 
 __host__ void sampleThePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constThePhi)
