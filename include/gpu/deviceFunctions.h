@@ -16,7 +16,7 @@
   return (ub - lb) * u + lb;                                                 \
 }                                                                            \
 
-#define rnormal(a, g, m, s){                                          \
+#define rnormalDevice(a, g, m, s){                                          \
   num_t u1 = runiformDevice(a, g, 0, 1);                              \
   num_t u2 = runiformDevice(a, g, 0, 1);                              \
   return sqrt(-2 * log(u1)) * sin(2 * M_PI * u2) * s + m;             \                             \
