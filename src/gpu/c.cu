@@ -99,6 +99,6 @@ __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
     lC(host_a, dev_a, cfg, n, 0);
   }
 
-  sampleC_kernel2<<<nblocks, nthreads>>>(a);
-  sampleC_kernel3<<<1, 1>>>(a);
+  sampleC_kernel2<<<nblocks, nthreads>>>(dev_a);
+  sampleC_kernel3<<<1, 1>>>(dev_a);
 }
