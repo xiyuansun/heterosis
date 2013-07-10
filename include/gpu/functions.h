@@ -159,7 +159,7 @@ __host__ void samplePiAlp(Chain*, Chain*, Config*);
 
 __global__ void samplePiDel_kernel1(Chain*);
 __global__ void samplePiDel_kernel2(Chain*);
-__host__ void samplePiDel(Chain*, Config*);
+__host__ void samplePiDel(Chain*, Chain*, Config*);
 
 __host__ void runChain(Chain*, Chain*, Config*);
 __host__ void oneChain(int, char**);

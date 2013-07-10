@@ -14,8 +14,8 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleC(host_a, dev_a, cfg);
     sampleTau(host_a, dev_a, cfg);
     samplePiAlp(host_a, dev_a, cfg);
-  /*  samplePiDel(a, cfg);
-    sampleD(a, cfg);
+    samplePiDel(a, cfg);
+   /* sampleD(a, cfg);
     sampleThePhi(a, cfg);
     sampleTheAlp(a, cfg);
     sampleTheDel(a, cfg);
