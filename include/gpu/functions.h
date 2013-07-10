@@ -78,7 +78,7 @@ void sampleEps(Chain*, Chain*, Config*);
 
 __global__ void lD_kernel1(Chain*);
 __global__ void lD_kernel2(Chain*, int);
-__host__ void lD(Chain*, Chain*, int);
+__host__ void lD(Chain*, Chain*, Config *cfg, int);
 __global__ void sampleD_kernel1(Chain*);
 __global__ void sampleD_kernel2(Chain*);
 __host__ void sampleD(Chain*, Chain*, Config*);

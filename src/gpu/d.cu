@@ -36,14 +36,14 @@ __global__ void lD_kernel2(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   }
 }
 
-__host__ void lD(Chain *host_a, Chain *dev_a, int newArg){ /* host */
+__host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
   
   if(newArg){
-    if(a->New[0] <= 0 || a->New[0] > a->d0)
-      a->lNew[0] = NUM_TMIN;
+    if(host_a->New[0] <= 0 || host_a->New[0] > host_a->d0)
+     host_a->lNew[0] = NUM_TMIN;
   } else {
-    if(a->Old[0] <= 0 || a->Old[0] > a->d0)
-      a->lOld[0] = NUM_TMIN; 
+    if(host_a->Old[0] <= 0 || host_a->Old[0] > host_a->d0)
+      host_a->lOld[0] = NUM_TMIN; 
   }
 
   lD_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
