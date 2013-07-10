@@ -1,12 +1,13 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <deviceFunctions.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-num_t alpProp(Chain *a, int g){ /* device */
+__device__ num_t alpProp(Chain *a, int g){ /* device */
   int G = a->G;
 
   num_t gam = a->gamAlp;
@@ -29,7 +30,7 @@ num_t alpProp(Chain *a, int g){ /* device */
   return nw;
 }
 
-num_t lAlp(Chain *a, int g, num_t arg){ /* device */
+__device__ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   
   int n, N = a->N, G = a->G;
   num_t s = 0, tmp;
@@ -52,12 +53,12 @@ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   return s + tmp;
 }
 
-void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+__global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
-  int g, G = a->G;
+  int g = GENE, G = a->G;
   num_t old, nw, dl, lp, lu;
 
-  for(g = 0; g < a->G; ++g){ 
+  if(g < G){ 
 
     old = a->alp[iG(a->mAlp, g)];
     nw = alpProp(a, g);
@@ -83,6 +84,6 @@ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 
 void sampleAlp(Chain *a){ /* host */
-  sampleAlp_kernel1(a);
-  sampleAlp_kernel2(a);
+  sampleAlp_kernel1<<<NBLOCKS, NTHREADS>>>(a);
+  sampleAlp_kernel2<<<1, 1>>>(a);
 }

@@ -8,12 +8,12 @@
 
 void runChain(Chain *a, Config *cfg){
 
-/*
+
   int m;
   
   for(m = 0; m < a->M; ++m){
     sampleC(a);
-    sampleTau(a, cfg);
+  /*  sampleTau(a, cfg);
     samplePiAlp(a, cfg);
     samplePiDel(a, cfg);
     sampleD(a, cfg);
@@ -26,7 +26,7 @@ void runChain(Chain *a, Config *cfg){
     sampleSigDel(a, cfg);
     sampleEta(a);
     sampleEps(a);
-    samplePhiAlpDel(a, cfg);
+    samplePhiAlpDel(a, cfg);*/
   }
-  */
+  
 }

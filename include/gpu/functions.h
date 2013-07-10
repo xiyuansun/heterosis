@@ -57,14 +57,13 @@ __host__ num_t rnormal(num_t, num_t);
 __host__ num_t rgamma(num_t, num_t, num_t);
 __host__ num_t rbeta(num_t, num_t);
 
-void lC_kernel1(Chain*, int);
-void lC_kernel2(Chain*, int);
-void lC_kernel3(Chain*, int, int);
-void lC(Chain*, int, int);
-void sampleC_kernel1(Chain*);
-void sampleC_kernel2(Chain*);
-void sampleC_kernel3(Chain*);
-void sampleC(Chain*);
+__global__ void lC_kernel1(Chain*, int);
+__global__ void lC_kernel2(Chain*, int, int);
+__host__ void lC(Chain*, Chain*, Config*, int, int);
+__global__ void sampleC_kernel1(Chain*);
+__global__ void sampleC_kernel2(Chain*);
+__global__ void sampleC_kernel3(Chain*);
+__host__ void sampleC(Chain*, Chain*, Config*);
 
 num_t lEps(Chain*, int, int, num_t);
 void sampleEps_kernel1(Chain*);
