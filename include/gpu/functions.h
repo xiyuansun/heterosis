@@ -74,7 +74,7 @@ __host__ void sampleC(Chain*, Chain*, Config*);
 num_t lEps(Chain*, int, int, num_t);
 void sampleEps_kernel1(Chain*);
 void sampleEps_kernel2(Chain*);
-void sampleEps(Chain*);
+void sampleEps(Chain*, Chain*, Config*);
 
 void lD_kernel1(Chain*);
 void lD_kernel2(Chain*);
@@ -83,38 +83,38 @@ void lD_kernel4(Chain*, int);
 void lD(Chain*, int);
 void sampleD_kernel1(Chain*);
 void sampleD_kernel2(Chain*);
-void sampleD(Chain*, Config*);
+void sampleD(Chain*, Chain*, Config*);
 
 num_t lPhi(Chain*, int, num_t);
 void samplePhi_kernel1(Chain*);
 void samplePhi_kernel2(Chain*);
-void samplePhi(Chain*);
+void samplePhi(Chain*, Chain*, Config*);
 
 num_t alpProp(Chain*, int);
 num_t lAlp(Chain*, int, num_t);
 void sampleAlp_kernel1(Chain*);
 void sampleAlp_kernel2(Chain*);
-void sampleAlp(Chain*);
+void sampleAlp(Chain*, Chain*, Config*);
 
 num_t delProp(Chain*, int);
 num_t lDel(Chain*, int, num_t);
 void sampleDel_kernel1(Chain*);
 void sampleDel_kernel2(Chain*);
-void sampleDel(Chain*);
+void sampleDel(Chain*, Chain*, Config*);
 
 num_t lPhiAlpDelJoint(Chain*, int, num_t, num_t, num_t);
 void samplePhiAlpDel_kernel1Joint(Chain*);
 void samplePhiAlpDel_kernel2Joint(Chain*);
-void samplePhiAlpDelJoint(Chain*);
+void samplePhiAlpDelJoint(Chain*, Chain*, Config*);
 
-void samplePhiAlpDel(Chain*, Config*);
+void samplePhiAlpDel(Chain*, Chain*, Config*);
 
-void sampleSigC(Chain*);
+void sampleSigC(Chain*, Chain*, Config*);
 
 void sampleEta_kernel1(Chain*);
 void sampleEta_kernel2(Chain*);
 void sampleEta_kernel3(Chain*);
-void sampleEta(Chain*);
+void sampleEta(Chain*, Chain*, Config*);
 
 __global__ void sampleTau_kernel1(Chain*);
 __global__ void sampleTau_kernel2(Chain*);
@@ -122,36 +122,36 @@ __host__ void sampleTau(Chain*, Chain*, Config*);
 
 void sampleThePhi_kernel1(Chain*);
 void sampleThePhi_kernel2(Chain*);
-void sampleThePhi(Chain*, Config*);
+void sampleThePhi(Chain*, Chain*, Config*);
 
 void sampleTheAlp_kernel1(Chain*);
 void sampleTheAlp_kernel2(Chain*);
 void sampleTheAlp_kernel3(Chain*);
 void sampleTheAlp_kernel4(Chain*);
-void sampleTheAlp(Chain*, Config*);
+void sampleTheAlp(Chain*, Chain*, Config*);
 
 void sampleTheDel_kernel1(Chain*);
 void sampleTheDel_kernel2(Chain*);
 void sampleTheDel_kernel3(Chain*);
 void sampleTheDel_kernel4(Chain*);
-void sampleTheDel(Chain*, Config*);
+void sampleTheDel(Chain*, Chain*, Config*);
 
 void sampleSigPhi_kernel1(Chain*);
 void sampleSigPhi_kernel2(Chain*);
 void sampleSigPhi_kernel3(Chain*);
-void sampleSigPhi(Chain*, Config*);
+void sampleSigPhi(Chain*, Chain*, Config*);
 
 void sampleSigAlp_kernel1(Chain*);
 void sampleSigAlp_kernel2(Chain*);
 void sampleSigAlp_kernel3(Chain*);
 void sampleSigAlp_kernel4(Chain*); 
-void sampleSigAlp(Chain*, Config*);
+void sampleSigAlp(Chain*, Chain*, Config*);
 
 void sampleSigDel_kernel1(Chain*);
 void sampleSigDel_kernel2(Chain*);
 void sampleSigDel_kernel3(Chain*);
 void sampleSigDel_kernel4(Chain*);
-void sampleSigDel(Chain*, Config*);
+void sampleSigDel(Chain*, Chain*, Config*);
 
 __global__ void samplePiAlp_kernel1(Chain*);
 __global__ void samplePiAlp_kernel2(Chain*);
