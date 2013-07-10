@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-__host__ allocChainHost(Chain **a, Config *cfg){
+__host__ void allocChainHost(Chain **a, Config *cfg){
 
   *a = malloc(sizeof(Chain));
   
@@ -63,7 +63,7 @@ __host__ allocChainHost(Chain **a, Config *cfg){
 
 }
 
-__host__ Chain *allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
+__host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
 
   *host_a = (Chain*) malloc(sizeof(Chain));
   

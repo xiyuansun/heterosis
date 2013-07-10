@@ -9,7 +9,8 @@
 
 __host__ Chain *chainDeviceToHost(Chain *a, Config *cfg){
 
-  Chain *host_a = allocChain(cfg, 1); 
+  Chain *host_a;
+  allocChainHost(host_a, cfg); 
   
   /* program options */
   

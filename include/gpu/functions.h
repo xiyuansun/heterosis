@@ -39,14 +39,14 @@ __host__ int *mySampleInt(int, int);
 __host__ int *readGrp(Config*);
 __host__ count_t *readData(Config*);
 
-__host__ Chain *allocChainHost(Chain**, Config*);
-__host__ Chain *allocChainDevice(Chain**, Chain**, Config*);
+__host__ void allocChainHost(Chain**, Config*);
+__host__ void allocChainDevice(Chain**, Chain**, Config*);
                                   
 __host__ Chain *newChain(Config*);
 __global__ void newChain_kernel1(Chain*);
 __global__ void newChain_kernel2(Chain*);
 __host__ Chain *chainDeviceToHost(Chain*, Config*);
-__host__ void printChain(Chain*, Config*, int);
+__host__ void printChain(Chain*, Config*);
 __host__ void freeChain(Chain*, Config*, int);
 
 num_t mu(Chain*, int, num_t, num_t, num_t);

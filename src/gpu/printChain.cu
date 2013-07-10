@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-__host__ void printChain(Chain *a, Config *cfg, int onHost){
+__host__ void printChain(Chain *a, Config *cfg){
 
-  Chain *host_a = onHost ? a : chainDeviceToHost(a, cfg);
+  Chain *host_a = chainDeviceToHost(a, cfg);
 
   printf("M = %d\n", host_a->M); ;
   printf("N = %d\n", host_a->N);
@@ -108,6 +108,5 @@ __host__ void printChain(Chain *a, Config *cfg, int onHost){
   printf("constPiAlp = %d\n", host_a->constPiAlp);
   printf("constPiDel = %d\n", host_a->constPiDel);
   
-  if(!onHost)
-    freeChain(host_a, cfg, 1);
+  freeChain(host_a, cfg, 1);
 }
