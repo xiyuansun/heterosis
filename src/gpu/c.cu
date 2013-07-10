@@ -52,7 +52,7 @@ __global__ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
   
   if(n < N){
     a->Old[n] = a->c[iN(a->mC, n)];
-    a->New[n] = rnormal(a->Old[n], a->tuneC[n]);
+    a->New[n] = rnormalDevice(a, n, a->Old[n], a->tuneC[n]);
     
   }
 }
@@ -65,7 +65,7 @@ __global__ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
 
     dl = a->lNew[n] - a->lOld[n];
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1));
+    lu = log(runiform(a, 1, 0, 1));
       
     if(lu < lp){ /* accept */
       a->c[iN(a->mC + 1, n)] = a->New[n];
