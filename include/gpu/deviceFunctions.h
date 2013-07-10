@@ -1,28 +1,26 @@
 #ifndef DEVICEFUNCTIONS_H
 #define DEVICEFUNCTIONS_H
 
-inline __device__ num_t mu(Chain *a, int n, num_t phi, num_t alp, num_t del){
-  if(a->grp[n] == 1){
-    return phi - alp;
-  } else if(a->grp[n] == 2){
-    return phi + del;
-  } else {
-    return phi + alp;
-  }
-}
+#define mu(a, n, phi, alp, del) {                              \
+  if(a->grp[n] == 1){                                          \
+    return phi - alp;                                          \
+  } else if(a->grp[n] == 2){                                   \
+    return phi + del;                                          \
+  } else {                                                     \
+    return phi + alp;                                          \
+  }                                                            \
+}                                                              \
 
-inline __device__ num_t runiformDevice(Chain *a, int g, num_t lb, num_t ub){
-  num_t u = curand_uniform(&(a->states[g]));
-  return (ub - lb) * u + lb;
-}
+#define runiformDevice(a, g, lb, ub){                                        \
+  num_t u = curand_uniform(&(a->states[g]));                                 \
+  return (ub - lb) * u + lb;                                                 \
+}                                                                            \
 
-inline __device__ num_t rnormal(Chain *a, int g, num_t m, num_t s){
-
-  num_t u1 = runiformDevice(a, g, 0, 1);
-  num_t u2 = runiformDevice(a, g, 0, 1);
-  
-  return sqrt(-2 * log(u1)) * sin(2 * M_PI * u2) * s + m;
-}
+#define rnormal(a, g, m, s){                                          \
+  num_t u1 = runiformDevice(a, g, 0, 1);                              \
+  num_t u2 = runiformDevice(a, g, 0, 1);                              \
+  return sqrt(-2 * log(u1)) * sin(2 * M_PI * u2) * s + m;             \                             \
+}                                                                     \
 
 inline __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, num_t lb){
    
