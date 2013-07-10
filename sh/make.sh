@@ -69,7 +69,7 @@ function gpu {
   DEP+=(config getopts printConfig freeConfig)
   DEP+=(mySampleInt readGrp readData)
   DEP+=(allocChain chainDeviceToHost newChain printChain freeChain) 
-  DEP+=(mu runiform rnormal rgamma rbeta)
+  DEP+=(runiform rnormal rgamma rbeta)
   DEP+=(c tau) # sigC eps eta d)
 #  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
 #  DEP+=(thePhi theAlp theDel)
