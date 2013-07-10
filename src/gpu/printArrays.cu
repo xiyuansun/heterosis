@@ -21,7 +21,7 @@ __host__ void pf1(num_t *v, int l, const char* m){
   printf("\n\n"); 
 }
 
-__host__ void pf1(curandState *v, int l, const char* m){
+__host__ void pstate1(curandState *v, int l, const char* m){
   int i;
   printf("%s", m);
   for(i = 0; i < l; ++i){
