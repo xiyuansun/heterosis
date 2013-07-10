@@ -21,7 +21,7 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(allHost_a->burnin), &(dev_a->burnin), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->heterosis), &(dev_a->heterosis), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->someParmsFlag), &(dev_a->someParmsFlag), sizeof(int), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(&(allHost_a->allParmsFlag), &(dev_a->allParmsFlag), sizeof(int), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(&(allHost_a->allParmsFlag), &(dev_a->allParmsFlag), sizeof(curandState), cudaMemcpyDeviceToHost));
   
   /* data */
 
