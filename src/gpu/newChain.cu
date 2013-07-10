@@ -13,7 +13,7 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-__global void thread_setup_kernel(int *nthreads) { /* kernel<<<1, 1>>> */
+__global__ void thread_setup_kernel(int *nthreads) { /* kernel<<<1, 1>>> */
   *nthreads = maxThreadsPerBlock;
 }
 
