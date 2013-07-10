@@ -117,7 +117,7 @@ __host__ num_t rgamma(num_t shape, num_t rate, num_t lb){
   }
 }
 
-__device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, num_t lb){
+inline __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, num_t lb){
    
   num_t A, c, d, r, u, v, w, x, z, eps, eps0, 
         haznaz, lam, ret, tmp1, tmp2;

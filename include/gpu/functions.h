@@ -53,19 +53,19 @@ __host__ Chain *chainDeviceToHost(Chain*, Chain*, Config*);
 __host__ void printChain(Chain*, Chain*, Config*);
 __host__ void freeChain(Chain*, Config*, int);
 
-__device__ num_t mu(Chain*, int, num_t, num_t, num_t);
+inline __device__ num_t mu(Chain*, int, num_t, num_t, num_t);
 
 __host__ num_t runiform(num_t, num_t);
-__device__ num_t runiformDevice(Chain*, int, num_t, num_t);
+inline __device__ num_t runiformDevice(Chain*, int, num_t, num_t);
 
 __host__ num_t rnormal(num_t, num_t);
-__device__ num_t rnormalDevice(Chain*, int, num_t, num_t);
+inline __device__ num_t rnormalDevice(Chain*, int, num_t, num_t);
 
 __host__ num_t rgamma(num_t, num_t, num_t);
-__device__ num_t rgammaDevice(Chain*, int, num_t, num_t, num_t);
+inline __device__ num_t rgammaDevice(Chain*, int, num_t, num_t, num_t);
 
 __host__ num_t rbeta(num_t, num_t);
-__device__ num_t rbetaDevice(Chain*, int, num_t, num_t);
+inline __device__ num_t rbetaDevice(Chain*, int, num_t, num_t);
 
 void lC_kernel1(Chain*, int);
 void lC_kernel2(Chain*, int);
