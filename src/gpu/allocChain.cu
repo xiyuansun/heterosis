@@ -63,7 +63,8 @@ __host__ Chain *allocChain(Config *cfg, int onHost){
   Chain *a;
   
   int *grp, *accC, *accPhi, *accAlp, *accDel, *accEps;
-  num_t *y, *yMeanG, *c, *sigC, *eps, *eta, *d, *tau, *phi, *thePhi *sigPhi, *alp;
+  count_t *y;
+  num_t *yMeanG, *c, *sigC, *eps, *eta, *d, *tau, *phi, *thePhi, *sigPhi, *alp;
   num_t *theAlp, *sigAlp, *piAlp, *del, *theDel, *sigDel, *piDel;
   num_t *tmp1, *tmp2, *Old, *Nw, *lOld, *lNew;
   num_t *tuneC, *tunePhi, *tuneEps;
