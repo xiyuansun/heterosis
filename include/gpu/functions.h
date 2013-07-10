@@ -42,7 +42,7 @@ __host__ count_t *readData(Config*);
 __host__ void allocChainHost(Chain**, Config*);
 __host__ void allocChainDevice(Chain**, Chain**, Config*);
                                   
-__host__ Chain *newChain(Config*);
+__host__ void newChain(Chain** host_a, Chain **dev_a, Config*);
 __global__ void newChain_kernel1(Chain*);
 __global__ void newChain_kernel2(Chain*);
 __host__ Chain *chainDeviceToHost(Chain*, Config*);
