@@ -140,7 +140,7 @@ void sampleSigPhi(Chain*, Config*);
 void sampleSigAlp_kernel1(Chain*);
 void sampleSigAlp_kernel2(Chain*);
 void sampleSigAlp_kernel3(Chain*);
-void sampleSigAlp_kernel4(Chain*);
+void sampleSigAlp_kernel4(Chain*); 
 void sampleSigAlp(Chain*, Config*);
 
 void sampleSigDel_kernel1(Chain*);
