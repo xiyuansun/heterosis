@@ -168,9 +168,9 @@ __host__ Chain *allocChain(Config *cfg, int onHost){
   } else {
     CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
     allocChain_kernel1<<<1, 1>>>(a, y, yMeanG, grp, c, sigC, eps, eta, d, tau, phi, thePhi,
-                                 sigPhi, alp, theAlp, sigAlp, piAlp, del, theDel, sigDel, 
+                                 sigPhi, alp, theAlp, sigAlp, piAlp, del, theDel, sigDel, piDel); 
                                 
-    allocChain_kernel2<<<1, 1>>>(a, piDel, tmp1, tmp2, Old, Nw, lOld, lNew, tuneC, tunePhi,
+    allocChain_kernel2<<<1, 1>>>(a, tmp1, tmp2, Old, Nw, lOld, lNew, tuneC, tunePhi,
                                  tuneEps, accC, accPhi, accAlp, accDel, accEps);
   }
     
