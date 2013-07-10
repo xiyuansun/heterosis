@@ -216,9 +216,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   /* set up curand states */
   
-  printf("hi\n");
   curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
-  printf("ho\n");
   
   newChain_kernel1<<<NBLOCKS, NTHREADS>>>(*dev_a);
   newChain_kernel2<<<1, 1>>>(*dev_a);
@@ -228,4 +226,6 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   free(tmpv);
   free(grp);
   free(y);
+  
+  printf("no problem here\n");
 }
