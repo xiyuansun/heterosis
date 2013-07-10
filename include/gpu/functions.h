@@ -39,16 +39,8 @@ __host__ int *mySampleInt(int, int);
 __host__ int *readGrp(Config*);
 __host__ count_t *readData(Config*);
 
-__host__ Chain *allocChain(Config*, int);
-__global__ void allocChain_kernel1(Chain *a, count_t *y, num_t *yMeanG, int *grp, num_t *c, num_t *sigC,
-                                  num_t *eps, num_t *eta, num_t *d, num_t *tau, num_t *phi, num_t *thePhi,
-                                  num_t *sigPhi, num_t *alp, num_t *theAlp, num_t *sigAlp, 
-                                  num_t *piAlp, num_t *del, num_t *theDel, num_t *sigDel, 
-                                  num_t *piDel);
-__global__ void allocChain_kernel2(Chain *a, num_t *tmp1, num_t *tmp2, num_t *Old, num_t *Nw, 
-                                   num_t *lOld, num_t *lNew, num_t *tuneC, num_t *tunePhi,
-                                   num_t *tuneEps, int *accC, int *accPhi, int *accAlp, 
-                                   int *accDel, int *accEps);
+__host__ Chain *allocChainHost(Chain**, Config*);
+__host__ Chain *allocChainDevice(Chain**, Chain**, Config*);
                                   
 __host__ Chain *newChain(Config*);
 __global__ void newChain_kernel1(Chain*);

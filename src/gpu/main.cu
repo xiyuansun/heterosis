@@ -12,8 +12,8 @@ int main(int argc, char **argv){
  
   Config *cfg = config(argc, argv); 
   Chain *a = newChain(cfg); 
-  printChain(a, cfg, 0); 
-  freeChain(a, cfg, 0);
+/*  printChain(a, cfg, 0); */
+ /* freeChain(a, cfg, 0); */
  
   return EXIT_SUCCESS;
 }
