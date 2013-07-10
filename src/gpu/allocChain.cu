@@ -9,7 +9,7 @@
 
 __host__ void allocChainHost(Chain **a, Config *cfg){
 
-  *a = malloc(sizeof(Chain));
+  *a = (Chain*) malloc(sizeof(Chain));
   
   /* data */  
   

@@ -114,7 +114,7 @@ __host__ Chain *newChain(Config *cfg){ /* host */
     return NULL;
   }
 
-  a = allocChainsDevice(&host_a, &dev_a, cfg);
+  allocChainsDevice(&host_a, &dev_a, cfg);
 
   /* data and configuration info */
 
