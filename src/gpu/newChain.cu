@@ -15,7 +15,7 @@ __global__ void curand_setup_kernel(Chain *a, unsigned int seed, int *test){ /* 
   int id = GENE;
   curand_init(seed, id, 0, &(a->states[id]));
   
-  test[id] = id * 10;
+  test[id] = id + 10;
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
