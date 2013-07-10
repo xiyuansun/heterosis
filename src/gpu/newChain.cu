@@ -225,13 +225,13 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   int *test_host = (int*) malloc (cfg->G * sizeof(int));
   int *test_dev;
-  CUDA_CALL(cudaMalloc((void**) &test_dev, cfg->G * sizeof(int)));
+  cudaMalloc((void**) &test_dev, cfg->G * sizeof(int));
   
   
   
   curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed, test_dev);
   
-  CUDA_CALL(cudaMemcpy(test_host, test_dev, cfg->G * sizeof(int), cudaMemcpyDeviceToHost);
+  cudaMemcpy(test_host, test_dev, cfg->G * sizeof(int), cudaMemcpyDeviceToHost);
   
   for(g = 0; g < cfg->G; ++g)
     printf("%d ", test_host[g]);
