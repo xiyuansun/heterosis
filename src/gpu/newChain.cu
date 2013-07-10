@@ -14,27 +14,27 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g = GENE, N = a->N, G = a->G;
   num_t u;
 
-  a->phi[iG(0, g)] = rnormal(a->thePhi[0], a->sigPhi[0]);
+  a->phi[iG(0, g)] = 1; /* rnormal(a->thePhi[0], a->sigPhi[0]);*/
 
   u = runiform(0, 1);
   if(u < a->piAlp[0]){
     a->alp[iG(0, g)] = 0;
   } else {
-    a->alp[iG(0, g)] = rnormal(a->theAlp[0], a->sigAlp[0]);
+    a->alp[iG(0, g)] = 1; /* rnormal(a->theAlp[0], a->sigAlp[0]); */
   }
     
   u = runiform(0, 1);
   if(u < a->piDel[0]){
     a->del[iG(0, g)] = 0;
   } else {
-    a->del[iG(0, g)] = rnormal(a->theDel[0], a->sigDel[0]);
+    a->del[iG(0, g)] = 1; /*rnormal(a->theDel[0], a->sigDel[0]);*/
   }
  
-  a->eta[iG(0, g)] = 1/sqrt(rgamma(a->d[0] / 2, 
-                 a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
+  a->eta[iG(0, g)] = 1; /* 1/sqrt(rgamma(a->d[0] / 2, 
+                 a->d[0] * a->tau[0] * a->tau[0] / 2, 0)); */
 
   for(n = 0; n < a->N; ++n)
-    a->eps[iNG(0, n, g)] = rnormal(0, a->eta[iG(0, g)]);
+    a->eps[iNG(0, n, g)] = 1; /* rnormal(0, a->eta[iG(0, g)]); */
     
 }
 

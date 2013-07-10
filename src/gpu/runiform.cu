@@ -1,4 +1,5 @@
 #include <constants.h>
+#include <curand_kernel.h>
 #include <math.h>
 #include <stdlib.h>
 
