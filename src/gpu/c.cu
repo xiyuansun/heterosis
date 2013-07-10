@@ -1,5 +1,8 @@
 #include <Chain.h>
 #include <constants.h>
+#include <constants.h>
+#include <cuda.h>
+#include <curand_kernel.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>

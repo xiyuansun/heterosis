@@ -6,13 +6,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void runChain(Chain *a, Config *cfg){
+void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
 
   int m;
   
   for(m = 0; m < a->M; ++m){
-    sampleC(a);
+    sampleC(host_a, dev_a, cfg);
   /*  sampleTau(a, cfg);
     samplePiAlp(a, cfg);
     samplePiDel(a, cfg);
