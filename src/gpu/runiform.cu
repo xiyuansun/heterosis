@@ -10,4 +10,4 @@ __host__ num_t runiform(num_t lb, num_t ub){
   return (ub - lb) * u + lb;
 }
 
-/* See deviceFunctions.h for device version. */
+/* See functions.h for device version. */

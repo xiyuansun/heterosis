@@ -12,4 +12,4 @@ __host__ num_t rnormal(num_t m, num_t s){
   return sqrt(-2 * log(u1)) * sin(2 * M_PI * u2) * s + m;
 }
 
-/* See deviceFunctions.h for device version. */
+/* See functions.h for device version. */

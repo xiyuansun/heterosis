@@ -12,4 +12,4 @@ __host__ num_t rbeta(num_t a, num_t b){
   return x / (x + y);
 }
 
-/* See deviceFunctions.h for device version. */
+/* See functions.h for device version. */

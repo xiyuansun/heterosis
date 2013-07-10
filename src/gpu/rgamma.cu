@@ -117,4 +117,4 @@ __host__ num_t rgamma(num_t shape, num_t rate, num_t lb){
   }
 }
 
-/* See deviceFunctions.h for device version. */
+/* See functions.h for device version. */
