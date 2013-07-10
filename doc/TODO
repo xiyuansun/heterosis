@@ -1,8 +1,7 @@
 1) implement in CUDA C
-2) figure out optimal numbers of blocks and threads per block
-3) output summary files without having to copy whole chain to cpu.
-4) implement logfile in both C and CUDA C versions to track progress.
-5) compute DIC in both versions (summary).
+2) output summaries of multiple chains
+3) implement logfile in both C and CUDA C versions to track progress.
+4) compute DIC in both versions (summary).
 
 ./mcmc -data [DATA-FILE] 
        -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 
