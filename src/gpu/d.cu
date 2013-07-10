@@ -7,7 +7,17 @@
 #include <stdlib.h>
 #include <thrust/reduce.h>
 
-__global__ void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+__global__ void lD_kernel1(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
+  if(newArg){
+    if(a->New[0] <= 0 || a->New[0] > a->d0)
+     a->lNew[0] = NUM_TMIN;
+  } else {
+    if(a->Old[0] <= 0 || a->Old[0] > a->d0)
+      a->lOld[0] = NUM_TMIN; 
+  }
+}
+
+__global__ void lD_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   int g = GENE, G = a->G;
 
   if(g < G){ 
@@ -16,7 +26,7 @@ __global__ void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-__global__ void lD_kernel2(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
+__global__ void lD_kernel3(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   num_t arg, ret, tmp;
  
   if(newArg){
@@ -38,15 +48,8 @@ __global__ void lD_kernel2(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 
 __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
   
-  if(newArg){
-    if(host_a->New[0] <= 0 || host_a->New[0] > host_a->d0)
-     host_a->lNew[0] = NUM_TMIN;
-  } else {
-    if(host_a->Old[0] <= 0 || host_a->Old[0] > host_a->d0)
-      host_a->lOld[0] = NUM_TMIN; 
-  }
-
-  lD_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  lD_kernel1<<<1, 1>>>(dev_a, newArg);
+  lD_kernel2<<<NBLOCKS, NTHREADS>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
@@ -56,7 +59,7 @@ __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host 
   num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
   
-  lD_kernel2<<<1, 1>>>(dev_a, newArg);
+  lD_kernel3<<<1, 1>>>(dev_a, newArg);
 }
 
 __global__ void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
@@ -76,7 +79,6 @@ __global__ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->d[a->mD + 1] = a->New[0];
     a->tuneD *= 1.1; /* Increase the proposal variance to avoid getting 
                                   stuck in a mode */
-    
     if(a->mD >= a->burnin) 
       ++a->accD;
   } else { /* reject */
