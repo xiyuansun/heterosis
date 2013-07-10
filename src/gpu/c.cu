@@ -65,7 +65,7 @@ __global__ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
 
     dl = a->lNew[n] - a->lOld[n];
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(a, 1, 0, 1));
+    lu = log(runiformDevice(a, 1, 0, 1));
       
     if(lu < lp){ /* accept */
       a->c[iN(a->mC + 1, n)] = a->New[n];
