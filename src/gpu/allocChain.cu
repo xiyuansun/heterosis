@@ -8,14 +8,11 @@
 #include <stdlib.h>
 
 
-__global__ void allocChain_kernel(Chain *a, count_t *y, num_t *yMeanG, int *grp, num_t *c, num_t *sigC,
+__global__ void allocChain_kernel1(Chain *a, count_t *y, num_t *yMeanG, int *grp, num_t *c, num_t *sigC,
                                   num_t *eps, num_t *eta, num_t *d, num_t *tau, num_t *phi, num_t *thePhi,
                                   num_t *sigPhi, num_t *alp, num_t *theAlp, num_t *sigAlp, 
                                   num_t *piAlp, num_t *del, num_t *theDel, num_t *sigDel, 
-                                  num_t *piDel, num_t *tmp1, num_t *tmp2, num_t *Old, num_t *Nw, 
-                                  num_t *lOld, num_t *lNew, num_t *tuneC, num_t *tunePhi,
-                                  num_t *tuneEps, int *accC, int *accPhi, int *accAlp, 
-                                  int *accDel, int *accEps){
+                                  num_t *piDel){
 
   a->y = y;
   a->yMeanG = yMeanG;
@@ -39,6 +36,13 @@ __global__ void allocChain_kernel(Chain *a, count_t *y, num_t *yMeanG, int *grp,
   a->sigDel = sigDel;
   a->piDel = piDel;
     
+}
+
+__global__ void allocChain_kernel2(Chain *a, num_t *tmp1, num_t *tmp2, num_t *Old, num_t *Nw, 
+                                  num_t *lOld, num_t *lNew, num_t *tuneC, num_t *tunePhi,
+                                  num_t *tuneEps, int *accC, int *accPhi, int *accAlp, 
+                                  int *accDel, int *accEps){
+                                  
   a->tmp1 = tmp1;
   a->tmp2 = tmp2;
   a->Old = Old;
@@ -54,7 +58,7 @@ __global__ void allocChain_kernel(Chain *a, count_t *y, num_t *yMeanG, int *grp,
   a->accPhi = accPhi;
   a->accAlp = accAlp;
   a->accDel = accDel;
-  a->accEps = accEps;
+  a->accEps = accEps;                                                               
 }
 
 
@@ -163,10 +167,11 @@ __host__ Chain *allocChain(Config *cfg, int onHost){
     
   } else {
     CUDA_CALL(cudaMalloc((void **) &a, sizeof(Chain)));
-    allocChain_kernel<<<1, 1>>>(a, y, yMeanG, grp, c, sigC, eps, eta, d, tau, phi, thePhi,
-                                sigPhi, alp, theAlp, sigAlp, piAlp, del, theDel, sigDel, 
-                                piDel, tmp1, tmp2, Old, Nw, lOld, lNew, tuneC, tunePhi,
-                                tuneEps, accC, accPhi, accAlp, accDel, accEps);
+    allocChain_kernel1<<<1, 1>>>(a, y, yMeanG, grp, c, sigC, eps, eta, d, tau, phi, thePhi,
+                                 sigPhi, alp, theAlp, sigAlp, piAlp, del, theDel, sigDel, 
+                                
+    allocChain_kernel2<<<1, 1>>>(a, piDel, tmp1, tmp2, Old, Nw, lOld, lNew, tuneC, tunePhi,
+                                 tuneEps, accC, accPhi, accAlp, accDel, accEps);
   }
     
   return a;
