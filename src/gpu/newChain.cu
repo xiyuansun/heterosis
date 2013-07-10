@@ -82,7 +82,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->accC[n] = 0;
   
     for(g = 0; g < a->G; ++g)
-      a->accEps[iG(n, g)] = -1;
+      a->accEps[iG(n, g)] = n;
   }
 
   for(g = 0; g < a->G; ++g){
