@@ -93,17 +93,15 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
-  int n, g, N, G, *grp;
+  int n, g, G, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
 
   y = readData(cfg);
-  
-  N = cfg->N;
   G = cfg->G;
   
   if(y == NULL)
-    return NULL;
+    return;
 
   grp = readGrp(cfg);
   
@@ -210,8 +208,8 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy((*host_a)->c, tmpv, cfg->N *sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(dev_a, host_a, sizeof(Chain), cudaMemcpyHostToDevice));  
   
-  newChain_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
-  newChain_kernel2<<<1, 1>>>(dev_a);
+  newChain_kernel1<<<NBLOCKS, NTHREADS>>>(*dev_a);
+  newChain_kernel2<<<1, 1>>>(*dev_a);
   
   free(yMeanG);
   free(lqts);

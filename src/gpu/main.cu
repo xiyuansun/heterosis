@@ -8,10 +8,12 @@
 #include <stdio.h>
 
 int main(int argc, char **argv){
- /* oneChain(argc, argv);*/
- 
+  
   Config *cfg = config(argc, argv); 
-  Chain *a = newChain(cfg); 
+  Chain *host_a, *dev_a;
+  
+  newChain(&host_a, &dev_a, cfg); 
+  
 /*  printChain(a, cfg, 0); */
  /* freeChain(a, cfg, 0); */
  
