@@ -14,7 +14,7 @@ int main(int argc, char **argv){
   
   newChain(&host_a, &dev_a, cfg); 
   
-/*  printChain(a, cfg, 0); */
+  printChain(host_a, cfg);
  /* freeChain(a, cfg, 0); */
  
   return EXIT_SUCCESS;
