@@ -110,10 +110,9 @@ void sampleEta_kernel2(Chain*);
 void sampleEta_kernel3(Chain*);
 void sampleEta(Chain*);
 
-void sampleTau_kernel1(Chain*);
-void sampleTau_kernel2(Chain*);
-void sampleTau_kernel3(Chain*);
-void sampleTau(Chain*, Config*);
+__global__ void sampleTau_kernel1(Chain*);
+__global__ void sampleTau_kernel2(Chain*);
+__host__ void sampleTau(Chain*, Chain*, Config*);
 
 void sampleThePhi_kernel1(Chain*);
 void sampleThePhi_kernel2(Chain*);

@@ -5,25 +5,16 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <thrust/reduce.h>
 
-void sampleTau_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+__global__ void sampleTau_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = GENE, G = a->G;
   
-  for(g = 0; g < a->G; ++g)
+  if(g < G)
     a->tmp1[g] = 1/pow(a->eta[iG(a->mEta, g)], 2);
 }
 
-void sampleTau_kernel2(Chain *a){ /* pairwise sum in Thrust */
-  int g;
-  num_t tmp = 0;
-  
-  for(g = 0; g < a->G; ++g) 
-    tmp += a->tmp1[g];
-
-  a->s1 = tmp;
-}
-
-void sampleTau_kernel3(Chain *a){ /* kernel<<<1, 1>>> */
+void sampleTau_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
   num_t rate = a->s1 * a->d[a->mD] / 2 + a->bTau;
   num_t shape = a->aTau + a->G * a->d[a->mD] / 2;
 
@@ -36,11 +27,17 @@ void sampleTau_kernel3(Chain *a){ /* kernel<<<1, 1>>> */
   ++a->mTau;
 }
 
-void sampleTau(Chain *a, Config *cfg){ /* host */
+void sampleTau(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constTau)
     return;
 
-  sampleTau_kernel1(a);
-  sampleTau_kernel2(a);
-  sampleTau_kernel3(a);
+  __global__ sampleTau_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  printf("thrust tau s1 = %0.3f\n", s1);
+  
+  sampleTau_kernel2<<<1, 1>>>(dev_a);
 }
