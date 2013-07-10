@@ -22,7 +22,7 @@ __global__ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t m = gs * a->s1 / den;
   num_t s = gs * ss / den;
 
-  a->thePhi[a->mThePhi + 1] = rnormalDevice(a, g, m, s);
+  a->thePhi[a->mThePhi + 1] = rnormalDevice(a, 1, m, s);
   ++a->mThePhi;
 }
 
@@ -30,12 +30,12 @@ __host__ void sampleThePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constThePhi)
     return;
 
-  sampleThePhi_kernel1(dev_a);
+  sampleThePhi_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
   
   
-  sampleThePhi_kernel2(dev_a);
+  sampleThePhi_kernel2<<<1, 1>>>(dev_a);
 }
