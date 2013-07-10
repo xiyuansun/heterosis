@@ -29,7 +29,7 @@ __global__ void lD_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 __global__ void lD_kernel3(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   num_t arg, ret, tmp;
  
-  if(newArg){
+  if(newArg){ 
     arg = a->New[0];
   } else{
     arg = a->Old[0];
