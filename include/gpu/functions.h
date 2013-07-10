@@ -119,9 +119,9 @@ __global__ void sampleTau_kernel1(Chain*);
 __global__ void sampleTau_kernel2(Chain*);
 __host__ void sampleTau(Chain*, Chain*, Config*);
 
-void sampleThePhi_kernel1(Chain*);
-void sampleThePhi_kernel2(Chain*);
-void sampleThePhi(Chain*, Chain*, Config*);
+__global__ void sampleThePhi_kernel1(Chain*);
+__global__ void sampleThePhi_kernel2(Chain*);
+__host__ void sampleThePhi(Chain*, Chain*, Config*);
 
 void sampleTheAlp_kernel1(Chain*);
 void sampleTheAlp_kernel2(Chain*);
