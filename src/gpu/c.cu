@@ -94,7 +94,7 @@ __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   
   sampleC_kernel1<<<nblocks, nthreads>>>(dev_a);
 
-  for(n = 0; n < a->N; ++n){ 
+  for(n = 0; n < cfg->N; ++n){ 
     lC(host_a, dev_a, cfg, n, 1);
     lC(host_a, dev_a, cfg, n, 0);
   }
