@@ -16,18 +16,18 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
   a->phi[iG(0, g)] = 1; /* rnormal(a->thePhi[0], a->sigPhi[0]);*/
 
-  u = runiform(0, 1);
+  u = 0.5; /* runiform(0, 1) */;
   if(u < a->piAlp[0]){
     a->alp[iG(0, g)] = 0;
   } else {
     a->alp[iG(0, g)] = 1; /* rnormal(a->theAlp[0], a->sigAlp[0]); */
   }
     
-  u = runiform(0, 1);
+  u = 0.5; /* runiform(0, 1); */
   if(u < a->piDel[0]){
     a->del[iG(0, g)] = 0;
   } else {
-    a->del[iG(0, g)] = 1; /*rnormal(a->theDel[0], a->sigDel[0]);*/
+    a->del[iG(0, g)] = 1; /* rnormal(a->theDel[0], a->sigDel[0]);*/
   }
  
   a->eta[iG(0, g)] = 1; /* 1/sqrt(rgamma(a->d[0] / 2, 
