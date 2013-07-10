@@ -17,7 +17,7 @@ void oneChain(int argc, char **argv){
     exit(EXIT_FAILURE);
   }
   
-  runChain(dev_a, cfg);
+  runChain(host_a, dev_a, cfg);
   summarizeChain(host_a, dev_a, cfg);
   
   printChain(host_a, dev_a, cfg);
