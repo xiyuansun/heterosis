@@ -3,7 +3,7 @@
 #include <constants.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include <curand_kerne.h>
+#include <curand_kernel.h>
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
