@@ -126,6 +126,6 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(allHost_a->constSigDel), &(dev_a->constSigDel), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiAlp), &(dev_a->constPiAlp), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiDel), &(dev_a->constPiDel), sizeof(int), cudaMemcpyDeviceToHost));
-  
-  return a;
+
+  return allHost_a;
 }
