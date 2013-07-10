@@ -25,9 +25,9 @@ __host__ Chain *chainDeviceToHost(Chain *a, Config *cfg){
 printf("%d %d %d\n", cfg->M, cfg->N, cfg->G);
 
 
-  CUDA_CALL(cudaMemcpy(host_a->y, a->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyDeviceToHost)); printf("3\n"); 
-  CUDA_CALL(cudaMemcpy(host_a->yMeanG, a->yMeanG, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));printf("4\n");
-  CUDA_CALL(cudaMemcpy(host_a->grp, a->grp, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));printf("5\n");
+  CUDA_CALL(cudaMemcpy(host_a->y, a->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(host_a->yMeanG, a->yMeanG, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(host_a->grp, a->grp, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));
   
   /* initialization constants */
   CUDA_CALL(cudaMemcpy(&(host_a->sigC0), &(a->sigC0), sizeof(num_t), cudaMemcpyDeviceToHost));
