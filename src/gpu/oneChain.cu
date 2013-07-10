@@ -8,14 +8,14 @@
 void oneChain(int argc, char **argv){
 
   Config *cfg = config(argc, argv); 
-  Chain *host_a, *dev_a;
+  Chain *host_a = NULL, *dev_a = NULL;
   
-  if(a == NULL){
+  newChain(&host_a, &dev_a, cfg); 
+  
+  if(host_a == NULL || dev_a == NULL){
     freeConfig(cfg);
     exit(EXIT_FAILURE);
   }
-  
-  newChain(&host_a, &dev_a, cfg); 
   
   runChain(dev_a, cfg);
   summarizeChain(host_a, dev_a, cfg);
