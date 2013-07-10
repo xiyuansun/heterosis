@@ -41,39 +41,39 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g, G = a->G;
 
-  a->mC = 0;
-  a->mSigC = 0;
+  a->mC = -1;
+  a->mSigC = -1;
 
-  a->mEps = 0;
-  a->mEta = 0;
-  a->mD = 0;
-  a->mTau = 0;
+  a->mEps = -1;
+  a->mEta = -1;
+  a->mD = -1;
+  a->mTau = -1;
 
-  a->mPhi = 0;
-  a->mAlp = 0;
-  a->mDel = 0;
+  a->mPhi = -1;
+  a->mAlp = -1;
+  a->mDel = -1;
 
-  a->mThePhi = 0;
-  a->mTheAlp = 0;
-  a->mTheDel = 0;
+  a->mThePhi = -1;
+  a->mTheAlp = -1;
+  a->mTheDel = -1;
 
-  a->mSigPhi = 0;
-  a->mSigAlp = 0;
-  a->mSigDel = 0;
+  a->mSigPhi = -1;
+  a->mSigAlp = -1;
+  a->mSigDel = -1;
 
-  a->mPiAlp = 0;
-  a->mPiDel = 0;
+  a->mPiAlp = -1;
+  a->mPiDel = -1;
 
   a->tuneD = 100;
 
   for(n = 0; n < a->N; ++n)
-    a->tuneC[n] = 1;
+    a->tuneC[n] = -1;
 
   for(g = 0; g < a->G; ++g){
-    a->tunePhi[g] = 1;
+    a->tunePhi[g] = -1;
 
     for(n = 0; n < a->N; ++n)
-      a->tuneEps[iG(n, g)] = 1;
+      a->tuneEps[iG(n, g)] = -1;
   }
   
   a->accD = 0;
@@ -82,13 +82,13 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->accC[n] = 0;
   
     for(g = 0; g < a->G; ++g)
-      a->accEps[iG(n, g)] = n;
+      a->accEps[iG(n, g)] = -1;
   }
 
   for(g = 0; g < a->G; ++g){
-    a->accPhi[g] = 0;
-    a->accAlp[g] = 0;
-    a->accDel[g] = 0;
+    a->accPhi[g] = -1;
+    a->accAlp[g] = -1;
+    a->accDel[g] = -1;
   }
 }
 
