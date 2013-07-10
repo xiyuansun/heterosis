@@ -16,10 +16,10 @@ __host__ Chain *allocChain(Config *cfg, int onHost){
   if(onHost){
     host_a->y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t));
   } else {
-    CUDA_CALL(cudaMalloc((void **) &(host_a->y), cfg->N * cfg->G * sizeof(count_t)));
+    CUDA_CALL(cudaMalloc((void**) &(host_a->y), cfg->N * cfg->G * sizeof(count_t)));
   }
-    
-  ALLOC(host_a->y, (count_t*), cfg->N * cfg->G * sizeof(count_t), onHost);
+ /*   
+  ALLOC(host_a->y, (count_t*), cfg->N * cfg->G * sizeof(count_t), onHost);*/
   ALLOC(host_a->yMeanG, (num_t*), cfg->N * sizeof(num_t), onHost);
   ALLOC(host_a->grp, (int*), cfg->N * sizeof(int), onHost);
 
