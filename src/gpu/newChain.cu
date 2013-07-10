@@ -127,8 +127,9 @@ __host__ Chain *newChain(Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy(&(a->allParmsFlag), &(cfg->allParmsFlag), sizeof(int), cudaMemcpyHostToDevice));  
   
   for(n = 0; n < cfg->N; ++n){
-    printf("%d\n", grp[n]);
+    printf("%d", n);
   
+    CUDA_CALL(cudaMalloc((void **)&(a->grp[n]), sizeof(int))); printf("---\n", n);
     CUDA_CALL(cudaMemcpy(&(a->grp[n]), &(grp[n]), sizeof(int), cudaMemcpyHostToDevice));
     tmp = 0;
     
