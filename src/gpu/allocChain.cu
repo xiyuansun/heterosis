@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 
-__global__ void allocChain_kernel(Chain *a, num_t *y, num_t *yMeanG, int *grp, num_t *c, num_t *sigC,
+__global__ void allocChain_kernel(Chain *a, count_t *y, num_t *yMeanG, int *grp, num_t *c, num_t *sigC,
                                   num_t *eps, num_t *eta, num_t *d, num_t *tau, num_t *phi, num_t *thePhi,
                                   num_t *sigPhi, num_t *alp, num_t *theAlp, num_t *sigAlp, 
                                   num_t *piAlp, num_t *del, num_t *theDel, num_t *sigDel, 
@@ -63,8 +63,8 @@ __host__ Chain *allocChain(Config *cfg, int onHost){
   Chain *a;
   
   int *grp, *accC, *accPhi, *accAlp, *accDel, *accEps;
-  num_t *y, *yMeanG, *c, *sigC, *eps, *eta, *d, *tau, *phi, *thePhi *sigPhi, *alp, 
-        *theAlp, *sigAlp, *piAlp, *del, *theDel, *sigDel, *piDel;
+  num_t *y, *yMeanG, *c, *sigC, *eps, *eta, *d, *tau, *phi, *thePhi *sigPhi, *alp;
+  num_t *theAlp, *sigAlp, *piAlp, *del, *theDel, *sigDel, *piDel;
   num_t *tmp1, *tmp2, *Old, *Nw, *lOld, *lNew;
   num_t *tuneC, *tunePhi, *tuneEps;
   
