@@ -22,7 +22,7 @@ __global__ void samplePiAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 __global__ void samplePiAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->piAlp[a->mPiAlp + 1] = rbetaDevice(a, 1, a->G + a->s1 + a->aTau, a->s1 + a->bTau);
   ++a->mPiAlp;
-}
+} 
 
 __host__ void samplePiAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constPiAlp)
