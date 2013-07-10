@@ -11,11 +11,9 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-__global__ void curand_setup_kernel(Chain *a, unsigned int seed, int *test){ /* kernel <<<G, 1>>> */
+__global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
   int id = GENE;
   curand_init(seed, id, 0, &(a->states[id]));
-  
-  test[id] = id + 10;
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
@@ -218,29 +216,9 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   /* set up curand states */
   
+  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
   
-  
-  
-  
-  
-  int *test_host = (int*) malloc (cfg->G * sizeof(int));
-  int *test_dev;
-  cudaMalloc((void**) &test_dev, cfg->G * sizeof(int));
-  
-  
-  
-  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed, test_dev);
-  
-  cudaMemcpy(test_host, test_dev, cfg->G * sizeof(int), cudaMemcpyDeviceToHost);
-  
-  for(g = 0; g < cfg->G; ++g)
-    printf("%d ", test_host[g]);
-    
-    printf("\n----\n");
-    
-    
-    
-  
+  /* compute the rest of the initial values */
   
   newChain_kernel1<<<NBLOCKS, NTHREADS>>>(*dev_a);
   newChain_kernel2<<<1, 1>>>(*dev_a);
