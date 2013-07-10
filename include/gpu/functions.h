@@ -23,12 +23,12 @@
 #define ALLOC(x, cast, size, onHost) {if(onHost){(x) = cast malloc(size);} else {cudaMalloc((void**) &(x), size);}}
 #define FREE(x, onHost) {if(onHost){free(x);} else {CUDA_CALL(cudaFree(x));}}
 
-void pi1(int*, int, const char*);
-void pf1(num_t*, int, const char*);
-void pi2(int*, int, int, const char*);
-void pf2(num_t*, int, int, const char*);
-void pi3(int*, int, int, int, const char*);
-void pf3(num_t*, int, int, int, const char*);
+__host__ void pi1(int*, int, const char*);
+__host__ void pf1(num_t*, int, const char*);
+__host__ void pi2(int*, int, int, const char*);
+__host__ void pf2(num_t*, int, int, const char*);
+__host__ void pi3(int*, int, int, int, const char*);
+__host__ void pf3(num_t*, int, int, int, const char*);
 
 __host__ Config *config(int, char**);
 __host__ void getopts(Config*, int, char**);
@@ -40,11 +40,11 @@ __host__ int *readGrp(Config*);
 __host__ count_t *readData(Config*);
 
 __host__ Chain *allocChain(Config*, int);
-Chain *newChain(Config*);
-void newChain_kernel1(Chain*);
-void newChain_kernel2(Chain*);
-Chain *chainDeviceToHost(Chain*, Config*);
-void printChain(Chain*, Config*, int);
+__host__ Chain *newChain(Config*);
+__global__ void newChain_kernel1(Chain*);
+__global__ void newChain_kernel2(Chain*);
+__host__ Chain *chainDeviceToHost(Chain*, Config*);
+__host__ void printChain(Chain*, Config*, int);
 __host__ void freeChain(Chain*, Config*, int);
 
 num_t mu(Chain*, int, num_t, num_t, num_t);

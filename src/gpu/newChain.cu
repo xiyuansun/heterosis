@@ -6,42 +6,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cmpfunc (const void *a, const void *b){
+__host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g, N = a->N, G = a->G;
+__global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int n, g = GENE, N = a->N, G = a->G;
   num_t u;
 
-  for(g = 0; g < a->G; ++g){
+  a->phi[iG(0, g)] = rnormal(a->thePhi[0], a->sigPhi[0]);
 
-    a->phi[iG(0, g)] = rnormal(a->thePhi[0], a->sigPhi[0]);
-
-    u = runiform(0, 1);
-    if(u < a->piAlp[0]){
-      a->alp[iG(0, g)] = 0;
-    } else {
-      a->alp[iG(0, g)] = rnormal(a->theAlp[0], a->sigAlp[0]);
-    }
+  u = runiform(0, 1);
+  if(u < a->piAlp[0]){
+    a->alp[iG(0, g)] = 0;
+  } else {
+    a->alp[iG(0, g)] = rnormal(a->theAlp[0], a->sigAlp[0]);
+  }
     
-    u = runiform(0, 1);
-    if(u < a->piDel[0]){
-      a->del[iG(0, g)] = 0;
-    } else {
-      a->del[iG(0, g)] = rnormal(a->theDel[0], a->sigDel[0]);
-    }
+  u = runiform(0, 1);
+  if(u < a->piDel[0]){
+    a->del[iG(0, g)] = 0;
+  } else {
+    a->del[iG(0, g)] = rnormal(a->theDel[0], a->sigDel[0]);
+  }
  
-    a->eta[iG(0, g)] = 1/sqrt(rgamma(a->d[0] / 2, 
-                   a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
+  a->eta[iG(0, g)] = 1/sqrt(rgamma(a->d[0] / 2, 
+                 a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
 
-    for(n = 0; n < a->N; ++n)
-      a->eps[iNG(0, n, g)] = rnormal(0, a->eta[iG(0, g)]);
+  for(n = 0; n < a->N; ++n)
+    a->eps[iNG(0, n, g)] = rnormal(0, a->eta[iG(0, g)]);
     
   }
 }
 
-void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g, G = a->G;
 
   a->mC = 0;
@@ -95,7 +93,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   }
 }
 
-Chain *newChain(Config *cfg){ /* host */
+__host__ Chain *newChain(Config *cfg){ /* host */
   int n, g, N, G, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv;
@@ -117,74 +115,75 @@ Chain *newChain(Config *cfg){ /* host */
     return NULL;
   }
 
-  allocChain(a, cfg);
+  a = allocChain(cfg, 0);
 
   /* data and configuration info */
   
-  a->M = cfg->M;
-  a->N = cfg->N;
-  a->G = cfg->G;
-  a->burnin = cfg->burnin;
-  a->heterosis = cfg->heterosis;
-  a->someParmsFlag = cfg->someParmsFlag;
-  a->allParmsFlag = cfg->allParmsFlag;
+  CUDA_CALL(cudaMemcpy(&(a->M), &(cfg->M), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->N), &(cfg->N), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->G), &(cfg->G), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->burnin), &(cfg->burnin), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->heterosis), &(cfg->heterosis), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->someParmsFlag), &(cfg->someParmsFlag), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->allParmsFlag), &(cfg->allParmsFlag), sizeof(int), cudaMemcpyHostToDevice));  
   
   for(n = 0; n < cfg->N; ++n){
-    a->grp[n] = grp[n];
+    CUDA_CALL(cudaMemcpy(&(a->grp[n]), &(grp[n]), sizeof(int), cudaMemcpyHostToDevice));
     tmp = 0;
     
     for(g = 0; g < cfg->G; ++g){
       a->y[iG(n, g)] = y[iG(n, g)];
       tmp += y[iG(n, g)];
     }
-           
-    a->yMeanG[n] = tmp / cfg->G;
+    tmp /= cfg->G;
+    
+    CUDA_CALL(cudaMemcpy(&(a->yMeanG[n]), &(tmp), sizeof(num_t), cudaMemcpyHostToDevice));
   }
     
   /* initialization constants */
   
-  a->sigC0   = cfg->sigC0;
-  a->d0      = cfg->d0;
-  a->aTau    = cfg->aTau;
-  a->aAlp    = cfg->aAlp;
-  a->aDel    = cfg->aDel; 
-  a->bTau    = cfg->bTau;
-  a->bAlp    = cfg->bAlp;
-  a->bDel    = cfg->bDel;  
-  a->gamPhi  = cfg->gamPhi;
-  a->gamAlp  = cfg->gamAlp;
-  a->gamDel  = cfg->gamDel;
-  a->sigPhi0 = cfg->sigPhi0;
-  a->sigAlp0 = cfg->sigAlp0;
-  a->sigDel0 = cfg->sigDel0;
+  CUDA_CALL(cudaMemcpy(&(a->sigC0), &(cfg->sigC0), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->d0), &(cfg->d0), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->aTau), &(cfg->aTau), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->aAlp), &(cfg->aAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->aDel), &(cfg->aDel), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->bTau), &(cfg->bTau), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->bAlp), &(cfg->bAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->bDel), &(cfg->bDel), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->gamPhi), &(cfg->gamPhi), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->gamAlp), &(cfg->gamAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->gamDel), &(cfg->gamDel), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->sigPhi0), &(cfg->sigPhi0), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->sigAlp0), &(cfg->sigAlp0), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy&((a->sigDel0), &(cfg->sigDel0), sizeof(num_t), cudaMemcpyHostToDevice));
   
   /* hyperparameters */
   
-  a->sigC[0]   = cfg->sigC;
-  a->d[0]      = cfg->d;
-  a->tau[0]    = cfg->tau;
-  a->thePhi[0] = cfg->thePhi;
-  a->theAlp[0] = cfg->theAlp;
-  a->theDel[0] = cfg->theDel;
-  a->sigPhi[0] = cfg->sigPhi;
-  a->sigAlp[0] = cfg->sigAlp;
-  a->sigDel[0] = cfg->sigDel;
-  a->piAlp[0]  = cfg->piAlp;
-  a->piDel[0]  = cfg->piDel;
+  CUDA_CALL(cudaMemcpy(&(a->sigC[0]), &(cfg->sigC), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->d[0]), &(cfg->d), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->tau[0]), &(cfg->tau), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->thePhi[0]), &(cfg->thePhi), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->theAlp[0]), &(cfg->theAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->theDel[0]), &(cfg->theDel), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->sigPhi[0]), &(cfg->sigPhi), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->sigAlp[0]), &(cfg->sigAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->sigDel[0]), &(cfg->sigDel), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->piAlp[0]), &(cfg->piAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->piDel[0]), &(cfg->piDel), sizeof(num_t), cudaMemcpyHostToDevice));
   
   /* choices to hold hyperparameters constant */
   
-  a->constSigC   = cfg->constSigC;
-  a->constD      = cfg->constD;
-  a->constTau    = cfg->constTau;
-  a->constThePhi = cfg->constThePhi;
-  a->constTheAlp = cfg->constTheAlp;
-  a->constTheDel = cfg->constTheDel;
-  a->constSigPhi = cfg->constSigPhi;
-  a->constSigAlp = cfg->constSigAlp;
-  a->constSigDel = cfg->constSigDel;
-  a->constPiAlp  = cfg->constPiAlp;
-  a->constPiDel  = cfg->constPiDel;
+  CUDA_CALL(cudaMemcpy(&(a->constSigC), &(cfg->constSigC), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constD), &(cfg->constD), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constTau), &(cfg->constTau), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constThePhi), &(cfg->constThePhi), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constTheAlp), &(cfg->constTheAlp), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constTheDel), &(cfg->constTheDel), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constSigPhi), &(cfg->constSigPhi), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constSigAlp), &(cfg->constSigAlp), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constSigDel), &(cfg->constSigDel), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constPiAlp), &(cfg->constPiAlp), sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->constPiDel), &(cfg->constPiDel), sizeof(int), cudaMemcpyHostToDevice));
   
   lqts = (num_t*) malloc(cfg->N * sizeof(num_t));
   tmpv = (num_t*) malloc(cfg->G * sizeof(num_t));
@@ -201,11 +200,12 @@ Chain *newChain(Config *cfg){ /* host */
   
   s /= cfg->N;
   
-  for(n = 0; n < cfg->N; ++n)
-    a->c[iN(0, n)] = lqts[n] - s;
-  
-  newChain_kernel1(a);
-  newChain_kernel2(a);
+  for(n = 0; n < cfg->N; ++n){
+    tmp = lqts[n] - s;
+    CUDA_CALL(cudaMemcpy(&(a->c[iN(0, n)]), &(tmp), sizeof(num_t), cudaMemcpyHostToDevice));
+  }
+  newChain_kernel1<<<NBLOCKS, NTHREADS>>>(a);
+  newChain_kernel2<<<1, 1>>>(a);
   
   free(lqts);
   free(tmpv);
