@@ -94,8 +94,8 @@ __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
    
   sampleD_kernel1<<<1, 1>>>(dev_a);
 
-  lD(host_a, dev_a, 1);
-  lD(host_a, dev_a, 0);
+  lD(host_a, dev_a, cfg, 1);
+  lD(host_a, dev_a, cfg, 0);
 
   sampleD_kernel2<<<1, 1>>>(dev_a);
 }
