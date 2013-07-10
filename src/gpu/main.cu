@@ -15,8 +15,8 @@ int main(int argc, char **argv){
   newChain(&host_a, &dev_a, cfg); 
   printChain(host_a, dev_a, cfg);
   
-  freeChain(host_a, cfg, 0); 
+  /*freeChain(host_a, cfg, 0); 
   cudaFree(dev_a);
- 
+ */
   return EXIT_SUCCESS;
 }
