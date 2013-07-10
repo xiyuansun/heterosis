@@ -222,10 +222,11 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   /* set up gpu stuff */
   
-  int *threads = (int*) malloc(sizeof(int));
+  int *threads;
+  CUDA_CALL(cudaMalloc((void**) &nthreads, sizeof(int)));
   thread_setup_kernel<<<1, 1>>>(nthreads*);
-  cfg->nthreads = *nthreads;
-  free(nthreads);
+  CUDA_CALL(cudaMemcpy(&(cfg->nthreads), *nthreads, sizeof(int), cudaMemcpyDeviceToHost));
+  cudaFree(nthreads);
   
   curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
   
