@@ -18,6 +18,10 @@ __host__ void allocChainHost(Chain **a, Config *cfg){
   (*a)->yMeanG = (num_t*) malloc(cfg->N * sizeof(num_t));
   (*a)->grp = (int*) malloc(cfg->N * sizeof(int));
 
+  /* curand states */
+  
+  (*a)->states = (curandState*) malloc(cfg->G * sizeof(curandState));
+
   /* parameters */
 
   (*a)->c      = (num_t*) malloc((cfg->M + 1) * cfg->N * sizeof(num_t));
