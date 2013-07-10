@@ -44,8 +44,6 @@ __host__ void lC(Chain *host_a, Chain *dev_a, Config *cfg, int n, int newArg){ /
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
   
-    printf("thrust c s1 = %0.3f\n", s1);
-  
   lC_kernel2<<<1, 1>>>(dev_a, n, newArg);
 }
 
