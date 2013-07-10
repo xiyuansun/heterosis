@@ -63,14 +63,14 @@ __global__ void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
   a->Old[0] = a->d[a->mD];
   
   do {
-    a->New[0] = rnormal(a->Old[0], a->tuneD);
+    a->New[0] = rnormalDevice(a, 1, a->Old[0], a->tuneD);
   } while(a->New[0] < 0);
 }
 
 __global__ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t dl = a->lNew[0] - a->lOld[0];
   num_t lp = 0 < dl ? 0 : dl;
-  num_t lu = log(runiform(0, 1));
+  num_t lu = log(runiformDevice(a, 1, 0, 1));
 
   if(lu < lp){ /* accept */
     a->d[a->mD + 1] = a->New[0];
