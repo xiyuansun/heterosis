@@ -153,9 +153,9 @@ void sampleSigDel_kernel3(Chain*);
 void sampleSigDel_kernel4(Chain*);
 void sampleSigDel(Chain*, Config*);
 
-void samplePiAlp_kernel1(Chain*);
-void samplePiAlp_kernel2(Chain*);
-void samplePiAlp(Chain*, Chain*, Config*);
+__global__ void samplePiAlp_kernel1(Chain*);
+__global__ void samplePiAlp_kernel2(Chain*);
+__host__ void samplePiAlp(Chain*, Chain*, Config*);
 
 void samplePiDel_kernel1(Chain*);
 void samplePiDel_kernel2(Chain*);

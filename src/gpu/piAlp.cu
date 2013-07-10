@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void samplePiAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+__global__ void samplePiAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = GENE, G = a->G;
 
   if(g < G){ 
@@ -18,12 +18,12 @@ void samplePiAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void samplePiAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void samplePiAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->piAlp[a->mPiAlp + 1] = rbeta(a->G + a->s1 + a->aTau, a->s1 + a->bTau);
   ++a->mPiAlp;
 }
 
-void samplePiAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+__host__ void samplePiAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constPiAlp)
     return;
 
