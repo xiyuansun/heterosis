@@ -90,7 +90,7 @@ __global__ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int n, N = cfg->N;
   int nthreads = (N < MAXTHREADS ? N : MAXTHREADS);
-  int nblocks = ceil(cfg->N / NTHREADS);
+  int nblocks = ceil(cfg->N / NTHREADS) + 1;
   
   sampleC_kernel1<<<nblocks, nthreads>>>(dev_a);
 
