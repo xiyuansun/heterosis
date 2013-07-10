@@ -1,6 +1,7 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <deviceFunctions.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
