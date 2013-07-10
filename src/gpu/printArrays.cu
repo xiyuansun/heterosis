@@ -1,4 +1,5 @@
 #include <constants.h>
+#include <curand_kernel.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -15,6 +16,16 @@ __host__ void pf1(num_t *v, int l, const char* m){
   printf("%s", m);
   for(i = 0; i < l; ++i){
     printf(NUM_TF, v[i]);
+    printf(" ");
+  }
+  printf("\n\n"); 
+}
+
+__host__ void pf1(curandState *v, int l, const char* m){
+  int i;
+  printf("%s", m);
+  for(i = 0; i < l; ++i){
+    printf("%d", v[i]);
     printf(" ");
   }
   printf("\n\n"); 
