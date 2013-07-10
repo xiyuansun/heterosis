@@ -11,7 +11,6 @@ __host__ int cmpfunc (const void *a, const void *b){
 }
 
 __global__ void curand_setup_kernel(Chain *a, unsigned int seed){
-  int G = a->G;
   int id = GENE;
   curand_init(seed, id, 0, &(a->states[id]));
 }
@@ -226,6 +225,4 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   free(tmpv);
   free(grp);
   free(y);
-  
-  printf("no problem here\n");
 }

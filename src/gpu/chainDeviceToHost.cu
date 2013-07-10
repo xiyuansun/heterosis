@@ -29,10 +29,6 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(allHost_a->yMeanG, host_a->yMeanG, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(allHost_a->grp, host_a->grp, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));
   
-  /* curand states */
-  
-  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->G * sizeof(curandState), cudaMemcpyDeviceToHost));
-  
   /* initialization constants */
   CUDA_CALL(cudaMemcpy(&(allHost_a->sigC0), &(dev_a->sigC0), sizeof(num_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->d0), &(dev_a->d0), sizeof(num_t), cudaMemcpyDeviceToHost));
@@ -132,5 +128,9 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiAlp), &(dev_a->constPiAlp), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiDel), &(dev_a->constPiDel), sizeof(int), cudaMemcpyDeviceToHost));
 
+  /* curand states */
+  printf("hi\n");
+  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->G * sizeof(curandState), cudaMemcpyDeviceToHost));
+  printf("ho\n");
   return allHost_a;
 }
