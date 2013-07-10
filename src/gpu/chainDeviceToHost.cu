@@ -111,7 +111,7 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(allHost_a->accPhi, host_a->accPhi, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(allHost_a->accAlp, host_a->accAlp, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(allHost_a->accDel, host_a->accDel, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(allHost_a->accEps, host_a->accEps, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->accEps, host_a->accEps, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
   
   /* choices to hold hyperparameters constant */
   
