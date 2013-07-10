@@ -82,7 +82,7 @@ __global__ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
     }
   }
 }
-
+ 
 __global__ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mC;
 }
