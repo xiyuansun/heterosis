@@ -155,8 +155,7 @@ void sampleSigDel(Chain*, Config*);
 
 void samplePiAlp_kernel1(Chain*);
 void samplePiAlp_kernel2(Chain*);
-void samplePiAlp_kernel3(Chain*);
-void samplePiAlp(Chain*, Config*);
+void samplePiAlp(Chain*, Chain*, Config*);
 
 void samplePiDel_kernel1(Chain*);
 void samplePiDel_kernel2(Chain*);
