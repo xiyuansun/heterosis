@@ -106,8 +106,6 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   y = readData(cfg);
   G = cfg->G;
   
-  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
-  
   if(y == NULL)
     return;
 
@@ -119,7 +117,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   }
 
   allocChainDevice(host_a, dev_a, cfg);
-
+  
   /* data and configuration info */
 
   CUDA_CALL(cudaMemcpy(&((*dev_a)->M), &(cfg->M), sizeof(int), cudaMemcpyHostToDevice));
@@ -214,6 +212,10 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     tmpv[n] = lqts[n] - s;
   
   CUDA_CALL(cudaMemcpy((*host_a)->c, tmpv, cfg->N *sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  /* set up curand states */
+  
+  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
   
   newChain_kernel1<<<NBLOCKS, NTHREADS>>>(*dev_a);
   newChain_kernel2<<<1, 1>>>(*dev_a);
