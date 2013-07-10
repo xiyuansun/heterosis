@@ -45,8 +45,8 @@ __host__ void allocChainDevice(Chain**, Chain**, Config*);
 __host__ void newChain(Chain** host_a, Chain **dev_a, Config*);
 __global__ void newChain_kernel1(Chain*);
 __global__ void newChain_kernel2(Chain*);
-__host__ Chain *chainDeviceToHost(Chain*, Config*);
-__host__ void printChain(Chain*, Config*);
+__host__ Chain *chainDeviceToHost(Chain*, Chain*, Config*);
+__host__ void printChain(Chain*, Chain*, Config*);
 __host__ void freeChain(Chain*, Config*, int);
 
 num_t mu(Chain*, int, num_t, num_t, num_t);

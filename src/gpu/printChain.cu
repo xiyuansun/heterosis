@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-__host__ void printChain(Chain *a, Config *cfg){
+__host__ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
-  Chain *allHost_a = chainDeviceToHost(a, cfg);
+  Chain *allHost_a = chainDeviceToHost(host_a, dev_a, cfg);
 
   printf("M = %d\n", allHost_a->M); ;
   printf("N = %d\n", allHost_a->N);
