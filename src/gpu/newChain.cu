@@ -154,7 +154,7 @@ __host__ Chain *newChain(Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy(&(a->gamDel), &(cfg->gamDel), sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&(a->sigPhi0), &(cfg->sigPhi0), sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&(a->sigAlp0), &(cfg->sigAlp0), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy&((a->sigDel0), &(cfg->sigDel0), sizeof(num_t), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(&(a->sigDel0), &(cfg->sigDel0), sizeof(num_t), cudaMemcpyHostToDevice));
   
   /* hyperparameters */
   
