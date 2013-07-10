@@ -123,16 +123,10 @@ __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, num_t lb
         haznaz, lam, ret, tmp1, tmp2;
 
   if(shape <= 0){
-    printf("Error: bad shape: ");
-    printf(NUM_TF, shape);
-    printf("\n");
     return(-1);
   }
   
   if(rate <= 0){
-    printf("Error: bad rate: ");
-    printf(NUM_TF, rate);
-    printf("\n");
     return(-1);
   }
 
