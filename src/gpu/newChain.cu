@@ -206,6 +206,8 @@ __host__ Chain *newChain(Config *cfg){ /* host */
   newChain_kernel1<<<NBLOCKS, NTHREADS>>>(a);
   newChain_kernel2<<<1, 1>>>(a);
   
+  printf("good here\n");
+  
   free(lqts);
   free(tmpv);
   free(grp);

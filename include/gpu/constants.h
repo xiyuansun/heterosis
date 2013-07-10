@@ -10,7 +10,7 @@
 
 #define NBLOCKS G
 #define NTHREADS 1
-#define GENE blockDim.x * blockIdx.x + threadIdx.x
+#define GENE ((blockDim.x * blockIdx.x) + threadIdx.x)
 
 typedef int count_t;
 typedef float num_t;
