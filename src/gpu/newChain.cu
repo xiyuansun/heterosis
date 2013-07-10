@@ -14,6 +14,9 @@ __host__ int cmpfunc (const void *a, const void *b){
 __global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
   int id = GENE;
   curand_init(seed, id, 0, &(a->states[id]));
+  
+  
+  a->states[id] = id;
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */

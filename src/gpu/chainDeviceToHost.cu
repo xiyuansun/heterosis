@@ -129,8 +129,8 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiDel), &(dev_a->constPiDel), sizeof(int), cudaMemcpyDeviceToHost));
 
   /* curand states */
-  printf("hi\n");
+
   CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->G * sizeof(curandState), cudaMemcpyDeviceToHost));
-  printf("ho\n");
+
   return allHost_a;
 }
