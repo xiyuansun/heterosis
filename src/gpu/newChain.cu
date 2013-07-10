@@ -36,7 +36,6 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   for(n = 0; n < a->N; ++n)
     a->eps[iNG(0, n, g)] = rnormal(0, a->eta[iG(0, g)]);
     
-  }
 }
 
 __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
