@@ -16,14 +16,14 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
   a->phi[iG(0, g)] = 1; /* rnormal(a->thePhi[0], a->sigPhi[0]);*/
 
-  u = 0.5; /* runiform(0, 1) */;
+  u = 1; /* runiform(0, 1) */;
   if(u < a->piAlp[0]){
     a->alp[iG(0, g)] = 0;
   } else {
     a->alp[iG(0, g)] = 1; /* rnormal(a->theAlp[0], a->sigAlp[0]); */
   }
     
-  u = 0.5; /* runiform(0, 1); */
+  u = 1; /* runiform(0, 1); */
   if(u < a->piDel[0]){
     a->del[iG(0, g)] = 0;
   } else {
@@ -82,7 +82,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->accC[n] = 0;
   
     for(g = 0; g < a->G; ++g)
-      a->accEps[iG(n, g)] = 0;
+      a->accEps[iG(n, g)] = -1;
   }
 
   for(g = 0; g < a->G; ++g){
