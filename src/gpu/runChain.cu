@@ -8,10 +8,9 @@
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
-
   int m;
   
-  for(m = 0; m < a->M; ++m){
+  for(m = 0; m < cfg->M; ++m){
     sampleC(host_a, dev_a, cfg);
   /*  sampleTau(a, cfg);
     samplePiAlp(a, cfg);
@@ -28,5 +27,4 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleEps(a);
     samplePhiAlpDel(a, cfg);*/
   }
-  
 }

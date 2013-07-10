@@ -8,7 +8,8 @@
 #define NUM_TF "%0.3f"
 #define NUM_TMIN FLT_MIN
 
-#define NTHREADS (G < maxThreadsPerBlock ? G : maxThreadsPerBlock)
+#define MAXTHREADS 512
+#define NTHREADS (G < MAXTHREADS ? G : MAXTHREADS)
 #define NBLOCKS ceil(G / NTHREADS)
 #define GENE ((blockDim.x * blockIdx.x) + threadIdx.x)
 
