@@ -13,6 +13,10 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
+__global void thread_setup_kernel(int *nthreads) { /* kernel<<<1, 1>>> */
+  *nthreads = maxThreadsPerBlock;
+}
+
 __global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
   int id = GENE;
   curand_init(seed, id, 0, &(a->states[id]));
@@ -216,7 +220,12 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   CUDA_CALL(cudaMemcpy((*host_a)->c, tmpv, cfg->N *sizeof(num_t), cudaMemcpyHostToDevice));
   
-  /* set up curand states */
+  /* set up gpu stuff */
+  
+  int *threads = (int*) malloc(sizeof(int));
+  thread_setup_kernel<<<1, 1>>>(nthreads*);
+  cfg->nthreads = *nthreads;
+  free(nthreads);
   
   curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
   

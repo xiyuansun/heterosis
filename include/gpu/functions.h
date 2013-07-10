@@ -43,6 +43,7 @@ __host__ void allocChainHost(Chain**, Config*);
 __host__ void allocChainDevice(Chain**, Chain**, Config*);
   
 __host__ int cmpfunc (const void*, const void*);
+__global__ void thread_setup_kernel(int*);
 __global__ void curand_setup_kernel(Chain*, unsigned int);
                                   
 __host__ void newChain(Chain** host_a, Chain **dev_a, Config*);

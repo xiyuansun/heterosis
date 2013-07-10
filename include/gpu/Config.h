@@ -27,7 +27,9 @@ typedef struct {
   int M; /* length of chain (not including initial values) */
   int N; /* number of libraries (samples) */
   int G; /* number of genes */
-    
+  
+  int nthreads; /* number of threads per block */
+  
   /* initialization constants */
   
   num_t sigC0;

@@ -23,6 +23,8 @@ __host__ void printConfig(Config *cfg){
   printf("joint = %d\n", cfg->joint);
   printf("seed = %d\n\n", cfg->seed);
   printf("heterosis = %d\n\n", cfg->heterosis);
+
+  printf("nthreads = %d\n\n", cfg->nthreads);
   
   printf("M = %d\n", cfg->M);
   printf("N = %d\n", cfg->N);
