@@ -1,3 +1,4 @@
+#include <Chain.h>
 #include <constants.h>
 #include <functions.h>
 #include <math.h>
