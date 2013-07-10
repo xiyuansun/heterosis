@@ -14,7 +14,7 @@ __global__ void sampleTau_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     a->tmp1[g] = 1/pow(a->eta[iG(a->mEta, g)], 2);
 }
 
-void sampleTau_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
+__global__ void sampleTau_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
   num_t rate = a->s1 * a->d[a->mD] / 2 + a->bTau;
   num_t shape = a->aTau + a->G * a->d[a->mD] / 2;
 
@@ -31,7 +31,7 @@ void sampleTau(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constTau)
     return;
 
-  __global__ sampleTau_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleTau_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
