@@ -30,7 +30,7 @@ __global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mSigC;
 }
 
-__host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *a){ 
+__host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){ 
   fprintf(cfg->log, "sigC ");
   sampleSigC_kernel<<<1, 1>>>(dev_a);
 }
