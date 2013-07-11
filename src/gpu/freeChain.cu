@@ -16,7 +16,7 @@ __host__ void freeChain(Chain *a, Config *cfg, int onHost){
 
   /* curand states */
   
-  FREE(a->states, onhost);
+  FREE(a->states, onHost);
 
   /* parameters */
   
