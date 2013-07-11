@@ -24,7 +24,7 @@ __global__ void sampleSigPhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   } else {
     a->sigPhi[a->mSigPhi + 1] = a->sigPhi[a->mSigPhi];
   }
-
+ 
   ++a->mSigPhi;
 }
 
