@@ -5,29 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-__device__ num_t delProp(Chain *a, int g){ /* device */
-  int G = a->G;      
-
-  num_t gam = a->gamDel;
-  num_t sig = a->sigDel[a->mSigDel];
-
-  num_t gprec = 1/(gam * gam);
-  num_t sprec = 1/(sig * sig);
-
-  num_t avg = (a->del[iG(a->mDel, g)] * sprec) / (gprec + sprec);
-  num_t s = gam * gam + sig * sig;
-  num_t u = runiformDevice(a, g, 0, 1);
-  num_t nw;
-
-  if(u < a->piDel[a->mPiDel]){
-    nw = 0;
-  } else {
-    nw = rnormalDevice(a, g, avg, s);
-  }
-
-  return nw;
-}
-
 __device__ num_t lDel(Chain *a, int g, num_t arg){ /* device */ 
   int n, N = a->N, G = a->G;
   num_t s = 0, tmp; 

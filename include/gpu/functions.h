@@ -301,4 +301,50 @@ inline __device__ num_t rbetaDevice(Chain *chain, int g, num_t a, num_t b){
   return x / (x + y);
 }
 
+inline __device__ num_t alpProp(Chain *a, int g){ /* device */
+  int G = a->G;
+
+  num_t gam = a->gamAlp;
+  num_t sig = a->sigAlp[a->mSigAlp];
+
+  num_t gprec = 1/(gam * gam);
+  num_t sprec = 1/(sig * sig);
+
+  num_t avg = (a->alp[iG(a->mAlp, g)] * sprec) / (gprec + sprec);
+  num_t s = gam * gam + sig * sig;
+  num_t u = runiformDevice(a, g, 0, 1); 
+  num_t nw;
+  
+  if(u < a->piAlp[a->mPiAlp]){
+    nw = 0;
+  } else {
+    nw = rnormalDevice(a, g, avg, s);
+  }
+
+  return nw;
+}
+
+inline __device__ num_t delProp(Chain *a, int g){ /* device */
+  int G = a->G;      
+
+  num_t gam = a->gamDel;
+  num_t sig = a->sigDel[a->mSigDel];
+
+  num_t gprec = 1/(gam * gam);
+  num_t sprec = 1/(sig * sig);
+
+  num_t avg = (a->del[iG(a->mDel, g)] * sprec) / (gprec + sprec);
+  num_t s = gam * gam + sig * sig;
+  num_t u = runiformDevice(a, g, 0, 1);
+  num_t nw;
+
+  if(u < a->piDel[a->mPiDel]){
+    nw = 0;
+  } else {
+    nw = rnormalDevice(a, g, avg, s);
+  }
+
+  return nw;
+}
+
 #endif /* FUNCTIONS_H */

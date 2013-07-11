@@ -6,29 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-__device__ num_t alpProp(Chain *a, int g){ /* device */
-  int G = a->G;
-
-  num_t gam = a->gamAlp;
-  num_t sig = a->sigAlp[a->mSigAlp];
-
-  num_t gprec = 1/(gam * gam);
-  num_t sprec = 1/(sig * sig);
-
-  num_t avg = (a->alp[iG(a->mAlp, g)] * sprec) / (gprec + sprec);
-  num_t s = gam * gam + sig * sig;
-  num_t u = runiformDevice(a, g, 0, 1); 
-  num_t nw;
-  
-  if(u < a->piAlp[a->mPiAlp]){
-    nw = 0;
-  } else {
-    nw = rnormalDevice(a, g, avg, s);
-  }
-
-  return nw;
-}
-
 __device__ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   
   int n, N = a->N, G = a->G;
