@@ -24,29 +24,29 @@ void printHyper(Chain *a, Config *cfg){
       return;
     }
     
-    sigC   = (num_t*) malloc(cfg->M * sizeof(num_t));
-    d      = (num_t*) malloc(cfg->M * sizeof(num_t));
-    tau    = (num_t*) malloc(cfg->M * sizeof(num_t));
-    thePhi = (num_t*) malloc(cfg->M * sizeof(num_t));
-    theAlp = (num_t*) malloc(cfg->M * sizeof(num_t));
-    theDel = (num_t*) malloc(cfg->M * sizeof(num_t));
-    sigPhi = (num_t*) malloc(cfg->M * sizeof(num_t));
-    sigAlp = (num_t*) malloc(cfg->M * sizeof(num_t));
-    sigDel = (num_t*) malloc(cfg->M * sizeof(num_t));
-    piAlp  = (num_t*) malloc(cfg->M * sizeof(num_t));
-    piDel  = (num_t*) malloc(cfg->M * sizeof(num_t));
+    sigC   = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    d      = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    tau    = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    thePhi = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    theAlp = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    theDel = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    sigPhi = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    sigAlp = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    sigDel = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    piAlp  = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+    piDel  = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
     
-    CUDA_CALL(cudaMemcpy(sigC,   a->sigC,   cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(d,      a->d,      cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(tau,    a->tau,    cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(thePhi, a->thePhi, cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(theAlp, a->theAlp, cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(theDel, a->theDel, cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(sigPhi, a->sigPhi, cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(sigAlp, a->sigAlp, cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(sigDel, a->sigDel, cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(piAlp,  a->piAlp,  cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
-    CUDA_CALL(cudaMemcpy(piDel,  a->piDel,  cfg->M * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(sigC,   a->sigC,   (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(d,      a->d,      (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(tau,    a->tau,    (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(thePhi, a->thePhi, (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(theAlp, a->theAlp, (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(theDel, a->theDel, (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(sigPhi, a->sigPhi, (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(sigAlp, a->sigAlp, (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(sigDel, a->sigDel, (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(piAlp,  a->piAlp,  (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(piDel,  a->piDel,  (cfg->M + 1) * sizeof(num_t), cudaMemcpyDeviceToHost));
     
     fprintf(fp, "sigC d tau thePhi theAlp theDel sigPhi sigAlp sigDel piAlp piDel\n");
     
