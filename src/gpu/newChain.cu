@@ -127,8 +127,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy(&((*dev_a)->G), &(cfg->G), sizeof(int), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&((*dev_a)->burnin), &(cfg->burnin), sizeof(int), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&((*dev_a)->heterosis), &(cfg->heterosis), sizeof(int), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->someParmsFlag), &(cfg->someParmsFlag), sizeof(int), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->allParmsFlag), &(cfg->allParmsFlag), sizeof(int), cudaMemcpyHostToDevice));  
+  CUDA_CALL(cudaMemcpy(&((*dev_a)->parmsFlag), &(cfg->parmsFlag), sizeof(int), cudaMemcpyHostToDevice));
   
   /* initialization constants */
   
