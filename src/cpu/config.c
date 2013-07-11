@@ -8,31 +8,18 @@
 #include <string.h>
 
 Config *config(int argc, char **argv){
-  Config *cfg = calloc(1, sizeof(Config));
 
-  cfg->dataFile = (char*) malloc(BUF * sizeof(char));
-  cfg->groupFile = (char*) malloc(BUF * sizeof(char));
-  cfg->probsFile = (char*) malloc(BUF * sizeof(char));  
-  cfg->hyperFile = (char*) malloc(BUF * sizeof(char));
-  cfg->ratesFile = (char*) malloc(BUF * sizeof(char));
-  cfg->someParmsFile = (char*) malloc(BUF * sizeof(char));
-  cfg->allParmsFile = (char*) malloc(BUF * sizeof(char));
-          
-  /* default filenames */ 
-        
+  Config *cfg = calloc(1, sizeof(Config));
+  cfg->chainNum = 1;
+  
+  /* default filenames */        
+
   strcpy(cfg->dataFile, "../data/data.txt"); 
   strcpy(cfg->groupFile, "../data/group.txt");
-  strcpy(cfg->probsFile, "../out/probs.txt");
-  strcpy(cfg->ratesFile, "../out/acceptance-rates.txt");
-  strcpy(cfg->hyperFile, "../out/hyperparameters.txt");
-  strcpy(cfg->someParmsFile, "../out/example-parameters.txt");        
-  strcpy(cfg->allParmsFile, "../out/all-parameters.txt");
-
-  cfg->probsFlag = 0;
+   
   cfg->ratesFlag = 0;
   cfg->hyperFlag = 0;
-  cfg->someParmsFlag = 0;
-  cfg->allParmsFlag = 0;
+  cfg->parmsFlag = 0;
 
   cfg->M = 10;  
   cfg->burnin = cfg->M / 2;
@@ -68,11 +55,10 @@ Config *config(int argc, char **argv){
   cfg->constSigDel = 0;
   cfg->constPiAlp = 0;
   cfg->constPiDel = 0;
-  
+
   getopts(cfg, argc, argv);
-  
   srand(cfg->seed);
-    
+
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.
    *  All the others must be given initial values.
@@ -110,6 +96,20 @@ Config *config(int argc, char **argv){
 
   if(!cfg->constPiDel)
     cfg->piDel = rbeta(cfg->aDel, cfg->bDel);
+  
+  /* make output directories */
+  
+  system("mkdir -p ../out/");
+  system("mkdir -p ../out/probs/");
+  
+  if(cfg->ratesFlag)
+    system("mkdir -p ../out/rates/");
+  
+  if(cfg->hyperFlag)
+    system("mkdir -p ../out/hyper/");
+  
+  if(cfg->parmsFlag)
+    system("mkdir -p ../out/parms/"); 
   
   return cfg;
 }

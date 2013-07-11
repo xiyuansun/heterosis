@@ -39,7 +39,6 @@ __host__ void pf3(num_t*, int, int, int, const char*);
 __host__ Config *config(int, char**);
 __host__ void getopts(Config*, int, char**);
 __host__ void printConfig(Config*);
-__host__ void freeConfig(Config*);
 
 __host__ int *mySampleInt(int, int);
 __host__ int *readGrp(Config*);
@@ -153,13 +152,13 @@ __global__ void samplePiDel_kernel2(Chain*);
 __host__ void samplePiDel(Chain*, Chain*, Config*);
 
 __host__ void runChain(Chain*, Chain*, Config*);
-__host__ void oneChain(int, char**);
+__host__ void oneChain(Config*);
+__host__ void chains(int, char**);
 
 __host__ void printProbs(Chain*, Config*);
-__host__ void printRates(Chain*, Config*);
+__host__ void printRates(Chain*, Chain*, Config*);
 __host__ void printHyper(Chain*, Config*);
-__host__ void printParms_oneFile(Chain*, Config*, int);
-__host__ void printParms(Chain*, Config*);
+__host__ void printParms(Chain*, Chain*, Config*);
 __host__ void summarizeChain(Chain*, Chain*, Config*);
 
 /* definitions of inline functions */

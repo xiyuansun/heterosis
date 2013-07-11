@@ -16,9 +16,9 @@ CCSRCDIR=$(SRCDIR)cpu/
 NVCCOBJDIR=$(OBJDIR)gpu/
 NVCCSRCDIR=$(SRCDIR)gpu/
 
-CCDEP=printArrays config getopts printConfig freeConfig
+CCDEP=printArrays config getopts printConfig 
 CCDEP+=mySampleInt readGrp readData
-CCDEP+=allocChain newChain printChain freeChain
+CCDEP+=allocChain newChain printChain freeChain chains
 CCDEP+=mu runiform rnormal rgamma rbeta
 CCDEP+=c sigC eta d tau eps
 CCDEP+=phi alp del phiAlpDelJoint phiAlpDel
@@ -29,9 +29,9 @@ CCDEP+=runChain oneChain summarizeChain
 CCDEP+=printProbs printRates printHyper printParms
 CCDEP+=main
 
-NVCCDEP=printArrays config getopts printConfig freeConfig
+NVCCDEP=printArrays config getopts printConfig 
 NVCCDEP+=mySampleInt readGrp readData
-NVCCDEP+=allocChain newChain chainDeviceToHost printChain freeChain
+NVCCDEP+=allocChain newChain chainDeviceToHost printChain freeChain chains
 NVCCDEP+=runiform rnormal rgamma rbeta
 NVCCDEP+=c sigC eta d tau eps 
 NVCCDEP+=phiAlpDel phi alp del phiAlpDelJoint

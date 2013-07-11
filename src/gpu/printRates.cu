@@ -4,104 +4,126 @@
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-__host__ void printRates(Chain *a, Config *cfg){
+void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
 
-  int n, i, G = a->G, niter = cfg->M - cfg->burnin;
-  num_t accD, accC, accPhi, accAlp, accDel, accEps;
+  int n, i, G = cfg->G, niter = cfg->M - cfg->burnin;
+  int accD, *accC, *accPhi, *accAlp, *accDel, *accEps;
+  num_t raccD, raccC, raccPhi, raccAlp, raccDel, raccEps;
+  char file[BUF];
   FILE *fp;
   
   if(cfg->ratesFlag){
-    fp = fopen(cfg->ratesFile, "w");  
+    sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
+    fp = fopen(file, "w"); 
     
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", cfg->ratesFile);
+      printf("ERROR: unable to create file, %s\n", file);
       return;
     }
        
     fprintf(fp, "d c phi alp del meanEps\n");
     
-    accD    = a->accD;
-    accD   /= niter;
+    accC = (int*) malloc(cfg->N * sizeof(int));
+    accPhi = (int*) malloc(cfg->G * sizeof(int));
+    accAlp = (int*) malloc(cfg->G * sizeof(int));
+    accDel = (int*) malloc(cfg->G * sizeof(int));
+    accEps = (int*) malloc(cfg->N * cfg->G * sizeof(int));
     
-    accC    = a->accC[0];
-    accC   /= niter;
+    CUDA_CALL(cudaMemcpy(&(accD), &(dev_a->accD), sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accC, host_a->accC, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accPhi, host_a->accPhi, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accAlp, host_a->accAlp, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accDel, host_a->accDel, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accEps, host_a->accEps, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
     
-    accPhi  = a->accPhi[0];
-    accPhi /= niter;
+    raccD    = (num_t) accD;
+    raccD   /= niter;
+    
+    raccC    = (num_t) accC[0];
+    raccC   /= niter;
+    
+    raccPhi  = (num_t) accPhi[0];
+    raccPhi /= niter;
 
-    accAlp  = a->accAlp[0];
-    accAlp /= niter;
+    raccAlp  = (num_t) accAlp[0];
+    raccAlp /= niter;
     
-    accDel  = a->accDel[0];
-    accDel /= niter;
+    raccDel  = (num_t) accDel[0];
+    raccDel /= niter;
   
-    accEps = 0;  
+    raccEps = 0;  
     for(n = 0; n < cfg->N; ++n)
-      accEps += a->accEps[iG(n, 0)];
-    accEps /= (niter * cfg->N);
+      raccEps += (num_t) accEps[iG(n, 0)];
+    raccEps /= (niter * cfg->N);
     
-    fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, raccD);   fprintf(fp, " ");
+    fprintf(fp, NUM_TF, raccC);   fprintf(fp, " ");
+    fprintf(fp, NUM_TF, raccPhi); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, raccAlp); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, raccDel); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, raccEps); fprintf(fp, " ");
     fprintf(fp, "\n");
 
     for(i = 1; i < cfg->N; ++i){
     
-      accC    = a->accC[i];
-      accC   /= niter;
+      raccC    = (num_t) accC[i];
+      raccC   /= niter;
     
-      accPhi  = a->accPhi[i];
-      accPhi /= niter;
+      raccPhi  = (num_t) accPhi[i];
+      raccPhi /= niter;
 
-      accAlp  = a->accAlp[i];
-      accAlp /= niter;
+      raccAlp  = (num_t) accAlp[i];
+      raccAlp /= niter;
     
-      accDel  = a->accDel[i];
-      accDel /= niter;
+      raccDel  = (num_t) accDel[i];
+      raccDel /= niter;
   
-      accEps = 0;  
+      raccEps = 0;  
       for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[iG(n, i)];
-      accEps /= (niter * cfg->N);
+        raccEps += (num_t) accEps[iG(n, i)];
+      raccEps /= (niter * cfg->N);
       
       fprintf(fp, ". ");
-      fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccC);   fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccPhi); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccAlp); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccDel); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccEps); fprintf(fp, " ");
       fprintf(fp, "\n");
     }
     
     for(i = cfg->N; i < cfg->G; ++i){
     
-      accPhi  = a->accPhi[i];
-      accPhi /= niter;
+      raccPhi  = (num_t) accPhi[i];
+      raccPhi /= niter;
 
-      accAlp  = a->accAlp[i];
-      accAlp /= niter;
+      raccAlp  = (num_t) accAlp[i];
+      raccAlp /= niter;
     
-      accDel  = a->accDel[i];
-      accDel /= niter;
+      raccDel  = (num_t) accDel[i];
+      raccDel /= niter;
   
-      accEps = 0;  
+      raccEps = 0;  
       
       for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[iG(n, i)];
-      accEps /= (niter * cfg->N);
+        raccEps += (num_t) accEps[iG(n, i)];
+      raccEps /= (niter * cfg->N);
       
       fprintf(fp, ". . ");
-      fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccPhi); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccAlp); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccDel); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, raccEps); fprintf(fp, " ");
       fprintf(fp, "\n");
     }
     
+    free(accC);
+    free(accPhi);
+    free(accAlp);
+    free(accDel);
+    free(accEps);
     fclose(fp);
   }
 }

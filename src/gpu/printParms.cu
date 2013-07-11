@@ -4,100 +4,72 @@
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-__host__ void printParms_oneFile(Chain *a, Config *cfg, int some){
+void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
 
-  int m, n, g, nlibs, ngenes;
-  int N = a->N, G = a->G;
-  num_t tmp;
+  int m, n, g;
+  int N = cfg->N, G = cfg->G;
+  char file[BUF];
   FILE *fp;
+  Chain *allHost_a;
   
-  if(cfg->someParmsFlag || cfg->allParmsFlag){   
-    if(cfg->someParmsFlag && some){
-      fp = fopen(cfg->someParmsFile, "w");
+  if(!cfg->parmsFlag)
+    return;
       
-      if(fp == NULL){
-        printf("ERROR: unable to create file, %s\n", cfg->someParmsFile);
-        return;
-      }
+  sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
+  fp = fopen(file, "w");
       
-      nlibs = 5 < cfg->N ? 5 : cfg->N;
-      ngenes = 5 < cfg->G ? 5 : cfg->G;
-    } else if(cfg->allParmsFlag && !some){
-      fp = fopen(cfg->allParmsFile, "w");
-      
-      if(fp == NULL){
-        printf("ERROR: unable to create file, %s\n", cfg->allParmsFile);
-        return;
-      }
-      
-      nlibs = cfg->N;
-      ngenes = cfg->G;
-    } else {
-      return;
-    }
+  if(fp == NULL){
+    printf("ERROR: unable to create file, %s\n", file);
+    return;
+  } 
     
-    for(n = 0; n < nlibs; ++n)
-      fprintf(fp, "c%d ", n);
+  for(n = 0; n < cfg->N; ++n)
+    fprintf(fp, "c%d ", n);
     
-    for(g = 0; g < ngenes; ++g)
-      fprintf(fp, "phi%d ", g);
+  for(g = 0; g < cfg->G; ++g)
+    fprintf(fp, "phi%d ", g);
     
-    for(g = 0; g < ngenes; ++g)
-      fprintf(fp, "alpha%d ", g);
+  for(g = 0; g < cfg->G; ++g)
+    fprintf(fp, "alpha%d ", g);
     
-    for(g = 0; g < ngenes; ++g)
-      fprintf(fp, "delta%d ", g);
+  for(g = 0; g < cfg->G; ++g)
+    fprintf(fp, "delta%d ", g);
       
-    for(g = 0; g < ngenes; ++g)
-      fprintf(fp, "eta%d ", g);
+  for(g = 0; g < cfg->G; ++g)
+    fprintf(fp, "eta%d ", g);
       
-    for(g = 0; g < ngenes; ++g)
-      for(n = 0; n < nlibs; ++n)
-        fprintf(fp, "eps_lib%d_gene%d ", n, g);
+  for(g = 0; g < cfg->G; ++g)
+    for(n = 0; n < cfg->N; ++n)
+      fprintf(fp, "eps_lib%d_gene%d ", n, g);
 
+  fprintf(fp, "\n");
+  allHost_a = chainDeviceToHost(host_a, dev_a, cfg);
+    
+  for(m = 0; m <= cfg->M; ++m){
+    for(n = 0; n < cfg->N; ++n)
+      fprintf(fp, NUM_TF, allHost_a->c[iN(m, n)]); fprintf(fp, " ");
+      
+    for(g = 0; g < cfg->G; ++g)
+      fprintf(fp, NUM_TF, allHost_a->phi[iG(m, g)]); fprintf(fp, " ");
+
+    for(g = 0; g < cfg->G; ++g)
+      fprintf(fp, NUM_TF, allHost_a->alp[iG(m, g)]); fprintf(fp, " ");
+      
+    for(g = 0; g < cfg->G; ++g)
+      fprintf(fp, NUM_TF, allHost_a->del[iG(m, g)]); fprintf(fp, " ");
+
+    for(g = 0; g < cfg->G; ++g)
+      fprintf(fp, NUM_TF, allHost_a->eta[iG(m, g)]); fprintf(fp, " ");
+      
+    for(n = 0; n < cfg->N; ++n)
+      for(g = 0; g < cfg->G; ++g)
+        fprintf(fp, NUM_TF, allHost_a->eps[iNG(m, n, g)]); fprintf(fp, " ");
+      
     fprintf(fp, "\n");
+  } 
     
-    for(m = 0; m <= cfg->M; ++m){
-      for(n = 0; n < nlibs; ++n){
-        tmp = a->c[iN(m, n)];
-        fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-      }
-      
-      for(g = 0; g < ngenes; ++g){
-        tmp = a->phi[iG(m, g)];
-        fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-      }
-
-      for(g = 0; g < ngenes; ++g){
-        tmp = a->alp[iG(m, g)];
-        fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-      }
-      
-      for(g = 0; g < ngenes; ++g){
-        tmp = a->del[iG(m, g)];
-        fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-      }      
-
-      for(g = 0; g < ngenes; ++g){
-        tmp = a->eta[iG(m, g)];
-        fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-      }    
-      
-      for(n = 0; n < nlibs; ++n)
-        for(g = 0; g < ngenes; ++g){
-          tmp = a->eps[iNG(m, n, g)];
-          fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-        }
-      
-      fprintf(fp, "\n");
-    } 
-    
-    fclose(fp);
-  }
-}
-
-void printParms(Chain *a, Config *cfg){
-  printParms_oneFile(a, cfg, 0);
-  printParms_oneFile(a, cfg, 1);
+  freeChain(allHost_a, cfg, 1);  
+  fclose(fp);
 }

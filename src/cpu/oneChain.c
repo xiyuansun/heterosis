@@ -5,12 +5,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void oneChain(int argc, char **argv){
-  Config *cfg = config(argc, argv);  
+void oneChain(Config *cfg){ 
   Chain *a = newChain(cfg);
   
   if(a == NULL){
-    freeConfig(cfg);
+    free(cfg);
     exit(EXIT_FAILURE);
   }
   
@@ -18,5 +17,4 @@ void oneChain(int argc, char **argv){
   summarizeChain(a, cfg);
   
   freeChain(a, cfg);
-  freeConfig(cfg);
-}
+} 

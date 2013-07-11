@@ -141,12 +141,12 @@ void samplePiDel_kernel3(Chain*);
 void samplePiDel(Chain*, Config*);
 
 void runChain(Chain*, Config*);
-void oneChain(int, char**);
+void oneChain(Config*);
+void chains(int, char**);
 
 void printProbs(Chain*, Config*);
 void printRates(Chain*, Config*);
 void printHyper(Chain*, Config*);
-void printParms_oneFile(Chain*, Config*, int);
 void printParms(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
 
