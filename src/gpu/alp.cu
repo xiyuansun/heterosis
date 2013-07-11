@@ -23,7 +23,7 @@ __device__ num_t alpProp(Chain *a, int g){ /* device */
   if(u < a->piAlp[a->mPiAlp]){
     nw = 0;
   } else {
-    nw = rnormal(avg, s);
+    nw = rnormalDevice(a, g, avg, s);
   }
 
   return nw;
