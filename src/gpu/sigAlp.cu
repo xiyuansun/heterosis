@@ -32,7 +32,7 @@ __global__ void sampleSigAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thru
     a->sigAlp[a->mSigAlp + 1] = a->sigAlp[a->mSigAlp]; 
   }
 
-  ++a->mSigAlp;
+  ++a->mSigAlp; 
 }
 
 __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
