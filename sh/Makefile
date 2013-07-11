@@ -32,10 +32,6 @@ cpu: $(CCOBJ)
 	mkdir -p ../obj/cpu
 	$(CC) $(CCFLAGS) $< -o $@ 
 
-clean:
-	rm -rf ../obj
-	rm -rf ../bin
-
 gpu: $(NVCCOBJ)
 	mkdir -p ../bin
 	$(NVCC) $(NVCCOBJ) -o ../bin/gpumcmc $(LDFLAGS)
