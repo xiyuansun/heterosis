@@ -150,6 +150,7 @@ Config *config(int argc, char **argv){
     fprintf(cfg->timeConfig, "parms ");
   }
   
-  fprintf(cfg->timeConfig, "\n"); 
+  fprintf(cfg->timeConfig, "\n");
+  fprintf(cfg->time, "\n"); 
   return cfg;
 }
