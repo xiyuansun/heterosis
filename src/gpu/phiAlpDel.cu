@@ -9,7 +9,7 @@ void samplePhiAlpDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
     samplePhiAlpDelJoint(host_a, dev_a, cfg);
   } else {*/
     samplePhi(host_a, dev_a, cfg);
-  /*  sampleAlp(host_a, dev_a, cfg);
+  /*   sampleAlp(host_a, dev_a, cfg);
     
     if(cfg->heterosis)
       sampleDel(host_a, dev_a, cfg);*/
