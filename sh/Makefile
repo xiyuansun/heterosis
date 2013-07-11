@@ -34,7 +34,7 @@ NVCCDEP+=runChain oneChain summarizeChain
 NVCCDEP+=printProbs printRates printHyper printParms
 NVCCDEP+=main
 
-NVCCOBJ=$(foreach name, $(NVDEP), ../obj/gpu/$(name).o)
+NVCCOBJ=$(foreach name, $(NVCCDEP), ../obj/gpu/$(name).o)
 
 all: cpu
 	
