@@ -1,6 +1,5 @@
 #include <Chain.h>
 #include <constants.h>
-#include <constants.h>
 #include <cuda.h>
 #include <curand_kernel.h>
 #include <functions.h>
@@ -87,7 +86,7 @@ __global__ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  int n, N = cfg->N;
+  int n;
   
   sampleC_kernel1<<<N_GRID, N_BLOCK>>>(dev_a);
 
