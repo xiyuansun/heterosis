@@ -104,8 +104,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   int n, g, G, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
-
-printf("okay");
+  
   y = readData(cfg);
   G = cfg->G;
   
