@@ -12,8 +12,7 @@ __host__ void printConfig(Config *cfg){
 
   printf("ratesFlag = %d\n", cfg->ratesFlag);
   printf("hyperFlag = %d\n", cfg->hyperFlag);
-  printf("someParmsFlag = %d\n", cfg->someParmsFlag);
-  printf("allParmsFlag = %d\n\n", cfg->allParmsFlag);  
+  printf("parmsFlag = %d\n", cfg->parmsFlag); 
   
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);

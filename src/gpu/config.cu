@@ -103,8 +103,7 @@ Config *config(int argc, char **argv){
   system("mkdir -p ../out/hyper/");
   system("mkdir -p ../out/probs/");
   system("mkdir -p ../out/rates/");
-  system("mkdir -p ../out/some-parms/");
-  system("mkdir -p ../out/all-parms/");
+  system("mkdir -p ../out/parms/");
   
   return cfg;
 }

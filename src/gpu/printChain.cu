@@ -15,8 +15,7 @@ __host__ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   printf("burnin = %d\n", allHost_a->burnin);
   printf("heterosis = %d\n", allHost_a->heterosis);
-  printf("someParmsFlag = %d\n", allHost_a->someParmsFlag);
-  printf("allParmsFlag = %d\n\n", allHost_a->allParmsFlag); 
+  printf("parmsFlag = %d\n", allHost_a->parmsFlag);
 
   pi2(allHost_a->y, allHost_a->N, allHost_a->G, "y = \n");
   pf1(allHost_a->yMeanG, allHost_a->N, "yMeanG =\n");
