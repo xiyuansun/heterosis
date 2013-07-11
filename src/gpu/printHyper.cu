@@ -3,6 +3,7 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +11,6 @@
 void printHyper(Chain *a, Config *cfg){
 
   int m;
-  num_t tmp;
   num_t *sigC, *d, *tau, *thePhi, *theAlp, *theDel, *sigPhi, *sigAlp, *sigDel, *piAlp, *piDel;
   char file[BUF];
   FILE *fp;
