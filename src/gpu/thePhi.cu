@@ -38,6 +38,5 @@ __host__ void sampleThePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
   
-  
   sampleThePhi_kernel2<<<1, 1>>>(dev_a);
 }

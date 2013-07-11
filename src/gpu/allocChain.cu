@@ -10,6 +10,12 @@
 
 __host__ void allocChainHost(Chain **a, Config *cfg){
 
+  float myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
+
   *a = (Chain*) malloc(sizeof(Chain));
   fprintf(cfg->log, "  Allocating chain.\n"); 
 
@@ -130,4 +136,11 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
   CUDA_CALL(cudaMalloc((void**) dev_a, sizeof(Chain)));  
   CUDA_CALL(cudaMemcpy(*dev_a, *host_a, sizeof(Chain), cudaMemcpyHostToDevice));
   
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  fprintf(cfg->time, "%0.3f ", myTime/60000.0); /* elapsed time in minutes */
 }

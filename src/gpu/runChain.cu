@@ -10,11 +10,6 @@
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
-  float myTime;
-  cudaEvent_t start, stop;
-  cudaEventCreate(&start);
-  cudaEventCreate(&stop);
-  cudaEventRecord(start, 0);
   
   fprintf(cfg->log, "  Running chain.\n");
   
@@ -39,12 +34,4 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
     fprintf(cfg->log, "\n");
   }
-  
-  cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop);
-  cudaEventElapsedTime(&myTime, start, stop);
-  cudaEventDestroy(start);
-  cudaEventDestroy(stop);
-  
-  fprintf(cfg->time, "%0.3f ", myTime/60000.0); /* elapsed time in minutes */
 } 
