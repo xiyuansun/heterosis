@@ -102,18 +102,26 @@ Config *config(int argc, char **argv){
   system("mkdir -p ../out/");
   system("mkdir -p ../out/probs/");
   
-  if(cfg->ratesFlag)
+  cfg->time = fopen("../out/time.txt", "w+");
+  fprintf(cfg->time, "alloc probs ");
+  
+  if(cfg->ratesFlag){
     system("mkdir -p ../out/rates/");
+    fprintf(cfg->time, "rates ");
+  }
   
-  if(cfg->hyperFlag)
+  if(cfg->hyperFlag){
     system("mkdir -p ../out/hyper/");
+    fprintf(cfg->time, "hyper ");
+  }
   
-  if(cfg->parmsFlag)
+  if(cfg->parmsFlag){
     system("mkdir -p ../out/parms/"); 
+    fprintf(cfg->time, "parms ");
+  }
 
   cfg->log = fopen("../out/log.txt", "w+");
-  cfg->time = fopen("../out/time.txt", "w+");
-  fprintf(cfg->time, "alloc probs rates hyper parms\n");
+
   
   return cfg;
 }
