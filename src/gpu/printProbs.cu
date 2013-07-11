@@ -8,8 +8,8 @@
 #include <string.h>
 
 void printProbs(Chain *a, Config *cfg){
-  int m, g, G = a->G, niter = cfg->M - cfg->burnin;
-  num_t alp, del;
+  int m, g, G = cfg->G, niter = cfg->M - cfg->burnin;
+  num_t *alp, *del;
   num_t prob_de, prob_hph, prob_lph, prob_mph;
   char file[BUF] = "../out/probs/chain";
   FILE *fp;
@@ -26,6 +26,12 @@ void printProbs(Chain *a, Config *cfg){
   if(cfg->heterosis)
     fprintf(fp, "hph lph mph");
   fprintf(fp, "\n");
+    
+  alp = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));    
+  del = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));
+
+  CUDA_CALL(cudaMemcpy(alp, a->alp, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost);
+  CUDA_CALL(cudaMemcpy(del, a->del, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost);
     
   for(g = 0; g < cfg->G; ++g){
     prob_de = 0;
@@ -46,12 +52,9 @@ void printProbs(Chain *a, Config *cfg){
       prob_mph = 0;
       
       for(m = cfg->burnin + 1; m <= cfg->M; ++m){
-        alp = a->alp[iG(m, g)];
-        del = a->del[iG(m, g)];
-          
-        prob_hph += (del > fabs(alp));
-        prob_lph += (del < -fabs(alp));
-        prob_mph += (fabs(del) > 1e-6);
+        prob_hph += (del[iG(m, g)] > fabs(alp[iG(m, g)]));
+        prob_lph += (del[iG(m, g)] < -fabs(alp[iG(m, g)]));
+        prob_mph += (fabs(del[iG(m, g)]) > 1e-6);
       }
       
       prob_hph /= niter;
@@ -64,6 +67,8 @@ void printProbs(Chain *a, Config *cfg){
     }
     fprintf(fp, "\n");
   }
-   
+
+  free(alp);
+  free(del);   
   fclose(fp);
 }
