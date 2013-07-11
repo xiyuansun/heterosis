@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
 
@@ -12,6 +13,8 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   int N = cfg->N, G = cfg->G;
   char file[BUF];
   FILE *fp;
+  double time;
+  clock_t start = clock();
   Chain *allHost_a;
   
   if(!cfg->parmsFlag)
@@ -74,4 +77,7 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
     
   freeChain(allHost_a, cfg, 1);  
   fclose(fp);
+
+  time = ((double) clock() - start) / (60 * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

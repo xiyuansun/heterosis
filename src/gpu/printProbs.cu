@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 void printProbs(Chain *a, Config *cfg){
   int m, g, G = cfg->G, niter = cfg->M - cfg->burnin;
@@ -13,7 +14,9 @@ void printProbs(Chain *a, Config *cfg){
   num_t prob_de, prob_hph, prob_lph, prob_mph;
   char file[BUF] = "../out/probs/chain";
   FILE *fp;
-  
+  double time;
+  clock_t start = clock();
+    
   fprintf(cfg->log, "  Printing heterosis / diff-expr probabilities.\n");
 
   sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
@@ -67,6 +70,9 @@ void printProbs(Chain *a, Config *cfg){
     }
     fprintf(fp, "\n");
   }
+
+  time = ((double) clock() - start) / (60 * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 
   free(alp);
   free(del);   

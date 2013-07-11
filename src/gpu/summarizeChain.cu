@@ -10,4 +10,6 @@ __host__ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
   printRates(host_a, dev_a, cfg);
   printHyper(host_a, cfg);
   printParms(host_a, dev_a, cfg);
+  
+  fprintf(cfg->time, "\n");
 }

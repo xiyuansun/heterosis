@@ -114,5 +114,6 @@ Config *config(int argc, char **argv){
   cfg->log = fopen("../out/log.txt", "w+");
   cfg->time = fopen("../out/time.txt", "w+");
   fprintf(cfg->time, "chain probs rates hyper parms\n");
+
   return cfg;
 }
