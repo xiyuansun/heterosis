@@ -105,12 +105,6 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
   
-  float myTime;
-  cudaEvent_t start, stop;
-  cudaEventCreate(&start);
-  cudaEventCreate(&stop);
-  cudaEventRecord(start, 0);
-  
   y = readData(cfg);
   G = cfg->G;
   
@@ -228,15 +222,6 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   newChain_kernel1<<<G_GRID, G_BLOCK>>>(*dev_a);
   newChain_kernel2<<<1, 1>>>(*dev_a);
- 
-  cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop);
-  cudaEventElapsedTime(&myTime, start, stop);
-  cudaEventDestroy(start);
-  cudaEventDestroy(stop);
-
-  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
-
  
   free(yMeanG);
   free(lqts);
