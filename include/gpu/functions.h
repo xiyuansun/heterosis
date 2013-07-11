@@ -123,11 +123,9 @@ __global__ void sampleThePhi_kernel1(Chain*);
 __global__ void sampleThePhi_kernel2(Chain*);
 __host__ void sampleThePhi(Chain*, Chain*, Config*);
 
-void sampleTheAlp_kernel1(Chain*);
-void sampleTheAlp_kernel2(Chain*);
-void sampleTheAlp_kernel3(Chain*);
-void sampleTheAlp_kernel4(Chain*);
-void sampleTheAlp(Chain*, Chain*, Config*);
+__global__ void sampleTheAlp_kernel1(Chain*);
+__global__ void sampleTheAlp_kernel2(Chain*);
+__host__ void sampleTheAlp(Chain*, Chain*, Config*);
 
 void sampleTheDel_kernel1(Chain*);
 void sampleTheDel_kernel2(Chain*);

@@ -5,11 +5,12 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <thrust/reduce.h>
 
-void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+__global__ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = GENE, G = a->G;
 
-  for(g = 0; g < a->G; ++g){
+  if(g < G){
     if(pow(a->alp[iG(a->mAlp, g)], 2) > 1e-6){
       a->tmp1[g] = 1;
       a->tmp2[g] = a->alp[iG(a->mAlp, g)];
@@ -20,44 +21,32 @@ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void sampleTheAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
-  int g, Galp = 0;
-  
-  for(g = 0; g < a->G; ++g) 
-    Galp += a->tmp1[g];
+__global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
-  a->s1 = Galp;
-}
-
-void sampleTheAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
-  int g;
-  num_t sm = 0;
-  
-  for(g = 0; g < a->G; ++g) 
-    sm += a->tmp2[g];
-
-  a->s2 = sm;
-}
-
-void sampleTheAlp_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
-
-  num_t gs = pow(a->gamAlp, 2);
-  num_t ss = pow(a->sigAlp[a->mSigAlp], 2);
+  num_t gs = a->gamAlp * a->gamAlp;
+  num_t ss = a->sigAlp[a->mSigAlp] * a->sigAlp[a->mSigAlp];
   num_t den = a->s1 * gs + ss;
 
   num_t m = gs * a->s2 / den;
   num_t s = sqrt(gs * ss / den);
 
-  a->theAlp[a->mTheAlp + 1] = rnormal(m, s);
+  a->theAlp[a->mTheAlp + 1] = rnormalDevice(a, 1, m, s);
   ++a->mTheAlp;
 }
 
-void sampleTheAlp(Chain *a, Config *cfg){ /* host */
+__host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constTheAlp)
     return;
 
-  sampleTheAlp_kernel1(a);
-  sampleTheAlp_kernel2(a);
-  sampleTheAlp_kernel3(a);
-  sampleTheAlp_kernel4(a);
+  sampleTheAlp_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  thrust::device_ptr<num_t> tmp2(host_a->tmp2);  
+  num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  sampleTheAlp_kernel2<<<NBLOCKS, NTHREADS>(dev_a);
 }
