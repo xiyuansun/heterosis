@@ -95,6 +95,6 @@ void printHyper(Chain *a, Config *cfg){
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
   
-    fprintf(cfg->timeConfig, "%0.3f ", myTime); /* elapsed time in minutes */    
+    fprintf(cfg->timeConfig, "%0.3f ", myTime/MILLISECS); /* elapsed time */    
   }
 }
