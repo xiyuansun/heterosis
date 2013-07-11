@@ -39,7 +39,7 @@ __host__ void pf3(num_t*, int, int, int, const char*);
 __host__ Config *config(int, char**);
 __host__ void getopts(Config*, int, char**);
 __host__ void printConfig(Config*);
-__void __ void freeConfig(Config*);
+__host__ void freeConfig(Config*);
 
 __host__ int *mySampleInt(int, int);
 __host__ int *readGrp(Config*);
