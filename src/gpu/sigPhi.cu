@@ -8,7 +8,7 @@
 #include <thrust/reduce.h>
 
 __global__ void sampleSigPhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g = GENE, G = a->G;
+  int g = IDX, G = a->G;
 
   if(g < G) 
     a->tmp1[g] = pow(a->phi[iG(a->mPhi, g)] - a->thePhi[a->mThePhi], 2);
@@ -32,7 +32,7 @@ void sampleSigPhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constSigPhi)
     return;
 
-  sampleSigPhi_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleSigPhi_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);

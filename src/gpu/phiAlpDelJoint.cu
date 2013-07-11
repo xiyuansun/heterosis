@@ -41,7 +41,7 @@ __device__ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, nu
 }
 
 __global__ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g = GENE, G = a->G;
+  int g = IDX, G = a->G;
   num_t oldPhi, newPhi, oldAlp, newAlp, oldDel, newDel;
   num_t dl, lp, lu;
 
@@ -90,6 +90,6 @@ __global__ void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void samplePhiAlpDelJoint(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  samplePhiAlpDelJoint_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  samplePhiAlpDelJoint_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   samplePhiAlpDelJoint_kernel2<<<1, 1>>>(dev_a);
 }

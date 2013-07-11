@@ -8,7 +8,7 @@
 #include <thrust/reduce.h>
 
 __global__ void sampleSigAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g = GENE, G = a->G;
+  int g = IDX, G = a->G;
 
   if(g < G){
     if(pow(a->alp[iG(a->mAlp, g)], 2) > 1e-6){
@@ -21,7 +21,7 @@ __global__ void sampleSigAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-__global__ void sampleSigAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
+__global__ void sampleSigAlp_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
   num_t shape = (a->s2 - 1) / 2;
   num_t rate = a->s1 / 2;
   num_t lb = 1/pow(a->sigAlp0, 2);
@@ -39,7 +39,7 @@ __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constSigAlp)
     return;
 
-  sampleSigAlp_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleSigAlp_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);

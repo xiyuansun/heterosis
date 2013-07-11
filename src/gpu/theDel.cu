@@ -8,7 +8,7 @@
 #include <thrust/reduce.h>
 
 __global__ void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g = GENE, G = a->G;
+  int g = IDX, G = a->G;
 
   if(g < G){ 
     if(pow(a->del[iG(a->mDel, g)], 2) > 1e-6){
@@ -38,7 +38,7 @@ void sampleTheDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constTheDel || !cfg->heterosis)
     return;
 
-  sampleTheDel_kernel1<<<NTHREADS, NBLOCKS>>>(dev_a);
+  sampleTheDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);

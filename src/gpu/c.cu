@@ -10,7 +10,7 @@
 #include <thrust/reduce.h>
 
 __global__ void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
-  int g = GENE, N = a->N, G = a->G;
+  int g = IDX, N = a->N, G = a->G;
   
   if(g < G)
     a->tmp1[g] = exp(a->eps[iNG(a->mEps, n, g)] + mu(a, n, a->phi[iG(a->mPhi, g)], 
@@ -37,7 +37,7 @@ __global__ void lC_kernel2(Chain *a, int n, int newArg){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void lC(Chain *host_a, Chain *dev_a, Config *cfg, int n, int newArg){ /* host */
-  lC_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a, n);
+  lC_kernel1<<<G_GRID, G_BLOCK>>>(dev_a, n);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
@@ -47,7 +47,7 @@ __host__ void lC(Chain *host_a, Chain *dev_a, Config *cfg, int n, int newArg){ /
 }
 
 __global__ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
-  int n = ((blockDim.x * blockIdx.x) + threadIdx.x), N = a->N;
+  int n = IDX, N = a->N;
   
   if(n < N){
     a->Old[n] = a->c[iN(a->mC, n)];
@@ -57,14 +57,14 @@ __global__ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
 }
 
 __global__ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
-  int n = ((blockDim.x * blockIdx.x) + threadIdx.x), N = a->N;
+  int n = IDX, N = a->N;
   num_t dl, lp, lu;
 
   if(n < N){ 
 
     dl = a->lNew[n] - a->lOld[n];
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiformDevice(a, 1, 0, 1));
+    lu = log(runiformDevice(a, n, 0, 1));
       
     if(lu < lp){ /* accept */
       a->c[iN(a->mC + 1, n)] = a->New[n];
@@ -88,16 +88,14 @@ __global__ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 
 __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int n, N = cfg->N;
-  int nthreads = (N < MAXTHREADS ? N : MAXTHREADS);
-  int nblocks = ceil(((float) cfg->N) / NTHREADS);
   
-  sampleC_kernel1<<<nblocks, nthreads>>>(dev_a);
+  sampleC_kernel1<<<N_GRID, N_BLOCK>>>(dev_a);
 
   for(n = 0; n < cfg->N; ++n){ 
     lC(host_a, dev_a, cfg, n, 1);
     lC(host_a, dev_a, cfg, n, 0);
   }
 
-  sampleC_kernel2<<<nblocks, nthreads>>>(dev_a);
+  sampleC_kernel2<<<N_GRID, N_BLOCK>>>(dev_a);
   sampleC_kernel3<<<1, 1>>>(dev_a);
 }

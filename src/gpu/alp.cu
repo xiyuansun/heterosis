@@ -31,7 +31,7 @@ __device__ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
 
 __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
-  int g = GENE, G = a->G;
+  int g = IDX, G = a->G;
   num_t old, nw, dl, lp, lu;
 
   if(g < G){ 
@@ -58,6 +58,6 @@ __global__ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  sampleAlp_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleAlp_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleAlp_kernel2<<<1, 1>>>(dev_a);
 }

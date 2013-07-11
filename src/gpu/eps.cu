@@ -13,7 +13,7 @@ __device__ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 }
 
 __global__ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
-  int n, g = GENE, N = a->N, G = a->G;
+  int n, g = IDX, N = a->N, G = a->G;
   num_t old, nw, dl, lp, lu;
 
   if(g < G){
@@ -44,6 +44,6 @@ __global__ void sampleEps_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  sampleEps_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleEps_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleEps_kernel2<<<1, 1>>>(dev_a);
 }

@@ -8,7 +8,7 @@
 #include <thrust/reduce.h>
 
 __global__ void sampleTau_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g = GENE, G = a->G;
+  int g = IDX, G = a->G;
   
   if(g < G)
     a->tmp1[g] = 1/pow(a->eta[iG(a->mEta, g)], 2);
@@ -31,7 +31,7 @@ void sampleTau(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constTau)
     return;
 
-  sampleTau_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleTau_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);

@@ -28,7 +28,7 @@ __device__ num_t lDel(Chain *a, int g, num_t arg){ /* device */
 }
 
 __global__ void sampleDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g = GENE, G = a->G;
+  int g = IDX, G = a->G;
   num_t old, nw, dl, lp, lu;
 
   if(g < G){ 
@@ -56,6 +56,6 @@ __global__ void sampleDel_kernel2(Chain *a){ /* kernel <<<1 1>>> */
 }
 
 __host__ void sampleDel(Chain *host_a, Chain *dev_a, Config* cfg){ /* host */
-  sampleDel_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleDel_kernel2<<<1, 1>>>(dev_a);
 }

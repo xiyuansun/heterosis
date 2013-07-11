@@ -11,7 +11,7 @@ __global__ void sampleEta_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __global__ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g = GENE, N = a->N, G = a->G;
+  int n, g = IDX, N = a->N, G = a->G;
   num_t shape = a->s1, rate;
 
   if(g < G){
@@ -36,6 +36,6 @@ __global__ void sampleEta_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 
 void sampleEta(Chain *host_a, Chain *dev_a, Config *cfg){
   sampleEta_kernel1<<<1, 1>>>(dev_a);
-  sampleEta_kernel2<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleEta_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleEta_kernel3<<<1, 1>>>(dev_a);
 }

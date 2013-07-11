@@ -18,7 +18,7 @@ __global__ void lD_kernel1(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 }
 
 __global__ void lD_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
-  int g = GENE, G = a->G;
+  int g = IDX, G = a->G;
 
   if(g < G){ 
     a->tmp1[g] = 2 * log(a->eta[iG(a->mEta, g)]);
@@ -49,7 +49,7 @@ __global__ void lD_kernel3(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
   
   lD_kernel1<<<1, 1>>>(dev_a, newArg);
-  lD_kernel2<<<NBLOCKS, NTHREADS>>>(dev_a);
+  lD_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
