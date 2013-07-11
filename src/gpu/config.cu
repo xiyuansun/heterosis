@@ -59,51 +59,80 @@ Config *config(int argc, char **argv){
   getopts(cfg, argc, argv);
   srand(cfg->seed);
 
-  /* 
-   *  All hyperparameters set in getopts() will be treated as constant.
-   *  All the others must be given initial values.
-   */
- 
-  if(!cfg->constSigC)
-    cfg->sigC = runiform(0, cfg->sigC0);
-  
-  if(!cfg->constD)
-    cfg->d = runiform(0, cfg->d0);
+  /* initialize output and chain */
 
-  if(!cfg->constTau)
-    cfg->tau = sqrt(rgamma(cfg->aTau, cfg->bTau, 0));
-
-  if(!cfg->constThePhi)
-    cfg->thePhi = rnormal(0, cfg->gamPhi);
-
-  if(!cfg->constTheAlp)
-    cfg->theAlp = rnormal(0, cfg->gamAlp);
-
-  if(!cfg->constTheDel)
-    cfg->theDel = rnormal(0, cfg->gamDel);
-
-  if(!cfg->constSigPhi)
-    cfg->sigPhi = runiform(0, cfg->sigPhi0);
-
-  if(!cfg->constSigAlp)
-    cfg->sigAlp = runiform(0, cfg->sigAlp0);
-
-  if(!cfg->constSigDel)
-    cfg->sigDel = runiform(0, cfg->sigDel0);
-
-  if(!cfg->constPiAlp)
-    cfg->piAlp = rbeta(cfg->aAlp, cfg->bAlp);
-
-  if(!cfg->constPiDel)
-    cfg->piDel = rbeta(cfg->aDel, cfg->bDel);
-  
-  /* initialize output */
-  
   system("mkdir -p ../out/");
   system("mkdir -p ../out/probs/");
   
+  cfg->log = fopen("../out/log.txt", "w+");
+  
   cfg->time = fopen("../out/time.txt", "w+");
-  fprintf(cfg->time, "alloc probs ");
+  fprintf(cfg->time, "alloc c ");
+
+  if(!cfg->constTau){
+    cfg->tau = sqrt(rgamma(cfg->aTau, cfg->bTau, 0));
+    fprintf(cfg->time, "tau ");
+  }
+ 
+  if(!cfg->constPiAlp){
+    cfg->piAlp = rbeta(cfg->aAlp, cfg->bAlp);
+    fprintf(cfg->time, "piDel ");
+  }
+  
+  if(!cfg->constPiDel){
+    cfg->piDel = rbeta(cfg->aDel, cfg->bDel);
+    fprintf(cfg->time, "piDel ");
+  }
+ 
+  if(!cfg->constD){
+    cfg->d = runiform(0, cfg->d0);
+    fprintf(cfg->time, "d ");
+  }
+ 
+  if(!cfg->constThePhi){
+    cfg->thePhi = rnormal(0, cfg->gamPhi);
+    fprintf(cfg->time, "thePhi ");
+  }
+
+  if(!cfg->constTheAlp){
+    cfg->theAlp = rnormal(0, cfg->gamAlp);
+    fprintf(cfg->time, "theAlp ");
+  }
+
+  if(!cfg->constTheDel){
+    cfg->theDel = rnormal(0, cfg->gamDel);
+    fprintf(cfg->time, "theDel ");
+  }
+ 
+  if(!cfg->constSigC){
+    cfg->sigC = runiform(0, cfg->sigC0);
+    fprintf(cfg->time, "sigC ");
+  }
+  
+  if(!cfg->constSigPhi){
+    cfg->sigPhi = runiform(0, cfg->sigPhi0);
+    fprintf(cfg->time, "sigPhi ");
+  }
+
+  if(!cfg->constSigAlp){
+    cfg->sigAlp = runiform(0, cfg->sigAlp0);
+    fprintf(cfg->time, "sigAlp ");
+  }
+
+  if(!cfg->constSigDel){
+    cfg->sigDel = runiform(0, cfg->sigDel0);
+    fprintf(cfg->time, "sigDel ");
+  }
+  
+  fprintf(cfg->time, "eta eps ");
+  
+  if(cfg->joint){
+    fprintf(cfg->time, "phiAlpDel ");
+  } else {
+    fprintf(cfg->time, "phi alp del ");
+  }
+  
+  fprintf(cfg->time, "probs ");
   
   if(cfg->ratesFlag){
     system("mkdir -p ../out/rates/");
@@ -119,10 +148,7 @@ Config *config(int argc, char **argv){
     system("mkdir -p ../out/parms/"); 
     fprintf(cfg->time, "parms ");
   }
-
-  fprintf(cfg->time, "\n");
-  cfg->log = fopen("../out/log.txt", "w+");
-
   
+  fprintf(cfg->time, "\n"); 
   return cfg;
 }

@@ -15,14 +15,15 @@ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
   num_t raccD, raccC, raccPhi, raccAlp, raccDel, raccEps;
   char file[BUF];
   FILE *fp;
-  
-  float myTime;
-  cudaEvent_t start, stop;
-  cudaEventCreate(&start);
-  cudaEventCreate(&stop);
-  cudaEventRecord(start, 0);
     
   if(cfg->ratesFlag){
+  
+    float myTime;
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start, 0);
+  
     fprintf(cfg->log, "  Printing Metropolis acceptance rates.\n");
   
     sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
@@ -128,20 +129,20 @@ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
       fprintf(fp, NUM_TF, raccEps); fprintf(fp, " ");
       fprintf(fp, "\n");
     }
-    
+
     free(accC);
     free(accPhi);
     free(accAlp);
     free(accDel);
     free(accEps);
     fclose(fp);
+    
+    cudaEventRecord(stop, 0);
+    cudaEventSynchronize(stop);
+    cudaEventElapsedTime(&myTime, start, stop);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+    
+    fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
   }
-  
-  cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop);
-  cudaEventElapsedTime(&myTime, start, stop);
-  cudaEventDestroy(start);
-  cudaEventDestroy(stop);
-  
-  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
 }

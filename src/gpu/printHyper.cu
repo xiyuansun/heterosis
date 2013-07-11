@@ -87,15 +87,14 @@ void printHyper(Chain *a, Config *cfg){
     free(sigDel);
     free(piAlp);
     free(piDel);
-    
     fclose(fp);
+    
+    cudaEventRecord(stop, 0);
+    cudaEventSynchronize(stop);
+    cudaEventElapsedTime(&myTime, start, stop);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+  
+    fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */    
   }
-  
-  cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop);
-  cudaEventElapsedTime(&myTime, start, stop);
-  cudaEventDestroy(start);
-  cudaEventDestroy(stop);
-  
-  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
 }

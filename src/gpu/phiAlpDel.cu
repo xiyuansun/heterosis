@@ -1,5 +1,7 @@
 #include <Chain.h>
 #include <constants.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,5 +1,7 @@
 #include <Chain.h>
 #include <constants.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
@@ -44,8 +46,22 @@ __global__ void sampleEps_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  float myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
+
   fprintf(cfg->log, "eps ");
 
   sampleEps_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleEps_kernel2<<<1, 1>>>(dev_a);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
 }

@@ -1,6 +1,7 @@
 #include <Chain.h>
 #include <constants.h>
 #include <cuda.h>
+#include <cuda_runtime.h>
 #include <curand_kernel.h>
 #include <functions.h>
 #include <math.h>
@@ -87,6 +88,13 @@ __global__ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 
 __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int n;
+  
+  float myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);  
+  
   fprintf(cfg->log, "c ");
   
   sampleC_kernel1<<<N_GRID, N_BLOCK>>>(dev_a);
@@ -98,4 +106,12 @@ __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   sampleC_kernel2<<<N_GRID, N_BLOCK>>>(dev_a);
   sampleC_kernel3<<<1, 1>>>(dev_a);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
 }

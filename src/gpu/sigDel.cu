@@ -1,6 +1,8 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
@@ -36,6 +38,12 @@ __global__ void sampleSigDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  float myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
+
   fprintf(cfg->log, "sigDel ");
 
   if(cfg->constSigDel || !cfg->heterosis)
@@ -52,4 +60,12 @@ __host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
  
   sampleSigDel_kernel2<<<1, 1>>>(dev_a);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
 }
