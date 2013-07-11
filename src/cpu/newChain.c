@@ -126,8 +126,7 @@ Chain *newChain(Config *cfg){ /* host */
   a->G = cfg->G;
   a->burnin = cfg->burnin;
   a->heterosis = cfg->heterosis;
-  a->someParmsFlag = cfg->someParmsFlag;
-  a->allParmsFlag = cfg->allParmsFlag;
+  a->parmsFlag = cfg->parmsFlag;
   
   for(n = 0; n < cfg->N; ++n){
     

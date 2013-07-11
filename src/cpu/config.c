@@ -19,8 +19,7 @@ Config *config(int argc, char **argv){
    
   cfg->ratesFlag = 0;
   cfg->hyperFlag = 0;
-  cfg->someParmsFlag = 0;
-  cfg->allParmsFlag = 0;
+  cfg->parmsFlag = 0;
 
   cfg->M = 10;  
   cfg->burnin = cfg->M / 2;
@@ -101,11 +100,16 @@ Config *config(int argc, char **argv){
   /* make output directories */
   
   system("mkdir -p ../out/");
-  system("mkdir -p ../out/hyper/");
   system("mkdir -p ../out/probs/");
-  system("mkdir -p ../out/rates/");
-  system("mkdir -p ../out/some-parms/");
-  system("mkdir -p ../out/all-parms/");
+  
+  if(cfg->ratesFlag)
+    system("mkdir -p ../out/rates/");
+  
+  if(cfg->hyperFlag)
+    system("mkdir -p ../out/hyper/");
+  
+  if(cfg->parmsFlag)
+    system("mkdir -p ../out/parms/"); 
   
   return cfg;
 }

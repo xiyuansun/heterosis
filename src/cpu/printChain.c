@@ -13,8 +13,7 @@ void printChain(Chain *a){
   
   printf("burnin = %d\n", a->burnin);
   printf("heterosis = %d\n", a->heterosis);
-  printf("someParmsFlag = %d\n", a->someParmsFlag);
-  printf("allParmsFlag = %d\n\n", a->allParmsFlag); 
+  printf("parmsFlag = %d\n", a->parmsFlag);
 
   pi2(a->y, a->N, a->G, "y = \n");
   pf1(a->yMeanG, a->N, "yMeanG =\n");

@@ -146,7 +146,6 @@ void oneChain(Config*);
 void printProbs(Chain*, Config*);
 void printRates(Chain*, Config*);
 void printHyper(Chain*, Config*);
-void printParms_oneFile(Chain*, Config*, int);
 void printParms(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
 

@@ -12,8 +12,7 @@ typedef struct {
 
   int ratesFlag; /* choice to output acceptance rates */
   int hyperFlag; /* choice to output hyperparameters */
-  int someParmsFlag; /* choice to output parameters for first few genes and samples */
-  int allParmsFlag; /* choice to output all parameters */
+  int parmsFlag; /* choice to output parameters */
    
   int burnin; /* burn-in of chain. Defaults to M/2. */
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */

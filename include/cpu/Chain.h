@@ -14,8 +14,7 @@ typedef struct {
   int G; /* number of genes */
   int burnin; 
   int heterosis;
-  int someParmsFlag;
-  int allParmsFlag;
+  int parmsFlag;
   
   /* initialization constants */
   
