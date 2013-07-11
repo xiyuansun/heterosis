@@ -140,11 +140,9 @@ __global__ void sampleSigAlp_kernel1(Chain*);
 __global__ void sampleSigAlp_kernel2(Chain*);
 __host__ void sampleSigAlp(Chain*, Chain*, Config*);
 
-void sampleSigDel_kernel1(Chain*);
-void sampleSigDel_kernel2(Chain*);
-void sampleSigDel_kernel3(Chain*);
-void sampleSigDel_kernel4(Chain*);
-void sampleSigDel(Chain*, Chain*, Config*);
+__global__ void sampleSigDel_kernel1(Chain*);
+__global__ void sampleSigDel_kernel2(Chain*);
+__host__ void sampleSigDel(Chain*, Chain*, Config*);
 
 __global__ void samplePiAlp_kernel1(Chain*);
 __global__ void samplePiAlp_kernel2(Chain*);
