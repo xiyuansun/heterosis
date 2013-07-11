@@ -13,18 +13,18 @@ __host__ int cmpfunc (const void *a, const void *b){
 }
 
 __global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
-  int id = GENE;
+  int id = IDX;
   curand_init(seed, id, 0, &(a->states[id]));
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, N = a->N, G = a->G;
-  int g = GENE;
+  int g = IDX;
   num_t u;
 
   a->phi[iG(0, g)] = rnormalDevice(a, g, a->thePhi[0], a->sigPhi[0]);
 
-  u = 1; /* runiform(0, 1) */;
+  u = runiformDevice(a, g, 0, 1);
   if(u < a->piAlp[0]){
     a->alp[iG(0, g)] = 0;
   } else {
@@ -217,11 +217,11 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   /* set up CURAND */
   
-  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
+  curand_setup_kernel<<<G_GRID, G_BLOCK>>>(*dev_a, cfg->seed);
   
   /* compute the rest of the initial values */
   
-  newChain_kernel1<<<NBLOCKS, NTHREADS>>>(*dev_a);
+  newChain_kernel1<<<G_GRID, G_BLOCK>>>(*dev_a);
   newChain_kernel2<<<1, 1>>>(*dev_a);
   
   free(yMeanG);
