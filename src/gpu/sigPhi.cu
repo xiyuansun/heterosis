@@ -20,7 +20,7 @@ __global__ void sampleSigPhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t lb = 1/pow(a->sigPhi0, 2);
 
   if(shape >= 1 && rate > 0){
-    a->sigPhi[a->mSigPhi + 1] = 1/sqrt(rgamma(shape, rate, lb));
+    a->sigPhi[a->mSigPhi + 1] = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));
   } else {
     a->sigPhi[a->mSigPhi + 1] = a->sigPhi[a->mSigPhi];
   }
