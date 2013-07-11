@@ -13,7 +13,10 @@ __host__ int cmpfunc (const void *a, const void *b){
 }
 
 __global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
-  int id = GENE;
+  int g = (blockDim.x * blockIdx.x) + threadIdx.x;
+  int n = (blockDim.y * blockIdx.y) + threadIdx.y;
+
+  int id = iG(n, g);
   curand_init(seed, id, 0, &(a->states[id]));
 }
 
@@ -217,7 +220,10 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   /* set up CURAND */
   
-  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
+  dim3 dimGrid(ceil(((float) cfg->G) / NTHREADS), ceil(((float) cfg->N / NTHREADS)));
+  dim3 dimBlock(cfg->G < MAXTHREADS ? cfg->G : MAXTHREADS, cfg->N < MAXTHREADS ? cfg->N : MAXTHREADS);
+  
+  curand_setup_kernel<<<dimGrid, dimBlock>>>(*dev_a, cfg->seed);
   
   /* compute the rest of the initial values */
   

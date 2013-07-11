@@ -20,7 +20,7 @@ __host__ void allocChainHost(Chain **a, Config *cfg){
 
   /* curand states */
   
-  (*a)->states = (curandState*) malloc(cfg->G * sizeof(curandState));
+  (*a)->states = (curandState*) malloc(cfg->G * cfg->N * sizeof(curandState));
 
   /* parameters */
 
