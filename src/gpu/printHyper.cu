@@ -17,7 +17,7 @@ void printHyper(Chain *a, Config *cfg){
   char file[BUF];
   FILE *fp;
   
-  double myTime;
+  float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);

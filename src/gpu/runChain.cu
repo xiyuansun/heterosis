@@ -10,7 +10,7 @@
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
-  double myTime;
+  float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
