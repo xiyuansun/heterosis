@@ -50,7 +50,7 @@ gpu: $(NVCCOBJ)
 	mkdir -p ../bin
 	$(NVCC) $(NVCCOBJ) -o ../bin/gpumcmc $(LDFLAGS)
 
-../obj/gpu/%.o: ../src/gpu/%.c
+$(NVCCOBJ): ../src/gpu/%.c
 	mkdir -p ../obj/gpu
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
 
