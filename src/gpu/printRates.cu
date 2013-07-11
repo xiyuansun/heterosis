@@ -30,7 +30,7 @@ void printRates(Chain *a, Config *cfg){
     accC    = a->accC[0];
     accC   /= niter;
     
-    accPhi  = a->accPhi[0];
+    accPhi  = a->accPhi[0]; 
     accPhi /= niter;
 
     accAlp  = a->accAlp[0];
