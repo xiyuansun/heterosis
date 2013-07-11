@@ -118,9 +118,9 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     return;
   }
 
-
+printf("1\n");
   allocChainDevice(host_a, dev_a, cfg);
-  printf("1\n");
+  
   /* data and configuration info */
 
   CUDA_CALL(cudaMemcpy(&((*dev_a)->M), &(cfg->M), sizeof(int), cudaMemcpyHostToDevice));
