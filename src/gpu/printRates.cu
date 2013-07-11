@@ -15,8 +15,6 @@ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
   FILE *fp;
   
   if(cfg->ratesFlag){
-  
-    system("mkdir -p ../out/rates/");
     sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w"); 
     

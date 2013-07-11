@@ -97,9 +97,13 @@ Config *config(int argc, char **argv){
   if(!cfg->constPiDel)
     cfg->piDel = rbeta(cfg->aDel, cfg->bDel);
   
-  /* make output directory */
+  /* make output directories */
   
   system("mkdir -p ../out/");
+  system("mkdir -p ../out/hyper/");
+  system("mkdir -p ../out/probs/");
+  system("mkdir -p ../out/rates/");
+  system("mkdir -p ../out/parms/");
   
   return cfg;
 }

@@ -16,8 +16,7 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   
   if(!cfg->parmsFlag)
     return;
-
-  system("mkdir -p ../out/parms/");
+      
   sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
   fp = fopen(file, "w");
       
