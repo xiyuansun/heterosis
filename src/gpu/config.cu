@@ -19,8 +19,7 @@ Config *config(int argc, char **argv){
    
   cfg->ratesFlag = 0;
   cfg->hyperFlag = 0;
-  cfg->someParmsFlag = 0;
-  cfg->allParmsFlag = 0;
+  cfg->parmsFlag = 0;
 
   cfg->M = 10;  
   cfg->burnin = cfg->M / 2;

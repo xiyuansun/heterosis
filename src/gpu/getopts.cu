@@ -16,8 +16,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"burnin", required_argument, 0, 'b'},
     {"rates", no_argument, 0, 'r'},  
     {"hyper", no_argument, 0, 'h'},
-    {"some-parms", no_argument, 0, 'p'},
-    {"all-parms", no_argument, 0, 'P'},
+    {"parms", no_argument, 0, 'p'},
     {"joint", no_argument, 0, 'j'},  
     {"seed", required_argument, 0, 's'},  
     {"sigma-c0", required_argument, 0, 'x'},
@@ -52,7 +51,7 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "A:ab:c:d:e:f:g:hi:jk:l:m:M:n:o:Ppq:rs:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
+        "A:ab:c:d:e:f:g:hi:jk:l:m:M:n:o:pq:rs:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
         long_options, &option_index);
     
     if(c == -1)
@@ -76,11 +75,8 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'h') { /* hyper */
       cfg->hyperFlag = 1;
     
-    } else if(c == 'p') { /* some-parms */
-      cfg->someParmsFlag = 1;
-    
-    } else if(c == 'P') { /* all-parms */
-      cfg->allParmsFlag = 1;
+    } else if(c == 'p') { /* parms */
+      cfg->parmsFlag = 1;
     
     } else if(c == 'j') { /* joint */
       cfg->joint = 1;
