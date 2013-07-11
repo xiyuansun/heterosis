@@ -5,13 +5,13 @@
 #include <stdlib.h>
 
 void samplePhiAlpDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  /*if(cfg->joint && cfg->heterosis){
+  if(cfg->joint && cfg->heterosis){
     samplePhiAlpDelJoint(host_a, dev_a, cfg);
-  } else {*/
+  } else {
     samplePhi(host_a, dev_a, cfg);
     sampleAlp(host_a, dev_a, cfg);
     
     if(cfg->heterosis)
       sampleDel(host_a, dev_a, cfg);
-  /*}*/
+  }
 }

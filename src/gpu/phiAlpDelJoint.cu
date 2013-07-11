@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
+__device__ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
  
   int n, N = a->N, G = a->G;
   num_t ret, s = 0, tmp = 0;
@@ -40,15 +40,15 @@ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel)
   return ret + tmp;
 }
 
-void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+__global__ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = GENE, G = a->G;
   num_t oldPhi, newPhi, oldAlp, newAlp, oldDel, newDel;
   num_t dl, lp, lu;
 
-  for(g = 0; g < a->G; ++g){
+  if(g < G){
 
     oldPhi = a->phi[iG(a->mPhi, g)];
-    newPhi = rnormal(oldPhi, a->tunePhi[g]);
+    newPhi = rnormalDevice(a, g, oldPhi, a->tunePhi[g]);
 
     oldAlp = a->alp[iG(a->mAlp, g)];
     newAlp = alpProp(a, g);
@@ -59,7 +59,7 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     dl = lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
        - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel);
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1));
+    lu = log(runiformDevice(a, g, 0, 1));
     
     if(lu < lp){ /* accept */
       a->phi[iG(a->mPhi + 1, g)] = newPhi;
@@ -83,13 +83,13 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mPhi;
   ++a->mAlp;
   ++a->mDel;
 }
 
-void samplePhiAlpDelJoint(Chain *a){ /* host */
-  samplePhiAlpDelJoint_kernel1(a);
-  samplePhiAlpDelJoint_kernel2(a);
+__host__ void samplePhiAlpDelJoint(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  samplePhiAlpDelJoint_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  samplePhiAlpDelJoint_kernel2<<<1, 1>>>(dev_a);
 }
