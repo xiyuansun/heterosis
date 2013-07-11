@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
   int n, N = a->N;
   num_t rate, shape, lb;
 
@@ -28,4 +28,8 @@ void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
   }
 
   ++a->mSigC;
+}
+
+__host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *a){ 
+  sampleSigC_kernel<<<1, 1>>>(dev_a);
 }
