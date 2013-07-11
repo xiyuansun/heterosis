@@ -13,12 +13,11 @@ __device__ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 }
 
 __global__ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
-  int g = IDX;
-  int N = a->N, G = a->G;
+  int n, g = IDX, N = a->N, G = a->G;
   num_t old, nw, dl, lp, lu;
 
   if(g < G){
-    for(n = 0; n < N; ++n){ 
+    for(n = 0; n < a->N; ++n){ 
       old = a->eps[iNG(a->mEps, n, g)];
       nw = rnormalDevice(a, g, old, a->tuneEps[iG(n, g)]);
 
