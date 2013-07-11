@@ -109,5 +109,5 @@ __host__ void samplePhiAlpDelJoint(Chain *host_a, Chain *dev_a, Config *cfg){ /*
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   
-  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
+  fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
 }

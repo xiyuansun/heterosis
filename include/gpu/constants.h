@@ -23,6 +23,8 @@
 #define IDY ((blockDim.x * blockIdx.x) + threadIdx.x)
 #define ID ((gridDim.x * blockDim.x * IDY) + IDX)
 
+#define MILLISECS 60000.0 /* number of milliseconds in a unit of time in output */
+
 typedef int count_t;
 typedef float num_t;
 

@@ -67,7 +67,6 @@ Config *config(int argc, char **argv){
   cfg->log = fopen("../out/log.txt", "w+");
   
   cfg->time = fopen("../out/time.txt", "w+");
-  cfg->timeConfig = fopen("../out/timeConfig.txt", "w+");
   fprintf(cfg->time, "c ");
 
   if(!cfg->constTau){
@@ -133,6 +132,7 @@ Config *config(int argc, char **argv){
     fprintf(cfg->time, "phi alp del ");
   }
   
+  cfg->timeConfig = fopen("../out/timeConfig.txt", "w+");
   fprintf(cfg->timeConfig, "alloc probs ");
   
   if(cfg->ratesFlag){
