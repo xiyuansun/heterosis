@@ -237,7 +237,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   
   int *idh = (int*) malloc(cfg->G * cfg->N * sizeof(int)), *idd;
-  CUDA_CALL(cudaMalloc((void**) idd, cfg->G * cfg->N * sizeof(int)));
+  CUDA_CALL(cudaMalloc((void**) &idd, cfg->G * cfg->N * sizeof(int)));
   
   curand_setup_kernel<<<dimGrid, dimBlock>>>(*dev_a, cfg->seed, idd);
   CUDA_CALL(cudaMemcpy(idh, idd, cfg->G * cfg->N * sizeof(int), cudaMemcpyDeviceToHost));
