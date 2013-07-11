@@ -6,21 +6,35 @@ NVCCFLAGS=-c -I../include/gpu -arch=sm_20
 
 LDFLAGS=-lm
 
-DEP=printArrays config getopts printConfig freeConfig
-DEP+=mySampleInt readGrp readData
-DEP+=allocChain newChain printChain freeChain
-DEP+=mu runiform rnormal rgamma rbeta
-DEP+=c sigC eta d tau # eps
-#DEP+=phi alp del phiAlpDelJoint phiAlpDel
-DEP+=thePhi theAlp theDel
-DEP+=sigPhi sigAlp sigDel
-DEP+=piAlp piDel
-DEP+=runChain oneChain summarizeChain
-DEP+=printProbs printRates printHyper printParms
-DEP+=main
+CCDEP=printArrays config getopts printConfig freeConfig
+CCDEP+=mySampleInt readGrp readData
+CCDEP+=allocChain newChain printChain freeChain
+CCDEP+=mu runiform rnormal rgamma rbeta
+CCDEP+=c sigC eta d tau eps
+CCDEP+=phi alp del phiAlpDelJoint phiAlpDel
+CCDEP+=thePhi theAlp theDel
+CCDEP+=sigPhi sigAlp sigDel
+CCDEP+=piAlp piDel
+CCDEP+=runChain oneChain summarizeChain
+CCDEP+=printProbs printRates printHyper printParms
+CCDEP+=main
 
-CCOBJ=$(foreach name, $(DEP), ../obj/cpu/$(name).o)
-NVCCOBJ=$(foreach name, $(DEP), ../obj/gpu/$(name).o)
+CCOBJ=$(foreach name, $(CCDEP), ../obj/cpu/$(name).o)
+
+NVCCDEP=printArrays config getopts printConfig freeConfig
+NVCCDEP+=mySampleInt readGrp readData
+NVCCDEP+=allocChain newChain printChain freeChain
+NVCCDEP+=runiform rnormal rgamma rbeta
+NVCCDEP+=c sigC eta d tau # eps
+# NVCCDEP+=phi alp del phiAlpDelJoint phiAlpDel
+NVCCDEP+=thePhi theAlp theDel
+NVCCDEP+=sigPhi sigAlp sigDel
+NVCCDEP+=piAlp piDel
+NVCCDEP+=runChain oneChain summarizeChain
+NVCCDEP+=printProbs printRates printHyper printParms
+NVCCDEP+=main
+
+NVCCOBJ=$(foreach name, $(NVDEP), ../obj/gpu/$(name).o)
 
 all: cpu
 	
