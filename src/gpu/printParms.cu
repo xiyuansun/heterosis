@@ -16,12 +16,6 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   FILE *fp;
   Chain *allHost_a;
   
-  float myTime;
-  cudaEvent_t start, stop;
-  cudaEventCreate(&start);
-  cudaEventCreate(&stop);
-  cudaEventRecord(start, 0);
-  
   if(cfg->parmsFlag){
 
 	fprintf(cfg->log, "  Printing parameters.\n"); 
@@ -82,12 +76,4 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
 	freeChain(allHost_a, cfg, 1);  
 	fclose(fp);
   }
-
-  cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop);
-  cudaEventElapsedTime(&myTime, start, stop);
-  cudaEventDestroy(start);
-  cudaEventDestroy(stop);
-  
-  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
 }
