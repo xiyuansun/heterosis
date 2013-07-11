@@ -1,5 +1,8 @@
-1) implement in CUDA C
-2) validate with BaySeq
+1) parallelize across libraries
+2) run and output summaries of multiple chains
+3) implement logfile in both C and CUDA C versions to track progress.
+4) compute DIC in both versions (summary).
+5) compute Gelman factors 
 
 ./mcmc -data [DATA-FILE] 
        -group [GROUP-FILE]                   # Assignment of libraries to treatment groups 

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printRates(Chain *a, Config *cfg){
+__host__ void printRates(Chain *a, Config *cfg){
 
   int n, i, G = a->G, niter = cfg->M - cfg->burnin;
   num_t accD, accC, accPhi, accAlp, accDel, accEps;

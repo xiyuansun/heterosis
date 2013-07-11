@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printProbs(Chain *a, Config *cfg){
+__host__ void printProbs(Chain *a, Config *cfg){
   int m, g, G = a->G, niter = cfg->M - cfg->burnin;
   num_t alp, del;
   num_t prob_de, prob_hph, prob_lph, prob_mph;

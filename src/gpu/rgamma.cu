@@ -1,10 +1,11 @@
-#include <functions.h>
+#include <Chain.h>
 #include <constants.h>
+#include <functions.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-num_t rgamma(num_t shape, num_t rate, num_t lb){
+__host__ num_t rgamma(num_t shape, num_t rate, num_t lb){
    
   num_t A, c, d, r, u, v, w, x, z, eps, eps0, 
         haznaz, lam, ret, tmp1, tmp2;
@@ -115,3 +116,5 @@ num_t rgamma(num_t shape, num_t rate, num_t lb){
     }
   }
 }
+
+/* See functions.h for device version. */

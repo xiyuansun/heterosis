@@ -5,42 +5,38 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <thrust/reduce.h>
 
-void sampleSigPhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+__global__ void sampleSigPhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = IDX, G = a->G;
 
-  for(g = 0; g < a->G; ++g) 
+  if(g < G) 
     a->tmp1[g] = pow(a->phi[iG(a->mPhi, g)] - a->thePhi[a->mThePhi], 2);
 }
 
-void sampleSigPhi_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
-  int g;
-  num_t rate = 0;
-  
-  for(g = 0; g < a->G; ++g)
-    rate += a->tmp1[g];
-  a->s1 = rate;  
-}
-
-void sampleSigPhi_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void sampleSigPhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t rate = a->s1 / 2;
   num_t shape = (a->G - 1) / 2;
   num_t lb = 1/pow(a->sigPhi0, 2);
 
   if(shape >= 1 && rate > 0){
-    a->sigPhi[a->mSigPhi + 1] = 1/sqrt(rgamma(shape, rate, lb));
+    a->sigPhi[a->mSigPhi + 1] = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));
   } else {
     a->sigPhi[a->mSigPhi + 1] = a->sigPhi[a->mSigPhi];
   }
-
+ 
   ++a->mSigPhi;
 }
 
-void sampleSigPhi(Chain *a, Config *cfg){ /* host */
+void sampleSigPhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constSigPhi)
     return;
 
-  sampleSigPhi_kernel1(a);
-  sampleSigPhi_kernel2(a);
-  sampleSigPhi_kernel3(a);
+  sampleSigPhi_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  sampleSigPhi_kernel2<<<1, 1>>>(dev_a);
 }

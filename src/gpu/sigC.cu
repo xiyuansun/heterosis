@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
   int n, N = a->N;
   num_t rate, shape, lb;
 
@@ -22,10 +22,14 @@ void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
   lb = 1 / pow(a->sigC0, 2); 
 
   if(shape >= 1 && rate > 0){
-    a->sigC[a->mSigC + 1] = 1/sqrt(rgamma(shape, rate, lb));
+    a->sigC[a->mSigC + 1] = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));
   } else {
     a->sigC[a->mSigC + 1] = a->sigC[a->mSigC];
   }
 
   ++a->mSigC;
+}
+
+__host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *a){ 
+  sampleSigC_kernel<<<1, 1>>>(dev_a);
 }

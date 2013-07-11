@@ -5,36 +5,31 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <thrust/reduce.h>
 
-void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+__global__ void lD_kernel1(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
+  if(newArg){
+    if(a->New[0] <= 0 || a->New[0] > a->d0)
+     a->lNew[0] = NUM_TMIN;
+  } else {
+    if(a->Old[0] <= 0 || a->Old[0] > a->d0)
+      a->lOld[0] = NUM_TMIN; 
+  }
+}
 
-  for(g = 0; g < a->G; ++g){ 
+__global__ void lD_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = IDX, G = a->G;
+
+  if(g < G){ 
     a->tmp1[g] = 2 * log(a->eta[iG(a->mEta, g)]);
     a->tmp2[g] = 1/(a->eta[iG(a->mEta, g)] * a->eta[iG(a->mEta, g)]);
   }
 }
 
-void lD_kernel2(Chain *a){ /* kernel: pairwise sum in Thrust */
-  int g;
-  a->s1 = 0;
-
-  for(g = 0; g < a->G; ++g) /* PARALLELIZE */
-    a->s1 += a->tmp1[g];
-}
-
-void lD_kernel3(Chain *a){ /* kernel: pairwise sum in Thrust */
-  int g;
-  a->s2 = 0;
-
-  for(g = 0; g < a->G; ++g) /* PARALLELIZE */
-    a->s2 += a->tmp2[g];
-}
-
-void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
+__global__ void lD_kernel3(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   num_t arg, ret, tmp;
  
-  if(newArg){
+  if(newArg){ 
     arg = a->New[0];
   } else{
     arg = a->Old[0];
@@ -51,40 +46,39 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   }
 }
 
-void lD(Chain *a, int newArg){ /* host */
+__host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
   
-  if(newArg){
-    if(a->New[0] <= 0 || a->New[0] > a->d0)
-      a->lNew[0] = NUM_TMIN;
-  } else {
-    if(a->Old[0] <= 0 || a->Old[0] > a->d0)
-      a->lOld[0] = NUM_TMIN; 
-  }
-
-  lD_kernel1(a);
-  lD_kernel2(a);
-  lD_kernel3(a);
-  lD_kernel4(a, newArg);
+  lD_kernel1<<<1, 1>>>(dev_a, newArg);
+  lD_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);
+  
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  thrust::device_ptr<num_t> tmp2(host_a->tmp2);  
+  num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  lD_kernel3<<<1, 1>>>(dev_a, newArg);
 }
 
-void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
   a->Old[0] = a->d[a->mD];
   
   do {
-    a->New[0] = rnormal(a->Old[0], a->tuneD);
+    a->New[0] = rnormalDevice(a, 1, a->Old[0], a->tuneD);
   } while(a->New[0] < 0);
 }
 
-void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t dl = a->lNew[0] - a->lOld[0];
   num_t lp = 0 < dl ? 0 : dl;
-  num_t lu = log(runiform(0, 1));
+  num_t lu = log(runiformDevice(a, 1, 0, 1));
 
   if(lu < lp){ /* accept */
     a->d[a->mD + 1] = a->New[0];
     a->tuneD *= 1.1; /* Increase the proposal variance to avoid getting 
                                   stuck in a mode */
-    
     if(a->mD >= a->burnin) 
       ++a->accD;
   } else { /* reject */
@@ -96,14 +90,14 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mD;
 }
 
-void sampleD(Chain *a, Config *cfg){ /* host */
+__host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constD)
     return;
    
-  sampleD_kernel1(a);
+  sampleD_kernel1<<<1, 1>>>(dev_a);
 
-  lD(a, 1);
-  lD(a, 0);
+  lD(host_a, dev_a, cfg, 1);
+  lD(host_a, dev_a, cfg, 0);
 
-  sampleD_kernel2(a);
+  sampleD_kernel2<<<1, 1>>>(dev_a);
 }

@@ -5,11 +5,12 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <thrust/reduce.h>
 
-void samplePiDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+__global__ void samplePiDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = IDX, G = a->G;
 
-  for(g = 0; g < a->G; ++g){ 
+  if(g < G){ 
     if(pow(a->del[iG(a->mDel, g)], 2) > 1e-6){
       a->tmp1[g] = 1; 
     } else {
@@ -18,25 +19,20 @@ void samplePiDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   } 
 }
 
-void samplePiDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
-
-  int g, Gdel = 0;
-  for(g = 0; g < a->G; ++g) 
-     Gdel += a->tmp1[g];
-
-  a->s1 = Gdel;
-}
-
-void samplePiDel_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
-  a->piDel[a->mPiDel + 1] = rbeta(a->G + a->s1 + a->aTau, a->s1 + a->bTau);
+__global__ void samplePiDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
+  a->piDel[a->mPiDel + 1] = rbetaDevice(a, 1, a->G + a->s1 + a->aTau, a->s1 + a->bTau);
   ++a->mPiDel;
 }
 
-void samplePiDel(Chain *a, Config *cfg){ /* host */
+__host__ void samplePiDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constPiDel || !cfg->heterosis)
     return;
 
-  samplePiDel_kernel1(a);
-  samplePiDel_kernel2(a);
-  samplePiDel_kernel3(a);
+  samplePiDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  samplePiDel_kernel2<<<1, 1>>>(dev_a);
 }

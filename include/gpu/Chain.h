@@ -2,6 +2,7 @@
 #define CHAIN_H
 
 #include "constants.h"
+#include <curand_kernel.h>
 
 typedef struct {
 
@@ -16,6 +17,10 @@ typedef struct {
   int heterosis;
   int someParmsFlag;
   int allParmsFlag;
+  
+  /* curand states */
+  
+  curandState *states;
   
   /* initialization constants */
   
@@ -112,7 +117,7 @@ typedef struct {
   int *accAlp;
   int *accDel;
   
-  /* indicate choices to hold each hyperparameter constant */
+  /* choices to hold hyperparameters constant */
   
   int constSigC;
   int constD;

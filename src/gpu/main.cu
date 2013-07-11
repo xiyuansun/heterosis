@@ -8,13 +8,6 @@
 #include <stdio.h>
 
 int main(int argc, char **argv){
- /* oneChain(argc, argv);*/
- 
-  Config *cfg = config(argc, argv);  
-  Chain *a = NULL;
-  
-  allocChain(a, cfg);
-  freeChain(a, cfg);
- 
+  oneChain(argc, argv);
   return EXIT_SUCCESS;
 }
