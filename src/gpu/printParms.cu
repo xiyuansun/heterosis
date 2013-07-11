@@ -16,6 +16,8 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   
   if(!cfg->parmsFlag)
     return;
+
+  fprintf(cfg->log, "  Printing parameters.\n"); 
       
   sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
   fp = fopen(file, "w");

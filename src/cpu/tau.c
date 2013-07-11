@@ -37,10 +37,10 @@ void sampleTau_kernel3(Chain *a){ /* kernel<<<1, 1>>> */
 }
 
 void sampleTau(Chain *a, Config *cfg){ /* host */
-  fprintf(cfg->log, "tau ");
-
   if(cfg->constTau)
     return;
+
+  fprintf(cfg->log, "tau ");
 
   sampleTau_kernel1(a);
   sampleTau_kernel2(a);

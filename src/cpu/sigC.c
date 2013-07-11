@@ -11,10 +11,10 @@ void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
   int n, N = a->N;
   num_t rate, shape, lb;
 
-  fprintf(cfg->log, "sigC ");
-
   if(a->constSigC)
     return; 
+
+  fprintf(cfg->log, "sigC ");
 
   rate = 0;
   for(n = 0; n < a->N; ++n) 

@@ -56,6 +56,8 @@ __global__ void sampleDel_kernel2(Chain *a){ /* kernel <<<1 1>>> */
 }
 
 __host__ void sampleDel(Chain *host_a, Chain *dev_a, Config* cfg){ /* host */
+  fprintf(cfg->log, "del ");
+
   sampleDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleDel_kernel2<<<1, 1>>>(dev_a);
 }

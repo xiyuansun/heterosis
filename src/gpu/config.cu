@@ -110,6 +110,8 @@ Config *config(int argc, char **argv){
   
   if(cfg->parmsFlag)
     system("mkdir -p ../out/parms/"); 
+
+  cfg->log = fopen("../out/log.txt", "w+");
   
   return cfg;
 }

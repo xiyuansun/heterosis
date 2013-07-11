@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 __host__ void freeChain(Chain *a, Config *cfg, int onHost){
+  fprintf(cfg->log, "  Freeing chain.\n\n");
   
   /* data */  
 

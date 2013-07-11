@@ -33,10 +33,10 @@ void samplePiAlp_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void samplePiAlp(Chain *a, Config *cfg){ /* host */
-  fprintf(cfg->log, "piAlp ");
-
   if(cfg->constPiAlp)
     return;
+
+  fprintf(cfg->log, "piAlp ");
 
   samplePiAlp_kernel1(a);
   samplePiAlp_kernel2(a);  

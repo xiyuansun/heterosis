@@ -36,6 +36,8 @@ __global__ void sampleSigAlp_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
 }
 
 __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  fprintf(cfg->log, "sigAlp ");
+
   if(cfg->constSigAlp)
     return;
 

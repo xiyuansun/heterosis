@@ -97,10 +97,10 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleD(Chain *a, Config *cfg){ /* host */
-  fprintf(cfg->log, "d ");
-  
   if(cfg->constD)
     return;
+    
+  fprintf(cfg->log, "d ");
    
   sampleD_kernel1(a);
 

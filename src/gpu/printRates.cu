@@ -15,6 +15,8 @@ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
   FILE *fp;
   
   if(cfg->ratesFlag){
+    fprintf(cfg->log, "  Printing Metropolis acceptance rates.\n");
+  
     sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w"); 
     

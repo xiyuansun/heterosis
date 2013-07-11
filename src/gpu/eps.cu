@@ -44,6 +44,8 @@ __global__ void sampleEps_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  fprintf(cfg->log, "eps ");
+
   sampleEps_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleEps_kernel2<<<1, 1>>>(dev_a);
 }

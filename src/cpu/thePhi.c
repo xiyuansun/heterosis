@@ -26,11 +26,11 @@ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mThePhi;
 }
 
-void sampleThePhi(Chain *a, Config *cfg){ /* host */
-  fprintf(cfg->log, "thePhi ");
-  
+void sampleThePhi(Chain *a, Config *cfg){ /* host */  
   if(cfg->constThePhi)
     return;
+    
+  fprintf(cfg->log, "thePhi ");
 
   sampleThePhi_kernel1(a);
   sampleThePhi_kernel2(a);

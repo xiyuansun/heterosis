@@ -55,10 +55,10 @@ void sampleSigAlp_kernel4(Chain *a){ /* parallel pairwise sum in Thrust */
 }
 
 void sampleSigAlp(Chain *a, Config *cfg){ /* host */
-  fprintf(cfg->log, "sigAlp ");
-
   if(cfg->constSigAlp)
     return;
+
+  fprintf(cfg->log, "sigAlp ");
 
   sampleSigAlp_kernel1(a);
   sampleSigAlp_kernel2(a);

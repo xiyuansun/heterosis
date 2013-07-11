@@ -11,6 +11,8 @@
 __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
 
   Chain *allHost_a;
+  fprintf(cfg->log, "  Copying chain from device to host. Takes a LONG time.\n");
+
   allocChainHost(&allHost_a, cfg); 
   
   /* program options */

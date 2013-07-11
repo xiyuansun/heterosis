@@ -7,10 +7,12 @@
 #include <stdlib.h>
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
-
   int m;
+  fprintf(cfg->log, "  Running chain.\n");
   
   for(m = 0; m < cfg->M; ++m){
+    fprintf(cfg->log, "    iter %d | ", m);
+
     sampleC(host_a, dev_a, cfg);
     sampleTau(host_a, dev_a, cfg);
     samplePiAlp(host_a, dev_a, cfg);
@@ -26,5 +28,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleEta(host_a, dev_a, cfg);
     sampleEps(host_a, dev_a, cfg);
     samplePhiAlpDel(host_a, dev_a, cfg);
+
+    fprintf(cfg->log, "\n");
   }
 } 

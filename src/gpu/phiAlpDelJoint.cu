@@ -90,6 +90,8 @@ __global__ void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void samplePhiAlpDelJoint(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  fprintf(cfg->log, "phiAlpDelJoint ");
+
   samplePhiAlpDelJoint_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   samplePhiAlpDelJoint_kernel2<<<1, 1>>>(dev_a);
 }

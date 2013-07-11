@@ -11,7 +11,8 @@
 __host__ void allocChainHost(Chain **a, Config *cfg){
 
   *a = (Chain*) malloc(sizeof(Chain));
-  
+  fprintf(cfg->log, "  Allocating chain.\n"); 
+
   /* data */  
   
   (*a)->y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t));
