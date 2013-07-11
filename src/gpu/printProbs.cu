@@ -36,10 +36,8 @@ void printProbs(Chain *a, Config *cfg){
   for(g = 0; g < cfg->G; ++g){
     prob_de = 0;
       
-    for(m = cfg->burnin + 1; m <= cfg->M; ++m){
-      alp = a->alp[iG(m, g)];
-      prob_de += ((alp * alp) > 1e-6);
-    }
+    for(m = cfg->burnin + 1; m <= cfg->M; ++m)
+      prob_de += ((alp[iG(m, g)] * alp[iG(m, g)]) > 1e-6);
       
     prob_de /= niter;
     fprintf(fp, NUM_TF, prob_de);
