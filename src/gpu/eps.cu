@@ -13,7 +13,7 @@ __device__ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 }
 
 __global__ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
-  int g = IDX, int n = IDY, id = ID;
+  int g = IDX, n = IDY, id = ID;
   int N = a->N, G = a->G;
   num_t old, nw, dl, lp, lu;
 
