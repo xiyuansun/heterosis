@@ -11,12 +11,11 @@ __host__ void chains(int argc, char **argv){
   fprintf(cfg->log, "Begun chains");
   
   for(i = 0; i < cfg->M; ++i){
+  printf("%d\n", i);
     fprintf(cfg->log, "Chain %d\n", i);
     cfg->chainNum = i;
     oneChain(cfg);
   }
-
-  printf("lag?\n");
 
   fprintf(cfg->log, "Done running mcmc.\n");
   free(cfg);
