@@ -58,13 +58,12 @@ __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   num_t old, nw, dl, lp, lu;
 
   if(g < G){ 
-
     old = a->alp[iG(a->mAlp, g)];
     nw = alpProp(a, g);
     
     dl = lAlp(a, g, nw) - lAlp(a, g, old);
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1));
+    lu = log(runiformDevice(a, g, 0, 1));
     
     if(lu < lp){ /* accept */
       a->alp[iG(a->mAlp + 1, g)] = nw;
@@ -81,8 +80,7 @@ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mAlp;
 }
 
-
-void sampleAlp(Chain *a){ /* host */
-  sampleAlp_kernel1<<<NBLOCKS, NTHREADS>>>(a);
-  sampleAlp_kernel2<<<1, 1>>>(a);
+void sampleAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  sampleAlp_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
+  sampleAlp_kernel2<<<1, 1>>>(dev_a);
 }
