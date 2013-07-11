@@ -9,7 +9,7 @@ void oneChain(Config *cfg){
   Chain *a = newChain(cfg);
   
   if(a == NULL){
-    freeConfig(cfg);
+    free(cfg);
     exit(EXIT_FAILURE);
   }
   
@@ -17,4 +17,4 @@ void oneChain(Config *cfg){
   summarizeChain(a, cfg);
   
   freeChain(a, cfg);
-}
+} 

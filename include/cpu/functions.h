@@ -142,6 +142,7 @@ void samplePiDel(Chain*, Config*);
 
 void runChain(Chain*, Config*);
 void oneChain(Config*);
+void chains(int, char**);
 
 void printProbs(Chain*, Config*);
 void printRates(Chain*, Config*);
