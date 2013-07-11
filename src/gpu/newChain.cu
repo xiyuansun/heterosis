@@ -105,6 +105,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
 
+printf("okay");
   y = readData(cfg);
   G = cfg->G;
   
@@ -117,8 +118,6 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     free(y);
     return;
   }
-
-  printf("okay");
 
   allocChainDevice(host_a, dev_a, cfg);
   
