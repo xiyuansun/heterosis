@@ -80,7 +80,7 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
 
   /* curand states */
   
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->G * sizeof(curandState)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->N * cfg->G * sizeof(curandState)));
 
   /* parameters */
 

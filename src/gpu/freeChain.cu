@@ -14,6 +14,10 @@ __host__ void freeChain(Chain *a, Config *cfg, int onHost){
   FREE(a->yMeanG, onHost);
   FREE(a->grp, onHost);
 
+  /* curand states */
+  
+  FREE(a->states, onhost);
+
   /* parameters */
   
   FREE(a->c, onHost);

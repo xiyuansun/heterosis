@@ -21,6 +21,7 @@
 
 #define IDX ((blockDim.x * blockIdx.x) + threadIdx.x)
 #define IDY ((blockDim.x * blockIdx.x) + threadIdx.x)
+#define ID ((gridDim.x * blockDim.x * IDY) + IDX)
 
 typedef int count_t;
 typedef float num_t;
