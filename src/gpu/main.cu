@@ -8,6 +8,8 @@
 #include <stdio.h>
 
 int main(int argc, char **argv){
+printf("okay");
+
   chains(argc, argv);
   return EXIT_SUCCESS;
 }
