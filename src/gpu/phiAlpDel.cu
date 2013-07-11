@@ -4,14 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void samplePhiAlpDel(Chain *a, Config *cfg){ /* host */
+void samplePhiAlpDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->joint && cfg->heterosis){
-    samplePhiAlpDelJoint(a);
+    samplePhiAlpDelJoint(host_a, dev_a, cfg);
   } else {
-    samplePhi(a);
-  /*  sampleAlp(a);
+    samplePhi(host_a, dev_a, cfg);
+  /*  sampleAlp(host_a, dev_a, cfg);
     
     if(cfg->heterosis)
-      sampleDel(a);*/
+      sampleDel(host_a, dev_a, cfg);*/
   }
 } 
