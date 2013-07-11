@@ -9,7 +9,6 @@
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
-  double time;
   time_t p1, p2;
   
   fprintf(cfg->log, "  Running chain.\n");
