@@ -101,10 +101,10 @@ void sampleDel_kernel1(Chain*);
 void sampleDel_kernel2(Chain*);
 void sampleDel(Chain*, Chain*, Config*);
 
-num_t lPhiAlpDelJoint(Chain*, int, num_t, num_t, num_t);
-void samplePhiAlpDel_kernel1Joint(Chain*);
-void samplePhiAlpDel_kernel2Joint(Chain*);
-void samplePhiAlpDelJoint(Chain*, Chain*, Config*);
+__device__ num_t lPhiAlpDelJoint(Chain*, int, num_t, num_t, num_t);
+__global__ void samplePhiAlpDel_kernel1Joint(Chain*);
+__global__ void samplePhiAlpDel_kernel2Joint(Chain*);
+__host__ void samplePhiAlpDelJoint(Chain*, Chain*, Config*);
 
 void samplePhiAlpDel(Chain*, Chain*, Config*);
 

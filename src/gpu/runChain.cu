@@ -25,6 +25,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleSigDel(host_a, dev_a, cfg);
     sampleEta(host_a, dev_a, cfg);
     sampleEps(host_a, dev_a, cfg);
-   /* samplePhiAlpDel(host_a, dev_a, cfg);*/
+    samplePhiAlpDel(host_a, dev_a, cfg);
   }
 } 

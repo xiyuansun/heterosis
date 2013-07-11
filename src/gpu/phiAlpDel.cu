@@ -9,9 +9,9 @@ void samplePhiAlpDel(Chain *a, Config *cfg){ /* host */
     samplePhiAlpDelJoint(a);
   } else {
     samplePhi(a);
-    sampleAlp(a);
+  /*  sampleAlp(a);
     
     if(cfg->heterosis)
-      sampleDel(a);
+      sampleDel(a);*/
   }
 } 
