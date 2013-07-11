@@ -23,7 +23,7 @@ CCOBJ=$(foreach name, $(CCDEP), ../obj/cpu/$(name).o)
 
 NVCCDEP=printArrays config getopts printConfig freeConfig
 NVCCDEP+=mySampleInt readGrp readData
-NVCCDEP+=allocChain newChain printChain freeChain
+NVCCDEP+=allocChain newChain chainDeviceToHost printChain freeChain
 NVCCDEP+=runiform rnormal rgamma rbeta
 NVCCDEP+=c sigC eta d tau # eps
 # NVCCDEP+=phi alp del phiAlpDelJoint phiAlpDel
