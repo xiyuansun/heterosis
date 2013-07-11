@@ -157,8 +157,8 @@ __host__ void chains(int, char**);
 
 __host__ void printProbs(Chain*, Config*);
 __host__ void printRates(Chain*, Chain*, Config*);
-__host__ void printHyper(Chain*, Chain*, Config*);
-__host__ void printParms(Chain*, Config*);
+__host__ void printHyper(Chain*, Config*);
+__host__ void printParms(Chain*, Chain*, Config*);
 __host__ void summarizeChain(Chain*, Chain*, Config*);
 
 /* definitions of inline functions */
