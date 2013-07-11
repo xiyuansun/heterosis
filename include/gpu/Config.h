@@ -9,6 +9,7 @@ typedef struct {
 
   char dataFile[BUF]; /* space-delimited text file with G rows and N columns */
   char groupFile[BUF]; /* space-delimited text file with 1 row and N entries */
+  char logFile[BUF];
   
   int ratesFlag; /* choice to output acceptance rates */
   int hyperFlag; /* choice to output hyperparameters */
