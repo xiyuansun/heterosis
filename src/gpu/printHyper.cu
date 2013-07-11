@@ -11,7 +11,7 @@ void printHyper(Chain *a, Config *cfg){
 
   int m;
   num_t tmp;
-  num_t sigC, d, tau, thePhi, theAlp, theDel, sigPhi, sigAlp, sigDel, piAlp, piDel;
+  num_t *sigC, *d, *tau, *thePhi, *theAlp, *theDel, *sigPhi, *sigAlp, *sigDel, *piAlp, *piDel;
   char file[BUF];
   FILE *fp;
   
