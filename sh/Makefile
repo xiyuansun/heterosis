@@ -42,7 +42,7 @@ cpu: $(CCOBJ)
 	mkdir -p ../bin
 	$(CC) $(CCOBJ) -o ../bin/mcmc $(LDFLAGS)
 
-../obj/cpu/%.o: ../src/cpu/%.c
+$(CCOBJ): ../src/cpu/%.c
 	mkdir -p ../obj/cpu
 	$(CC) $(CCFLAGS) $< -o $@ 
 
@@ -50,11 +50,9 @@ gpu: $(NVCCOBJ)
 	mkdir -p ../bin
 	$(NVCC) $(NVCCOBJ) -o ../bin/gpumcmc $(LDFLAGS)
 
-../obj/gpu/%.o: ../src/gpu/%.c
+$(NVCCOBJ): ../src/gpu/%.c
 	mkdir -p ../obj/gpu
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
-
-../src/gpu/%.c: 
 
 clean:
 	rm -rf ../obj
