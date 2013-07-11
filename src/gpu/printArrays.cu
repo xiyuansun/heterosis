@@ -50,7 +50,7 @@ __host__ void pstate(curandState *v, int l1, int l2, const char* m){
   printf("%s", m);
   for(i = 0; i < l1; ++i){
     for(j = 0; j < l2; ++j)
-      printf("%d ", v[i*l2 + j]);
+      printf("%d ", (v[i*l2 + j]).d);
     printf("\n");
   }
   printf("\n"); 
