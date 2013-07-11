@@ -10,9 +10,10 @@
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
   double time;
-  clock_t start = clock();
+  time_t start, stop;
   
   fprintf(cfg->log, "  Running chain.\n");
+  time(&start);
   
   for(m = 0; m < cfg->M; ++m){
     fprintf(cfg->log, "    iter %d | ", m);
@@ -36,6 +37,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     fprintf(cfg->log, "\n");
   }
   
-  time = ((double) clock() - start) / (60 * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  time(&stop);
+  fprintf(cfg->time, "%0.3f ", difftime(stop, start)/60.0);
 } 
