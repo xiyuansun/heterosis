@@ -82,7 +82,7 @@ void printProbs(Chain *a, Config *cfg){
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   
-  fprintf(cfg->time, "%0.3f ", myTime/60000.0); /* elapsed time in minutes */
+  fprintf(cfg->time, "%0.3f ", myTime); /* elapsed time in minutes */
 
   free(alp);
   free(del);   
