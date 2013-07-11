@@ -49,7 +49,7 @@ all: cpu
 	
 cpu: $(CCOBJ)
 	mkdir -p $(BINDIR)
-	$(CC) $(CCOBJ) -o $(BINDIR) mcmc $(LDFLAGS)
+	$(CC) $(CCOBJ) -o $(BINDIR)mcmc $(LDFLAGS)
 
 $(CCOBJDIR)%.o: $(CCSRCDIR)%.c
 	mkdir -p $(CCOBJDIR)
@@ -57,7 +57,7 @@ $(CCOBJDIR)%.o: $(CCSRCDIR)%.c
 
 gpu: $(NVCCOBJ)
 	mkdir -p $(BINDIR)
-	$(NVCC) $(NVCCOBJ) -o $(BINDIR) $(LDFLAGS)
+	$(NVCC) $(NVCCOBJ) -o $(BINDIR)gpumcmc $(LDFLAGS)
 
 $(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu
 	mkdir -p $(NVCCOBJDIR)
