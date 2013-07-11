@@ -5,11 +5,12 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <thrust/reduce.h>
 
-void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+__global__ void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = GENE, G = a->G;
 
-  for(g = 0; g < a->G; ++g){ 
+  if(g < G){ 
     if(pow(a->del[iG(a->mDel, g)], 2) > 1e-6){
       a->tmp1[g] = 1;
       a->tmp2[g] = a->del[iG(a->mDel, g)];
@@ -20,26 +21,7 @@ void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void sampleTheDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
-  int g, Gdel = 0;
-  
-  for(g = 0; g < a->G; ++g)   
-    Gdel += a->tmp1[g];
-
-  a->s1 = Gdel;
-}
-
-void sampleTheDel_kernel3(Chain *a){ /* pairwise sum in Thrust */
-  int g;
-  num_t sm = 0;
-  
-  for(g = 0; g < a->G; ++g) 
-    sm += a->tmp2[g];
-
-  a->s2 = sm;
-}
-
-void sampleTheDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void sampleTheDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
   num_t gs = pow(a->gamDel, 2);
   num_t ss = pow(a->sigDel[a->mSigDel], 2);
@@ -48,16 +30,23 @@ void sampleTheDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
   num_t m = gs * a->s2 / den;
   num_t s = sqrt(gs * ss / den);
 
-  a->theDel[a->mTheDel + 1] = rnormal(m, s);
+  a->theDel[a->mTheDel + 1] = rnormalDevice(a, 1, m, s);
   ++a->mTheDel;
 }
 
-void sampleTheDel(Chain *a, Config *cfg){ /* host */
+void sampleTheDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constTheDel || !cfg->heterosis)
     return;
 
-  sampleTheDel_kernel1(a);
-  sampleTheDel_kernel2(a);
-  sampleTheDel_kernel3(a);
-  sampleTheDel_kernel4(a);
+  sampleTheDel_kernel1<<<NTHREADS, NBLOCKS>>>(dev_a);
+  
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  thrust::device_ptr<num_t> tmp2(host_a->tmp2);  
+  num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  sampleTheDel_kernel2<<<1, 1>>>(dev_a);
 }
