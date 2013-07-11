@@ -17,7 +17,7 @@
 #define N_BLOCK (((float) cfg->N) / NTHREADS)
 
 #define GN_GRID dim3(G_GRID, N_GRID)
-#deinfe GN_BLOCK dim3(G_BLOCK, N_BLOCK)
+#define GN_BLOCK dim3(G_BLOCK, N_BLOCK)
 
 #define IDX ((blockDim.x * blockIdx.x) + threadIdx.x)
 #define IDY ((blockDim.x * blockIdx.x) + threadIdx.x)
