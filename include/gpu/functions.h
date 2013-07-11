@@ -71,10 +71,10 @@ __global__ void sampleC_kernel2(Chain*);
 __global__ void sampleC_kernel3(Chain*);
 __host__ void sampleC(Chain*, Chain*, Config*);
 
-num_t lEps(Chain*, int, int, num_t);
-void sampleEps_kernel1(Chain*);
-void sampleEps_kernel2(Chain*);
-void sampleEps(Chain*, Chain*, Config*);
+__device__ num_t lEps(Chain*, int, int, num_t);
+__global__ void sampleEps_kernel1(Chain*);
+__global__ void sampleEps_kernel2(Chain*);
+__host__ void sampleEps(Chain*, Chain*, Config*);
 
 __global__ void lD_kernel1(Chain*, int);
 __global__ void lD_kernel2(Chain*);
