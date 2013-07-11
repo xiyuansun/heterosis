@@ -13,6 +13,8 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   fprintf(cfg->log, "  Running chain.\n");
   
+  printf("1\n");
+  
   for(m = 0; m < cfg->M; ++m){
     fprintf(cfg->log, "    iter %d | ", m);
 
@@ -34,4 +36,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
     fprintf(cfg->log, "\n");
   }
+  
+  printf("2\n");
 } 
