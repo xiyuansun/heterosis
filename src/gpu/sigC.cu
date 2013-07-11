@@ -10,8 +10,6 @@ __global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
   int n, N = a->N;
   num_t rate, shape, lb;
 
-  fprintf(cfg->log, "sigC ");
-
   if(a->constSigC)
     return; 
 
@@ -33,5 +31,6 @@ __global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *a){ 
+  fprintf(cfg->log, "sigC ");
   sampleSigC_kernel<<<1, 1>>>(dev_a);
 }
