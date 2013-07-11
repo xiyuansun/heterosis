@@ -11,10 +11,10 @@
 #define MAXTHREADS 512
 
 #define G_BLOCK (cfg->G < MAXTHREADS ? cfg->G : MAXTHREADS)
-#define G_GRID (((float) cfg->G) / G_BLOCK)
+#define G_GRID ((int) ceil(((float) cfg->G) / G_BLOCK))
 
 #define N_BLOCK (cfg->N < MAXTHREADS ? cfg->N : MAXTHREADS)
-#define N_GRID (((float) cfg->N) / N_BLOCK)
+#define N_GRID ((int) ceil(((float) cfg->N) / N_BLOCK))
 
 #define GN_GRID dim3(G_GRID, N_GRID, 1)
 #define GN_BLOCK dim3(G_BLOCK, N_BLOCK, 1)
