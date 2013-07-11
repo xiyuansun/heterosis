@@ -11,7 +11,7 @@ Config *config(int argc, char **argv){
 
   Config *cfg = (Config*) malloc(sizeof(Config));
   cfg->chainNum = 1;
-  
+  printf("okay");
   /* default filenames */        
 
   strcpy(cfg->dataFile, "../data/data.txt"); 

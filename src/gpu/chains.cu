@@ -8,7 +8,7 @@
 __host__ void chains(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
-  printf("okay");
+  
   for(i = 0; i < cfg->M; ++i){
     cfg->chainNum = i;
     oneChain(cfg);
