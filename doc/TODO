@@ -1,4 +1,4 @@
-1) implement logfile in both C and CUDA C versions to track progress.
+1) compute runtimes
 2) compute DIC in both versions (summary).
 3) compute Gelman factors 
 4) write documentation

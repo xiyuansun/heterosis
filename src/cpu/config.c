@@ -97,7 +97,7 @@ Config *config(int argc, char **argv){
   if(!cfg->constPiDel)
     cfg->piDel = rbeta(cfg->aDel, cfg->bDel);
   
-  /* make output directories */
+  /* initialize output */
   
   system("mkdir -p ../out/");
   system("mkdir -p ../out/probs/");
@@ -112,6 +112,7 @@ Config *config(int argc, char **argv){
     system("mkdir -p ../out/parms/"); 
     
   cfg->log = fopen("../out/log.txt", "w+");
-  
+  cfg->time = fopen("../out/time.txt", "w+");
+  fprintf(cfg->time, "chain probs rates hyper parms\n");
   return cfg;
 }

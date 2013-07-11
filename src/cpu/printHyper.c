@@ -6,12 +6,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 void printHyper(Chain *a, Config *cfg){
   int m;
   num_t tmp;
   char file[BUF];
   FILE *fp;
+  double time;
+  clock_t start = clock();
   
   if(cfg->hyperFlag){
     fprintf(cfg->log, "  Printing hyperparameters.\n");
@@ -65,4 +68,7 @@ void printHyper(Chain *a, Config *cfg){
     
     fclose(fp);
   }
+  
+  time = ((double) clock() - start) / (60 * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

@@ -6,5 +6,6 @@
 
 void freeConfig(Config *cfg){
   fclose(cfg->log);
+  fclose(cfg->time);
   free(cfg);
 }
