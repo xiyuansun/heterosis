@@ -25,6 +25,8 @@ __global__ void samplePiAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 } 
 
 __host__ void samplePiAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  printf("  piAlp\n");
+
   if(cfg->constPiAlp)
     return;
 

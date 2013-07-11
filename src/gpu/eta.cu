@@ -35,6 +35,8 @@ __global__ void sampleEta_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEta(Chain *host_a, Chain *dev_a, Config *cfg){
+  printf("  eta\n");
+  
   sampleEta_kernel1<<<1, 1>>>(dev_a);
   sampleEta_kernel2<<<NBLOCKS, NTHREADS>>>(dev_a);
   sampleEta_kernel3<<<1, 1>>>(dev_a);

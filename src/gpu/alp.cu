@@ -83,6 +83,8 @@ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 
 void sampleAlp(Chain *a){ /* host */
+  printf("  alpha\n");
+
   sampleAlp_kernel1<<<NBLOCKS, NTHREADS>>>(a);
   sampleAlp_kernel2<<<1, 1>>>(a);
 }

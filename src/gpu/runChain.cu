@@ -11,6 +11,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
   
   for(m = 0; m < cfg->M; ++m){
+    printf("iteration %d\n", m);
     sampleC(host_a, dev_a, cfg);
     sampleTau(host_a, dev_a, cfg);
     samplePiAlp(host_a, dev_a, cfg);

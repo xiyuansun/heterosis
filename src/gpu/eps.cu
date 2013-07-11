@@ -53,6 +53,8 @@ void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   dim3 dimGrid(ceil(((float) cfg->G) / NTHREADS), ceil(((float) cfg->N / NTHREADS)));
   dim3 dimBlock(cfg->G < MAXTHREADS ? cfg->G : MAXTHREADS, cfg->N < MAXTHREADS ? cfg->N : MAXTHREADS);
 
+  printf("  eps\n");
+
   sampleEps_kernel1<<<dimGrid, dimBlock>>>(dev_a);
   sampleEps_kernel2<<<1, 1>>>(dev_a);
 }

@@ -90,6 +90,7 @@ __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int n, N = cfg->N;
   int nthreads = (N < MAXTHREADS ? N : MAXTHREADS);
   int nblocks = ceil(((float) cfg->N) / NTHREADS);
+  printf("  c\n");
   
   sampleC_kernel1<<<nblocks, nthreads>>>(dev_a);
 

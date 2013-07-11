@@ -91,6 +91,8 @@ __global__ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+  printf("  d\n");
+
   if(cfg->constD)
     return;
    
