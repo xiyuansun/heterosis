@@ -13,7 +13,7 @@ __host__ int cmpfunc (const void *a, const void *b){
 }
 
 __global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
-  int id = IDX;
+  int id = ID;
   curand_init(seed, id, 0, &(a->states[id]));
 }
 
@@ -217,7 +217,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   /* set up CURAND */
   
-  curand_setup_kernel<<<G_GRID, G_BLOCK>>>(*dev_a, cfg->seed);
+  curand_setup_kernel<<<GN_GRID, GN_BLOCK>>>(*dev_a, cfg->seed);
   
   /* compute the rest of the initial values */
   
