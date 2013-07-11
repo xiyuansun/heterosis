@@ -12,12 +12,14 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-__global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
+__global__ void curand_setup_kernel(Chain *a, unsigned int seed, int *idd){ /* kernel <<<G, 1>>> */
   int g = (blockDim.x * blockIdx.x) + threadIdx.x;
   int n = (blockDim.y * blockIdx.y) + threadIdx.y;
   int G = a->G;
   
   int id = iG(n, g);
+  idd[id] = id;
+  
   curand_init(seed, id, 0, &(a->states[id]));
 }
 
@@ -232,7 +234,17 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   dim3 dimGrid(nblocksG, nblocksN);
   dim3 dimBlock(nthreadsG, nthreadsN);
   
-  curand_setup_kernel<<<dimGrid, dimBlock>>>(*dev_a, cfg->seed);
+  
+  
+  int *idh = (int*) malloc(cfg->G * cfg->N * sizeof(int)), *idd;
+  CUDA_CALL((void**) idd, cfg->G * cfg->N * sizeof(int));
+  
+  curand_setup_kernel<<<dimGrid, dimBlock>>>(*dev_a, cfg->seed, idd);
+  CUDA_CALL(cudaMemcpy(idh, idd, cfg->G * cfg->N * sizeof(int), cudaMemcpyDeviceToHost);
+  pi2(idh, cfg->N, cfg->G, "idh = \n");
+  
+  
+  
   
   /* compute the rest of the initial values */
   
