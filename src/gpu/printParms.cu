@@ -23,7 +23,7 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   if(fp == NULL){
     printf("ERROR: unable to create file, %s\n", file);
     return;
-  }
+  } 
     
   for(n = 0; n < cfg->N; ++n)
     fprintf(fp, "c%d ", n);
