@@ -226,7 +226,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   free(yMeanG);
   free(lqts);
-  free(tmpv);
+  free(tmpv); 
   free(grp);
   free(y);
 }
