@@ -6,9 +6,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-void printRates(Chain *a, Config *cfg){
+void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
 
-  int n, i, G = a->G, niter = cfg->M - cfg->burnin;
+  int n, i, G = cfg->G, niter = cfg->M - cfg->burnin;
+  int accD, *accC, *accPhi, *accAlp, *accDel, *accEps;
   num_t raccD, raccC, raccPhi, raccAlp, raccDel, raccEps;
   char file[BUF];
   FILE *fp;
@@ -24,24 +25,37 @@ void printRates(Chain *a, Config *cfg){
        
     fprintf(fp, "d c phi alp del meanEps\n");
     
-    raccD    = (num_t) a->accD;
+    accC = (int*) malloc(cfg->N * sizeof(int));
+    accPhi = (int*) malloc(cfg->G * sizeof(int));
+    accAlp = (int*) malloc(cfg->G * sizeof(int));
+    accDel = (int*) malloc(cfg->G * sizeof(int));
+    accEps = (int*) malloc(cfg->N * cfg->G * sizeof(int));
+    
+    CUDA_CALL(cudaMemcpy(&(accD), &(dev_a->accD), sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accC, host_a->accC, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accPhi, host_a->accPhi, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accAlp, host_a->accAlp, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accDel, host_a->accDel, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(accEps, host_a->accEps, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    
+    raccD    = (num_t) accD;
     raccD   /= niter;
     
-    raccC    = (num_t) a->accC[0];
+    raccC    = (num_t) accC[0];
     raccC   /= niter;
     
-    raccPhi  = (num_t) a->accPhi[0];
+    raccPhi  = (num_t) accPhi[0];
     raccPhi /= niter;
 
-    raccAlp  = (num_t) a->accAlp[0];
+    raccAlp  = (num_t) accAlp[0];
     raccAlp /= niter;
     
-    raccDel  = (num_t) a->accDel[0];
+    raccDel  = (num_t) accDel[0];
     raccDel /= niter;
   
     raccEps = 0;  
     for(n = 0; n < cfg->N; ++n)
-      raccEps += (num_t) a->accEps[iG(n, 0)];
+      raccEps += (num_t) accEps[iG(n, 0)];
     raccEps /= (niter * cfg->N);
     
     fprintf(fp, NUM_TF, raccD);   fprintf(fp, " ");
@@ -54,21 +68,21 @@ void printRates(Chain *a, Config *cfg){
 
     for(i = 1; i < cfg->N; ++i){
     
-      raccC    = (num_t) a->accC[i];
+      raccC    = (num_t) accC[i];
       raccC   /= niter;
     
-      raccPhi  = (num_t) a->accPhi[i];
+      raccPhi  = (num_t) accPhi[i];
       raccPhi /= niter;
 
-      raccAlp  = (num_t) a->accAlp[i];
+      raccAlp  = (num_t) accAlp[i];
       raccAlp /= niter;
     
-      raccDel  = (num_t) a->accDel[i];
+      raccDel  = (num_t) accDel[i];
       raccDel /= niter;
   
       raccEps = 0;  
       for(n = 0; n < cfg->N; ++n)
-        raccEps += (num_t) a->accEps[iG(n, i)];
+        raccEps += (num_t) accEps[iG(n, i)];
       raccEps /= (niter * cfg->N);
       
       fprintf(fp, ". ");
@@ -82,19 +96,19 @@ void printRates(Chain *a, Config *cfg){
     
     for(i = cfg->N; i < cfg->G; ++i){
     
-      raccPhi  = (num_t) a->accPhi[i];
+      raccPhi  = (num_t) accPhi[i];
       raccPhi /= niter;
 
-      raccAlp  = (num_t) a->accAlp[i];
+      raccAlp  = (num_t) accAlp[i];
       raccAlp /= niter;
     
-      raccDel  = (num_t) a->accDel[i];
+      raccDel  = (num_t) accDel[i];
       raccDel /= niter;
   
       raccEps = 0;  
       
       for(n = 0; n < cfg->N; ++n)
-        raccEps += (num_t) a->accEps[iG(n, i)];
+        raccEps += (num_t) accEps[iG(n, i)];
       raccEps /= (niter * cfg->N);
       
       fprintf(fp, ". . ");
@@ -105,6 +119,11 @@ void printRates(Chain *a, Config *cfg){
       fprintf(fp, "\n");
     }
     
+    free(accC);
+    free(accPhi);
+    free(accAlp);
+    free(accDel);
+    free(accEps);
     fclose(fp);
   }
 }
