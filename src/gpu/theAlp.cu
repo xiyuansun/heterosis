@@ -19,7 +19,7 @@ __global__ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
       a->tmp2[g] = 0;
     }
   }
-}
+} 
 
 __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
