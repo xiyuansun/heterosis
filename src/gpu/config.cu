@@ -84,7 +84,7 @@ Config *config(int argc, char **argv){
     cfg->piDel = rbeta(cfg->aDel, cfg->bDel);
     fprintf(cfg->time, "piDel ");
   }
- 
+
   if(!cfg->constD){
     cfg->d = runiform(0, cfg->d0);
     fprintf(cfg->time, "d ");
