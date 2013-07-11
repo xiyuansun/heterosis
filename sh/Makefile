@@ -20,6 +20,7 @@ CCDEP+=printProbs printRates printHyper printParms
 CCDEP+=main
 
 CCOBJ=$(foreach name, $(CCDEP), ../obj/cpu/$(name).o)
+CCSRC=$(foreach name, $(CCDEP), ../obj/cpu/$(name).c)
 
 NVCCDEP=printArrays config getopts printConfig freeConfig
 NVCCDEP+=mySampleInt readGrp readData
@@ -35,6 +36,7 @@ NVCCDEP+=printProbs printRates printHyper printParms
 NVCCDEP+=main
 
 NVCCOBJ=$(foreach name, $(NVCCDEP), ../obj/gpu/$(name).o)
+NVCCSRC=$(foreach name, $(CCDEP), ../obj/cpu/$(name).cu)
 
 all: cpu
 	
@@ -42,7 +44,7 @@ cpu: $(CCOBJ)
 	mkdir -p ../bin
 	$(CC) $(CCOBJ) -o ../bin/mcmc $(LDFLAGS)
 
-$(CCOBJ): ../src/cpu/%.c
+../obj/cpu/%.o:../src/cpu/%.c
 	mkdir -p ../obj/cpu
 	$(CC) $(CCFLAGS) $< -o $@ 
 
@@ -50,11 +52,10 @@ gpu: $(NVCCOBJ)
 	mkdir -p ../bin
 	$(NVCC) $(NVCCOBJ) -o ../bin/gpumcmc $(LDFLAGS)
 
-$(NVCCOBJ): ../src/gpu/%.c
+../obj/gpu/%.o: ../src/gpu/%.cu
 	mkdir -p ../obj/gpu
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
 
 clean:
 	rm -rf ../obj
 	rm -rf ../bin
-	
