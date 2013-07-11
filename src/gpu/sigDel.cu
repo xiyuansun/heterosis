@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <thust/reduce.h>
+#include <thrust/reduce.h>
 
 __global__ void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = GENE, G = a->G;
