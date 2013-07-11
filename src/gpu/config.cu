@@ -100,10 +100,16 @@ Config *config(int argc, char **argv){
   /* make output directories */
   
   system("mkdir -p ../out/");
-  system("mkdir -p ../out/hyper/");
   system("mkdir -p ../out/probs/");
-  system("mkdir -p ../out/rates/");
-  system("mkdir -p ../out/parms/");
+  
+  if(cfg->ratesFlag)
+    system("mkdir -p ../out/rates/");
+  
+  if(cfg->hyperFlag)
+    system("mkdir -p ../out/hyper/");
+  
+  if(cfg->parmsFlag)
+    system("mkdir -p ../out/parms/");
   
   return cfg;
 }
