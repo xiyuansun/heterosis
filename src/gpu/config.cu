@@ -109,7 +109,7 @@ Config *config(int argc, char **argv){
     system("mkdir -p ../out/hyper/");
   
   if(cfg->parmsFlag)
-    system("mkdir -p ../out/parms/");
+    system("mkdir -p ../out/parms/"); 
   
   return cfg;
 }
