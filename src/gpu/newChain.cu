@@ -12,14 +12,8 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-__global__ void curand_setup_kernel(Chain *a, unsigned int seed, int *idd){ /* kernel <<<G, 1>>> */
-  int g = (blockDim.x * blockIdx.x) + threadIdx.x;
-  int n = (blockDim.y * blockIdx.y) + threadIdx.y;
-  int G = a->G;
-  
-  int id = iG(n, g);
-  idd[id] = id;
-  
+__global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
+  int id = GENE;
   curand_init(seed, id, 0, &(a->states[id]));
 }
 
@@ -110,8 +104,6 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   int n, g, G, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
-
-  printf("new chain\n");
 
   y = readData(cfg);
   G = cfg->G;
@@ -225,26 +217,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   /* set up CURAND */
   
-  int nthreadsG = cfg->G < MAXTHREADS ? cfg->G : MAXTHREADS;
-  int nthreadsN = cfg->N < MAXTHREADS ? cfg->N : MAXTHREADS;
-  
-  int nblocksG = ceil(((float) cfg->G) / NTHREADS);
-  int nblocksN = ceil(((float) cfg->N / NTHREADS));
-  
-  dim3 dimGrid(nblocksG, nblocksN);
-  dim3 dimBlock(nthreadsG, nthreadsN);
-  
-  
-  
-  int *idh = (int*) malloc(cfg->G * cfg->N * sizeof(int)), *idd;
-  CUDA_CALL(cudaMalloc((void**) &idd, cfg->G * cfg->N * sizeof(int)));
-  
-  curand_setup_kernel<<<dimGrid, dimBlock>>>(*dev_a, cfg->seed, idd);
-  CUDA_CALL(cudaMemcpy(idh, idd, cfg->G * cfg->N * sizeof(int), cudaMemcpyDeviceToHost));
-  pi2(idh, cfg->N, cfg->G, "idh = \n");
-  
-  
-  
+  curand_setup_kernel<<<NBLOCKS, NTHREADS>>>(*dev_a, cfg->seed);
   
   /* compute the rest of the initial values */
   

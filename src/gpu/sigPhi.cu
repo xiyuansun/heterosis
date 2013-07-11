@@ -29,8 +29,6 @@ __global__ void sampleSigPhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleSigPhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  printf("  sigPhi\n");
-
   if(cfg->constSigPhi)
     return;
 

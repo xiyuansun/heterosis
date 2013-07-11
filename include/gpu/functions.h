@@ -30,9 +30,9 @@
 
 __host__ void pi1(int*, int, const char*);
 __host__ void pf1(num_t*, int, const char*);
+__host__ void pstate1(curandState*, int, const char*);
 __host__ void pi2(int*, int, int, const char*);
 __host__ void pf2(num_t*, int, int, const char*);
-__host__ void pstate(curandState*, int, int, const char*);
 __host__ void pi3(int*, int, int, int, const char*);
 __host__ void pf3(num_t*, int, int, int, const char*);
 
@@ -49,7 +49,7 @@ __host__ void allocChainHost(Chain**, Config*);
 __host__ void allocChainDevice(Chain**, Chain**, Config*);
   
 __host__ int cmpfunc (const void*, const void*);
-__global__ void curand_setup_kernel(Chain*, unsigned int, int*);
+__global__ void curand_setup_kernel(Chain*, unsigned int);
                                   
 __host__ void newChain(Chain** host_a, Chain **dev_a, Config*);
 __global__ void newChain_kernel1(Chain*);
@@ -71,10 +71,10 @@ __global__ void sampleC_kernel2(Chain*);
 __global__ void sampleC_kernel3(Chain*);
 __host__ void sampleC(Chain*, Chain*, Config*);
 
-__device__ num_t lEps(Chain*, int, int, num_t);
-__global__ void sampleEps_kernel1(Chain*);
-__global__ void sampleEps_kernel2(Chain*);
-__host__ void sampleEps(Chain*, Chain*, Config*);
+num_t lEps(Chain*, int, int, num_t);
+void sampleEps_kernel1(Chain*);
+void sampleEps_kernel2(Chain*);
+void sampleEps(Chain*, Chain*, Config*);
 
 __global__ void lD_kernel1(Chain*, int);
 __global__ void lD_kernel2(Chain*);

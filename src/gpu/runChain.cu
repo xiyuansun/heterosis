@@ -11,7 +11,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
   
   for(m = 0; m < cfg->M; ++m){
-    printf("iteration %d\n", m);
     sampleC(host_a, dev_a, cfg);
     sampleTau(host_a, dev_a, cfg);
     samplePiAlp(host_a, dev_a, cfg);
@@ -25,9 +24,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleSigAlp(host_a, dev_a, cfg);
     sampleSigDel(host_a, dev_a, cfg);
     sampleEta(host_a, dev_a, cfg);
-    sampleEps(host_a, dev_a, cfg);
-   /* samplePhiAlpDel(host_a, dev_a, cfg);*/
-   
-    printChain(host_a, dev_a, cfg);
+   /* sampleEps(host_a, dev_a, cfg);
+    samplePhiAlpDel(host_a, dev_a, cfg);*/
   }
 } 

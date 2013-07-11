@@ -35,8 +35,6 @@ __global__ void sampleTheDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleTheDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  printf("  theDel\n");
-
   if(cfg->constTheDel || !cfg->heterosis)
     return;
 

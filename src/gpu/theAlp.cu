@@ -35,8 +35,6 @@ __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  printf("  theAlp\n");
-
   if(cfg->constTheAlp)
     return;
 

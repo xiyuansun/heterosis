@@ -50,8 +50,6 @@ void samplePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void samplePhi(Chain *a){ /* host */
-  printf("  phi\n");
-
   samplePhi_kernel1(a);
   samplePhi_kernel2(a);
 }

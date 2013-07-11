@@ -10,8 +10,6 @@
 
 __host__ void allocChainHost(Chain **a, Config *cfg){
 
-  printf("  allocating chain on host\n");
-
   *a = (Chain*) malloc(sizeof(Chain));
   
   /* data */  
@@ -22,7 +20,7 @@ __host__ void allocChainHost(Chain **a, Config *cfg){
 
   /* curand states */
   
-  (*a)->states = (curandState*) malloc(cfg->G * cfg->N * sizeof(curandState));
+  (*a)->states = (curandState*) malloc(cfg->G * sizeof(curandState));
 
   /* parameters */
 
@@ -71,8 +69,6 @@ __host__ void allocChainHost(Chain **a, Config *cfg){
 }
 
 __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
-
-  printf("  allocating chain on device\n");
 
   *host_a = (Chain*) malloc(sizeof(Chain));
   

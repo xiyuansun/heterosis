@@ -10,7 +10,7 @@
 
 #define MAXTHREADS 512
 #define NTHREADS (cfg->G < MAXTHREADS ? cfg->G : MAXTHREADS)
-#define NBLOCKS ceil(((float) cfg->G) / NTHREADS)
+#define NBLOCKS ceil(cfg->G / NTHREADS)
 #define GENE ((blockDim.x * blockIdx.x) + threadIdx.x)
 
 typedef int count_t;

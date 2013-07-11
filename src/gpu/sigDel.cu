@@ -36,8 +36,6 @@ __global__ void sampleSigDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  printf("  sigDel\n");
-
   if(cfg->constSigDel || !cfg->heterosis)
     return;
 

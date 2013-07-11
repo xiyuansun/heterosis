@@ -79,8 +79,6 @@ void sampleDel_kernel2(Chain *a){ /* kernel <<<1 1>>> */
 }
 
 void sampleDel(Chain *a){ /* host */
-  printf("  delta\n");
-
   sampleDel_kernel1(a);
   sampleDel_kernel2(a);
 }

@@ -70,7 +70,7 @@ function gpu {
   DEP+=(mySampleInt readGrp readData)
   DEP+=(allocChain chainDeviceToHost newChain printChain freeChain) 
   DEP+=(runiform rnormal rgamma rbeta)
-  DEP+=(c tau piAlp piDel d sigC eta eps)
+  DEP+=(c tau piAlp piDel d sigC eta) # eps)
   DEP+=(thePhi theAlp theDel)
 #  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
   DEP+=(sigPhi sigAlp sigDel)
@@ -83,8 +83,7 @@ function gpu {
   for dep in ${DEP[@]}
   do
     OBJ+=(../obj/gpu/${dep}.o)
-    echo ${CC} ../src/gpu/${dep}.cu -o ../obj/gpu/${dep}.o ${CFLAGS}
-    ${CC} ../src/gpu/${dep}.cu -o ../obj/gpu/${dep}.o ${CFLAGS}
+    ${CC} ../src/gpu/${dep}.cu -o ../obj/gpu/${dep}.o ${CFLAGS} 
   done
 
   $CC ${OBJ[@]} -o ../bin/gpumcmc ${LDFLAGS}
