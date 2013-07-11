@@ -7,13 +7,7 @@ typedef struct {
 
   char *dataFile; /* space-delimited text file with G rows and N columns */
   char *groupFile; /* space-delimited text file with 1 row and N entries */
-  char *probsFile; /* main output: diff expression / heterosis probabilities */
-  char *ratesFile; /* optional output: acceptance rates of Metropolis steps */
-  char *hyperFile; /* optional output: hyperparameters */
-  char *someParmsFile; /* optional output: example parameters */
-  char *allParmsFile; /* optional output: all parameters */
-
-  int probsFlag; /* choice to output probs of diff expression / heterosis */
+  
   int ratesFlag; /* choice to output acceptance rates */
   int hyperFlag; /* choice to output hyperparameters */
   int someParmsFlag; /* choice to output parameters for first few genes and samples */
