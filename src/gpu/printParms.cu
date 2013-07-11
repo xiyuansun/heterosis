@@ -14,6 +14,7 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   int N = cfg->N, G = cfg->G;
   char file[BUF];
   FILE *fp;
+  Chain *allHost_a;
   
   float myTime;
   cudaEvent_t start, stop;
