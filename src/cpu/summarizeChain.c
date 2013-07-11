@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 void summarizeChain(Chain *a, Config *cfg){
+
   printProbs(a, cfg);
   printRates(a, cfg);
   printHyper(a, cfg);

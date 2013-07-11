@@ -1,4 +1,3 @@
 make -C .. gpu
-mkdir -p ../out
 
-../bin/gpumcmc --data ../data/smallData.txt --group ../data/smallGroup.txt --probs ../out/probs.txt --hyper ../out/hyper.txt --rates ../out/rates.txt --all-parms ../out/allparms.txt --some-parms ../out/someparms.txt
+../bin/gpumcmc --data ../data/smallData.txt --group ../data/smallGroup.txt -r -p -P -h

@@ -4,30 +4,35 @@
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void printParms_oneFile(Chain *a, Config *cfg, int some){
 
   int m, n, g, nlibs, ngenes;
   int N = a->N, G = a->G;
+  char file[BUF];
   num_t tmp;
   FILE *fp;
   
   if(cfg->someParmsFlag || cfg->allParmsFlag){   
     if(cfg->someParmsFlag && some){
-      fp = fopen(cfg->someParmsFile, "w");
+      sprintf(file, "../out/some-parms/chain%d.txt", cfg->chainNum);
+      fp = fopen(file, "w");
       
       if(fp == NULL){
-        printf("ERROR: unable to create file, %s\n", cfg->someParmsFile);
+        printf("ERROR: unable to create file, %s\n", file);
         return;
       }
       
       nlibs = 5 < cfg->N ? 5 : cfg->N;
       ngenes = 5 < cfg->G ? 5 : cfg->G;
     } else if(cfg->allParmsFlag && !some){
-      fp = fopen(cfg->allParmsFile, "w");
+      
+      sprintf(file, "../out/all-parms/chain%d.txt", cfg->chainNum);
+      fp = fopen(file, "w");
       
       if(fp == NULL){
-        printf("ERROR: unable to create file, %s\n", cfg->allParmsFile);
+        printf("ERROR: unable to create file, %s\n", file);
         return;
       }
       

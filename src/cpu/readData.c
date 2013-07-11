@@ -8,6 +8,7 @@
 count_t *readData(Config *cfg){
   int g = 0, n = 0, G, *y;
   char *buf, row[MAXROW];
+
   FILE *fp = fopen(cfg->dataFile, "r");
   
   if(fp == NULL){

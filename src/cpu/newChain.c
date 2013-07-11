@@ -116,7 +116,7 @@ Chain *newChain(Config *cfg){ /* host */
     
     return NULL;
   }
-
+  
   a = allocChain(cfg);
 
   /* data and configuration info */
@@ -130,6 +130,7 @@ Chain *newChain(Config *cfg){ /* host */
   a->allParmsFlag = cfg->allParmsFlag;
   
   for(n = 0; n < cfg->N; ++n){
+    
     a->grp[n] = grp[n];
     tmp = 0;
     

@@ -4,18 +4,21 @@
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void printRates(Chain *a, Config *cfg){
 
   int n, i, G = a->G, niter = cfg->M - cfg->burnin;
   num_t accD, accC, accPhi, accAlp, accDel, accEps;
+  char file[BUF];
   FILE *fp;
   
   if(cfg->ratesFlag){
-    fp = fopen(cfg->ratesFile, "w");  
+    sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
+    fp = fopen(file, "w"); 
     
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", cfg->ratesFile);
+      printf("ERROR: unable to create file, %s\n", file);
       return;
     }
        

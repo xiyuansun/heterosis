@@ -141,7 +141,7 @@ void samplePiDel_kernel3(Chain*);
 void samplePiDel(Chain*, Config*);
 
 void runChain(Chain*, Config*);
-void oneChain(int, char**);
+void oneChain(Config*);
 
 void printProbs(Chain*, Config*);
 void printRates(Chain*, Config*);
