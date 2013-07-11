@@ -111,7 +111,7 @@ void samplePhiAlpDel(Chain*, Chain*, Config*);
 __global__ void sampleSigC_kernel(Chain*);
 __host__ void sampleSigC(Chain*, Chain*, Config*);
 
-__global__ void sampleEta_kernel1(Chain*);
+__global__ void sampleEta_kernel1(Chain*); 
 __global__ void sampleEta_kernel2(Chain*);
 __global__ void sampleEta_kernel3(Chain*);
 __host__ void sampleEta(Chain*, Chain*, Config*);
