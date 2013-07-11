@@ -50,8 +50,14 @@ __global__ void sampleEps_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  dim3 dimGrid(ceil(((float) cfg->G) / NTHREADS), ceil(((float) cfg->N / NTHREADS)));
-  dim3 dimBlock(cfg->G < MAXTHREADS ? cfg->G : MAXTHREADS, cfg->N < MAXTHREADS ? cfg->N : MAXTHREADS);
+  int nthreadsG = cfg->G < MAXTHREADS ? cfg->G : MAXTHREADS;
+  int nthreadsN = cfg->N < MAXTHREADS ? cfg->N : MAXTHREADS;
+  
+  int nblocksG = ceil(((float) cfg->G) / NTHREADS);
+  int nblocksN = ceil(((float) cfg->N / NTHREADS));
+  
+  dim3 dimGrid(nblocksG, nblocksN);
+  dim3 dimBlock(nthredsG, nthreadsN);
 
   printf("  eps\n");
 
