@@ -10,13 +10,13 @@ __host__ void chains(int argc, char **argv){
   Config *cfg = config(argc, argv); 
   fprintf(cfg->log, "Begun chains");
   
-  printf("lag?\n");
-  
   for(i = 0; i < cfg->M; ++i){
     fprintf(cfg->log, "Chain %d\n", i);
     cfg->chainNum = i;
     oneChain(cfg);
   }
+
+  printf("lag?\n");
 
   fprintf(cfg->log, "Done running mcmc.\n");
   free(cfg);
