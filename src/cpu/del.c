@@ -78,7 +78,9 @@ void sampleDel_kernel2(Chain *a){ /* kernel <<<1 1>>> */
   ++a->mDel;
 }
 
-void sampleDel(Chain *a){ /* host */
+void sampleDel(Chain *a, Config *cfg){ /* host */
+  fprintf(cfg->log, "del ");
+  
   sampleDel_kernel1(a);
   sampleDel_kernel2(a);
 }

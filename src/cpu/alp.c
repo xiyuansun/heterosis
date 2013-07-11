@@ -82,7 +82,9 @@ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 
-void sampleAlp(Chain *a){ /* host */
+void sampleAlp(Chain *a, Config *cfg){ /* host */
+  fprintf(cfg->log, "alp ");
+    
   sampleAlp_kernel1(a);
   sampleAlp_kernel2(a);
 }

@@ -8,6 +8,7 @@
 Chain *allocChain(Config *cfg){
 
   Chain *a = malloc(sizeof(Chain));
+  fprintf(cfg->log, "  Allocating chain.\n");
   
   /* data */  
   

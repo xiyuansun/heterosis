@@ -43,7 +43,9 @@ void sampleEps_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mEps;
 }
 
-void sampleEps(Chain *a){ /* host */
+void sampleEps(Chain *a, Config *cfg){ /* host */
+  fprintf(cfg->log, "eps ");
+  
   sampleEps_kernel1(a);
   sampleEps_kernel2(a);
 }

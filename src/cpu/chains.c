@@ -8,11 +8,14 @@
 void chains(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
+  fprintf(cfg->log, "Begun chains");
   
   for(i = 0; i < cfg->M; ++i){
+    fprintf(cfg->log, "Chain %d\n", i);
     cfg->chainNum = i;
     oneChain(cfg);
   }
   
-  free(cfg);
+  fprintf(cfg->log, "Done running mcmc.\n");
+  freeConfig(cfg);
 }

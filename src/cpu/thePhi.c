@@ -27,6 +27,8 @@ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleThePhi(Chain *a, Config *cfg){ /* host */
+  fprintf(cfg->log, "thePhi ");
+  
   if(cfg->constThePhi)
     return;
 

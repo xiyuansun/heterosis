@@ -49,7 +49,9 @@ void samplePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mPhi;
 }
 
-void samplePhi(Chain *a){ /* host */
+void samplePhi(Chain *a, Config *cfg){ /* host */
+  fprintf(cfg->log, "phi ");
+  
   samplePhi_kernel1(a);
   samplePhi_kernel2(a);
 }

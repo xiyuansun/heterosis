@@ -37,6 +37,8 @@ void sampleSigPhi_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleSigPhi(Chain *a, Config *cfg){ /* host */
+  fprintf(cfg->log, "sigPhi ");
+
   if(cfg->constSigPhi)
     return;
 

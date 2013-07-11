@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 void freeChain(Chain *a, Config *cfg){
+  fprintf(cfg->log, "  Freeing chain.\n\n");
   
   /* data */  
 

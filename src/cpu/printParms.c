@@ -7,7 +7,7 @@
 #include <string.h>
 
 void printParms(Chain *a, Config *cfg){
-
+    
   int m, n, g;
   int N = a->N, G = a->G;
   char file[BUF];
@@ -15,6 +15,7 @@ void printParms(Chain *a, Config *cfg){
   FILE *fp;
   
   if(cfg->parmsFlag){   
+    fprintf(cfg->log, "  Printing parameters.\n");  
       
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");

@@ -86,8 +86,10 @@ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mC;
 }
 
-void sampleC(Chain *a){ /* host */
+void sampleC(Chain *a, Config *cfg){ /* host */
   int n;
+  fprintf(cfg->log, "c ");
+  
   sampleC_kernel1(a);
 
   for(n = 0; n < a->N; ++n){ 

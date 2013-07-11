@@ -8,13 +8,14 @@
 #include <string.h>
 
 void printHyper(Chain *a, Config *cfg){
-
   int m;
   num_t tmp;
   char file[BUF];
   FILE *fp;
   
   if(cfg->hyperFlag){
+    fprintf(cfg->log, "  Printing hyperparameters.\n");
+  
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");
     

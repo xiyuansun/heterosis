@@ -1,11 +1,14 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "constants.h"
+#include <constants.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
 
   int chainNum;
+  FILE *log;
 
   char dataFile[BUF]; /* space-delimited text file with G rows and N columns */
   char groupFile[BUF]; /* space-delimited text file with 1 row and N entries */

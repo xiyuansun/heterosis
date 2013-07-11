@@ -53,6 +53,8 @@ void sampleTheAlp_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleTheAlp(Chain *a, Config *cfg){ /* host */
+  fprintf(cfg->log, "theAlp ");
+
   if(cfg->constTheAlp)
     return;
 

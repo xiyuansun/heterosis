@@ -89,7 +89,9 @@ void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mDel;
 }
 
-void samplePhiAlpDelJoint(Chain *a){ /* host */
+void samplePhiAlpDelJoint(Chain *a, Config *cfg){ /* host */
+  fprintf(cfg->log, "phiAlpDelJoint ");
+  
   samplePhiAlpDelJoint_kernel1(a);
   samplePhiAlpDelJoint_kernel2(a);
 }

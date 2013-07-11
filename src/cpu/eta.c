@@ -33,7 +33,9 @@ void sampleEta_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mEta;
 }
 
-void sampleEta(Chain *a){
+void sampleEta(Chain *a, Config *cfg){
+  fprintf(cfg->log, "eta ");
+
   sampleEta_kernel1(a);
   sampleEta_kernel2(a);
   sampleEta_kernel3(a);

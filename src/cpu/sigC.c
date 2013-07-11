@@ -6,9 +6,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void sampleSigC(Chain *a){ /* kernel <<<1, 1>>> */
+void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
+
   int n, N = a->N;
   num_t rate, shape, lb;
+
+  fprintf(cfg->log, "sigC ");
 
   if(a->constSigC)
     return; 

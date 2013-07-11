@@ -14,6 +14,8 @@ void printProbs(Chain *a, Config *cfg){
   char file[BUF] = "../out/probs/chain";
   FILE *fp;
   
+  fprintf(cfg->log, "  Printing heterosis / diff-expr probabilities.\n");
+  
   sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
   fp = fopen(file, "w"); 
     
