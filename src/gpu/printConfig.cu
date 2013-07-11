@@ -10,7 +10,6 @@ __host__ void printConfig(Config *cfg){
   printf("dataFile = %s\n", cfg->dataFile);
   printf("groupFile = %s\n\n", cfg->groupFile);
 
-  printf("probsFlag = %d\n", cfg->probsFlag);
   printf("ratesFlag = %d\n", cfg->ratesFlag);
   printf("hyperFlag = %d\n", cfg->hyperFlag);
   printf("someParmsFlag = %d\n", cfg->someParmsFlag);
