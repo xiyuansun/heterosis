@@ -48,7 +48,7 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g, G = a->G;
-printf("1\n");
+
   a->mC = 0;
   a->mSigC = 0;
 
@@ -118,8 +118,9 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     return;
   }
 
+
   allocChainDevice(host_a, dev_a, cfg);
-  
+  printf("1\n");
   /* data and configuration info */
 
   CUDA_CALL(cudaMemcpy(&((*dev_a)->M), &(cfg->M), sizeof(int), cudaMemcpyHostToDevice));
