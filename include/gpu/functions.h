@@ -156,7 +156,7 @@ __host__ void oneChain(Config*);
 __host__ void chains(int, char**);
 
 __host__ void printProbs(Chain*, Config*);
-__host__ void printRates(Chain*, Config*);
+__host__ void printRates(Chain*, Chain*, Config*);
 __host__ void printHyper(Chain*, Config*);
 __host__ void printParms_oneFile(Chain*, Config*, int);
 __host__ void printParms(Chain*, Config*);
