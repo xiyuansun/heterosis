@@ -5,9 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void oneChain(int argc, char **argv){
+void oneChain(Config*){
 
-  Config *cfg = config(argc, argv); 
   Chain *host_a = NULL, *dev_a = NULL;
   
   newChain(&host_a, &dev_a, cfg); 
@@ -20,9 +19,6 @@ void oneChain(int argc, char **argv){
   runChain(host_a, dev_a, cfg);
   summarizeChain(host_a, dev_a, cfg);
   
-  printChain(host_a, dev_a, cfg);
-  
   freeChain(host_a, cfg, 0); 
   cudaFree(dev_a);
-  freeConfig(cfg);
 }

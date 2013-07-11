@@ -153,7 +153,8 @@ __global__ void samplePiDel_kernel2(Chain*);
 __host__ void samplePiDel(Chain*, Chain*, Config*);
 
 __host__ void runChain(Chain*, Chain*, Config*);
-__host__ void oneChain(int, char**);
+__host__ void oneChain(Config*);
+__host__ void chains(int, char**);
 
 __host__ void printProbs(Chain*, Config*);
 __host__ void printRates(Chain*, Config*);

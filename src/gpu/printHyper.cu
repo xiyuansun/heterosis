@@ -5,18 +5,21 @@
 #include <constants.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-__host__ void printHyper(Chain *a, Config *cfg){
+void printHyper(Chain *a, Config *cfg){
 
   int m;
   num_t tmp;
+  char file[BUF];
   FILE *fp;
   
   if(cfg->hyperFlag){
-    fp = fopen(cfg->hyperFile, "w");
+    sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
+    fp = fopen(file, "w");
     
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", cfg->hyperFile);
+      printf("ERROR: unable to create file, %s\n", file);
       return;
     }
     

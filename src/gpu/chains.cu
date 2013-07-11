@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void chains(int argc, char **argv){
+__host__ void chains(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
   

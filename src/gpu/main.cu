@@ -8,6 +8,6 @@
 #include <stdio.h>
 
 int main(int argc, char **argv){
-  oneChain(argc, argv);
+  chains(argc, argv);
   return EXIT_SUCCESS;
 }
