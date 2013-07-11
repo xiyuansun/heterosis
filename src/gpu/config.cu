@@ -67,7 +67,8 @@ Config *config(int argc, char **argv){
   cfg->log = fopen("../out/log.txt", "w+");
   
   cfg->time = fopen("../out/time.txt", "w+");
-  fprintf(cfg->time, "alloc c ");
+  cfg->timeConfig = fopen("../out/timeConfig.txt", "w+");
+  fprintf(cfg->time, "c ");
 
   if(!cfg->constTau){
     cfg->tau = sqrt(rgamma(cfg->aTau, cfg->bTau, 0));
@@ -132,23 +133,23 @@ Config *config(int argc, char **argv){
     fprintf(cfg->time, "phi alp del ");
   }
   
-  fprintf(cfg->time, "probs ");
+  fprintf(cfg->timeConfig, "alloc probs ");
   
   if(cfg->ratesFlag){
     system("mkdir -p ../out/rates/");
-    fprintf(cfg->time, "rates ");
+    fprintf(cfg->timeConfig, "rates ");
   }
   
   if(cfg->hyperFlag){
     system("mkdir -p ../out/hyper/");
-    fprintf(cfg->time, "hyper ");
+    fprintf(cfg->timeConfig, "hyper ");
   }
   
   if(cfg->parmsFlag){
     system("mkdir -p ../out/parms/"); 
-    fprintf(cfg->time, "parms ");
+    fprintf(cfg->timeConfig, "parms ");
   }
   
-  fprintf(cfg->time, "\n"); 
+  fprintf(cfg->timeConfig, "\n"); 
   return cfg;
 }
