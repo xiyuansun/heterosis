@@ -10,7 +10,7 @@ __host__ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
   printProbs(host_a, cfg);
   printRates(allHost_a, cfg);
-  printHyper(allHost_a, cfg);
+  printHyper(host_a, cfg);
   printParms(allHost_a, cfg);
   
   freeChain(allHost_a, cfg, 1);
