@@ -5,13 +5,10 @@
 
 __host__ void printConfig(Config *cfg){
   
+  printf("chainNum = %d\n\n", cfg->chainNum);
+  
   printf("dataFile = %s\n", cfg->dataFile);
-  printf("groupFile = %s\n", cfg->groupFile);
-  printf("probsFile = %s\n", cfg->probsFile);
-  printf("ratesFile = %s\n", cfg->ratesFile);
-  printf("hyperFile = %s\n", cfg->hyperFile);
-  printf("someParmsFile = %s\n", cfg->someParmsFile);
-  printf("allParmsFile = %s\n\n", cfg->allParmsFile);
+  printf("groupFile = %s\n\n", cfg->groupFile);
 
   printf("probsFlag = %d\n", cfg->probsFlag);
   printf("ratesFlag = %d\n", cfg->ratesFlag);
