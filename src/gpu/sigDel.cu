@@ -39,7 +39,7 @@ __host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->constSigDel || !cfg->heterosis)
     return;
 
-  sampleSigDel_kernel1(dev_a);
+  sampleSigDel_kernel1<<<NBLOCKS, NTHREADS>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
@@ -49,5 +49,5 @@ __host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
  
-  sampleSigDel_kernel2(dev_a);
+  sampleSigDel_kernel2<<<1, 1>>>(dev_a);
 }
