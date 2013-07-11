@@ -73,7 +73,7 @@ function gpu {
   DEP+=(c tau piAlp piDel d sigC) # eps eta)
   DEP+=(thePhi theAlp theDel)
 #  DEP+=(phi alp del phiAlpDelJoint phiAlpDel)
-  DEP+=(sigPhi) # sigAlp sigDel)
+  DEP+=(sigPhi sigAlp) # sigDel)
   DEP+=(runChain oneChain summarizeChain)
   DEP+=(printProbs printRates printHyper printParms)
   DEP+=(main)
