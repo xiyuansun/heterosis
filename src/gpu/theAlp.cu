@@ -48,5 +48,5 @@ __host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
   
-  sampleTheAlp_kernel2<<<NBLOCKS, NTHREADS>(dev_a);
+  sampleTheAlp_kernel2<<<NBLOCKS, NTHREADS>>>(dev_a);
 }
