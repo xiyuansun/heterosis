@@ -1,6 +1,5 @@
-1) make proper makefile to cut down on compilation time 
-2) implement all samplers in CUDA C
-3) parallelize across libraries
+1) implement all samplers in CUDA C
+2) parallelize across libraries
 3) run and output summaries of multiple chains
 4) implement logfile in both C and CUDA C versions to track progress.
 5) compute DIC in both versions (summary).
