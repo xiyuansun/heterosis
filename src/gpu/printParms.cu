@@ -12,7 +12,7 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   int N = cfg->N, G = cfg->G;
   char file[BUF];
   FILE *fp;
-  Chain *allHost;
+  Chain *allHost_a;
   
   if(!cfg->parmsFlag)
     return;
@@ -45,31 +45,31 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
       fprintf(fp, "eps_lib%d_gene%d ", n, g);
 
   fprintf(fp, "\n");
-  allHost = chainDeviceToHost(host_a, dev_a, cfg);
+  allHost_a = chainDeviceToHost(host_a, dev_a, cfg);
     
   for(m = 0; m <= cfg->M; ++m){
     for(n = 0; n < cfg->N; ++n)
-      fprintf(fp, NUM_TF, allHost->c[iN(m, n)]); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, allHost_a->c[iN(m, n)]); fprintf(fp, " ");
       
     for(g = 0; g < cfg->G; ++g)
-      fprintf(fp, NUM_TF, allHost->phi[iG(m, g)]); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, allHost_a->phi[iG(m, g)]); fprintf(fp, " ");
 
     for(g = 0; g < cfg->G; ++g)
-      fprintf(fp, NUM_TF, allHost->alp[iG(m, g)]); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, allHost_a->alp[iG(m, g)]); fprintf(fp, " ");
       
     for(g = 0; g < cfg->G; ++g)
-      fprintf(fp, NUM_TF, allHost->del[iG(m, g)]); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, allHost_a->del[iG(m, g)]); fprintf(fp, " ");
 
     for(g = 0; g < cfg->G; ++g)
-      fprintf(fp, NUM_TF, allHost->eta[iG(m, g)]); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, allHost_a->eta[iG(m, g)]); fprintf(fp, " ");
       
     for(n = 0; n < cfg->N; ++n)
       for(g = 0; g < cfg->G; ++g)
-        fprintf(fp, NUM_TF, allHost->eps[iNG(m, n, g)]); fprintf(fp, " ");
+        fprintf(fp, NUM_TF, allHost_a->eps[iNG(m, n, g)]); fprintf(fp, " ");
       
     fprintf(fp, "\n");
   } 
     
-  freeChain(allHost, cfg, 1);  
+  freeChain(allHost_a, cfg, 1);  
   fclose(fp);
 }
