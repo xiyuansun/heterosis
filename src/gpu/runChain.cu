@@ -1,18 +1,22 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
-  time_t p1, p2;
+  double myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
   
   fprintf(cfg->log, "  Running chain.\n");
-  time(&p1);
   
   for(m = 0; m < cfg->M; ++m){
     fprintf(cfg->log, "    iter %d | ", m);
@@ -36,6 +40,11 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     fprintf(cfg->log, "\n");
   }
   
-  time(&p2);
-  fprintf(cfg->time, "%0.3f ", difftime(p2, p1)/60.0);
+  cudaEventRecord(sop, 0, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  fprintf(cfg->time, "%0.3f ", myTime/60000.0); /* elapsed time in minutes */
 } 

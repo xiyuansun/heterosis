@@ -1,11 +1,12 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
 
@@ -14,8 +15,12 @@ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
   num_t raccD, raccC, raccPhi, raccAlp, raccDel, raccEps;
   char file[BUF];
   FILE *fp;
-  double time;
-  clock_t start = clock();
+  
+  double myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
     
   if(cfg->ratesFlag){
     fprintf(cfg->log, "  Printing Metropolis acceptance rates.\n");
@@ -132,6 +137,11 @@ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
     fclose(fp);
   }
   
-  time = ((double) clock() - start) / (60 * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  cudaEventRecord(stop, 0, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  fprintf(cfg->time, "%0.3f ", myTime/60000.0); /* elapsed time in minutes */
 }

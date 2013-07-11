@@ -1,12 +1,13 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 void printProbs(Chain *a, Config *cfg){
   int m, g, G = cfg->G, niter = cfg->M - cfg->burnin;
@@ -14,8 +15,12 @@ void printProbs(Chain *a, Config *cfg){
   num_t prob_de, prob_hph, prob_lph, prob_mph;
   char file[BUF] = "../out/probs/chain";
   FILE *fp;
-  double time;
-  clock_t start = clock();
+  
+  double myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
     
   fprintf(cfg->log, "  Printing heterosis / diff-expr probabilities.\n");
 
@@ -71,8 +76,13 @@ void printProbs(Chain *a, Config *cfg){
     fprintf(fp, "\n");
   }
 
-  time = ((double) clock() - start) / (60 * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  cudaEventRecord(stop, 0, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  fprintf(cfg->time, "%0.3f ", myTime/60000.0); /* elapsed time in minutes */
 
   free(alp);
   free(del);   
