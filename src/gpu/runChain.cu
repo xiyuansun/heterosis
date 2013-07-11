@@ -40,7 +40,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     fprintf(cfg->log, "\n");
   }
   
-  cudaEventRecord(stop, 0, 0);
+  cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&myTime, start, stop);
   cudaEventDestroy(start);

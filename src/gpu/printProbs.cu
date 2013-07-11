@@ -76,7 +76,7 @@ void printProbs(Chain *a, Config *cfg){
     fprintf(fp, "\n");
   }
 
-  cudaEventRecord(stop, 0, 0);
+  cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&myTime, start, stop);
   cudaEventDestroy(start);
