@@ -17,7 +17,7 @@ __device__ num_t alpProp(Chain *a, int g){ /* device */
 
   num_t avg = (a->alp[iG(a->mAlp, g)] * sprec) / (gprec + sprec);
   num_t s = gam * gam + sig * sig;
-  num_t u = runiform(0, 1);
+  num_t u = runiformDevice(a, g, 0, 1);
   num_t nw;
   
   if(u < a->piAlp[a->mPiAlp]){
