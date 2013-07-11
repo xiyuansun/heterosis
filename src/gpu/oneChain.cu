@@ -5,14 +5,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void oneChain(Config*){
+void oneChain(Config* cfg){
 
   Chain *host_a = NULL, *dev_a = NULL;
-  
   newChain(&host_a, &dev_a, cfg); 
   
   if(host_a == NULL || dev_a == NULL){
-    freeConfig(cfg);
+    free(cfg);
     exit(EXIT_FAILURE);
   }
   

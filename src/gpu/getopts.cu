@@ -17,7 +17,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"rates", no_argument, 0, 'r'},  
     {"hyper", no_argument, 0, 'h'},
     {"some-parms", no_argument, 0, 'p'},
-    {"all-parms", no_argument, 0, 'a'},
+    {"all-parms", no_argument, 0, 'P'},
     {"joint", no_argument, 0, 'j'},  
     {"seed", required_argument, 0, 's'},  
     {"sigma-c0", required_argument, 0, 'x'},
