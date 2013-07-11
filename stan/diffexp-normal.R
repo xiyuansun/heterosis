@@ -61,6 +61,7 @@ fit <- stan(model_code = diffexp_model, data=diffexp_data, iter=10000, chains=4)
 fit1 <- stan(fit = fit, data=diffexp_data, iter=10000, chains=4)
 
 s = monitor(fit1)
+alphas = grep("alpha",rownames(s))
 
 
 # Single gene analysis
@@ -71,7 +72,6 @@ onegene = function(d) {
 est = daply(d, "gene", onegene)
 
 
-alphas = grep("alpha",rownames(s))
 
 # Determine which are nonzero
 sig = s[alphas,4] * s[alphas,8] < 0 
