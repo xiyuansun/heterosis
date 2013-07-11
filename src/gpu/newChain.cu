@@ -15,7 +15,8 @@ __host__ int cmpfunc (const void *a, const void *b){
 __global__ void curand_setup_kernel(Chain *a, unsigned int seed){ /* kernel <<<G, 1>>> */
   int g = (blockDim.x * blockIdx.x) + threadIdx.x;
   int n = (blockDim.y * blockIdx.y) + threadIdx.y;
-
+  int G = a->G;
+  
   int id = iG(n, g);
   curand_init(seed, id, 0, &(a->states[id]));
 }
