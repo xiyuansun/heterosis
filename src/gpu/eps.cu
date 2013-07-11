@@ -57,7 +57,7 @@ void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int nblocksN = ceil(((float) cfg->N / NTHREADS));
   
   dim3 dimGrid(nblocksG, nblocksN);
-  dim3 dimBlock(nthredsG, nthreadsN);
+  dim3 dimBlock(nthreadsG, nthreadsN);
 
   printf("  eps\n");
 

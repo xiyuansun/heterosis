@@ -230,7 +230,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   int nblocksN = ceil(((float) cfg->N / NTHREADS));
   
   dim3 dimGrid(nblocksG, nblocksN);
-  dim3 dimBlock(nthredsG, nthreadsN);
+  dim3 dimBlock(nthreadsG, nthreadsN);
   
   curand_setup_kernel<<<dimGrid, dimBlock>>>(*dev_a, cfg->seed);
   
