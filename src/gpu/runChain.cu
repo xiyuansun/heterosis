@@ -13,18 +13,18 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   fprintf(cfg->log, "  Running chain.\n");
   
-  printf("1\n");
+  
   
   for(m = 0; m < cfg->M; ++m){
     fprintf(cfg->log, "    iter %d | ", m);
 
-    sampleC(host_a, dev_a, cfg);
-    sampleTau(host_a, dev_a, cfg);
-    samplePiAlp(host_a, dev_a, cfg);
-    samplePiDel(host_a, dev_a, cfg);
-    sampleD(host_a, dev_a, cfg);
-    sampleThePhi(host_a, dev_a, cfg);
-    sampleTheAlp(host_a, dev_a, cfg);
+    sampleC(host_a, dev_a, cfg);printf("c\n");
+    sampleTau(host_a, dev_a, cfg);printf("tau\n");
+    samplePiAlp(host_a, dev_a, cfg);printf("pial\n");
+    samplePiDel(host_a, dev_a, cfg);printf("pidel\n");
+    sampleD(host_a, dev_a, cfg);printf("d\n");
+    sampleThePhi(host_a, dev_a, cfg);printf("thephi\n");
+    sampleTheAlp(host_a, dev_a, cfg);printf("thealp\n");
     sampleTheDel(host_a, dev_a, cfg);
     sampleSigC(host_a, dev_a, cfg);
     sampleSigPhi(host_a, dev_a, cfg);
