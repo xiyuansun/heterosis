@@ -13,17 +13,17 @@ __device__ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 }
 
 __global__ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
-  int n = IDY, g = IDX, N = a->N, G = a->G, id = ID;
+  int n, g = IDX, N = a->N, G = a->G;
   num_t old, nw, dl, lp, lu;
 
   if(g < G){
-    if(n < N){ 
+    for(n = 0; n < N; ++n){ 
       old = a->eps[iNG(a->mEps, n, g)];
-      nw = rnormalDevice(a, id, old, a->tuneEps[iG(n, g)]);
+      nw = rnormalDevice(a, g, old, a->tuneEps[iG(n, g)]);
 
       dl = lEps(a, n, g, nw) - lEps(a, n, g, old);
       lp = 0 < dl ? 0 : dl;
-      lu = log(runiformDevice(a, id, 0, 1));
+      lu = log(runiformDevice(a, g, 0, 1));
       
       if(lu < lp){ /* accept */
         a->eps[iNG(a->mEps + 1, n, g)] = nw;
@@ -44,6 +44,6 @@ __global__ void sampleEps_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  sampleEps_kernel1<<<GN_GRID, GN_BLOCK>>>(dev_a);
+  sampleEps_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleEps_kernel2<<<1, 1>>>(dev_a);
 }
