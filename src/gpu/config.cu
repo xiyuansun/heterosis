@@ -120,6 +120,7 @@ Config *config(int argc, char **argv){
     fprintf(cfg->time, "parms ");
   }
 
+  fprintf(cfg->time, "\n");
   cfg->log = fopen("../out/log.txt", "w+");
 
   
