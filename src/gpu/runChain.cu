@@ -10,7 +10,7 @@
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
-  
+  cudaDeviceSynchronize();
   fprintf(cfg->log, "  Running chain.\n");
   
   for(m = 0; m < cfg->M; ++m){
