@@ -43,9 +43,15 @@ void printRates(Chain *a, Config *cfg){
     accDel /= niter;
   
     accEps = 0;  
-    for(n = 0; n < cfg->N; ++n)
+    for(n = 0; n < cfg->N; ++n){
       accEps += a->accEps[iG(n, 0)];
+      printf("%d ",a->accEps[iG(n, 0)]);
+    }
+    printf("\n%0.3f\n", accEps);
+    
     accEps /= (niter * cfg->N);
+    
+    
     
     fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
     fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");

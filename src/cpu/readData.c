@@ -47,14 +47,15 @@ count_t *readData(Config *cfg){
   
   /* BEGIN DEBUG */
   
-  cfg->G = 24;
+  cfg->G = 25;
+  G = 25;
   
   /* END DEBUG */
   
   for(g = 0; g < cfg->G; ++g)
     for(n = 0; n < cfg->N; ++n)
       fscanf(fp, "%d", y + iG(n, g));
-  
+      
   fclose(fp);
   return y;
 }

@@ -202,7 +202,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     for(g = 0; g < cfg->G; ++g)
       tmpv[g] = y[iG(n, g)];
       
-    qsort(tmpv, cfg->N, sizeof(num_t), cmpfunc);    
+    qsort(tmpv, cfg->G, sizeof(num_t), cmpfunc);    
     lqts[n] = log(tmpv[(int) floor(cfg->G * 0.75)]);
     s += lqts[n];
   }
