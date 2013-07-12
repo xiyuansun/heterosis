@@ -33,6 +33,4 @@ void runChain(Chain *a, Config *cfg){
     fprintf(cfg->log, "\n");
     fprintf(cfg->time, "\n");
   }
-
-printChain(a);
 }
