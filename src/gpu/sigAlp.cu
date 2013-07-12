@@ -67,7 +67,8 @@ if(err != cudaSuccess) {
  
   sampleSigAlp_kernel2<<<1, 1>>>(dev_a); 
 
-  err= cudaEventRecord(stop, 0);
+printf("hu\n");
+  err= cudaEventRecord(stop, 0);printf("hum\n");
   if(err != cudaSuccess) {
           printf ("\n\n 1. Error: %s\n\n", cudaGetErrorString(err));
           exit(1);
