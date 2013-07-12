@@ -5,7 +5,9 @@
 #include <string.h>
 
 void printConfig(Config *cfg){
-  printf("chainNum = %d\n\n", cfg->chainNum);
+
+  printf("chainNum = %d\n", cfg->chainNum);
+  printf("chains = %d\n\n", cfg->chains);
   
   printf("dataFile = %s\n", cfg->dataFile);
   printf("groupFile = %s\n", cfg->groupFile);

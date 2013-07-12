@@ -10,7 +10,7 @@ void chains(int argc, char **argv){
   Config *cfg = config(argc, argv); 
   fprintf(cfg->log, "Begun chains");
   
-  for(i = 0; i < cfg->M; ++i){
+  for(i = 0; i < cfg->chains; ++i){
     fprintf(cfg->log, "Chain %d\n", i);
     cfg->chainNum = i;
     oneChain(cfg);

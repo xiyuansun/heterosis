@@ -12,6 +12,7 @@ void getopts(Config *cfg, int argc, char **argv){
   struct option long_options[] = {
     {"data", required_argument, 0, 'i'},
     {"group", required_argument, 0, 'g'},
+    {"chains", required_argument, 0, 'c'},
     {"iter", required_argument, 0, 'M'},
     {"burnin", required_argument, 0, 'b'},
     {"rates", no_argument, 0, 'r'},  
@@ -26,7 +27,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"a-delta", required_argument, 0, '9'},  
     {"b-tau", required_argument, 0, 'n'},
     {"b-alpha", required_argument, 0, 'A'},
-    {"b-delta", required_argument, 0, 'c'},
+    {"b-delta", required_argument, 0, 'Z'},
     {"gamma-phi", required_argument, 0, 'q'},
     {"gamma-alpha", required_argument, 0, 'e'},  
     {"gamma-delta", required_argument, 0, '8'},
@@ -51,37 +52,40 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "A:ab:c:d:e:f:g:hi:jk:l:m:M:n:o:pq:rs:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
+        "A:ab:B:c:C:d:e:f:g:G:hHi:jJk:l:m:M:n:o:pPq:rRs:S:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
         long_options, &option_index);
     
     if(c == -1)
       break;
       
-    if(c == 'i'){ /* data */
+    if(c == 'i' || c == 'D'){ /* data */
       strcpy(cfg->dataFile, optarg);
       
-    } else if(c == 'g') { /* group */
+    } else if(c == 'g' || c == 'G') { /* group */
       strcpy(cfg->groupFile, optarg);
             
+    } else if(c == 'c' || c == 'C') { /* number of chains */
+      cfg->chains = atoi(optarg);
+      
     } else if(c == 'm' || c == 'M') { /* iterations */
       cfg->M = atoi(optarg);
     
-    } else if(c == 'b') { /* burnin */
+    } else if(c == 'b' || c == 'B') { /* burnin */
       cfg->burnin = atoi(optarg);
       
-    } else if(c == 'r') { /* rates */
+    } else if(c == 'r' || c == 'R') { /* rates */
       cfg->ratesFlag = 1;
     
-    } else if(c == 'h') { /* hyper */
+    } else if(c == 'h' || c == 'H') { /* hyper */
       cfg->hyperFlag = 1;
     
-    } else if(c == 'p') { /* parms */
+    } else if(c == 'p' || c == 'P') { /* parms */
       cfg->parmsFlag = 1;
     
-    } else if(c == 'j') { /* joint */
+    } else if(c == 'j' || c == 'J') { /* joint */
       cfg->joint = 1;
 
-    } else if(c == 's') { /* seed */
+    } else if(c == 's' || c == 'S') { /* seed */
       cfg->seed = atoi(optarg);
     
     } else if(c == 'x') { /* sigma-c0 */
@@ -105,7 +109,7 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'A') { /* b-alpha */
       cfg->bAlp = atof(optarg);
           
-    } else if(c == 'c') { /* b-delta */
+    } else if(c == 'Z') { /* b-delta */
       cfg->bDel = atof(optarg);    
     
     } else if(c == 'q') { /* gamma-phi */

@@ -7,7 +7,9 @@
 
 typedef struct {
 
-  int chainNum;
+  int chainNum; /* index of current chain */
+  int chains; /* number of chains */
+  
   FILE *log;
   FILE *time;
 

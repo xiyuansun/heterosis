@@ -21,7 +21,8 @@ Config *config(int argc, char **argv){
   cfg->hyperFlag = 0;
   cfg->parmsFlag = 0;
 
-  cfg->M = 10;  
+  cfg->chains = 2;
+  cfg->M = 10;
   cfg->burnin = cfg->M / 2;
   cfg->joint = 0;
 
