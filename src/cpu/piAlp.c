@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void samplePiAlp_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
   int g, G = a->G;
@@ -33,6 +34,9 @@ void samplePiAlp_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void samplePiAlp(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   if(cfg->constPiAlp)
     return;
 
@@ -41,4 +45,7 @@ void samplePiAlp(Chain *a, Config *cfg){ /* host */
   samplePiAlp_kernel1(a);
   samplePiAlp_kernel2(a);  
   samplePiAlp_kernel3(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

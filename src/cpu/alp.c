@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 num_t alpProp(Chain *a, int g){ /* device */
   int G = a->G;
@@ -83,8 +84,14 @@ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 
 void sampleAlp(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   fprintf(cfg->log, "alp ");
     
   sampleAlp_kernel1(a);
   sampleAlp_kernel2(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

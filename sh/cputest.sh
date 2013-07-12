@@ -1,3 +1,3 @@
 make -C .. cpu
 
-../bin/mcmc --data ../data/smallData.txt --group ../data/smallGroup.txt -r -h
+../bin/mcmc --data ../data/smallData.txt --group ../data/smallGroup.txt -h -r -p

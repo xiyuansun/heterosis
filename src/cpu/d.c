@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
@@ -97,6 +98,9 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleD(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+  
   if(cfg->constD)
     return;
     
@@ -108,4 +112,7 @@ void sampleD(Chain *a, Config *cfg){ /* host */
   lD(a, 0);
 
   sampleD_kernel2(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

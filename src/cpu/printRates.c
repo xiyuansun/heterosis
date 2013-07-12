@@ -13,8 +13,6 @@ void printRates(Chain *a, Config *cfg){
   num_t accD, accC, accPhi, accAlp, accDel, accEps;
   char file[BUF];
   FILE *fp;
-  double time;
-  clock_t start = clock();
     
   if(cfg->ratesFlag){
     fprintf(cfg->log, "  Printing Metropolis acceptance rates.\n");
@@ -112,7 +110,4 @@ void printRates(Chain *a, Config *cfg){
     
     fclose(fp);
   }
-
-  time = ((double) clock() - start) / (60 * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
 }

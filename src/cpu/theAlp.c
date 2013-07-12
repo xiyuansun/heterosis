@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
@@ -53,6 +54,9 @@ void sampleTheAlp_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleTheAlp(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   if(cfg->constTheAlp)
     return;
     
@@ -62,4 +66,7 @@ void sampleTheAlp(Chain *a, Config *cfg){ /* host */
   sampleTheAlp_kernel2(a);
   sampleTheAlp_kernel3(a);
   sampleTheAlp_kernel4(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

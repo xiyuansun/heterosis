@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
   int g, N = a->N, G = a->G;
@@ -88,6 +89,9 @@ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 
 void sampleC(Chain *a, Config *cfg){ /* host */
   int n;
+  double time;
+  clock_t start = clock();
+
   fprintf(cfg->log, "c ");
   
   sampleC_kernel1(a);
@@ -99,4 +103,7 @@ void sampleC(Chain *a, Config *cfg){ /* host */
 
   sampleC_kernel2(a);
   sampleC_kernel3(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
   int N = a->N, G = a->G;
@@ -44,8 +45,14 @@ void sampleEps_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEps(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   fprintf(cfg->log, "eps ");
   
   sampleEps_kernel1(a);
   sampleEps_kernel2(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

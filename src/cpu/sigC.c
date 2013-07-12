@@ -5,11 +5,14 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
 
   int n, N = a->N;
   num_t rate, shape, lb;
+  double time;
+  clock_t start = clock();
 
   if(a->constSigC)
     return; 
@@ -31,4 +34,7 @@ void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
   }
 
   ++a->mSigC;
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

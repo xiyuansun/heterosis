@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void sampleThePhi_kernel1(Chain *a){ /* pairwise sum in Thrust */
   int g, G = a->G;
@@ -27,6 +28,9 @@ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleThePhi(Chain *a, Config *cfg){ /* host */  
+  double time;
+  clock_t start = clock();
+
   if(cfg->constThePhi)
     return;
     
@@ -34,4 +38,7 @@ void sampleThePhi(Chain *a, Config *cfg){ /* host */
 
   sampleThePhi_kernel1(a);
   sampleThePhi_kernel2(a);
+  
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

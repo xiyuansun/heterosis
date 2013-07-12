@@ -11,6 +11,5 @@ void summarizeChain(Chain *a, Config *cfg){
   printRates(a, cfg);
   printHyper(a, cfg);
   printParms(a, cfg);
-  
-  fprintf(cfg->time, "\n");
+
 }

@@ -9,8 +9,6 @@
 
 void runChain(Chain *a, Config *cfg){
   int m;
-  double time;
-  clock_t start = clock();
   
   fprintf(cfg->log, "  Running chain.\n");
   
@@ -34,8 +32,6 @@ void runChain(Chain *a, Config *cfg){
     samplePhiAlpDel(a, cfg);
     
     fprintf(cfg->log, "\n");
+    fprintf(cfg->time, "\n");
   }
-  
-  time = ((double) clock() - start) / (60 * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
 }

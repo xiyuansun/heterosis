@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
@@ -53,6 +54,9 @@ void sampleTheDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleTheDel(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   if(cfg->constTheDel || !cfg->heterosis)
     return;
 
@@ -62,4 +66,7 @@ void sampleTheDel(Chain *a, Config *cfg){ /* host */
   sampleTheDel_kernel2(a);
   sampleTheDel_kernel3(a);
   sampleTheDel_kernel4(a);
+  
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);  
 }

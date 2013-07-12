@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 num_t delProp(Chain *a, int g){ /* device */
   int G = a->G;      
@@ -79,8 +80,14 @@ void sampleDel_kernel2(Chain *a){ /* kernel <<<1 1>>> */
 }
 
 void sampleDel(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+  
   fprintf(cfg->log, "del ");
   
   sampleDel_kernel1(a);
   sampleDel_kernel2(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

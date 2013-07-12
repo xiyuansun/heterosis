@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void sampleSigAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
@@ -55,6 +56,9 @@ void sampleSigAlp_kernel4(Chain *a){ /* parallel pairwise sum in Thrust */
 }
 
 void sampleSigAlp(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   if(cfg->constSigAlp)
     return;
 
@@ -64,4 +68,7 @@ void sampleSigAlp(Chain *a, Config *cfg){ /* host */
   sampleSigAlp_kernel2(a);
   sampleSigAlp_kernel3(a);
   sampleSigAlp_kernel4(a); 
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

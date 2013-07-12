@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
  
@@ -90,8 +91,14 @@ void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void samplePhiAlpDelJoint(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   fprintf(cfg->log, "phiAlpDelJoint ");
   
   samplePhiAlpDelJoint_kernel1(a);
   samplePhiAlpDelJoint_kernel2(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "--%0.3f ", time);
 }

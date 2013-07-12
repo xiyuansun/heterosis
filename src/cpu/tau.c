@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void sampleTau_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
@@ -37,6 +38,9 @@ void sampleTau_kernel3(Chain *a){ /* kernel<<<1, 1>>> */
 }
 
 void sampleTau(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   if(cfg->constTau)
     return;
 
@@ -45,4 +49,7 @@ void sampleTau(Chain *a, Config *cfg){ /* host */
   sampleTau_kernel1(a);
   sampleTau_kernel2(a);
   sampleTau_kernel3(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

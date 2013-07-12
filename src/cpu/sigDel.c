@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
@@ -54,6 +55,9 @@ void sampleSigDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleSigDel(Chain *a, Config *cfg){ /* host */
+  double time;
+  clock_t start = clock();
+
   if(cfg->constSigDel || !cfg->heterosis)
     return;
 
@@ -63,4 +67,7 @@ void sampleSigDel(Chain *a, Config *cfg){ /* host */
   sampleSigDel_kernel2(a);
   sampleSigDel_kernel3(a);
   sampleSigDel_kernel4(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }

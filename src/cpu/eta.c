@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void sampleEta_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
   a->s1 = (a->N + a->d[a->mD]) / 2; 
@@ -34,9 +35,15 @@ void sampleEta_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEta(Chain *a, Config *cfg){
+  double time;
+  clock_t start = clock();
+
   fprintf(cfg->log, "eta ");
 
   sampleEta_kernel1(a);
   sampleEta_kernel2(a);
   sampleEta_kernel3(a);
+
+  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  fprintf(cfg->time, "%0.3f ", time);
 }
