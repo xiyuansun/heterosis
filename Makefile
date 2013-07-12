@@ -11,6 +11,9 @@ OBJDIR=obj/
 SRCDIR=src/
 OUTDIR=out/
 
+CPUBIN=$(BINDIR)mcmc
+GPUBIN=$(BINDIR)gpumcmc
+
 CCOBJDIR=$(OBJDIR)cpu/
 CCSRCDIR=$(SRCDIR)cpu/
 
@@ -46,26 +49,25 @@ NVCCDEP+=main
 CCOBJ=$(foreach name, $(CCDEP), $(CCOBJDIR)$(name).o)
 NVCCOBJ=$(foreach name, $(NVCCDEP), $(NVCCOBJDIR)$(name).o)
 
-all: cpu
+all: $(CPUBIN)
 	
-cpu: $(CCOBJ) $(OUTDIR)
+$(CPUBIN): $(CCOBJ) 
 	mkdir -p $(BINDIR)
 	$(CC) $(CCOBJ) -o $(BINDIR)mcmc $(LDFLAGS)
 
 $(CCOBJDIR)%.o: $(CCSRCDIR)%.c
 	mkdir -p $(CCOBJDIR)
 	$(CC) $(CCFLAGS) $< -o $@ 
+
+gpu: $(GPUBIN)
 	
-gpu: $(NVCCOBJ) $(OUTDIR)
+$(GPUBIN): $(NVCCOBJ)
 	mkdir -p $(BINDIR)
 	$(NVCC) $(NVCCOBJ) -o $(BINDIR)gpumcmc $(LDFLAGS)
 
 $(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu
 	mkdir -p $(NVCCOBJDIR)
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
-
-$(OUTDIR):
-	mkdir -p $(OUTDIR)
 
 clean:
 	rm -rf $(OBJDIR)

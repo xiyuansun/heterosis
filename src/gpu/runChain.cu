@@ -36,5 +36,5 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     fprintf(cfg->log, "\n");
   }
   
-  printChain(host_a, cfg);
+  printChain(host_a, dev_a, cfg);
 } 
