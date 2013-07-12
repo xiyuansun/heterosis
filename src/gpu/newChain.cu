@@ -120,7 +120,10 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     return;
   }
 
+printf("1\n");
+
   allocChainDevice(host_a, dev_a, cfg);
+printf("2\n");
 
   /* data and configuration info */
 
