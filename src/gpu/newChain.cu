@@ -246,12 +246,12 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   ind = (int*) malloc(cfg->N * cfg->G * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &indd, cfg->N * cfg->G * sizeof(int)));  
  
-   b = (int*) malloc(cfg->N * cfg->G * sizeof(num_t));
+   b = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));
   CUDA_CALL(cudaMalloc((void**) &db, cfg->N * cfg->G * sizeof(num_t)));  
 
  
    for(i = 0; i < cfg->N * cfg->G; ++i){
-    d[i] = -1;
+    b[i] = -1;
     ind[i] = -1;
     }
  
@@ -262,7 +262,7 @@ CUDA_CALL(cudaMemcpy(ind, indd, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceT
 
 
   pf2(b, cfg->N, cfg->G, "unifs = \n");
-  pf2(ind, cfg->N, cfg->G, "inds = \n");
+  pi2(ind, cfg->N, cfg->G, "inds = \n");
   
  
  
