@@ -22,28 +22,29 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX;
   num_t u;
 
-  a->phi[iG(0, g)] = rnormalDevice(a, g, a->thePhi[0], a->sigPhi[0]);
+  if(g < G){
+	a->phi[iG(0, g)] = rnormalDevice(a, g, a->thePhi[0], a->sigPhi[0]);
 
-  u = runiformDevice(a, g, 0, 1);
-  if(u < a->piAlp[0]){
-    a->alp[iG(0, g)] = 0;
-  } else {
-    a->alp[iG(0, g)] = rnormalDevice(a, g, a->theAlp[0], a->sigAlp[0]);
-  }
-    
-  u = runiformDevice(a, g, 0, 1);
-  if(u < a->piDel[0]){
-    a->del[iG(0, g)] = 0;
-  } else {
-    a->del[iG(0, g)] = rnormalDevice(a, g, a->theDel[0], a->sigDel[0]);
-  }
+	u = runiformDevice(a, g, 0, 1);
+	if(u < a->piAlp[0]){
+	  a->alp[iG(0, g)] = 0;
+	} else {
+	  a->alp[iG(0, g)] = rnormalDevice(a, g, a->theAlp[0], a->sigAlp[0]);
+	}
+	
+	u = runiformDevice(a, g, 0, 1);
+	if(u < a->piDel[0]){
+	  a->del[iG(0, g)] = 0;
+	} else {
+	  a->del[iG(0, g)] = rnormalDevice(a, g, a->theDel[0], a->sigDel[0]);
+	}
  
-  a->eta[iG(0, g)] = 1/sqrt(rgammaDevice(a, g, a->d[0] / 2, 
-                 a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
+	a->eta[iG(0, g)] = 1/sqrt(rgammaDevice(a, g, a->d[0] / 2, 
+				   a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
 
-  for(n = 0; n < a->N; ++n)
-    a->eps[iNG(0, n, g)] = rnormalDevice(a, 1, 0, a->eta[iG(0, g)]);
-    
+	for(n = 0; n < a->N; ++n)
+	  a->eps[iNG(0, n, g)] = rnormalDevice(a, iG(n, g), 0, a->eta[iG(0, g)]);
+  }  
 }
 
 __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
