@@ -15,7 +15,7 @@ __device__ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 }
 
 __global__ void sampleEps_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g = IDY, N = a->N, G = a->G;
+  int n, g = IDX, N = a->N, G = a->G;
   num_t old, nw, dl, lp, lu;
 
   if(g < G){
@@ -54,7 +54,7 @@ void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   fprintf(cfg->log, "eps ");
 
-  sampleEps_kernel1<<<GN_GRID, GN_BLOCK>>>(dev_a);
+  sampleEps_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleEps_kernel2<<<1, 1>>>(dev_a);
 
   cudaEventRecord(stop, 0);

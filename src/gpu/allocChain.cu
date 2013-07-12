@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 __host__ void allocChainHost(Chain **a, Config *cfg){
+  int N = cfg->N, G = cfg->G;
 
   *a = (Chain*) malloc(sizeof(Chain));
   fprintf(cfg->log, "  Allocating chain.\n"); 
@@ -21,7 +22,7 @@ __host__ void allocChainHost(Chain **a, Config *cfg){
 
   /* curand states */
   
-  (*a)->states = (curandState_t*) malloc(cfg->N * cfg->G * sizeof(curandState_t));
+  (*a)->states = (curandState_t*) malloc(MAX_NG * sizeof(curandState_t));
 
   /* parameters */
 

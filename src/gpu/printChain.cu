@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 __host__ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
-
+  int N = cfg->N, G = cfg->G;
   Chain *allHost_a = chainDeviceToHost(host_a, dev_a, cfg);
 
   printf("M = %d\n", allHost_a->M); ;
@@ -20,7 +20,7 @@ __host__ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   pi2(allHost_a->y, allHost_a->N, allHost_a->G, "y = \n");
   pf1(allHost_a->yMeanG, allHost_a->N, "yMeanG =\n");
   pi1(allHost_a->grp, allHost_a->N, "grp =\n");  
-  pstate(allHost_a->states, allHost_a->N, allHost_a->G, "curand states =\n");
+  pstate(allHost_a->states, MAX_NG, "curand states =\n");
   
   printf("sigC0   = "); printf(NUM_TF, allHost_a->sigC0); printf("\n");
   printf("d0      = "); printf(NUM_TF, allHost_a->d0); printf("\n");

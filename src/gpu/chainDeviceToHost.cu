@@ -23,7 +23,7 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   
   /* curand states */
 
-  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->N * cfg->G * sizeof(curandState_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, MAX_NG * sizeof(curandState_t), cudaMemcpyDeviceToHost));
   
   /* program options */
   

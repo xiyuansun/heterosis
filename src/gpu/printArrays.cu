@@ -45,14 +45,11 @@ __host__ void pf2(num_t *v, int l1, int l2, const char* m){
   printf("\n"); 
 }
 
-__host__ void pstate(curandState *v, int l1, int l2, const char* m){
-  int i, j;
+__host__ void pstate(curandState *v, int l, const char* m){
+  int i;
   printf("%s", m);
-  for(i = 0; i < l1; ++i){
-    for(j = 0; j < l2; ++j)
-      printf("%d ", (v[i*l2 + j]).d);
-    printf("\n");
-  }
+  for(i = 0; i < l1; ++i)
+    printf("%d ", (v[i]).d);
   printf("\n"); 
 }
 
