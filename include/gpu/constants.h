@@ -12,7 +12,7 @@
 #define G_GRID ((cfg->G / G_BLOCK) + 1)
 
 #define N_BLOCK (cfg->N < MAXTHREADS ? cfg->N : MAXTHREADS)
-#define N_GRID ((cfg->N / G_BLOCK) + 1)
+#define N_GRID ((cfg->N / N_BLOCK) + 1)
 
 #define GN_GRID dim3(G_GRID, N_GRID, 1)
 #define GN_BLOCK dim3(G_BLOCK, N_BLOCK, 1)
