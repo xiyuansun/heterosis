@@ -44,6 +44,14 @@ count_t *readData(Config *cfg){
   rewind(fp);
   
   G = cfg->G;
+
+  /* */
+  
+  G = 50;
+  cfg->G = 50;
+  
+  /* */
+  
   
   for(g = 0; g < cfg->G; ++g)
     for(n = 0; n < cfg->N; ++n)
