@@ -46,8 +46,8 @@ __host__ count_t *readData(Config *cfg){
   
   /* */
   
-  G = 100;
-  cfg->G = 100;
+  G = 55;
+  cfg->G = G;
   
   /* */
   
