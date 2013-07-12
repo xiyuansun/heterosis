@@ -37,11 +37,11 @@ void printProbs(Chain *a, Config *cfg){
     fprintf(fp, "hph lph mph");
   fprintf(fp, "\n");
     
-  alp = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));    
-  del = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));
+  alp = (num_t*) malloc(cfg->M * cfg->G * sizeof(num_t));    
+  del = (num_t*) malloc(cfg->M * cfg->G * sizeof(num_t));
 
-  CUDA_CALL(cudaMemcpy(alp, a->alp, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(del, a->del, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(alp, a->alp, cfg->M * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(del, a->del, cfg->M * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     
   for(g = 0; g < cfg->G; ++g){
     prob_de = 0;
