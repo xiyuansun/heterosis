@@ -102,7 +102,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   }
 }
 
-__global__ void fill(num_t *db, int *indd, int N, int G){
+__global__ void fill(Chain *a, num_t *db, int *indd, int N, int G){
   int id = ID;
   if(id < N*G){
     indd[id] = id;
@@ -240,7 +240,8 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
  
  
  /*begin debug */
- int *b, *db, *ind, *indd;
+ num_t *b, *db;
+ int *ind, *indd;
  
   ind = (int*) malloc(cfg->N * cfg->G * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &indd, cfg->N * cfg->G * sizeof(int)));  
@@ -254,7 +255,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     ind[i] = -1;
     }
  
-  fill<<<GN_GRID, GN_BLOCK>>>(db, indd, cfg->N, cfg->G);
+  fill<<<GN_GRID, GN_BLOCK>>>(dev_a, db, indd, cfg->N, cfg->G);
   
   CUDA_CALL(cudaMemcpy(b, db, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
 CUDA_CALL(cudaMemcpy(ind, indd, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
