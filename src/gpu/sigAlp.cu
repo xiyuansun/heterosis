@@ -55,7 +55,5 @@ __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
  
   sampleSigAlp_kernel2<<<1, 1>>>(dev_a); 
-  
-  fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
   cudaDeviceSynchronize();
 }
