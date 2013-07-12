@@ -212,6 +212,5 @@ Chain *newChain(Config *cfg){ /* host */
   free(tmpv);
   free(grp);
   free(y);
-    
   return a;
 }

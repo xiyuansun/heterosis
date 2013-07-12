@@ -20,7 +20,7 @@ void printParms(Chain *a, Config *cfg){
       
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");
-      
+    
     if(fp == NULL){
       printf("ERROR: unable to create file, %s\n", file);
       return;
