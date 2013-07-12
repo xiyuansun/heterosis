@@ -9,7 +9,6 @@
 
 void runChain(Chain *a, Config *cfg){
   int m;
-  
   fprintf(cfg->log, "  Running chain.\n");
   
   for(m = 0; m < a->M; ++m){

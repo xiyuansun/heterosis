@@ -77,8 +77,12 @@ Config *config(int argc, char **argv){
   if(cfg->parmsFlag)
     system("mkdir -p ../out/parms/"); 
     
-  cfg->log = fopen("../out/log.txt", "w+");
-  cfg->time = fopen("../out/time.txt", "w+");
+  cfg->log = fopen("../out/log.txt", "w");
+  
+  if(cfg->log == NULL)
+    printf("ERROR: could not create log.\n");
+  
+  cfg->time = fopen("../out/time.txt", "w");
   fprintf(cfg->time, "c ");
 
   if(!cfg->constTau){

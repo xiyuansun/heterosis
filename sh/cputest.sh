@@ -1,3 +1,3 @@
 make -C .. cpu
 
-../bin/mcmc --data ../data/smallData.txt --group ../data/smallGroup.txt -h -r -p --chains 3
+../bin/mcmc --data ../data/mediumData.txt --group ../data/mediumGroup.txt -r -h -p -M 10000
