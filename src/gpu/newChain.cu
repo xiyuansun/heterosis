@@ -13,7 +13,7 @@ __host__ int cmpfunc (const void *a, const void *b){
 }
 
 __global__ void curand_setup_kernel(Chain *a, int *seeds){ /* kernel <<<G, 1>>> */
-  int id = ID, N = a->N, G = a->G;
+  int id = IDX, N = a->N, G = a->G;
   if(id < MAX_NG)
     curand_init(seeds[id], id, 0, &(a->states[id]));
 }
@@ -103,11 +103,12 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
-  int n, g, i, G, *grp, *seeds, *dev_seeds;
+  int n, g, i, N, G, *grp, *seeds, *dev_seeds;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
   
   y = readData(cfg);
+  N = cfg->N;
   G = cfg->G;
   
   if(y == NULL)
