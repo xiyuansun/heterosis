@@ -62,7 +62,6 @@ gpu: $(NVCCOBJ)
 	$(NVCC) $(NVCCOBJ) -o $(BINDIR)gpumcmc $(LDFLAGS)
 
 $(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu $(NVCCOBJDIR)
-	mkdir -p $(NVCCOBJDIR)
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
 
 $(NVCCOBJDIR):
