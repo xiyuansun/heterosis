@@ -38,18 +38,11 @@ __global__ void sampleSigAlp_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
 }
 
 __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
-  float myTime;
-  cudaEvent_t start, stop;
-  cudaEventCreate(&start);
-  cudaEventCreate(&stop);
-  cudaEventRecord(start, 0);
 
   fprintf(cfg->log, "sigAlp ");
 
   if(cfg->constSigAlp)
     return;
-
-printf("hi\n");
 
   sampleSigAlp_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   
@@ -62,15 +55,6 @@ printf("hi\n");
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
  
   sampleSigAlp_kernel2<<<1, 1>>>(dev_a); 
-
-printf("ho\n");
-
-  cudaEventRecord(stop, 0);printf("0\n");
-  cudaEventSynchronize(stop);printf("1\n");
-  cudaEventElapsedTime(&myTime, start, stop);printf("2\n");
-  cudaEventDestroy(start);printf("3\n");
-  cudaEventDestroy(stop);printf("4\n");
-printf("hum\n");
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
   cudaDeviceSynchronize();
