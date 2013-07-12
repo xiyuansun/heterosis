@@ -50,6 +50,8 @@ __global__ void lD_kernel3(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 
 __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
   
+  
+  
   lD_kernel1<<<1, 1>>>(dev_a, newArg);
   lD_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);
   
