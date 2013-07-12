@@ -10,11 +10,11 @@
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
-  fprintf(cfg->log, "  Running chain.\n"); printf("hi\n");
+  fprintf(cfg->log, "  Running chain.\n"); 
   
   for(m = 0; m < cfg->M; ++m){
 
-    fprintf(cfg->log, "    iter %d | ", m);
+    fprintf(cfg->log, "    iter %d | ", m);printf("hi\n");
 
     sampleC(host_a, dev_a, cfg);
     sampleTau(host_a, dev_a, cfg);
