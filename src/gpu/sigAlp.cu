@@ -65,7 +65,7 @@ printf("hi\n");
 
 printf("ho\n");
 
-  cudaEventRecord(stop, 0);
+  cudaEventRecord(stop, 0);printf("0\n");
   cudaEventSynchronize(stop);printf("1\n");
   cudaEventElapsedTime(&myTime, start, stop);printf("2\n");
   cudaEventDestroy(start);printf("3\n");
