@@ -45,7 +45,7 @@ __host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventRecord(start, 0);
 
   fprintf(cfg->log, "sigDel ");
-printf("hu\n");
+printf("nnnnn\n");
   if(cfg->constSigDel || !cfg->heterosis)
     return;
 
