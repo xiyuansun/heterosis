@@ -54,7 +54,7 @@ void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   fprintf(cfg->log, "eps ");
 
-  sampleEps_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  sampleEps_kernel1<<<GN_GRID, GN_BLOCK>>>(dev_a);
   sampleEps_kernel2<<<1, 1>>>(dev_a);
 
   cudaEventRecord(stop, 0);
