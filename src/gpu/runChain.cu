@@ -11,7 +11,7 @@
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
   fprintf(cfg->log, "  Running chain.\n");
-  printChain(host_a, dev_a, cfg);
+  printConfig(cfg);
   
   for(m = 0; m < cfg->M; ++m){
 
