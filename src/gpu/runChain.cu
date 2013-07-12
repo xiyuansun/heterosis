@@ -29,10 +29,10 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleSigPhi(host_a, dev_a, cfg);
     sampleSigAlp(host_a, dev_a, cfg);
     sampleSigDel(host_a, dev_a, cfg);
-    sampleEta(host_a, dev_a, cfg);
+    sampleEta(host_a, dev_a, cfg);  printf("%d\n", m);
     sampleEps(host_a, dev_a, cfg);
     samplePhiAlpDel(host_a, dev_a, cfg);
- printf("%d\n", m);
+
     fprintf(cfg->time, "\n");
     fprintf(cfg->log, "\n");
   }
