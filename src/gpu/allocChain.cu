@@ -21,7 +21,7 @@ __host__ void allocChainHost(Chain **a, Config *cfg){
 
   /* curand states */
   
-  (*a)->states = (curandState*) malloc(cfg->G * sizeof(curandState));
+  (*a)->states = (curandState_t*) malloc(cfg->G * cfg->N * sizeof(curandState_t));
 
   /* parameters */
 
@@ -87,7 +87,7 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
 
   /* curand states */
   
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->N * cfg->G * sizeof(curandState)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->N * cfg->G * sizeof(curandState_t)));
 
   /* parameters */
 

@@ -19,7 +19,7 @@ typedef struct {
   
   /* curand states */
   
-  curandState *states;
+  curandState_t *states;
   
   /* initialization constants */
   

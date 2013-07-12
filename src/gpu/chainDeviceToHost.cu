@@ -138,7 +138,7 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
 
   /* curand states */
 
-  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->G * sizeof(curandState), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->G * sizeof(curandState_t), cudaMemcpyDeviceToHost));
 
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
