@@ -102,6 +102,15 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   }
 }
 
+__global__ void fill(num_t *db, int *indd, int N, int G){
+  int id = ID;
+  if(id < N*G){
+    indd[id] = id;
+    db[id] = runiformDevice(a, id, 0, 1); 
+  }
+}
+
+
 __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   int n, g, i, G, *grp, *seeds, *dev_seeds;
   count_t *y;
@@ -227,6 +236,38 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     
   CUDA_CALL(cudaMemcpy(dev_seeds, seeds, cfg->N * cfg->G * sizeof(int), cudaMemcpyHostToDevice));
   curand_setup_kernel<<<GN_GRID, GN_BLOCK>>>(*dev_a, dev_seeds);
+ 
+ 
+ 
+ /*begin debug */
+ int *b, *db, *ind, *indd;
+ 
+  ind = (int*) malloc(cfg->N * cfg->G * sizeof(int));
+  CUDA_CALL(cudaMalloc((void**) &indd, cfg->N * cfg->G * sizeof(int)));  
+ 
+   b = (int*) malloc(cfg->N * cfg->G * sizeof(num_t));
+  CUDA_CALL(cudaMalloc((void**) &db, cfg->N * cfg->G * sizeof(num_t)));  
+
+ 
+   for(i = 0; i < cfg->N * cfg->G; ++i){
+    d[i] = -1;
+    ind[i] = -1;
+    }
+ 
+  fill<<<GN_GRID, GN_BLOCK>>>(db, indd, cfg->N, cfg->G);
+  
+  CUDA_CALL(cudaMemcpy(b, db, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+CUDA_CALL(cudaMemcpy(ind, indd, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+
+
+  pf2(b, cfg->N, cfg->G, "unifs = \n");
+  pf2(ind, cfg->N, cfg->G, "inds = \n");
+  
+ 
+ 
+ /* end debug */
+ 
+ 
   
   /* compute the rest of the initial values */
   
