@@ -15,11 +15,11 @@ __device__ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
 }
 
 __global__ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
-  int n, g = IDX, N = a->N, G = a->G;
+  int n = IDY, g = IDX, N = a->N, G = a->G;
   num_t old, nw, dl, lp, lu;
 
   if(g < G){
-    for(n = 0; n < N; ++n){ 
+    if(n < N){ 
       old = a->eps[iNG(a->mEps, n, g)];
       nw = rnormalDevice(a, iG(n, g), old, a->tuneEps[iG(n, g)]);
 
@@ -54,7 +54,7 @@ void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   fprintf(cfg->log, "eps ");
 
-  sampleEps_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  sampleEps_kernel1<<<GN_GRID, GN_BLOCK>>>(dev_a);
   sampleEps_kernel2<<<1, 1>>>(dev_a);
 
   cudaEventRecord(stop, 0);
