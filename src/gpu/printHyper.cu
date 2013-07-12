@@ -96,5 +96,6 @@ void printHyper(Chain *a, Config *cfg){
     cudaEventDestroy(stop);
   
     fprintf(cfg->timeConfig, "%0.3f ", myTime/MILLISECS); /* elapsed time */    
+    cudaDeviceSynchronize();
   }
 }

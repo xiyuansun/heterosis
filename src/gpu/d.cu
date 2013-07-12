@@ -104,6 +104,7 @@ __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
     return;
    
   sampleD_kernel1<<<1, 1>>>(dev_a);
+  cudaDeviceSynchronize();
 
   lD(host_a, dev_a, cfg, 1);
   lD(host_a, dev_a, cfg, 0);
@@ -117,4 +118,5 @@ __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(stop);
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
+  cudaDeviceSynchronize();
 }

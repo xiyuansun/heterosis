@@ -53,4 +53,5 @@ __host__ void samplePiDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(stop);
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
+  cudaDeviceSynchronize();
 }

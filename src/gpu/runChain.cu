@@ -21,7 +21,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleTau(host_a, dev_a, cfg);
     samplePiAlp(host_a, dev_a, cfg);
     samplePiDel(host_a, dev_a, cfg); 
-    sampleD(host_a, dev_a, cfg); printf("%d\n", m);
+    sampleD(host_a, dev_a, cfg); 
     sampleThePhi(host_a, dev_a, cfg);
     sampleTheAlp(host_a, dev_a, cfg);
     sampleTheDel(host_a, dev_a, cfg);

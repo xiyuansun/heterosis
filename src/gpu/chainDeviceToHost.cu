@@ -146,6 +146,6 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventDestroy(stop);
   
   fprintf(cfg->timeConfig, "%0.3f ", myTime/MILLISECS); /* elapsed time */
-
+  cudaDeviceSynchronize();
   return allHost_a;
 }

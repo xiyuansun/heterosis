@@ -56,4 +56,5 @@ void sampleEta(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventDestroy(stop);
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
+  cudaDeviceSynchronize();
 }
