@@ -1,3 +1,3 @@
 make -C .. gpu
 
-../bin/gpumcmc --data ../data/smallData.txt --group ../data/smallGroup.txt -r -h -p
+../bin/gpumcmc --data ../data/mediumData.txt --group ../data/mediumGroup.txt -r -h -p
