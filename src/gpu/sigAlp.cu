@@ -9,9 +9,6 @@
 #include <stdlib.h>
 #include <thrust/reduce.h>
 
-#include "cuPrintf.cuh"
-#include "cuPrintf.cu"
-
 __global__ void sampleSigAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX, G = a->G;
 
