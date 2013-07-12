@@ -255,13 +255,13 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     ind[i] = -1;
     }
  
-  fill<<<G_GRID, G_BLOCK>>>(*dev_a, db, indd, cfg->N, cfg->G);
+  fill<<<GN_GRID, GN_BLOCK>>>(*dev_a, db, indd, cfg->N, cfg->G);
   
   CUDA_CALL(cudaMemcpy(b, db, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
 CUDA_CALL(cudaMemcpy(ind, indd, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
 
 
-printf("%d %d\n\n", G_GRID, G_BLOCK);
+printf("%d %d\n\n", GN_GRID, GN_BLOCK);
 
   pf2(b, cfg->N, cfg->G, "unifs = \n");
   pi2(ind, cfg->N, cfg->G, "inds = \n");
