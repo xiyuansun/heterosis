@@ -8,7 +8,7 @@
 __host__ void chains(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
-  fprintf(cfg->log, "Begun chains\n");
+  fprintf(cfg->log, "Running %d chains.\n", cfg->chains);
   
   for(i = 0; i < cfg->chains; ++i){
     fprintf(cfg->log, "Chain %d\n", i);
