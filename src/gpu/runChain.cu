@@ -14,6 +14,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   fprintf(cfg->log, "  Running chain.\n");
   
   for(m = 0; m < cfg->M; ++m){
+    printf("%d\n", m);
     fprintf(cfg->log, "    iter %d | ", m);
 
     sampleC(host_a, dev_a, cfg);
