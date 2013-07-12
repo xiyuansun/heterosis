@@ -49,7 +49,9 @@ NVCCDEP+=main
 CCOBJ=$(foreach name, $(CCDEP), $(CCOBJDIR)$(name).o)
 NVCCOBJ=$(foreach name, $(NVCCDEP), $(NVCCOBJDIR)$(name).o)
 
-all: $(CPUBIN)
+all: cpu
+
+cpu: $(CPUBIN)
 	
 $(CPUBIN): $(CCOBJ) 
 	mkdir -p $(BINDIR)
