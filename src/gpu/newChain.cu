@@ -104,7 +104,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 __global__ void fill(Chain *a, num_t *db, int *indd, int N, int G){
   int id = IDX;
-  if(id < N*G){
+  if(id < 100000000/*N*G */){
     indd[id] = id;
     db[id] = runiformDevice(a, id, 0, 1); 
   }
