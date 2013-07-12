@@ -239,7 +239,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
  
  
  
- /*begin debug */
+ /*begin debug 
  num_t *b, *db;
  int *ind, *indd;
  
@@ -267,7 +267,7 @@ CUDA_CALL(cudaMemcpy(ind, indd, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceT
   
  
  
- /* end debug */
+  end debug */
  
  
   
