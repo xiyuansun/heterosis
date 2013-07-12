@@ -44,6 +44,12 @@ __host__ count_t *readData(Config *cfg){
   
   G = cfg->G;
   
+  /* */
+  cfg->G = 100;
+  G = cfg->G;
+  
+  /* */
+  
   for(g = 0; g < cfg->G; ++g)
     for(n = 0; n < cfg->N; ++n)
       fscanf(fp, "%d", y + iG(n, g));
