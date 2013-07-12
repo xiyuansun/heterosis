@@ -75,6 +75,5 @@ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
 
 	freeChain(allHost_a, cfg, 1);  
 	fclose(fp);
-    cudaDeviceSynchronize();
   }
 }

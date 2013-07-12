@@ -87,5 +87,4 @@ void printProbs(Chain *a, Config *cfg){
   free(alp);
   free(del);   
   fclose(fp);
-  cudaDeviceSynchronize();
 }

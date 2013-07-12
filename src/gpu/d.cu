@@ -30,6 +30,7 @@ __global__ void lD_kernel2(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   tmp = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
   ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(tmp);
   ret -= (arg/2 + 1) * a->s1 - tmp * a->s2;
+  ret = (arg < 1e-6 || arg > a->d0) ? ret : NUM_TMIN;
 
   if(newArg){
     a->lNew[0] = ret;
@@ -39,16 +40,6 @@ __global__ void lD_kernel2(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
-  num_t d0, val, mn = NUM_TMIN;
-  
-  CUDA_CALL(cudaMemcpy(&d0, &(dev_a->d0), sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(&val, newArg ? host_a->New : host_a->Old, sizeof(num_t), cudaMemcpyDeviceToHost));
-  
-  if(val < 1e-6 || val > d0){
-    CUDA_CALL(cudaMemcpy(newArg ? host_a->lNew : host_a->lOld, &mn, sizeof(num_t), cudaMemcpyHostToDevice));
-    return;
-  }
- 
   lD_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
@@ -104,7 +95,6 @@ __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
     return;
    
   sampleD_kernel1<<<1, 1>>>(dev_a);
-  cudaDeviceSynchronize();
 
   lD(host_a, dev_a, cfg, 1);
   lD(host_a, dev_a, cfg, 0);
@@ -118,5 +108,4 @@ __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(stop);
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
-  cudaDeviceSynchronize();
 }
