@@ -14,10 +14,10 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   fprintf(cfg->log, "  Running chain.\n");
   
   for(m = 0; m < cfg->M; ++m){
-    printf("%d\n", m);
+
     fprintf(cfg->log, "    iter %d | ", m);
- printf("%d\n", m);
-    sampleC(host_a, dev_a, cfg); printf("%d\n", m);
+
+    sampleC(host_a, dev_a, cfg);
     sampleTau(host_a, dev_a, cfg);
     samplePiAlp(host_a, dev_a, cfg);
     samplePiDel(host_a, dev_a, cfg);
@@ -32,7 +32,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleEta(host_a, dev_a, cfg);
     sampleEps(host_a, dev_a, cfg);
     samplePhiAlpDel(host_a, dev_a, cfg);
-
+ printf("%d\n", m);
     fprintf(cfg->time, "\n");
     fprintf(cfg->log, "\n");
   }
