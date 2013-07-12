@@ -49,7 +49,7 @@ __host__ void sampleThePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   sampleThePhi_kernel2<<<1, 1>>>(dev_a);
 
   cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop);
+  cudaEventSynchronize(stop); 
   cudaEventElapsedTime(&myTime, start, stop);
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
