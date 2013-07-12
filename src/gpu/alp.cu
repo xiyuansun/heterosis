@@ -53,7 +53,7 @@ __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
       a->alp[iG(a->mAlp + 1, g)] = old;
     }
   }
-}
+} 
 
 __global__ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   ++a->mAlp;
