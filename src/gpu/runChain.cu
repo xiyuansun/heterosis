@@ -10,8 +10,7 @@
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
-  fprintf(cfg->log, "  Running chain.\n");
-  printConfig(cfg);
+  fprintf(cfg->log, "  Running chain.\n"); printf("hi\n");
   
   for(m = 0; m < cfg->M; ++m){
 
