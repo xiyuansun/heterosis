@@ -38,7 +38,7 @@ void sampleSigPhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventRecord(start, 0);
 
   fprintf(cfg->log, "sigPhi ");
-printf("hi\n");
+
   if(cfg->constSigPhi)
     return;
 
@@ -57,6 +57,6 @@ printf("hi\n");
   cudaEventDestroy(stop);
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
-printf("h0\n");
+
   cudaDeviceSynchronize();
 }
