@@ -48,25 +48,24 @@ NVCCOBJ=$(foreach name, $(NVCCDEP), $(NVCCOBJDIR)$(name).o)
 
 all: cpu
 	
-cpu: $(CCOBJ)
+cpu: $(CCOBJ) $(OUTDIR)
 	mkdir -p $(BINDIR)
 	$(CC) $(CCOBJ) -o $(BINDIR)mcmc $(LDFLAGS)
 
-$(CCOBJDIR)%.o: $(CCSRCDIR)%.c $(CCOBJDIR)
+$(CCOBJDIR)%.o: $(CCSRCDIR)%.c
+	mkdir -p $(CCOBJDIR)
 	$(CC) $(CCFLAGS) $< -o $@ 
 	
-$(CCOBJDIR):
-	mkdir -p $(CCOBJDIR)
-
-gpu: $(NVCCOBJ)
+gpu: $(NVCCOBJ) $(OUTDIR)
 	mkdir -p $(BINDIR)
 	$(NVCC) $(NVCCOBJ) -o $(BINDIR)gpumcmc $(LDFLAGS)
 
-$(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu $(NVCCOBJDIR)
+$(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu
+	mkdir -p $(NVCCOBJDIR)
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
 
-$(NVCCOBJDIR):
-	mkdir -p $(NVCCOBJDIR)
+$(OUTDIR):
+	mkdir -p $(OUTDIR)
 
 clean:
 	rm -rf $(OBJDIR)

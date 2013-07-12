@@ -264,8 +264,8 @@ config = function(){ # host
 
   # default filenames and MCMC settings
 
-  cfg$datafile = "../data/data.txt";
-  cfg$groupfile = "../data/group.txt"; 
+  cfg$datafile = "../data/mediumData.txt";
+  cfg$groupfile = "../data/mediumGroup.txt"; 
 
   cfg$probsfile = "../out/probs.txt";
   cfg$hyperfile = "../out/hyperparameters.txt";
