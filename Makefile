@@ -9,6 +9,7 @@ LDFLAGS=-lm
 BINDIR=bin/
 OBJDIR=obj/
 SRCDIR=src/
+OUTDIR=out/
 
 CCOBJDIR=$(OBJDIR)cpu/
 CCSRCDIR=$(SRCDIR)cpu/
@@ -70,3 +71,4 @@ $(NVCCOBJDIR):
 clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(BINDIR)
+	rm -rf $(OUTDIR)
