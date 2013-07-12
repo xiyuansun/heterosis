@@ -4,7 +4,7 @@
 #define BUF 256
 #define MAXROW 16384
 #define NUM_TF "%0.3f"
-#define NUM_TMIN -1.0/0.0
+#define NUM_TMIN (-1.0/0.0)
 
 #define MAXTHREADS 512
 
