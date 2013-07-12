@@ -16,21 +16,21 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
     fprintf(cfg->log, "    iter %d | ", m);
 
-    sampleC(host_a, dev_a, cfg); printf("c\n");
-    sampleTau(host_a, dev_a, cfg);printf("tau\n");
-    samplePiAlp(host_a, dev_a, cfg);printf("pialp\n");
-    samplePiDel(host_a, dev_a, cfg); printf("pidel\n");
-    sampleD(host_a, dev_a, cfg); printf("d\n");
-    sampleThePhi(host_a, dev_a, cfg);printf("thephi\n");
-    sampleTheAlp(host_a, dev_a, cfg);printf("thealp\n");
-    sampleTheDel(host_a, dev_a, cfg);printf("thedel\n");
-    sampleSigC(host_a, dev_a, cfg);printf("sigc\n");
-    sampleSigPhi(host_a, dev_a, cfg);printf("sigphi\n");
-    sampleSigAlp(host_a, dev_a, cfg);printf("sigalp\n");
-    sampleSigDel(host_a, dev_a, cfg);printf("sigdel\n");
-    sampleEta(host_a, dev_a, cfg);  printf("eta\n");
-    sampleEps(host_a, dev_a, cfg);printf("eps\n");
-    samplePhiAlpDel(host_a, dev_a, cfg);printf("phialpdel\n");
+    sampleC(host_a, dev_a, cfg); 
+    sampleTau(host_a, dev_a, cfg);
+    samplePiAlp(host_a, dev_a, cfg);
+    samplePiDel(host_a, dev_a, cfg); 
+    sampleD(host_a, dev_a, cfg); 
+    sampleThePhi(host_a, dev_a, cfg);
+    sampleTheAlp(host_a, dev_a, cfg);
+    sampleTheDel(host_a, dev_a, cfg);
+    sampleSigC(host_a, dev_a, cfg);
+    sampleSigPhi(host_a, dev_a, cfg);
+    sampleSigAlp(host_a, dev_a, cfg);
+    sampleSigDel(host_a, dev_a, cfg);
+    sampleEta(host_a, dev_a, cfg);  
+    sampleEps(host_a, dev_a, cfg);
+    samplePhiAlpDel(host_a, dev_a, cfg);
 
     fprintf(cfg->time, "\n");
     fprintf(cfg->log, "\n");
