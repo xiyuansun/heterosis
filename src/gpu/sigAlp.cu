@@ -45,7 +45,7 @@ __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   err = cudaEventRecord(start, 0);
-f(err != cudaSuccess) {
+if(err != cudaSuccess) {
           printf ("\n\n 1. Error: %s\n\n", cudaGetErrorString(err));
           exit(1);
         }
