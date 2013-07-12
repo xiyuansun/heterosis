@@ -57,7 +57,7 @@ void samplePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "alp ");
+  fprintf(cfg->log, "phi ");
 
   samplePhi_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   samplePhi_kernel2<<<1, 1>>>(dev_a);
