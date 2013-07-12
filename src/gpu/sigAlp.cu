@@ -66,10 +66,10 @@ printf("hi\n");
 printf("ho\n");
 
   cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop);
-  cudaEventElapsedTime(&myTime, start, stop);
-  cudaEventDestroy(start);
-  cudaEventDestroy(stop);
+  cudaEventSynchronize(stop);printf("1\n");
+  cudaEventElapsedTime(&myTime, start, stop);printf("2\n");
+  cudaEventDestroy(start);printf("3\n");
+  cudaEventDestroy(stop);printf("4\n");
 printf("hum\n");
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
