@@ -14,8 +14,8 @@
 #define N_BLOCK (cfg->N < MAXTHREADS ? cfg->N : MAXTHREADS)
 #define N_GRID ((cfg->N / N_BLOCK) + 1)
 
-#define GN_GRID dim3(G_GRID, N_GRID, 1)
-#define GN_BLOCK dim3(G_BLOCK, N_BLOCK, 1)
+#define GN_GRID dim3(G_GRID, N_GRID)
+#define GN_BLOCK dim3(G_BLOCK, N_BLOCK)
 
 #define IDX ((blockDim.x * blockIdx.x) + threadIdx.x)
 #define IDY ((blockDim.y * blockIdx.y) + threadIdx.y)
