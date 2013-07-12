@@ -255,7 +255,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     ind[i] = -1;
     }
  
-  fill<<<GN_GRID, GN_BLOCK>>>(dev_a, db, indd, cfg->N, cfg->G);
+  fill<<<GN_GRID, GN_BLOCK>>>(*dev_a, db, indd, cfg->N, cfg->G);
   
   CUDA_CALL(cudaMemcpy(b, db, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
 CUDA_CALL(cudaMemcpy(ind, indd, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
