@@ -218,7 +218,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   srand(cfg->seed);
   seeds = (int*) malloc(cfg->N * cfg->G * sizeof(int));
-  CUDA_CALL(cudaMalloc((void**) dev_seeds, cfg->N * cfg->G * sizeof(int)));  
+  CUDA_CALL(cudaMalloc((void**) &dev_seeds, cfg->N * cfg->G * sizeof(int)));  
   
   for(i = 0; i < cfg->N * cfg->G; ++i)
     seeds[i] = rand();
