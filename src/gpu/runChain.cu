@@ -14,9 +14,9 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   for(m = 0; m < cfg->M; ++m){
 
-    fprintf(cfg->log, "    iter %d | ", m);printf("hi\n");
+    fprintf(cfg->log, "    iter %d | ", m);
 
-    sampleC(host_a, dev_a, cfg);
+    sampleC(host_a, dev_a, cfg); printf("hi\n");
     sampleTau(host_a, dev_a, cfg);
     samplePiAlp(host_a, dev_a, cfg);
     samplePiDel(host_a, dev_a, cfg); 
