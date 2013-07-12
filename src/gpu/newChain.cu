@@ -261,7 +261,6 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
 CUDA_CALL(cudaMemcpy(ind, indd, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
 
 
-printf("%d %d\n\n", GN_GRID, GN_BLOCK);
 
   pf2(b, cfg->N, cfg->G, "unifs = \n");
   pi2(ind, cfg->N, cfg->G, "inds = \n");
