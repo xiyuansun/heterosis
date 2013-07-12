@@ -12,10 +12,12 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-__global__ void curand_setup_kernel(Chain *a, int *seeds){ /* kernel <<<G, 1>>> */
+__global__ void curand_setup_kernel(Chain *a, int *seeds, int *indd){ /* kernel <<<G, 1>>> */
   int id = ID;
-  if(id < a->G * a->N)
+  if(id < a->G * a->N){
+    indd[id] = id;
     curand_init(seeds[id], id, 0, &(a->states[id]));
+  }
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
@@ -175,6 +177,7 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy((*host_a)->sigDel, &(cfg->sigDel), sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy((*host_a)->piAlp, &(cfg->piAlp), sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy((*host_a)->piDel, &(cfg->piDel), sizeof(num_t), cudaMemcpyHostToDevice));
+  
 
   /* data */
   
@@ -224,8 +227,52 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   for(i = 0; i < cfg->N * cfg->G; ++i)
     seeds[i] = rand();
     
+    
+    
+    
+    
+    
+    
+     int *ind, *indd;
+ 
+  ind = (int*) malloc(cfg->N * cfg->G * sizeof(int));
+  CUDA_CALL(cudaMalloc((void**) &indd, cfg->N * cfg->G * sizeof(int)));  
+    
+    
+    
   CUDA_CALL(cudaMemcpy(dev_seeds, seeds, cfg->N * cfg->G * sizeof(int), cudaMemcpyHostToDevice));
-  curand_setup_kernel<<<GN_GRID, GN_BLOCK>>>(*dev_a, dev_seeds);
+  curand_setup_kernel<<<GN_GRID, GN_BLOCK>>>(*dev_a, dev_seeds, indd);
+ 
+ CUDA_CALL(cudaMemcpy(ind, indd, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+ pi2(ind, cfg->N, cfg->G, "inds = \n");
+  
+ 
+ /*begin debug 
+ num_t *b, *db;
+
+ 
+   b = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));
+  CUDA_CALL(cudaMalloc((void**) &db, cfg->N * cfg->G * sizeof(num_t)));  
+
+ 
+   for(i = 0; i < cfg->N * cfg->G; ++i){
+    b[i] = -1;
+    ind[i] = -1;
+    }
+ 
+  fill<<<GN_GRID, GN_BLOCK>>>(*dev_a, db, indd, cfg->N, cfg->G);
+  
+  CUDA_CALL(cudaMemcpy(b, db, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+
+
+
+  pf2(b, cfg->N, cfg->G, "unifs = \n");
+ 
+ 
+ 
+  end debug */
+ 
+ 
   
   /* compute the rest of the initial values */
   
