@@ -55,11 +55,15 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 void lD(Chain *a, int newArg){ /* host */
   
   if(newArg){
-    if(a->New[0] <= 0 || a->New[0] > a->d0)
+    if(a->New[0] <= 0 || a->New[0] > a->d0){
       a->lNew[0] = NUM_TMIN;
+      return;
+    }
   } else {
-    if(a->Old[0] <= 0 || a->Old[0] > a->d0)
+    if(a->Old[0] <= 0 || a->Old[0] > a->d0){
       a->lOld[0] = NUM_TMIN; 
+      return;
+    }
   }
 
   lD_kernel1(a);
