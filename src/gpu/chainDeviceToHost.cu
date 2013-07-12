@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
-
+  int N = cfg->N, G = cfg->G;
   Chain *allHost_a;
   
   float myTime;
