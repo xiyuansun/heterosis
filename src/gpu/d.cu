@@ -9,17 +9,7 @@
 #include <stdlib.h>
 #include <thrust/reduce.h>
 
-__global__ void lD_kernel1(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
-  if(newArg){
-    if(a->New[0] <= 0 || a->New[0] > a->d0)
-     a->lNew[0] = NUM_TMIN;
-  } else {
-    if(a->Old[0] <= 0 || a->Old[0] > a->d0)
-      a->lOld[0] = NUM_TMIN; 
-  }
-}
-
-__global__ void lD_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
+__global__ void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX, G = a->G;
 
   if(g < G){ 
@@ -28,7 +18,7 @@ __global__ void lD_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-__global__ void lD_kernel3(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
+__global__ void lD_kernel2(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   num_t arg, ret, tmp;
  
   if(newArg){ 
@@ -49,11 +39,17 @@ __global__ void lD_kernel3(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
+  num_t d0, val, mn = NUM_TMIN;
   
+  CUDA_CALL(cudaMemcpy(&d0, &(dev_a->d0), sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(&val, newArg ? host_a->New : host_a->Old, sizeof(num_t), cudaMemcpyDeviceToHost));
   
-  
-  lD_kernel1<<<1, 1>>>(dev_a, newArg);
-  lD_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);
+  if(val < 1e-6 || val > d0){
+    CUDA_CALL(cudaMemcpy(newArg ? host_a->lNew : host_a->lOld, &mn, sizeof(num_t), cudaMemcpyHostToDevice));
+    return;
+  }
+ 
+  lD_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
@@ -63,7 +59,7 @@ __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host 
   num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
   
-  lD_kernel3<<<1, 1>>>(dev_a, newArg);
+  lD_kernel2<<<1, 1>>>(dev_a, newArg);
 }
 
 __global__ void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
