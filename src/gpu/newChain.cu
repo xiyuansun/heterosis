@@ -42,7 +42,7 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
                  a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
 
   for(n = 0; n < a->N; ++n)
-    a->eps[iNG(0, n, g)] = rnormalDevice(a, g, 0, a->eta[iG(0, g)]);
+    a->eps[iNG(0, n, g)] = rnormalDevice(a, iG(n, g), 0, a->eta[iG(0, g)]);
     
 }
 
