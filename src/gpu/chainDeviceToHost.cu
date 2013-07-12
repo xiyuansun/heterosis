@@ -19,8 +19,11 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventRecord(start, 0);
   
   fprintf(cfg->log, "  Copying chain from device to host. Takes a LONG time.\n");
-
   allocChainHost(&allHost_a, cfg); 
+  
+  /* curand states */
+
+  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->N * cfg->G * sizeof(curandState_t), cudaMemcpyDeviceToHost));
   
   /* program options */
   
@@ -135,10 +138,6 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(allHost_a->constSigDel), &(dev_a->constSigDel), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiAlp), &(dev_a->constPiAlp), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiDel), &(dev_a->constPiDel), sizeof(int), cudaMemcpyDeviceToHost));
-
-  /* curand states */
-
-  CUDA_CALL(cudaMemcpy(allHost_a->states, host_a->states, cfg->G * sizeof(curandState_t), cudaMemcpyDeviceToHost));
 
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);

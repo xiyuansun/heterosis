@@ -21,11 +21,11 @@ __global__ void sampleEps_kernel1(Chain *a){ /* kernel <<<N, G>>> */
   if(g < G){
     for(n = 0; n < N; ++n){ 
       old = a->eps[iNG(a->mEps, n, g)];
-      nw = rnormalDevice(a, g, old, a->tuneEps[iG(n, g)]);
+      nw = rnormalDevice(a, iG(n, g), old, a->tuneEps[iG(n, g)]);
 
       dl = lEps(a, n, g, nw) - lEps(a, n, g, old);
       lp = 0 < dl ? 0 : dl;
-      lu = log(runiformDevice(a, g, 0, 1));
+      lu = log(runiformDevice(a, iG(n, g), 0, 1));
       
       if(lu < lp){ /* accept */
         a->eps[iNG(a->mEps + 1, n, g)] = nw;
