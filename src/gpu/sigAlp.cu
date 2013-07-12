@@ -42,7 +42,7 @@ __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
-  err = cudaEventRecord(start, 0);
+  cudaEventRecord(start, 0);
   fprintf(cfg->log, "sigAlp ");
 
   if(cfg->constSigAlp)
