@@ -18,7 +18,7 @@
 #define GN_BLOCK dim3(G_BLOCK, N_BLOCK, 1)
 
 #define IDX ((blockDim.x * blockIdx.x) + threadIdx.x)
-#define IDY ((blockDim.x * blockIdx.x) + threadIdx.x)
+#define IDY ((blockDim.y * blockIdx.y) + threadIdx.y)
 #define ID ((gridDim.x * blockDim.x * IDY) + IDX)
 
 #define MILLISECS 60000.0 /* number of milliseconds in a unit of time in output */
