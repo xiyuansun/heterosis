@@ -70,7 +70,7 @@ printf("ho\n");
   cudaEventElapsedTime(&myTime, start, stop);
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
-printf"hum\n");
+printf("hum\n");
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
   cudaDeviceSynchronize();
