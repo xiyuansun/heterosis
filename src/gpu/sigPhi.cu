@@ -57,5 +57,6 @@ printf("hi\n");
   cudaEventDestroy(stop);
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
+printf("h0\n");
   cudaDeviceSynchronize();
 }
