@@ -6,10 +6,10 @@
 #include <stdio.h>
 
 void oneChain(Config *cfg){ 
-  Chain *host_a, *dev_a;
+  Chain *host_a = NULL, *dev_a = NULL;
   newChain(&host_a, &dev_a, cfg);  
   
-  if(a == NULL){
+  if(host_a == NULL){
     free(cfg);
     exit(EXIT_FAILURE);
   }
