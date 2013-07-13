@@ -40,7 +40,7 @@ __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     old = a->alp[iG(a->mAlp, g)];
     nw = alpProp(a, g);
     
-    dl = lAlp(a, g, nw) - lAlp(a, g, old);
+    dl = -1e12 /* lAlp(a, g, nw) - lAlp(a, g, old); */
     lp = 0 < dl ? 0 : dl;
     lu = log(runiformDevice(a, g, 0, 1));
     
@@ -68,10 +68,10 @@ void sampleAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventRecord(start, 0);
 
   fprintf(cfg->log, "alp ");
-/*
+
   sampleAlp_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleAlp_kernel2<<<1, 1>>>(dev_a);
-  */
+  
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&myTime, start, stop);
