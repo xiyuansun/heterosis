@@ -7,29 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-num_t alpProp(Chain *a, int g){ /* device */
-
-  num_t gam = a->gamAlp;
-  num_t sig = a->sigAlp;
-
-  num_t gprec = 1/(gam * gam);
-  num_t sprec = 1/(sig * sig);
-
-  num_t avg = (a->alp[g] * sprec) / (gprec + sprec);
-  num_t s = gam * gam + sig * sig;
-  num_t u = runiform(0, 1);
-  num_t nw;
-  
-  if(u < a->piAlp){
-    nw = 0;
-  } else {
-    nw = rnormal(avg, s);
-  }
-
-  return nw;
-}
-
-num_t lAlp(Chain *a, int g, num_t arg){ /* device */
+__device__ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   
   int n, G = a->G;
   num_t s = 0, tmp;
@@ -52,19 +30,19 @@ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   return s + tmp;
 }
 
-void sampleAlp_kernel(Chain *a){ /* kernel <<<G, 1>>> */
+__global__ void sampleAlp_kernel(Chain *a){ /* kernel <<<G, 1>>> */
 
-  int g;
+  int g = IDX;
   num_t old, nw, dl, lp, lu;
 
-  for(g = 0; g < a->G; ++g){ 
+  if(g < a->G){ 
 
     old = a->alp[g];
     nw = alpProp(a, g);
     
     dl = lAlp(a, g, nw) - lAlp(a, g, old);
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1));
+    lu = log(runiformDevice(a, g, 0, 1));
     
     if(lu < lp){ /* accept */
       a->alp[g] = nw;
@@ -75,14 +53,24 @@ void sampleAlp_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void sampleAlp(Chain *a, Config *cfg){ /* host */
+__host__ void sampleAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  clock_t start = clock();
-  
+  num_t myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
+
   if(cfg->verbose)
     printf("alpha ");
-    
-  sampleAlp_kernel(a);
 
-  cfg->timeAlp = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  sampleAlp_kernel<<<G_GRID, G_BLOCK>>>(dev_a);
+  
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  cfg->timeAlp = myTime;
 }

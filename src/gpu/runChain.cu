@@ -5,9 +5,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-void runChain(Chain *a, Config *cfg){
+void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
   
   if(cfg->verbose)
@@ -20,23 +19,23 @@ void runChain(Chain *a, Config *cfg){
     if(cfg->verbose)
       printf("    iter %d | ", m);
     
-    sampleC(a, cfg);
-    sampleTau(a, cfg);
-    samplePiAlp(a, cfg);
-    samplePiDel(a, cfg);
-    sampleD(a, cfg); 
-    sampleThePhi(a, cfg);
-    sampleTheAlp(a, cfg);
-    sampleTheDel(a, cfg);
-    sampleSigC(a, cfg);
-    sampleSigPhi(a, cfg);
-    sampleSigAlp(a, cfg);
-    sampleSigDel(a, cfg);
-    sampleEta(a, cfg);
-    sampleEps(a, cfg);
-    samplePhiAlpDel(a, cfg); 
+    sampleC(host_a, dev_a,  cfg);
+    sampleTau(host_a, dev_a,  cfg);
+    samplePiAlp(host_a, dev_a, cfg);
+    samplePiDel(host_a, dev_a, cfg);
+    sampleD(host_a, dev_a,  cfg); 
+    sampleThePhi(host_a, dev_a,  cfg);
+    sampleTheAlp(host_a, dev_a,  cfg);
+    sampleTheDel(host_a, dev_a,  cfg);
+    sampleSigC(host_a, dev_a,  cfg);
+    sampleSigPhi(host_a, dev_a,  cfg);
+    sampleSigAlp(host_a, dev_a, cfg);
+    sampleSigDel(host_a, dev_a,  cfg);
+    sampleEta(host_a, dev_a,  cfg);
+    sampleEps(host_a, dev_a,  cfg);
+    samplePhiAlpDel(host_a, dev_a, cfg); 
     
-    intermResults(a, cfg);
+    intermResults(host_a, dev_a,  cfg);
     
     if(cfg->verbose)
       printf("\n");

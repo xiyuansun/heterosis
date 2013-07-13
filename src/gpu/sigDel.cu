@@ -6,11 +6,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <thrust/reduce.h>
 
-void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+__global__ void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = IDX;
 
-  for(g = 0; g < a->G; ++g){ 
+  if(g < a->G){ 
     if(pow(a->del[g], 2) > 1e-6){
       a->tmp1[g] = pow(a->del[g] - a->theDel, 2);
       a->tmp2[g] = 1;
@@ -21,51 +22,50 @@ void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void sampleSigDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
-  int g;
-  num_t rate = 0;
-  
-  for(g = 0; g < a->G; ++g) 
-    rate += a->tmp1[g];
 
-  a->s1 = rate;
-}
-
-void sampleSigDel_kernel3(Chain *a){ /* pairwise sum in Thrust */
-  int g, Gdel = 0;
-  
-  for(g = 0; g < a->G; ++g) 
-    Gdel += a->tmp2[g];
-
-  a->s2 = Gdel;
-}
-
-void sampleSigDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void sampleSigDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t shape = (a->s2 - 1) / 2;
   num_t rate = a->s1 / 2;
   num_t lb = 1/pow(a->sigDel0, 2);
 
   if(shape >= 1 && rate > 0){
-    a->sigDel = 1/sqrt(rgamma(shape, rate, lb));
+    a->sigDel = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));
   } else {
     a->sigDel = a->sigDel;
   }
 }
 
-void sampleSigDel(Chain *a, Config *cfg){ /* host */
+__host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  clock_t start = clock();
-
-  if(cfg->constSigDel || !cfg->heterosis)
-    return;
+  num_t myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
 
   if(cfg->verbose)
     printf("sigDel ");
 
-  sampleSigDel_kernel1(a);
-  sampleSigDel_kernel2(a);
-  sampleSigDel_kernel3(a);
-  sampleSigDel_kernel4(a);
+  if(cfg->constSigDel || !cfg->heterosis)
+    return;
 
-  cfg->timeSigDel = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  sampleSigDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  thrust::device_ptr<num_t> tmp2(host_a->tmp2);  
+  num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
+ 
+  sampleSigDel_kernel2<<<1, 1>>>(dev_a);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+
+  cfg->timeSigDel = myTime;
 }

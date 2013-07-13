@@ -1,7 +1,9 @@
 #ifndef CHAIN_H
 #define CHAIN_H
 
-#include "constants.h"
+#include <constants.h>
+#include <cuda.h>
+#include <curand_kernel.h>
 
 typedef struct {
 
@@ -13,9 +15,11 @@ typedef struct {
   int N; /* number of libraries (samples) */
   int G; /* number of genes */
   int burnin; 
-  int heterosis;
-  int parmsFlag;
   int m; /* current place in the chain */
+  
+  /* curand states */
+  
+  curandState_t *states;
   
   /* initialization constants */
   

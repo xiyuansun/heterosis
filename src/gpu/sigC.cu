@@ -7,11 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
-
-  int n;
-  num_t rate, shape, lb;
-  clock_t start = clock();
+__global__ void sampleSigC_kernel(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
 
   if(a->constSigC)
     return; 
@@ -28,8 +24,27 @@ void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
   lb = 1 / pow(a->sigC0, 2); 
 
   if(shape >= 1 && rate > 0){
-    a->sigC = 1/sqrt(rgamma(shape, rate, lb));
+    a->sigC = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));
   } 
-
-  cfg->timeSigC = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }
+
+__host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){ 
+
+  num_t myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
+
+  if(cfg->verbose)
+    printf("sigC "); 
+
+  sampleSigC_kernel<<<1, 1>>>(dev_a);
+  
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+
+  cfg->timeSigC = myTime;

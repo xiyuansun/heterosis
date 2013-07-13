@@ -5,7 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printChain(Chain *a){
+void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
+  int N = cfg->N, G = cfg->G;
+  Chain *a = chainDeviceToHost(host_a, dev_a, cfg);
 
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
@@ -92,4 +94,6 @@ void printChain(Chain *a){
   printf("constSigDel = %d\n", a->constSigDel);
   printf("constPiAlp = %d\n", a->constPiAlp);
   printf("constPiDel = %d\n", a->constPiDel);
+
+  freeChain(a, cfg, 1);
 }

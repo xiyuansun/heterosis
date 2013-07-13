@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-num_t lPhi(Chain *a, int g, num_t arg){ /* device */
+__device__ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
   int n, G = a->G;
   num_t ret, s = 0, tmp = 0; 
 
@@ -20,18 +20,18 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
   return ret;
 }
 
-void samplePhi_kernel(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+__global__ void samplePhi_kernel(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = IDX;
   num_t old, nw, dl, lp, lu;
   
-  for(g = 0; g < a->G; ++g){ 
+  if(g < a->G){ 
 
     old = a->phi[g];
-    nw = rnormal(old, a->tunePhi[g]);
+    nw = rnormalDevice(a, g, old, a->tunePhi[g]);
 
     dl = lPhi(a, g, nw) - lPhi(a, g, old);
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1)); 
+    lu = log(runiformDevice(a, g, 0, 1)); 
     
     if(lu < lp){ /* accept */
       a->phi[g] = nw;
@@ -46,14 +46,24 @@ void samplePhi_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void samplePhi(Chain *a, Config *cfg){ /* host */
+__host__ void samplePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  clock_t start = clock();
-  
+  num_t myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
+
   if(cfg->verbose)
     printf("phi ");
-  
-  samplePhi_kernel(a);
 
-  cfg->timePhi = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  samplePhi_kernel<<<G_GRID, G_BLOCK>>>(dev_a);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+
+  cfg->timePhi = myTime;
 }

@@ -5,24 +5,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <thrust/reduce.h>
 
-void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+__global__ void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
+  int g = IDX, G = a->G;
   
-  for(g = 0; g < a->G; ++g)
+  if(g < G)
     a->tmp1[g] = exp(a->eps[iG(n, g)] + mu(a, n, a->phi[g], 
                     a->alp[g], a->del[g]));
 }
 
-void lC_kernel2(Chain *a, int n){ /* parallel pairwise sum */
-  int g;
-  a->tmp2[0] = 0;
-  
-  for(g = 0; g < a->G; ++g)
-    a->tmp2[0] += a->tmp1[g];
-}
-
-void lC_kernel3(Chain *a, int n, int newArg){ /* kernel <<<1, 1>>> */
+__global__ void lC_kernel2(Chain *a, int n, int newArg){ /* kernel <<<1, 1>>> */
   num_t arg, ret;
 
   if(newArg){
@@ -41,31 +34,35 @@ void lC_kernel3(Chain *a, int n, int newArg){ /* kernel <<<1, 1>>> */
   }
 }
 
-void lC(Chain *a, int n, int newArg){ /* host */
-  lC_kernel1(a, n);
-  lC_kernel2(a, n);
-  lC_kernel3(a, n, newArg);
+__host__ void lC(Chain *host_a, Chain *dev_a, Config *cfg, int n, int newArg){ /* host */
+  lC_kernel1<<<G_GRID, G_BLOCK>>>(dev_a, n);
+  
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  lC_kernel2<<<1, 1>>>(dev_a, n, newArg);
 }
 
-void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
-  int n;
+__global__ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
+  int n = IDX;
   
-  for(n = 0; n < a->N; ++n){
+  if(n < a->N){
     a->Old[n] = a->c[n];
-    a->New[n] = rnormal(a->Old[n], a->tuneC[n]);
+    a->New[n] = rnormalDevice(a, n, a->Old[n], a->tuneC[n]);
     
   }
 }
 
-void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
-  int n;
+__global__ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
+  int n = IDX;
   num_t dl, lp, lu;
 
-  for(n = 0; n < a->N; ++n){ 
+  if(n < a->N){ 
 
     dl = a->lNew[n] - a->lOld[n];
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1));
+    lu = log(runiformDevice(a, n, 0, 1));
       
     if(lu < lp){ /* accept */
       a->c[n] = a->New[n];
@@ -82,21 +79,31 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
   }
 }
 
-void sampleC(Chain *a, Config *cfg){ /* host */
+__host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int n;
-  clock_t start = clock();
-
+  num_t myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);  
+  
   if(cfg->verbose)
     printf("c ");
-  
-  sampleC_kernel1(a);
+   
+  sampleC_kernel1<<<N_GRID, N_BLOCK>>>(dev_a);
 
-  for(n = 0; n < a->N; ++n){ 
-    lC(a, n, 1);
-    lC(a, n, 0);
+  for(n = 0; n < cfg->N; ++n){ 
+    lC(host_a, dev_a, cfg, n, 1);
+    lC(host_a, dev_a, cfg, n, 0);
   }
 
-  sampleC_kernel2(a);
-    
-  cfg->timeC = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  sampleC_kernel2<<<N_GRID, N_BLOCK>>>(dev_a);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+  
+  cfg->timeC = myTime;
 }

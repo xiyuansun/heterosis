@@ -4,56 +4,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void freeChain(Chain *a, Config *cfg){
+__host__ void freeChain(Chain *a, Config *cfg, int onHost){
 
   if(cfg->verbose)
-    printf("  Freeing chain.\n\n");
+    printf("  FREEing chain.\n\n");
+
+  FREE(a->states, onHost);
   
   /* data */  
 
-  free(a->y);
-  free(a->yMeanG);
-  free(a->grp);
+  FREE(a->y, onHost);
+  FREE(a->yMeanG, onHost);
+  FREE(a->grp, onHost);
 
   /* parameters */
   
-  free(a->c);
-  free(a->eps);
-  free(a->eta);
-  free(a->phi);
-  free(a->alp);
-  free(a->del);
+  FREE(a->c, onHost);
+  FREE(a->eps, onHost);
+  FREE(a->eta, onHost);
+  FREE(a->phi, onHost);
+  FREE(a->alp, onHost);
+  FREE(a->del, onHost);
 
   /* temporary and return values */
   
-  free(a->tmp1);
-  free(a->tmp2);
+  FREE(a->tmp1, onHost);
+  FREE(a->tmp2, onHost);
 
-  free(a->Old);
-  free(a->New);
-  free(a->lOld);
-  free(a->lNew);
+  FREE(a->Old, onHost);
+  FREE(a->New, onHost);
+  FREE(a->lOld, onHost);
+  FREE(a->lNew, onHost);
   
   /* tuning parameters for Metropolis steps */
   
-  free(a->tuneC);
-  free(a->tunePhi);
-  free(a->tuneEps);
+  FREE(a->tuneC, onHost);
+  FREE(a->tunePhi, onHost);
+  FREE(a->tuneEps, onHost);
 
   /* number of acceptances for Metropolis steps */
 
-  free(a->accC);
-  free(a->accPhi);
-  free(a->accAlp);
-  free(a->accDel);
-  free(a->accEps);
+  FREE(a->accC, onHost);
+  FREE(a->accPhi, onHost);
+  FREE(a->accAlp, onHost);
+  FREE(a->accDel, onHost);
+  FREE(a->accEps, onHost);
   
   /* counters towards heterosis and differential expression */
 
-  free(a->dex);
-  free(a->hph);
-  free(a->lph);
-  free(a->mph);
+  FREE(a->dex, onHost);
+  FREE(a->hph, onHost);
+  FREE(a->lph, onHost);
+  FREE(a->mph, onHost);
   
   free(a);
 }

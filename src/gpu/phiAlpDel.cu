@@ -4,24 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void breakpoint(){
-  return;
-}
-
-void samplePhiAlpDel(Chain *a, Config *cfg){ /* host */
-
-
-if(a->m == 6){
-  breakpoint();
-}
+void samplePhiAlpDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   if(cfg->joint && cfg->heterosis){
-    samplePhiAlpDelJoint(a, cfg);
+    samplePhiAlpDelJoint(host_a, dev_a, cfg);
   } else {
-    samplePhi(a, cfg); 
-    sampleAlp(a, cfg); 
+    samplePhi(host_a, dev_a, cfg); 
+    sampleAlp(host_a, dev_a, cfg); 
     
     if(cfg->heterosis)
-      sampleDel(a, cfg);
+      sampleDel(host_a, dev_a, cfg);
   }
 } 

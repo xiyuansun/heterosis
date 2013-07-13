@@ -5,12 +5,12 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <thrust/reduce.h>
 
-void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+__global__ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = IDX;
 
-  for(g = 0; g < a->G; ++g){
+  if(g < a->G){
     if(pow(a->alp[g], 2) > 1e-6){
       a->tmp1[g] = 1;
       a->tmp2[g] = a->alp[g];
@@ -21,26 +21,7 @@ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void sampleTheAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thrust */
-  int g, Galp = 0;
-  
-  for(g = 0; g < a->G; ++g) 
-    Galp += a->tmp1[g];
-
-  a->s1 = Galp;
-}
-
-void sampleTheAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
-  int g;
-  num_t sm = 0;
-  
-  for(g = 0; g < a->G; ++g) 
-    sm += a->tmp2[g];
-
-  a->s2 = sm;
-}
-
-void sampleTheAlp_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
   num_t gs = pow(a->gamAlp, 2);
   num_t ss = pow(a->sigAlp, 2);
@@ -49,23 +30,40 @@ void sampleTheAlp_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
   num_t m = gs * a->s2 / den;
   num_t s = sqrt(gs * ss / den);
 
-  a->theAlp = rnormal(m, s);
+  a->theAlp = rnormalDevice(a, 1, m, s);
 }
 
-void sampleTheAlp(Chain *a, Config *cfg){ /* host */
+__host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  clock_t start = clock();
+  num_t myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
 
-  if(cfg->constTheAlp)
-    return;
-  
   if(cfg->verbose)
     printf("theAlp ");
 
-  sampleTheAlp_kernel1(a);
-  sampleTheAlp_kernel2(a);
-  sampleTheAlp_kernel3(a);
-  sampleTheAlp_kernel4(a);
+  if(cfg->constTheAlp)
+    return;
 
-  cfg->timeTheAlp = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  sampleTheAlp_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+ 
+  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  thrust::device_ptr<num_t> tmp2(host_a->tmp2);  
+  num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
+  CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  sampleTheAlp_kernel2<<<1, 1>>>(dev_a);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+
+  cfg->timeTheAlp = myTime;
 }

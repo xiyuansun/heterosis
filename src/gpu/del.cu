@@ -4,31 +4,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-num_t delProp(Chain *a, int g){ /* device */    
-
-  num_t gam = a->gamDel;
-  num_t sig = a->sigDel;
-
-  num_t gprec = 1/(gam * gam);
-  num_t sprec = 1/(sig * sig);
-
-  num_t avg = (a->del[g] * sprec) / (gprec + sprec);
-  num_t s = gam * gam + sig * sig;
-  num_t u = runiform(0, 1);
-  num_t nw;
-
-  if(u < a->piDel){
-    nw = 0;
-  } else {
-    nw = rnormal(avg, s);
-  }
-
-  return nw;
-}
-
-num_t lDel(Chain *a, int g, num_t arg){ /* device */ 
+__device__ num_t lDel(Chain *a, int g, num_t arg){ /* device */ 
   int n, G = a->G;
   num_t s = 0, tmp; 
   
@@ -50,18 +27,18 @@ num_t lDel(Chain *a, int g, num_t arg){ /* device */
   return s + tmp;
 }
 
-void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
-  int g;
+__global__ void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
+  int g = IDX;
   num_t old, nw, dl, lp, lu;
 
-  for(g = 0; g < a->G; ++g){ 
+  if(g < a->G){ 
 
     old = a->del[g];
     nw = delProp(a, g);
     
     dl = lDel(a, g, nw) - lDel(a, g, old);
     lp = 0 < dl? 0 : dl;
-    lu = log(runiform(0, 1));
+    lu = log(runiformDevice(a, g, 0, 1));
     
     if(lu < lp){ /* accept */
       a->del[g] = nw;
@@ -74,14 +51,24 @@ void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void sampleDel(Chain *a, Config *cfg){ /* host */
+__host__ void sampleDel(Chain *host_a, Chain *dev_a, Config* cfg){ /* host */
 
-  clock_t start = clock();
-  
+  float myTime;
+  cudaEvent_t start, stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
+
   if(cfg->verbose)
     printf("del ");
-  
-  sampleDel_kernel(a);
 
-  cfg->timeDel = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  sampleDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&myTime, start, stop);
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
+
+  cfg->timeDel = myTime;
 }
