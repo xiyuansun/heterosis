@@ -154,7 +154,5 @@ Config *config(int argc, char **argv){
   fprintf(cfg->timeConfig, "\n");
   fprintf(cfg->time, "\n"); 
   
-  printConfig(cfg);
-  
   return cfg;
 }
