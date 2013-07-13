@@ -10,7 +10,7 @@
 
 __device__ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   
-/*  int n, N = a->N, G = a->G;
+  int n, N = a->N, G = a->G;
   num_t s = 0, tmp;
    
   for(n = 0; n < a->N; ++n){
@@ -28,8 +28,7 @@ __device__ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
     tmp = log(a->piAlp[a->mPiAlp]);
   }
 
-  return s + tmp; */
-  return 1;
+  return s + tmp; 
 }
 
 __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
@@ -41,7 +40,7 @@ __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     old = a->alp[iG(a->mAlp, g)];
     nw = alpProp(a, g);
     
-    dl = lAlp(a, g, nw) - lAlp(a, g, old); 
+    dl = 1; /* lAlp(a, g, nw) - lAlp(a, g, old); */
     lp = 0 < dl ? 0 : dl;
     lu = log(runiformDevice(a, g, 0, 1));
     
