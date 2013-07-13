@@ -11,7 +11,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   FILE *fp;
   int n, g, G = cfg->G;
   char file[BUF];
-  num_t tmp, *tmpv,;
+  num_t tmp, *tmpv;
  
   /* differential expression and heterosis probabilities */
   
