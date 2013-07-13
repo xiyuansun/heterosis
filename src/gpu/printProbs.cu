@@ -48,8 +48,6 @@ void printProbs(Chain *a, Config *cfg){
   alp = (num_t*) malloc((cfg->M + 1) * cfg->G * sizeof(num_t));    
   del = (num_t*) malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
 
-  printChain(a, cfg);
-
   CUDA_CALL(cudaMemcpy(alp, a->alp, (cfg->M + 1) * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(del, a->del, (cfg->M + 1) * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     
