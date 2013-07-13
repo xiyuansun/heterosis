@@ -53,11 +53,11 @@ __host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
- /* 
+  
   thrust::device_ptr<num_t> tmp2(host_a->tmp2);  
   num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
-  
+ /* 
   sampleTheAlp_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);*/
 
   cudaEventRecord(stop, 0);
