@@ -8,7 +8,7 @@
 #define MAXROW 16384
 #define NUM_TF "%0.3f"
 #define NUM_TMIN (-1.0/0.0)
-#define MAX_NG (N > G ? N : G)
+#define MAX_NG ((N > G) ? N : G)
 
 #define MAXTHREADS 512
 

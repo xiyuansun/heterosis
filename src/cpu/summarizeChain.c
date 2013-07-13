@@ -6,8 +6,8 @@
 #include <stdlib.h>
 
 void summarizeChain(Chain *a, Config *cfg){
-  int n, g, i, G = cfg->G,  niter = cfg->M - cfg->burnin;
-  num_t accD, accC, accPhi, accAlp, accDel, accEps; 
+  int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin;
+  num_t accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
   FILE *fp;
   char file[BUF];
 
