@@ -229,7 +229,7 @@ inline __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, n
         v = runiformDevice(a, g, 0, 1);
 
         tmp1 = exp(-x/2);
-        tmp2 = pow((float) x, shape - 1)* tmp1 * pow(2.0, 1 - shape) * pow((1.0 - tmp1, 1 - shape);
+        tmp2 = pow((float) x, shape - 1)* tmp1 * pow(2.0, 1 - shape) * pow(1.0 - tmp1, 1 - shape);
 
         if(v < tmp2)
           return ret;
