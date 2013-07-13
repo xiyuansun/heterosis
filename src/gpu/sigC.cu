@@ -41,7 +41,7 @@ __host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
-    fprintf("sigC "); 
+    printf("sigC "); 
 
   sampleSigC_kernel<<<1, 1>>>(dev_a);
   
