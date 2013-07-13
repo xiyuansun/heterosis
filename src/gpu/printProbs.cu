@@ -27,7 +27,7 @@ void printProbs(Chain *a, Config *cfg){
     printf("  Printing differential expression ");
 
     if(cfg->heterosis)
-      printf("and heterosis  ");
+      printf("and heterosis ");
       
     printf("probabilities.\n");
   }

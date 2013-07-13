@@ -24,6 +24,7 @@ typedef struct {
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */
   int seed; /* seed for random number generators */
   int heterosis; /* indicate whether the program will test for heterosis */
+  int verbose;
 
   int M; /* length of chain (not including initial values) */
   int N; /* number of libraries (samples) */

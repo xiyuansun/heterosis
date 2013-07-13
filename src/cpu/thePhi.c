@@ -33,12 +33,13 @@ void sampleThePhi(Chain *a, Config *cfg){ /* host */
 
   if(cfg->constThePhi)
     return;
-    
-  fprintf(cfg->log, "thePhi ");
+
+  if(cfg->verbose)
+    printf("thePhi ");
 
   sampleThePhi_kernel1(a);
   sampleThePhi_kernel2(a);
   
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);
 }

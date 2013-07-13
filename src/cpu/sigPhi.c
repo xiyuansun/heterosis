@@ -44,12 +44,13 @@ void sampleSigPhi(Chain *a, Config *cfg){ /* host */
   if(cfg->constSigPhi)
     return;
     
-  fprintf(cfg->log, "sigPhi ");
+  if(cfg->verbose)
+    printf("sigPhi ");
 
   sampleSigPhi_kernel1(a);
   sampleSigPhi_kernel2(a);
   sampleSigPhi_kernel3(a);
 
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);
 }

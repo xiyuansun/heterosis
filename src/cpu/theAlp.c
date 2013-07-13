@@ -59,14 +59,15 @@ void sampleTheAlp(Chain *a, Config *cfg){ /* host */
 
   if(cfg->constTheAlp)
     return;
-    
-  fprintf(cfg->log, "theAlp ");
+  
+  if(cfg->verbose)
+    printf("theAlp ");
 
   sampleTheAlp_kernel1(a);
   sampleTheAlp_kernel2(a);
   sampleTheAlp_kernel3(a);
   sampleTheAlp_kernel4(a);
 
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);
 }

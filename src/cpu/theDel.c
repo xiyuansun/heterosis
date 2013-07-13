@@ -60,13 +60,14 @@ void sampleTheDel(Chain *a, Config *cfg){ /* host */
   if(cfg->constTheDel || !cfg->heterosis)
     return;
 
-  fprintf(cfg->log, "theDel ");
+  if(cfg->verbose)
+    printf("theDel ");
 
   sampleTheDel_kernel1(a);
   sampleTheDel_kernel2(a);
   sampleTheDel_kernel3(a);
   sampleTheDel_kernel4(a);
   
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);  
 }

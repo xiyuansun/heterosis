@@ -109,7 +109,7 @@ void sampleD(Chain *a, Config *cfg){ /* host */
     return;
   
   if(cfg->verbose)  
-    fprintf("d ");
+    printf("d ");
    
   sampleD_kernel1(a);
 
@@ -118,6 +118,6 @@ void sampleD(Chain *a, Config *cfg){ /* host */
 
   sampleD_kernel2(a);
 
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);
 }

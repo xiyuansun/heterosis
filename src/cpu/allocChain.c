@@ -39,7 +39,7 @@ Chain *allocChain(Config *cfg){
   a->piDel  = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
   
   /* temporary and return values */
-  
+
   a->tmp1 = (num_t*) malloc(cfg->G * sizeof(num_t));
   a->tmp2 = (num_t*) malloc(cfg->G * sizeof(num_t));
 

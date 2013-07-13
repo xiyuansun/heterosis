@@ -9,10 +9,13 @@
 
 void runChain(Chain *a, Config *cfg){
   int m;
-  fprintf(cfg->log, "  Running chain.\n");
+  
+  if(cfg->verbose)
+    printf("  Running chain.\n");
   
   for(m = 0; m < a->M; ++m){
-    fprintf(cfg->log, "    iter %d | ", m);
+    if(cfg->verbose)
+      printf("    iter %d | ", m);
     
     sampleC(a, cfg);
     sampleTau(a, cfg);
@@ -30,7 +33,9 @@ void runChain(Chain *a, Config *cfg){
     sampleEps(a, cfg);
     samplePhiAlpDel(a, cfg);
     
-    fprintf(cfg->log, "\n");
+    if(cfg->verbose)
+      printf("\n");
+      
     fprintf(cfg->time, "\n");
   }
 }

@@ -15,8 +15,10 @@ void printParms(Chain *a, Config *cfg){
   num_t tmp;
   FILE *fp;
   
-  if(cfg->parmsFlag){   
-    fprintf(cfg->log, "  Printing parameters.\n");  
+  if(cfg->parmsFlag){
+    
+    if(cfg->verbose) 
+      printf("  Printing parameters.\n");  
       
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");

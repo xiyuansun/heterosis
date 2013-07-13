@@ -15,7 +15,9 @@ void printRates(Chain *a, Config *cfg){
   FILE *fp;
     
   if(cfg->ratesFlag){
-    fprintf(cfg->log, "  Printing Metropolis acceptance rates.\n");
+  
+    if(cfg->verbose)
+      printf("  Printing Metropolis acceptance rates.\n");
   
     sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w"); 

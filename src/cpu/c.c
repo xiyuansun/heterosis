@@ -105,6 +105,6 @@ void sampleC(Chain *a, Config *cfg){ /* host */
   sampleC_kernel2(a);
   sampleC_kernel3(a);
     
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);
 }

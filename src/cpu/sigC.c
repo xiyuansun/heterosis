@@ -17,7 +17,8 @@ void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
   if(a->constSigC)
     return; 
 
-  fprintf(cfg->log, "sigC ");
+  if(cfg->verbose)
+    printf("sigC ");
 
   rate = 0;
   for(n = 0; n < a->N; ++n) 
@@ -35,6 +36,6 @@ void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
 
   ++a->mSigC;
 
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);
 }

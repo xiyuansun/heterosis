@@ -22,7 +22,7 @@ void chains(int argc, char **argv){
   }
   
   if(cfg->verbose)
-    fprintf("Done running mcmc.\n");
+    printf("Done running mcmc.\n");
 
   freeConfig(cfg);
 }

@@ -93,6 +93,6 @@ void sampleAlp(Chain *a, Config *cfg){ /* host */
   sampleAlp_kernel1(a);
   sampleAlp_kernel2(a);
 
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);
 }

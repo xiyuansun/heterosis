@@ -15,7 +15,9 @@ void printHyper(Chain *a, Config *cfg){
   FILE *fp;
   
   if(cfg->hyperFlag){
-    fprintf(cfg->log, "  Printing hyperparameters.\n");
+  
+    if(cfg->verbose)
+      printf("  Printing hyperparameters.\n");
   
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");

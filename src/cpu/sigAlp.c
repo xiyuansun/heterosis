@@ -40,7 +40,6 @@ void sampleSigAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
   a->s2 = Galp;
 }
 
-
 void sampleSigAlp_kernel4(Chain *a){ /* parallel pairwise sum in Thrust */
   num_t shape = (a->s2 - 1) / 2;
   num_t rate = a->s1 / 2;
@@ -62,13 +61,14 @@ void sampleSigAlp(Chain *a, Config *cfg){ /* host */
   if(cfg->constSigAlp)
     return;
 
-  fprintf(cfg->log, "sigAlp ");
+  if(cfg->verbose)
+    printf("sigAlp ");
 
   sampleSigAlp_kernel1(a);
   sampleSigAlp_kernel2(a);
   sampleSigAlp_kernel3(a);
   sampleSigAlp_kernel4(a); 
 
-  time = ((double) clock() - start) / (SECS * CLOCKS_PER_SEC);
+  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   fprintf(cfg->time, "%0.3f ", time);
 }
