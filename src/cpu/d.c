@@ -45,7 +45,7 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(tmp);
   ret -= (arg/2 + 1) * a->s1 - tmp * a->s2;
   
-  if(ret < 1e-6 || ret > a->d0)
+  if(arg < 1e-6 || arg > a->d0)
     ret = NUM_TMIN;
 
   if(newArg){
@@ -75,6 +75,16 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t dl = a->lNew[0] - a->lOld[0];
   num_t lp = 0 < dl ? 0 : dl;
   num_t lu = log(runiform(0, 1));
+
+/*
+  printf("\n\nlNew = %0.3f\n", a->lNew[0]);
+  printf("lOld = %0.3f\n", a->lOld[0]);
+  printf("New = %0.3f\n", a->New[0]);
+  printf("Old = %0.3f\n", a->Old[0]);
+  printf("lu = %0.3f\n", a->lNew[0]);
+  printf("ld = %0.3f\n", a->lOld[0]);
+  printf("lp = %0.3f\n\n", a->lOld[0]);
+*/
 
   if(lu < lp){ /* accept */
     a->d = a->New[0];

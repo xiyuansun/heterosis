@@ -123,6 +123,7 @@ void printHeaders(Chain *a, Config *cfg){
         fprintf(fp, " ");
       }
      
+    fprintf(fp, "\n");  
     fclose(fp);
   }
   
