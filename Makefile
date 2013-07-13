@@ -41,7 +41,7 @@ NVCCDEP+=thePhi theAlp theDel
 NVCCDEP+=sigPhi sigAlp sigDel
 NVCCDEP+=piAlp piDel
 NVCCDEP+=runChain oneChain 
-NVCCDEP+=printHeaders intermResults summarizeChain
+NVCCDEP+=printHeaders interimResults summarizeChain
 NVCCDEP+=main
 
 CCOBJ=$(foreach name, $(CCDEP), $(CCOBJDIR)$(name).o)

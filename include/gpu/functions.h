@@ -16,21 +16,20 @@
   
 #define FREE(x, onHost){if(onhost{free(x);} else {CUDA_CALL(cudaFree(x))}}
 
-void pi1(int*, int, const char*);
-void pf1(num_t*, int, const char*);
-pstate(curandState_t*, int, const char*);
-void pi2(int*, int, int, const char*);
-void pf2(num_t*, int, int, const char*);
-void pi3(int*, int, int, int, const char*);
-void pf3(num_t*, int, int, int, const char*);
+__host__ void pi1(int*, int, const char*);
+__host__ void pf1(num_t*, int, const char*);
+__host__ pstate(curandState_t*, int, const char*);
+__host__ void pi2(int*, int, int, const char*);
+__host__ void pf2(num_t*, int, int, const char*);
+__host__ void pi3(int*, int, int, int, const char*);
+__host__ void pf3(num_t*, int, int, int, const char*);
 
-Config *config(int, char**);
-void getopts(Config*, int, char**);
-void printConfig(Config*);
+__host__ Config *config(int, char**);
+__host__ void getopts(Config*, int, char**);
+__host__ void printConfig(Config*);
 
-int *mySampleInt(int, int);
-int *readGrp(Config*);
-count_t *readData(Config*);
+__host__ int *readGrp(Config*);
+__host__ count_t *readData(Config*);
 
 __host__ Chain *allocChainHost(Config*);
 __host__ void allocChainDevice(Chain*, Chain*, Config*);
@@ -39,38 +38,34 @@ __host__ Chain *chainDeviceToHost(Chain*, Chain*, Config*);
 __host__ void cmpfunc(const void*, const void*);
 __global__ void curand_setup_kernel(Chain*, int*);
 
-Chain *newChain(Config*);
-void newChain_kernel1(Chain*);
-void newChain_kernel2(Chain*);
-void printChain(Chain*);
-void freeChain(Chain*, Config*);
+__global__ void newChain_kernel1(Chain*);
+__global__ void newChain_kernel2(Chain*);
+__host__ Chain *newChain(Config*);
+__host__ void printChain(Chain*);
+__host__ void freeChain(Chain*, Config*);
 
-num_t mu(Chain*, int, num_t, num_t, num_t);
-num_t runiform(num_t, num_t);
-num_t rnormal(num_t, num_t);
-num_t rgamma(num_t, num_t, num_t);
-num_t rbeta(num_t, num_t);
+__host__ num_t runiform(num_t, num_t);
+__host__ num_t rnormal(num_t, num_t);
+__host__ num_t rgamma(num_t, num_t, num_t);
+__host__ num_t rbeta(num_t, num_t);
 
-void lC_kernel1(Chain*, int);
-void lC_kernel2(Chain*, int);
-void lC_kernel3(Chain*, int, int);
-void lC(Chain*, int, int);
-void sampleC_kernel1(Chain*);
-void sampleC_kernel2(Chain*);
-void sampleC(Chain*, Config*);
+__global__ void lC_kernel1(Chain*, int);
+__global__ void lC_kernel2(Chain*, int, int);
+__host__ void lC(Chain*, Chain*, int, int);
+__global__ void sampleC_kernel1(Chain*);
+__global__ void sampleC_kernel2(Chain*);
+__host__ void sampleC(Chain*, Chain*, Config*);
 
-num_t lEps(Chain*, int, int, num_t);
-void sampleEps_kernel(Chain*);
-void sampleEps(Chain*, Config*);
+__device__ num_t lEps(Chain*, int, int, num_t);
+__global__ void sampleEps_kernel(Chain*);
+__host__ void sampleEps(Chain*, Chain*, Config*);
 
-void lD_kernel1(Chain*);
-void lD_kernel2(Chain*);
-void lD_kernel3(Chain*);
-void lD_kernel4(Chain*, int);
-void lD(Chain*, int);
-void sampleD_kernel1(Chain*);
-void sampleD_kernel2(Chain*);
-void sampleD(Chain*, Config*);
+__global__ void lD_kernel1(Chain*);
+__global__ void lD_kernel2(Chain*, int);
+__host__ void lD(Chain*, int);
+__global__ void sampleD_kernel1(Chain*);
+__global__ void sampleD_kernel2(Chain*);
+__host__ void sampleD(Chain*, Chain*, Config*);
 
 num_t lPhi(Chain*, int, num_t);
 void samplePhi_kernel(Chain*);
@@ -78,7 +73,7 @@ void samplePhi(Chain*, Config*);
 
 __device__ num_t lAlp(Chain*, int, num_t);
 __global__ void sampleAlp_kernel(Chain*);
-__host__ void sampleAlp(Chain*, Config*);
+__host__ void sampleAlp(Chain*, Chain*, Config*);
 
 num_t delProp(Chain*, int);
 num_t lDel(Chain*, int, num_t);
@@ -89,13 +84,13 @@ num_t lPhiAlpDelJoint(Chain*, int, num_t, num_t, num_t);
 void samplePhiAlpDelJoint_kernel(Chain*);
 void samplePhiAlpDelJoint(Chain*, Config*);
 
-void samplePhiAlpDel(Chain*, Config*);
+__host__ void samplePhiAlpDel(Chain*, Chain*, Config*);
 
 void sampleSigC(Chain*, Config*);
 
-void sampleEta_kernel1(Chain*);
-void sampleEta_kernel2(Chain*);
-void sampleEta(Chain*, Config*);
+__global__ void sampleEta_kernel1(Chain*);
+__global__ void sampleEta_kernel2(Chain*);
+__host__ void sampleEta(Chain*, Chain*, Config*);
 
 void sampleTau_kernel1(Chain*);
 void sampleTau_kernel2(Chain*);
@@ -149,11 +144,11 @@ void runChain(Chain*, Config*);
 void oneChain(Config*);
 void chains(int, char**);
 
-void printHeaders(Chain*, Config*);
-void intermResults(Chain*, Config*);
-void summarizeChain(Chain*, Config*);
+__host__ void printHeaders(Chain*, Chain*, Config*);
+__host__ void interimResults(Chain*, Chain*, Config*);
+__host__ void summarizeChain(Chain*, Chain*, Config*);
 
-inline num_t mu(Chain *a, int n, num_t phi, num_t alp, num_t del){
+inline __device_ num_t mu(Chain *a, int n, num_t phi, num_t alp, num_t del){
   if(a->grp[n] == 1){
     return phi - alp;
   } else if(a->grp[n] == 2){

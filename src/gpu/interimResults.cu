@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void intermResults(Chain *a, Config *cfg){
+void interimResults(Chain *a, Config *cfg){
   FILE *fp;
   char file[BUF];
   int n, g, G = cfg->G;
