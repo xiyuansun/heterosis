@@ -42,7 +42,7 @@ __global__ void lD_kernel2(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 
 __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
 
-  lD_kernel1<<<G_GRID, G_BLOCK>>>(a);
+  lD_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
 
   thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
   num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
@@ -52,7 +52,7 @@ __host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host 
   num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
   
-  lD_kernel2<<<1, 1>>>(a, newArg);
+  lD_kernel2<<<1, 1>>>(dev_a, newArg);
 }
 
 __global__ void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
