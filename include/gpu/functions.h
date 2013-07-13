@@ -18,7 +18,7 @@
 
 __host__ void pi1(int*, int, const char*);
 __host__ void pf1(num_t*, int, const char*);
-__host__ pstate(curandState_t*, int, const char*);
+__host__ pstate(curandState*, int, const char*);
 __host__ void pi2(int*, int, int, const char*);
 __host__ void pf2(num_t*, int, int, const char*);
 __host__ void pi3(int*, int, int, int, const char*);
@@ -137,7 +137,7 @@ __host__ void printHeaders(Chain*, Chain*, Config*);
 __host__ void interimResults(Chain*, Chain*, Config*);
 __host__ void summarizeChain(Chain*, Chain*, Config*);
 
-inline __device_ num_t mu(Chain *a, int n, num_t phi, num_t alp, num_t del){
+inline __device__ num_t mu(Chain *a, int n, num_t phi, num_t alp, num_t del){
   if(a->grp[n] == 1){
     return phi - alp;
   } else if(a->grp[n] == 2){
