@@ -40,7 +40,7 @@ __global__ void lD_kernel2(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   }
 }
 
-__host__ void lD(Chain *a, int newArg){ /* host */
+__host__ void lD(Chain *host_a, Chain *dev_a, Config *cfg, int newArg){ /* host */
 
   lD_kernel1<<<G_GRID, G_BLOCK>>>(a);
 
