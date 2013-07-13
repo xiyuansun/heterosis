@@ -33,7 +33,7 @@ __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t s = sqrt(gs * ss / den);
 
   a->theAlp[a->mTheAlp + 1] = rnormalDevice(a, 1, m, s);
-  /*++a->mTheAlp;*/
+  ++a->mTheAlp;
 }
 
 __host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
