@@ -12,7 +12,7 @@ Chain *allocChain(Config *cfg){
   if(cfg->verbose)
     printf("  Allocating chain.\n");
   
-  /* data */  
+  /* data */   
   
   a->y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t));
   a->yMeanG = (num_t*) malloc(cfg->N * sizeof(num_t));
