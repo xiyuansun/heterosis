@@ -86,12 +86,8 @@ Config *config(int argc, char **argv){
    *  All the others must be given initial values.
    */
    
-   printf("\n\n\n\n\n-------\n\n\n\n");
-   
   if(!cfg->constTau)
-    cfg->tau = sqrt(rgamma(cfg->aTau, cfg->bTau, 0));
- 
-   printf("\n\n\n\n--------\n\n\n\n");
+    cfg->tau = sqrt(rgamma(2, 3, 0));
  
   if(!cfg->constPiAlp)
     cfg->piAlp = rbeta(cfg->aAlp, cfg->bAlp);
