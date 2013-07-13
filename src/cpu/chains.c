@@ -8,7 +8,7 @@
 void chains(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
-  fprintf(cfg->log, "Begun chains");
+  fprintf(cfg->log, "Running %d chain(s).\n", cfg->chains);
   
   for(i = 0; i < cfg->chains; ++i){
     fprintf(cfg->log, "Chain %d\n", i);

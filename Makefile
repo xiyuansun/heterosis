@@ -12,7 +12,7 @@ SRCDIR=src/
 OUTDIR=out/
 
 CPUBIN=$(BINDIR)mcmc
-GPUBIN=$(BINDIR)gpumcmc
+GPUBIN=$(BINDIR)gpu-mcmc
 
 CCOBJDIR=$(OBJDIR)cpu/
 CCSRCDIR=$(SRCDIR)cpu/
