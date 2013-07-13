@@ -27,15 +27,16 @@ __host__ void samplePiDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   float myTime;
   cudaEvent_t start, stop;
+  
+  if(cfg->constPiDel || !cfg->heterosis)
+    return;
+  
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
     printf("piDel ");
-
-  if(cfg->constPiDel || !cfg->heterosis)
-    return;
 
   samplePiDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   

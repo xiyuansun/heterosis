@@ -9,12 +9,6 @@
 
 __global__ void sampleSigC_kernel(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
 
-  if(a->constSigC)
-    return; 
-
-  if(cfg->verbose)
-    printf("sigC ");
-
   rate = 0;
   for(n = 0; n < a->N; ++n) 
     rate += a->c[n] * a->c[n];
@@ -32,6 +26,10 @@ __host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){
 
   num_t myTime;
   cudaEvent_t start, stop;
+  
+  if(a->constSigC)
+    return; 
+  
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);

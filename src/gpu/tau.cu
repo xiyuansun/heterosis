@@ -27,15 +27,16 @@ void sampleTau(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   num_t myTime;
   cudaEvent_t start, stop;
+  
+  if(cfg->constTau)
+    return;
+  
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
     printf("tau ");
-
-  if(cfg->constTau)
-    return;
 
   sampleTau_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   

@@ -15,7 +15,7 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   if(cfg->verbose)
     printf("    Copying chain from device to host.\n");
 
-  allocChainHost(&allHost_a, cfg); 
+  allHost_a = allocChainHost(cfg); 
   
   /* curand states */
 

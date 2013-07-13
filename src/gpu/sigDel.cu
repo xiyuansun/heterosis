@@ -39,15 +39,16 @@ __host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   num_t myTime;
   cudaEvent_t start, stop;
+  
+  if(cfg->constSigDel || !cfg->heterosis)
+    return;
+  
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
     printf("sigDel ");
-
-  if(cfg->constSigDel || !cfg->heterosis)
-    return;
 
   sampleSigDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   

@@ -5,9 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void summarizeChain(Chain *a, Config *cfg){
+void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int n, g, i, G = cfg->G,  niter = cfg->M - cfg->burnin;
-  num_t accD, accC, accPhi, accAlp, accDel, accEps; 
+  num_t accD, accC, accPhi, accAlp, accDel, accEps, *dex, *hph, *lph, *mph; 
+  int nAccD, *nAccC, *nAccPhi, *nAccAlp, *nAccDel, *nAccEps;
   FILE *fp;
   char file[BUF];
 
@@ -30,6 +31,16 @@ void summarizeChain(Chain *a, Config *cfg){
     return;
   }
   
+  dex = (num_t*) malloc(cfg->G * sizeof(num_t));
+  hph = (num_t*) malloc(cfg->G * sizeof(num_t));
+  lph = (num_t*) malloc(cfg->G * sizeof(num_t));
+  mph = (num_t*) malloc(cfg->G * sizeof(num_t));
+  
+  CUDA_CALL(cudaMemcpy(dex, host_a->dex, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(hph, host_a->hph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(lph, host_a->lph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(mph, host_a->mph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  
   for(g = 0; g < G; ++g){
     fprintf(fp, NUM_TF, ((num_t) a->dex[g]) / niter); fprintf(fp, " ");
     
@@ -41,11 +52,16 @@ void summarizeChain(Chain *a, Config *cfg){
     fprintf(fp, "\n");
   }
   
+  free(dex);
+  free(hph);
+  free(lph);
+  free(mph);
   fclose(fp);
   
   /* acceptance rates of Metropolis steps */
   
   if(cfg->ratesFlag){
+  
     if(cfg->verbose)
       printf("  Printing acceptance rates of metropolis steps.\n");
   
@@ -57,24 +73,37 @@ void summarizeChain(Chain *a, Config *cfg){
       return;
     }
        
-    accD    = a->accD;
+    nAccC = (int*) malloc(cfg->N * sizeof(int));
+    nAccPhi = (int*) malloc(cfg->G * sizeof(int));
+    nAccAlp = (int*) malloc(cfg->G * sizeof(int));
+    nAccDel = (int*) malloc(cfg->G * sizeof(int));
+    nAccEps = (int*) malloc(cfg->N * cfg->G * sizeof(int));   
+       
+    CUDA_CALL(cudaMemcpy(&(nAccD), &(dev_a->accD), sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(nAccC, host_a->accC, cfg->N * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(nAccPhi, host_a->accPhi, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(nAccAlp, host_a->accAlp, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(nAccDel, host_a->accDel, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+    CUDA_CALL(cudaMemcpy(nAccEps, host_a->accEps, cfg->N * cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+      
+    accD    = (num_t) nAccD;
     accD   /= niter;
     
-    accC    = a->accC[0];
+    accC    = (num_t) nAccC[0];
     accC   /= niter;
     
-    accPhi  = a->accPhi[0];
+    accPhi  = (num_t) nAccPhi[0];
     accPhi /= niter;
 
-    accAlp  = a->accAlp[0];
+    accAlp  = (num_t) nAccAlp[0];
     accAlp /= niter;
     
-    accDel  = a->accDel[0];
+    accDel  = (num_t) nAccDel[0];
     accDel /= niter;
   
     accEps = 0;  
     for(n = 0; n < cfg->N; ++n)
-      accEps += a->accEps[iG(n, 0)];
+      accEps += (num_t) nAccEps[iG(n, 0)];
     accEps /= (niter * cfg->N);
     
     fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
@@ -87,21 +116,21 @@ void summarizeChain(Chain *a, Config *cfg){
 
     for(i = 1; i < cfg->N; ++i){
     
-      accC    = a->accC[i];
+      accC    = (num_t) nAccC[i];
       accC   /= niter;
     
-      accPhi  = a->accPhi[i];
+      accPhi  = (num_t) nAccPhi[i];
       accPhi /= niter;
 
-      accAlp  = a->accAlp[i];
+      accAlp  = (num_t) nAccAlp[i];
       accAlp /= niter;
     
-      accDel  = a->accDel[i];
+      accDel  = (num_t) nAccDel[i];
       accDel /= niter;
   
       accEps = 0;  
       for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[iG(n, i)];
+        accEps += (num_t) nAccEps[iG(n, i)];
       accEps /= (niter * cfg->N);
       
       fprintf(fp, ". ");
@@ -115,19 +144,19 @@ void summarizeChain(Chain *a, Config *cfg){
     
     for(i = cfg->N; i < cfg->G; ++i){
     
-      accPhi  = a->accPhi[i];
+      accPhi  = (num_t) nAccPhi[i];
       accPhi /= niter;
 
-      accAlp  = a->accAlp[i];
+      accAlp  = (num_t) nAccAlp[i];
       accAlp /= niter;
     
-      accDel  = a->accDel[i];
+      accDel  = (num_t) nAccDel[i];
       accDel /= niter;
   
       accEps = 0;  
       
       for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[iG(n, i)];
+        accEps += (num_t) nAccEps[iG(n, i)];
       accEps /= (niter * cfg->N);
       
       fprintf(fp, ". . ");
@@ -138,6 +167,12 @@ void summarizeChain(Chain *a, Config *cfg){
       fprintf(fp, "\n");
     }    
 
+    free(accC);
+    free(accPhi);
+    free(accAlp);
+    free(accDel);
+    free(accEps);
+    
     fclose(fp);
   }
 }

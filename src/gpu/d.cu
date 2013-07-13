@@ -85,15 +85,16 @@ __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   num_t myTime;
   cudaEvent_t start, stop;
+  
+  if(cfg->constD)
+    return;
+  
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
     printf("d ");
-
-  if(cfg->constD)
-    return;
    
   sampleD_kernel1<<<1, 1>>>(dev_a);
 

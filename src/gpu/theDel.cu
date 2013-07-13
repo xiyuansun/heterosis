@@ -37,15 +37,16 @@ __host__ void sampleTheDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   float myTime;
   cudaEvent_t start, stop;
+  
+  if(cfg->constTheDel || !cfg->heterosis)
+    return;
+  
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
     printf("theDel ");
-
-  if(cfg->constTheDel || !cfg->heterosis)
-    return;
 
   sampleTheDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   

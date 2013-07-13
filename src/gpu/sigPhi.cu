@@ -26,19 +26,20 @@ __global__ void sampleSigPhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   }
 }
 
-void sampleSigPhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+__host__ void sampleSigPhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   float myTime;
   cudaEvent_t start, stop;
+  
+  if(cfg->constSigPhi)
+    return;
+  
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
     printf("sigPhi ");
-
-  if(cfg->constSigPhi)
-    return;
 
   sampleSigPhi_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   

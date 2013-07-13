@@ -27,15 +27,16 @@ __host__ void samplePiAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
   num_t myTime;
   cudaEvent_t start, stop;
+  
+  if(cfg->constPiAlp)
+    return;
+  
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
     printf("piAlp ");
-
-  if(cfg->constPiAlp)
-    return;
 
   samplePiAlp_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   

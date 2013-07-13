@@ -32,7 +32,7 @@ __host__ int *readGrp(Config*);
 __host__ count_t *readData(Config*);
 
 __host__ Chain *allocChainHost(Config*);
-__host__ void allocChainDevice(Chain*, Chain*, Config*);
+__host__ void allocChainDevice(Chain**, Chain**, Config*);
 __host__ Chain *chainDeviceToHost(Chain*, Chain*, Config*);
 
 __host__ void cmpfunc(const void*, const void*);
@@ -40,8 +40,8 @@ __global__ void curand_setup_kernel(Chain*, int*);
 
 __global__ void newChain_kernel1(Chain*);
 __global__ void newChain_kernel2(Chain*);
-__host__ Chain *newChain(Config*);
-__host__ void printChain(Chain*);
+__host__ void newChain(Chain**, Chain**, Config*);
+__host__ void printChain(Chain*, Chain*, Config*);
 __host__ void freeChain(Chain*, Config*);
 
 __host__ num_t runiform(num_t, num_t);
@@ -67,82 +67,71 @@ __global__ void sampleD_kernel1(Chain*);
 __global__ void sampleD_kernel2(Chain*);
 __host__ void sampleD(Chain*, Chain*, Config*);
 
-num_t lPhi(Chain*, int, num_t);
-void samplePhi_kernel(Chain*);
-void samplePhi(Chain*, Config*);
+__device__ num_t lPhi(Chain*, int, num_t);
+__global__ void samplePhi_kernel(Chain*);
+__host__ void samplePhi(Chain*, Chain*, Config*);
 
 __device__ num_t lAlp(Chain*, int, num_t);
 __global__ void sampleAlp_kernel(Chain*);
 __host__ void sampleAlp(Chain*, Chain*, Config*);
 
-num_t delProp(Chain*, int);
-num_t lDel(Chain*, int, num_t);
-void sampleDel_kernel(Chain*);
-void sampleDel(Chain*, Config*);
 
-num_t lPhiAlpDelJoint(Chain*, int, num_t, num_t, num_t);
-void samplePhiAlpDelJoint_kernel(Chain*);
-void samplePhiAlpDelJoint(Chain*, Config*);
+__device__ num_t lDel(Chain*, int, num_t);
+__global__ void sampleDel_kernel(Chain*);
+__host__ void sampleDel(Chain*, Chain*, Config*);
+
+__device__ num_t lPhiAlpDelJoint(Chain*, int, num_t, num_t, num_t);
+__global__ void samplePhiAlpDelJoint_kernel(Chain*);
+__host__ void samplePhiAlpDelJoint(Chain*, Chain*, Config*);
 
 __host__ void samplePhiAlpDel(Chain*, Chain*, Config*);
 
-void sampleSigC(Chain*, Config*);
+__global__ void sampleSigC_kernel(Chain*);
+__host__ void sampleSigC(Chain*, Chain*, Config*);
 
 __global__ void sampleEta_kernel1(Chain*);
 __global__ void sampleEta_kernel2(Chain*);
 __host__ void sampleEta(Chain*, Chain*, Config*);
 
-void sampleTau_kernel1(Chain*);
-void sampleTau_kernel2(Chain*);
-void sampleTau_kernel3(Chain*);
-void sampleTau(Chain*, Config*);
+__global__ void sampleTau_kernel1(Chain*);
+__global__ void sampleTau_kernel2(Chain*);
+__host__ void sampleTau(Chain*, Chain*, Config*);
 
-void sampleThePhi_kernel1(Chain*);
-void sampleThePhi_kernel2(Chain*);
-void sampleThePhi(Chain*, Config*);
+__global__ void sampleThePhi_kernel1(Chain*);
+__global__ void sampleThePhi_kernel2(Chain*);
+__host__ void sampleThePhi(Chain*, Chain*, Config*);
 
-void sampleTheAlp_kernel1(Chain*);
-void sampleTheAlp_kernel2(Chain*);
-void sampleTheAlp_kernel3(Chain*);
-void sampleTheAlp_kernel4(Chain*);
-void sampleTheAlp(Chain*, Config*);
+__global__ void sampleTheAlp_kernel1(Chain*);
+__global__ void sampleTheAlp_kernel2(Chain*);
+__host__ void sampleTheAlp(Chain*, Chain*, Config*);
 
-void sampleTheDel_kernel1(Chain*);
-void sampleTheDel_kernel2(Chain*);
-void sampleTheDel_kernel3(Chain*);
-void sampleTheDel_kernel4(Chain*);
-void sampleTheDel(Chain*, Config*);
+__global__ void sampleTheDel_kernel1(Chain*);
+__global__ void sampleTheDel_kernel2(Chain*);
+__host__ void sampleTheDel(Chain*, Chain*, Config*);
 
-void sampleSigPhi_kernel1(Chain*);
-void sampleSigPhi_kernel2(Chain*);
-void sampleSigPhi_kernel3(Chain*);
-void sampleSigPhi(Chain*, Config*);
+__global__ void sampleSigPhi_kernel1(Chain*);
+__global__ void sampleSigPhi_kernel2(Chain*);
+__host__ void sampleSigPhi(Chain*, Chain*, Config*);
 
-void sampleSigAlp_kernel1(Chain*);
-void sampleSigAlp_kernel2(Chain*);
-void sampleSigAlp_kernel3(Chain*);
-void sampleSigAlp_kernel4(Chain*);
-void sampleSigAlp(Chain*, Config*);
+__global__ void sampleSigAlp_kernel1(Chain*);
+__global__ void sampleSigAlp_kernel2(Chain*);
+__host__ void sampleSigAlp(Chain*, Chain*, Config*);
 
-void sampleSigDel_kernel1(Chain*);
-void sampleSigDel_kernel2(Chain*);
-void sampleSigDel_kernel3(Chain*);
-void sampleSigDel_kernel4(Chain*);
-void sampleSigDel(Chain*, Config*);
+__global__ void sampleSigDel_kernel1(Chain*);
+__global__ void sampleSigDel_kernel2(Chain*);
+__host__ void sampleSigDel(Chain*, Chain*, Config*);
 
-void samplePiAlp_kernel1(Chain*);
-void samplePiAlp_kernel2(Chain*);
-void samplePiAlp_kernel3(Chain*);
-void samplePiAlp(Chain*, Config*);
+__global__ void samplePiAlp_kernel1(Chain*);
+__global__ void samplePiAlp_kernel2(Chain*);
+__host__ void samplePiAlp(Chain*, Chain*, Config*);
 
-void samplePiDel_kernel1(Chain*);
-void samplePiDel_kernel2(Chain*);
-void samplePiDel_kernel3(Chain*);
-void samplePiDel(Chain*, Config*);
+__global__ void samplePiDel_kernel1(Chain*);
+__global__ void samplePiDel_kernel2(Chain*);
+__host__ void samplePiDel(Chain*, Chain*, Config*);
 
-void runChain(Chain*, Config*);
-void oneChain(Config*);
-void chains(int, char**);
+__host__ void runChain(Chain*, Chain*, Config*);
+__host__ void oneChain(Config*);
+__host__ void chains(int, char**);
 
 __host__ void printHeaders(Chain*, Chain*, Config*);
 __host__ void interimResults(Chain*, Chain*, Config*);
