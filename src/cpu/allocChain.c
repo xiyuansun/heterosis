@@ -7,7 +7,7 @@
 
 Chain *allocChain(Config *cfg){
 
-  Chain *a = (Chain*) calloc(1, sizeof(Chain));
+  Chain *a = (Chain*) malloc(sizeof(Chain));
   
   if(cfg->verbose)
     printf("  Allocating chain.\n");

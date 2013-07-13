@@ -44,6 +44,9 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   tmp = arg * a->tau * a->tau / 2;
   ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(tmp);
   ret -= (arg/2 + 1) * a->s1 - tmp * a->s2;
+  
+  if(ret < 1e-6 || ret > a->d0)
+    ret = NUM_TMIN;
 
   if(newArg){
     a->lNew[0] = ret;
@@ -53,18 +56,6 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
 }
 
 void lD(Chain *a, int newArg){ /* host */
-  
-  if(newArg){
-    if(a->New[0] <= 0 || a->New[0] > a->d0){
-      a->lNew[0] = NUM_TMIN;
-      return;
-    }
-  } else {
-    if(a->Old[0] <= 0 || a->Old[0] > a->d0){
-      a->lOld[0] = NUM_TMIN; 
-      return;
-    }
-  }
 
   lD_kernel1(a);
   lD_kernel2(a);
@@ -77,7 +68,7 @@ void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
   
   do {
     a->New[0] = rnormal(a->Old[0], a->tuneD);
-  } while(a->New[0] < 0);
+  } while(a->New[0] < 1e-6);
 }
 
 void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
