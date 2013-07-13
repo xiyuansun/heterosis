@@ -199,7 +199,7 @@ inline __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, n
     for(n = 0; n < nmax; ++n){
       v = -1;
       while(v <= 0){
-        x = rnormal(0, 1);
+        x = rnormalDevice(a, g, 0, 1);
         v = pow(1 + c*x, 3);
       }
 
