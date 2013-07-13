@@ -52,33 +52,32 @@ NVCCOBJ=$(foreach name, $(NVCCDEP), $(NVCCOBJDIR)$(name).o)
 all: cpu
 
 cpu: $(CPUBIN)
-	echo $(CCDEP)
 	
-$(CPUBIN): $(CCOBJ) $(BINDIR) 
+$(CPUBIN): $(CCOBJ) 
 	$(CC) $(CCOBJ) $(LDFLAGS) -o $(CPUBIN) 
 
-$(CCOBJDIR)%.o: $(CCSRCDIR)%.c $(CCOBJDIR)
+$(CCOBJDIR)%.o: $(CCSRCDIR)%.c cpudirs
 	$(CC) $(CCFLAGS) $< -o $@ 
 
-gpu: $(GPUBIN)
+gpu: $(GPUBIN) dirs
 	
-$(GPUBIN): $(NVCCOBJ) $(BINDIR)
+$(GPUBIN): $(NVCCOBJ) 
 	$(NVCC) $(NVCCOBJ) $(LDFLAGS) -o $(GPUBIN) 
 
-$(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu $(NVCCOBJDIR)
+$(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
 
-$(BINDIR):
-	mkdir $(BINDIR)
+.INTERMEDIATE: cpudirs gpudirs dirs
 
-$(CCOBJDIR): $(OBJDIR)
-	mkdir $(CCOBJDIR)
-	
-$(NVCCOBJDIR): $(OBJDIR)
-	mkdir $(NVCCOBJDIR)
+cpudirs: dirs
+	mkdir -p $(CCOBJDIR)
 
-$(OBJDIR):
-	mkdir $(OBJDIR)
+gpudirs: dirs
+	mkdir -p $(NVCCOBJDIR)
+
+dirs:
+	mkdir -p $(BINDIR)
+	mkdir -p $(OBJDIR)
 
 clean:
 	rm -rf $(OBJDIR)
