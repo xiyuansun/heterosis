@@ -39,7 +39,7 @@ void sampleSigPhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventRecord(start, 0);
 
   if(cfg->verbose)
-    fprintf("sigPhi ");
+    printf("sigPhi ");
 
   if(cfg->constSigPhi)
     return;
