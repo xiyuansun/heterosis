@@ -12,11 +12,11 @@ __device__ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, nu
   int n, N = a->N, G = a->G;
   num_t ret, s = 0, tmp = 0;
 
- /* for(n = 0; n < a->N; ++n){
+  for(n = 0; n < a->N; ++n){
     tmp = mu(a, n, argPhi, argAlp, argDel);
     s += a->y[iG(n, g)] * tmp - exp(a->c[iN(a->mC, n)] + 
          a->eps[iNG(a->mEps, n, g)] + tmp);
-  } */
+  } 
   
   s = 100;
 
