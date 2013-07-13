@@ -12,11 +12,13 @@ __device__ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, nu
   int n, N = a->N, G = a->G;
   num_t ret, s = 0, tmp = 0;
 
-  for(n = 0; n < a->N; ++n){
+ /* for(n = 0; n < a->N; ++n){
     tmp = mu(a, n, argPhi, argAlp, argDel);
     s += a->y[iG(n, g)] * tmp - exp(a->c[iN(a->mC, n)] + 
          a->eps[iNG(a->mEps, n, g)] + tmp);
-  }
+  } */
+  
+  s = 100;
 
   /* phi part */
   ret = s - pow(argPhi - a->thePhi[a->mThePhi], 2) / (2 * pow(a->sigPhi[a->mSigPhi], 2));
@@ -58,21 +60,10 @@ __global__ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     oldDel = a->del[iG(a->mDel, g)];
     newDel = delProp(a, g);
 
-
-
-/*
     dl =  lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
-       - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel);
+         -lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel);
     lp = 0 < dl ? 0 : dl;
     lu = log(runiformDevice(a, g, 0, 1));
-    
-    */
-    
-    
-    lp = -1;
-    lu = 0;
-    dl = 0;
-    
     
     if(lu < lp){ /* accept */
       a->phi[iG(a->mPhi + 1, g)] = newPhi;
