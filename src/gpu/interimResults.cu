@@ -197,56 +197,23 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
       return;
     }
     
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeC), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeTau), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timePiAlp), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timePiDel), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeD), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeThePhi), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeTheAlp), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeTheDel), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeSigC), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeSigPhi), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeSigAlp), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeSigDel), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-  
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeEta), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeEps), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timephi), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeAlp), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
-    
-    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->timeDel), sizeof(num_t), cudaMemcpyDeviceToHost));
-    fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->c); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->tau); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->piAlp); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->piDel); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->d); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->thePhi); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->theAlp); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->theDel); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->sigC); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->sigPhi); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->sigAlp); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->sigDel); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->eta); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->eps); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->phi); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->alp); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, cfg->del); fprintf(fp, " ");
     fprintf(fp, "\n");
 
     fclose(fp);  
