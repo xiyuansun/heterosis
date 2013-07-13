@@ -60,7 +60,7 @@ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
     dl = lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
        - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel); 
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1)); 
+    lu = log(runiform(0, 1));
 
     if(lu < lp){ /* accept */
       a->phi[g] = newPhi;

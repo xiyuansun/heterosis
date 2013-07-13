@@ -30,7 +30,7 @@ Config *config(int argc, char **argv){
   cfg->G = 0;
   cfg->burnin = cfg->M / 2;
   cfg->joint = 0;
-  cfg->seed = 0;
+  cfg->seed = 22;
 
   /* default initialization constants */
 

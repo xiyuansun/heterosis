@@ -31,7 +31,7 @@ void samplePhi_kernel(Chain *a){ /* kernel <<<G, 1>>> */
 
     dl = lPhi(a, g, nw) - lPhi(a, g, old);
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1));
+    lu = log(runiform(0, 1)); 
     
     if(lu < lp){ /* accept */
       a->phi[g] = nw;
