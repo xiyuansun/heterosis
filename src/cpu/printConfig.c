@@ -16,6 +16,8 @@ void printConfig(Config *cfg){
   printf("ratesFlag = %d\n", cfg->ratesFlag);
   printf("hyperFlag = %d\n", cfg->hyperFlag);
   printf("parmsFlag = %d\n", cfg->parmsFlag);
+  printf("timeFlag = %d\n", cfg->timeFlag);
+  printf("verbose = %d\n\n", cfg->verbose);
   
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);

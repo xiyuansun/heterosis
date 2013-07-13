@@ -17,12 +17,13 @@ typedef struct {
   int ratesFlag; /* choice to output acceptance rates */
   int hyperFlag; /* choice to output hyperparameters */
   int parmsFlag; /* choice to output parameters */
+  int timeFlag; /* output how much time it takes to sample each kind of parameter */
+  int verbose;
    
   int burnin; /* burn-in of chain. Defaults to M/2. */
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */
   int seed; /* seed for random number generators */
   int heterosis; /* indicate whether the program will test for heterosis */
-  int verbose;
 
   int M; /* length of chain (not including initial values) */
   int N; /* number of libraries (samples) */

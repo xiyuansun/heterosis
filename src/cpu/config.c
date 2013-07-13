@@ -20,13 +20,14 @@ Config *config(int argc, char **argv){
   cfg->ratesFlag = 0;
   cfg->hyperFlag = 0;
   cfg->parmsFlag = 0;
+  cfg->timeFlag = 0;
+  cfg->verbose = 0;
 
   cfg->chains = 2;
   cfg->m = 1;
   cfg->M = 10;
   cfg->burnin = cfg->M / 2;
   cfg->joint = 0;
-  cfg->verbose = 0;
 
   /* default initialization constants */
 
