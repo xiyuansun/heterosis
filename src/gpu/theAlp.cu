@@ -25,7 +25,7 @@ __global__ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
-  num_t gs = a->gamAlp * a->gamAlp;
+  /*num_t gs = a->gamAlp * a->gamAlp;
   num_t ss = a->sigAlp[a->mSigAlp] * a->sigAlp[a->mSigAlp];
   num_t den = a->s1 * gs + ss;
 
@@ -33,7 +33,7 @@ __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t s = sqrt(gs * ss / den);
 
   a->theAlp[a->mTheAlp + 1] = rnormalDevice(a, 1, m, s);
-  ++a->mTheAlp;
+  ++a->mTheAlp;*/
 }
 
 __host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
@@ -57,8 +57,8 @@ __host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   thrust::device_ptr<num_t> tmp2(host_a->tmp2);  
   num_t s2 = thrust::reduce(tmp2, tmp2 + cfg->G);
   CUDA_CALL(cudaMemcpy(&(dev_a->s2), &s2, sizeof(num_t), cudaMemcpyHostToDevice));
-  /*
-  sampleTheAlp_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);*/
+  
+  sampleTheAlp_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);
 
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
