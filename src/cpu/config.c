@@ -100,7 +100,7 @@ Config *config(int argc, char **argv){
     cfg->d = runiform(0, cfg->d0);
     fprintf(cfg->time, "d ");
   }
- 
+
   if(!cfg->constThePhi){
     cfg->thePhi = rnormal(0, cfg->gamPhi);
     fprintf(cfg->time, "thePhi ");
