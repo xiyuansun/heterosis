@@ -6,17 +6,14 @@
 #include <stdlib.h>
 
 void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
-  int N = cfg->N, G = cfg->G;
+
   Chain *a = chainDeviceToHost(host_a, dev_a, cfg);
 
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
   printf("G = %d\n\n", a->G);  
-  
   printf("burnin = %d\n", a->burnin);
-  printf("heterosis = %d\n", a->heterosis);
-  printf("parmsFlag = %d\n", a->parmsFlag);
 
   pi2(a->y, a->N, a->G, "y = \n");
   pf1(a->yMeanG, a->N, "yMeanG =\n");
