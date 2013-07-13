@@ -1,6 +1,8 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <cuda.h>
+#include <curand_kernel.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
@@ -8,6 +10,12 @@
 
 __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
+}
+
+__global__ void curand_setup_kernel(Chain *a, int *seeds){ /* kernel <<<G, 1>>> */
+  int id = IDX, N = a->N, G = a->G;
+  if(id < MAX_NG)
+    curand_init(seeds[id], id, 0, &(a->states[id]));
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
@@ -22,25 +30,25 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
     a->phi[g] = rnormal(a->thePhi, a->sigPhi);
 
-    u = runiform(0, 1);
+    u = runiformDevice(a, g, 0, 1);
     if(u < a->piAlp){
       a->alp[g] = 0;
     } else {
-      a->alp[g] = rnormal(a->theAlp, a->sigAlp);
+      a->alp[g] = rnormalDevice(a, g, a->theAlp, a->sigAlp);
     }
     
     u = runiform(0, 1);
     if(u < a->piDel){
       a->del[g] = 0;
     } else {
-      a->del[g] = rnormal(a->theDel, a->sigDel);
+      a->del[g] = rnormalDevice(a, g, a->theDel, a->sigDel);
     }
  
-    a->eta[g] = 1/sqrt(rgamma(a->d / 2, 
+    a->eta[g] = 1/sqrt(rgammaDevice(a, g, a->d / 2, 
                    a->d * a->tau * a->tau / 2, 0));
 
     for(n = 0; n < a->N; ++n)
-      a->eps[iG(n, g)] = rnormal(0, a->eta[g]);
+      a->eps[iG(n, g)] = rnormalDevice(a, g, 0, a->eta[g]);
     
   }
 }
