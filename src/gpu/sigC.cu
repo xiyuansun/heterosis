@@ -9,7 +9,7 @@
 
 __global__ void sampleSigC_kernel(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
   int n;
-  num_t rate = 0, lb;
+  num_t shape, rate = 0, lb;
   
   for(n = 0; n < a->N; ++n) 
     rate += a->c[n] * a->c[n];
