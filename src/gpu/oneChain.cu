@@ -6,15 +6,17 @@
 #include <stdio.h>
 
 void oneChain(Config *cfg){ 
-  Chain *a = newChain(cfg);  
+  Chain *host_a, *dev_a;
+  newChain(&host_a, &dev_a, cfg);  
   
   if(a == NULL){
     free(cfg);
     exit(EXIT_FAILURE);
   }
   
-  runChain(a, cfg);
-  summarizeChain(a, cfg);
+  runChain(host_a, dev_a, cfg);
+  summarizeChain(host_a, dev_a, cfg);
 
-  freeChain(a, cfg);
+  freeChain(host_a, cfg);
+  cudaFree(dev_a);
 } 
