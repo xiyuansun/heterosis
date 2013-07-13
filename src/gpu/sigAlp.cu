@@ -46,7 +46,7 @@ __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventRecord(start, 0);
   
   if(cfg->verbose)
-    fprintf("sigAlp ");
+    printf("sigAlp ");
 
   if(cfg->constSigAlp)
     return;
