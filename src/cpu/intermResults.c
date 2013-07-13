@@ -16,7 +16,7 @@ void intermResults(Chain *a, Config *cfg){
   
   if(cfg->hyperFlag){
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
-    fp = fopen(file, "w+");
+    fp = fopen(file, "a");
     
     if(fp == NULL){
       printf("ERROR: unable to open file, %s\n", file);
@@ -98,7 +98,7 @@ void intermResults(Chain *a, Config *cfg){
   
   if(cfg->parmsFlag){
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
-    fp = fopen(file, "w+");
+    fp = fopen(file, "a");
     
     if(fp == NULL){
       printf("ERROR: unable to open file, %s\n", file);
@@ -142,12 +142,12 @@ void intermResults(Chain *a, Config *cfg){
   
   if(a->m > cfg->burnin){
     for(g = 0; g < G; ++g){
-      a->dex += ((a->alp[g] * a->alp[g]) > 1e-6);
+      a->dex[g] += ((a->alp[g] * a->alp[g]) > 1e-6);
   
       if(cfg->heterosis){
-        a->hph += (a->del[g] > fabs(a->alp[g]));
-        a->lph += (a->del[g] < -fabs(a->alp[g]));
-        a->mph += (fabs(a->del[g]) > 1e-6);
+        a->hph[g] += (a->del[g] > fabs(a->alp[g]));
+        a->lph[g] += (a->del[g] < -fabs(a->alp[g]));
+        a->mph[g] += (fabs(a->del[g]) > 1e-6);
       }
     }
   }
@@ -157,7 +157,7 @@ void intermResults(Chain *a, Config *cfg){
   if(cfg->timeFlag){
   
     sprintf(file, "../out/time/chain%d.txt", cfg->chainNum);
-    fp = fopen(file, "w"); 
+    fp = fopen(file, "a"); 
   
     if(fp == NULL){
       printf("ERROR: unable to create file, %s\n", file);

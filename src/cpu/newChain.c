@@ -15,6 +15,10 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   num_t u;
 
   for(g = 0; g < a->G; ++g){
+    a->dex[g] = 0;
+    a->hph[g] = 0;
+    a->lph[g] = 0;
+    a->mph[g] = 0;
 
     a->phi[g] = rnormal(a->thePhi, a->sigPhi);
 
@@ -47,11 +51,6 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->m = 1;
   
   /* counts toward differential expression and heterosis */
-  
-  a->dex = 0;
-  a->hph = 0;
-  a->lph = 0;
-  a->mph = 0; 
   
   for(n = 0; n < a->N; ++n)
     a->tuneC[n] = 1;

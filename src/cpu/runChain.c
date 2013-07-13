@@ -13,7 +13,7 @@ void runChain(Chain *a, Config *cfg){
   if(cfg->verbose)
     printf("  Running chain.\n");
   
-  printHeaders(cfg);
+  printHeaders(a, cfg);
   
   for(m = 0; m < a->M; ++m){
     if(cfg->verbose)

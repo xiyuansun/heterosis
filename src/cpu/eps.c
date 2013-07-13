@@ -30,7 +30,7 @@ void sampleEps_kernel(Chain *a){ /* kernel <<<N, G>>> */
         a->eps[iG(n, g)] = nw;
         a->tuneEps[iG(n, g)] *= 1.1;
         
-        if(a->m >= a->burnin)
+        if(a->m > a->burnin)
           ++a->accEps[iG(n, g)]; 
       } else { /* reject */
         a->eps[iG(n, g)] = old;

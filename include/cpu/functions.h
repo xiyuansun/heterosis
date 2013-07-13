@@ -136,7 +136,7 @@ void runChain(Chain*, Config*);
 void oneChain(Config*);
 void chains(int, char**);
 
-void printHeaders(Config*);
+void printHeaders(Chain*, Config*);
 void intermResults(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
 

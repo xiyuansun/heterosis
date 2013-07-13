@@ -72,7 +72,7 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
       a->tuneC[n] *= 1.1; /* Increase the proposal variance to avoid  
                                        gettiG stuck in a mode */
                                        
-      if(a->m >= a->burnin)                                 
+      if(a->m > a->burnin)                                 
         ++a->accC[n];
     } else { /* reject */
       a->tuneC[n] /= 1.1; /* If you're rejectiG too often, decrease the  

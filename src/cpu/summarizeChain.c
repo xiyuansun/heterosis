@@ -13,8 +13,22 @@ void summarizeChain(Chain *a, Config *cfg){
 
   /* differential expression and heterosis probabilities */
   
+  if(cfg->verbose){
+    printf("  Printing differential expression ");
+    
+    if(cfg->heterosis)
+      printf("and heterosis ");
+      
+    printf("probabilities.\n");
+  }
+  
   sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
-  fp = fopen(file, "w");
+  fp = fopen(file, "a");
+  
+  if(fp == NULL){
+    printf("ERROR: unable to create file, %s\n", file);
+    return;
+  }
   
   for(g = 0; g < G; ++g){
     fprintf(fp, NUM_TF, ((num_t) a->dex[g]) / niter); fprintf(fp, " ");
@@ -24,16 +38,19 @@ void summarizeChain(Chain *a, Config *cfg){
       fprintf(fp, NUM_TF, ((num_t) a->lph[g]) / niter); fprintf(fp, " ");
       fprintf(fp, NUM_TF, ((num_t) a->mph[g]) / niter); fprintf(fp, " ");
     }
+    fprintf(fp, "\n");
   }
- 
+  
   fclose(fp);
   
   /* acceptance rates of Metropolis steps */
   
   if(cfg->ratesFlag){
+    if(cfg->verbose)
+      printf("  Printing acceptance rates of metropolis steps.\n");
   
     sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
-    fp = fopen(file, "w"); 
+    fp = fopen(file, "a"); 
     
     if(fp == NULL){
       printf("ERROR: unable to create file, %s\n", file);

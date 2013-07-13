@@ -7,11 +7,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-void printHeaders(Config *cfg){
+void printHeaders(Chain *a, Config *cfg){
   FILE *fp;
-  int n, g;
+  int n, g, G = cfg->G;
   char file[BUF];
-
+ 
   /* differential expression and heterosis probabilities */
   
   sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
@@ -38,6 +38,21 @@ void printHeaders(Config *cfg){
     
     fprintf(fp, "sigma-c d tau theta-phi theta-alpha theta-delta ");
     fprintf(fp, "sigma-phi sigma-alpha sigma-delta pi-alpha pi-delta\n");
+    
+    /* print initial values */
+    
+	fprintf(fp, NUM_TF, a->sigC); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->d); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->tau); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->thePhi); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->theAlp); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->theDel); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->sigPhi); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->sigAlp); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->sigDel); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->piAlp); fprintf(fp, " ");
+	fprintf(fp, NUM_TF, a->piDel); fprintf(fp, "\n");
+    
     fclose(fp);
   }
   
@@ -51,10 +66,12 @@ void printHeaders(Config *cfg){
       printf("ERROR: unable to create file, %s\n", file);
       return;
     }
+  
+    /* print header */
     
     for(n = 0; n < cfg->N; ++n)
-      fprintf(fp, "c%d ", n);
-    
+      fprintf(fp, "c%d ", n);    
+     
     for(g = 0; g < cfg->G; ++g)
       fprintf(fp, "phi%d ", g);
     
@@ -71,7 +88,41 @@ void printHeaders(Config *cfg){
       for(n = 0; n < cfg->N; ++n)
         fprintf(fp, "epsilon_lib%d_gene%d ", n, g);
 
-    fprintf(fp, "\n");    
+    fprintf(fp, "\n");   
+    
+    /* print initial values */
+
+    for(n = 0; n < cfg->N; ++n){
+      fprintf(fp, NUM_TF, a->c[n]);
+      fprintf(fp, " ");
+    }
+    
+    for(g = 0; g < cfg->G; ++g){
+      fprintf(fp, NUM_TF, a->phi[g]);
+      fprintf(fp, " ");
+    }
+    
+    for(g = 0; g < cfg->G; ++g){
+      fprintf(fp, NUM_TF, a->alp[g]);
+      fprintf(fp, " ");
+    }
+    
+    for(g = 0; g < cfg->G; ++g){
+      fprintf(fp, NUM_TF, a->del[g]);
+      fprintf(fp, " ");
+    }
+    
+    for(g = 0; g < cfg->G; ++g){
+      fprintf(fp, NUM_TF, a->eta[g]);
+      fprintf(fp, " ");
+    }
+    
+    for(g = 0; g < cfg->G; ++g)
+      for(n = 0; n < cfg->N; ++n){
+        fprintf(fp, NUM_TF, a->eps[iG(n, g)]);
+        fprintf(fp, " ");
+      }
+     
     fclose(fp);
   }
   

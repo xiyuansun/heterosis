@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 void oneChain(Config *cfg){ 
-  Chain *a = newChain(cfg);
+  Chain *a = newChain(cfg);  
   
   if(a == NULL){
     free(cfg);
@@ -15,6 +15,6 @@ void oneChain(Config *cfg){
   
   runChain(a, cfg);
   summarizeChain(a, cfg);
-  
+
   freeChain(a, cfg);
 } 

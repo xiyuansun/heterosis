@@ -48,5 +48,12 @@ void freeChain(Chain *a, Config *cfg){
   free(a->accDel);
   free(a->accEps);
   
+  /* counters towards heterosis and differential expression */
+
+  free(a->dex);
+  free(a->hph);
+  free(a->lph);
+  free(a->mph);
+  
   free(a);
 }

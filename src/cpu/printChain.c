@@ -36,27 +36,27 @@ void printChain(Chain *a){
   printf("sigDel0 = "); printf(NUM_TF, a->sigDel0); printf("\n\n");
   
   pf1(a->c, a->N, "c =\n");
-  printf("sigC = "); printf(NUM_TF, a->sigC); printf("\n"); 
+  printf("sigC = "); printf(NUM_TF, a->sigC); printf("\n\n"); 
   pf2(a->eps, a->N, a->G, "eps =\n");
   pf1(a->eta, a->G, "eta =\n");
   printf("d = "); printf(NUM_TF, a->d); printf("\n");
-  printf("tau =\n"); printf(NUM_TF, a->d); printf("\n");
+  printf("tau = "); printf(NUM_TF, a->d); printf("\n");
   pf1(a->phi, a->G, "phi =\n");
   pf1(a->alp, a->G, "alp =\n");
   pf1(a->del, a->G, "del =\n");
-  printf("thePhi =\n"); printf(NUM_TF, a->thePhi); printf("\n");
-  printf("theAlp =\n"); printf(NUM_TF, a->theAlp); printf("\n");
-  printf("theDel =\n"); printf(NUM_TF, a->theDel); printf("\n");
-  printf("sigPhi =\n"); printf(NUM_TF, a->sigPhi); printf("\n");
-  printf("sigAlp =\n"); printf(NUM_TF, a->sigAlp); printf("\n");
-  printf("sigDel =\n"); printf(NUM_TF, a->sigDel); printf("\n");
-  printf("piAlp =\n"); printf(NUM_TF, a->piAlp); printf("\n"); 
-  printf("piDel =\n"); printf(NUM_TF, a->piDel); printf("\n");
+  printf("thePhi = "); printf(NUM_TF, a->thePhi); printf("\n");
+  printf("theAlp = "); printf(NUM_TF, a->theAlp); printf("\n");
+  printf("theDel = "); printf(NUM_TF, a->theDel); printf("\n");
+  printf("sigPhi = "); printf(NUM_TF, a->sigPhi); printf("\n");
+  printf("sigAlp = "); printf(NUM_TF, a->sigAlp); printf("\n");
+  printf("sigDel = "); printf(NUM_TF, a->sigDel); printf("\n");
+  printf("piAlp = "); printf(NUM_TF, a->piAlp); printf("\n"); 
+  printf("piDel = "); printf(NUM_TF, a->piDel); printf("\n\n");
   
   pi1(a->dex, a->G, "dex =\n");
-  pi1(a->dex, a->G, "hph =\n");
-  pi1(a->dex, a->G, "lph =\n"); 
-  pi1(a->dex, a->G, "mph =\n");
+  pi1(a->hph, a->G, "hph =\n");
+  pi1(a->lph, a->G, "lph =\n"); 
+  pi1(a->mph, a->G, "mph =\n");
   
   printf("tuneD = "); printf(NUM_TF, a->tuneD); printf("\n");
   pf1(a->tuneC, a->N, "tuneC =\n");

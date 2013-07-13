@@ -69,7 +69,7 @@ void sampleAlp_kernel(Chain *a){ /* kernel <<<G, 1>>> */
     if(lu < lp){ /* accept */
       a->alp[g] = nw;
       
-      if(a->m >= a->burnin)
+      if(a->m > a->burnin)
         ++a->accAlp[g];
     } 
   }

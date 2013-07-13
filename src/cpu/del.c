@@ -66,7 +66,7 @@ void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
     if(lu < lp){ /* accept */
       a->del[g] = nw;
       
-      if(a->m >= a->burnin)
+      if(a->m > a->burnin)
         ++a->accDel[g];
     } else { /* reject */
       a->del[g] = old;

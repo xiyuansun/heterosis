@@ -90,7 +90,7 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
     a->tuneD *= 1.1; /* Increase the proposal variance to avoid getting 
                                   stuck in a mode */
     
-    if(a->m >= a->burnin) 
+    if(a->m > a->burnin) 
       ++a->accD;
   } else { /* reject */
     a->tuneD /= 1.1; /* If you're rejecting too often, decrease the proposal 
