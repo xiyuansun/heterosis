@@ -133,6 +133,7 @@ __host__ void oneChain(Config*);
 __host__ void chains(int, char**);
 
 __host__ void printHeaders(Chain*, Chain*, Config*);
+__global__ void updateProbs(Chain*);
 __global__ void updateM(Chain*);
 __host__ void interimResults(Chain*, Chain*, Config*);
 __host__ void summarizeChain(Chain*, Chain*, Config*);

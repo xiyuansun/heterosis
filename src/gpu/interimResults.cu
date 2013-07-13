@@ -7,6 +7,22 @@
 #include <stdlib.h>
 #include <time.h>
 
+__global__ void updateProbs(Chain *a){
+  int g = IDX;
+
+  if(a->m > a->burnin){
+    if(g < G){
+      a->dex[g] += ((a->alp[g] * a->alp[g]) > 1e-6);
+  
+      if(cfg->heterosis){
+        a->hph[g] += (a->del[g] > fabs(a->alp[g]));
+        a->lph[g] += (a->del[g] < -fabs(a->alp[g]));
+        a->mph[g] += (fabs(a->del[g]) > 1e-6);
+      }
+    }
+  }  
+}
+
 __global__ void updateM(Chain* a){
   ++a->m;
 }
@@ -15,7 +31,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   FILE *fp;
   char file[BUF];
   int n, g, G = cfg->G;
-  num_t tmp, *tmpv, *phi = NULL, *alp = NULL, *del = NULL;
+  num_t tmp, *tmpv;
   
   /* hyperparameters */
   
@@ -112,25 +128,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   
   /* heterosis and differential expression probabilities */
   
-  phi  = (num_t*) malloc(cfg->G * sizeof(num_t));
-  alp  = (num_t*) malloc(cfg->G * sizeof(num_t));
-  del  = (num_t*) malloc(cfg->G * sizeof(num_t));  
-
-  CUDA_CALL(cudaMemcpy(phi, host_a->phi, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(alp, host_a->alp, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(del, host_a->del, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  
-  if(cfg->m > cfg->burnin){
-    for(g = 0; g < G; ++g){
-      a->dex[g] += ((a->alp[g] * a->alp[g]) > 1e-6);
-  
-      if(cfg->heterosis){
-        a->hph[g] += (a->del[g] > fabs(a->alp[g]));
-        a->lph[g] += (a->del[g] < -fabs(a->alp[g]));
-        a->mph[g] += (fabs(a->del[g]) > 1e-6);
-      }
-    }
-  }
+  updateProbs<<<G_GRID, G_BLOCK>>>(dev_a);
   
   /* parameters */
   
@@ -150,19 +148,22 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
       fprintf(fp, NUM_TF, tmpv[n]);
       fprintf(fp, " ");
     }
-    
+
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->phi, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));    
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, phi[g]);
+      fprintf(fp, NUM_TF, tmpv[g]);
       fprintf(fp, " ");
     }
     
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->alp, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, alp[g]);
+      fprintf(fp, NUM_TF, tmpv[g]);
       fprintf(fp, " ");
     }
     
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->del, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, del[g]);
+      fprintf(fp, NUM_TF, tmpv[g]);
       fprintf(fp, " ");
     }
     
@@ -184,10 +185,6 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
     fclose(fp);
     free(tmpv);
   }
-  
-  free(phi);
-  free(alp);
-  free(del);
   
   /* time spent in each sampler */
   
