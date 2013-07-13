@@ -46,7 +46,7 @@ __global__ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   num_t oldPhi, newPhi, oldAlp, newAlp, oldDel, newDel;
   num_t dl, lp, lu;
 
-  if(g < G){
+  if(g < a->G){
 
     oldPhi = a->phi[g];
     newPhi = rnormalDevice(a, g, oldPhi, a->tunePhi[g]);
