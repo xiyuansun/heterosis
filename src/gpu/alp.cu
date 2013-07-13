@@ -68,10 +68,10 @@ void sampleAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventRecord(start, 0);
 
   fprintf(cfg->log, "alp ");
-
+/*
   sampleAlp_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleAlp_kernel2<<<1, 1>>>(dev_a);
-  
+  */
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&myTime, start, stop);
