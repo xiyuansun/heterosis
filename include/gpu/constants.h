@@ -20,7 +20,7 @@
 
 #define IDX ((blockDim.x * blockIdx.x) + threadIdx.x)
 
-#define MILLISECS 60000.0 /* number of milliseconds in a unit of time in output */
+#define MILLISECS 1000.0 /* number of milliseconds in a unit of time in output */
 
 typedef int count_t;
 typedef float num_t;

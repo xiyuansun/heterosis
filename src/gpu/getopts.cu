@@ -19,11 +19,12 @@ void getopts(Config *cfg, int argc, char **argv){
     {"hyper", no_argument, 0, 'h'},
     {"parms", no_argument, 0, 'p'},
     {"joint", no_argument, 0, 'j'},  
-    {"seed", required_argument, 0, 's'},  
+    {"seed", required_argument, 0, 's'}, 
+    {"verbose", no_argument, 0, 'v'},  
     {"sigma-c0", required_argument, 0, 'x'},
     {"d0", required_argument, 0, 'f'},
     {"a-tau", required_argument, 0, 'k'},
-    {"a-alpha", required_argument, 0, 'l'},
+    {"a-alpha", required_argument, 0, '0'},
     {"a-delta", required_argument, 0, '9'},  
     {"b-tau", required_argument, 0, 'n'},
     {"b-alpha", required_argument, 0, 'A'},
@@ -33,7 +34,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"gamma-delta", required_argument, 0, '8'},
     {"sigma-phi0", required_argument, 0, 't'},
     {"sigma-alpha0", required_argument, 0, 'u'},
-    {"sigma-delta0", required_argument, 0, 'v'},
+    {"sigma-delta0", required_argument, 0, 'l'},
     {"sigma-c", required_argument, 0, 'w'},
     {"d", required_argument, 0, 'd'},
     {"tau", required_argument, 0, 'y'},
@@ -88,6 +89,9 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 's' || c == 'S') { /* seed */
       cfg->seed = atoi(optarg);
     
+    } else if(c == 'v' || c == 'V') { /* verbose */
+      cfg->verbose = 1;
+    
     } else if(c == 'x') { /* sigma-c0 */
       cfg->sigC0 = atof(optarg);
     
@@ -97,7 +101,7 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'k') { /* a-tau */
       cfg->aTau = atof(optarg);
     
-    } else if(c == 'l') { /* a-alpha */
+    } else if(c == '0') { /* a-alpha */
       cfg->aAlp = atof(optarg);
     
     } else if(c == '9') { /* a-delta */
@@ -127,7 +131,7 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'u') { /* sigma-alpha0 */
       cfg->sigAlp0 = atof(optarg);
     
-    } else if(c == 'v') { /* sigma-delta0 */
+    } else if(c == 'l') { /* sigma-delta0 */
       cfg->sigDel0 = atof(optarg);
     
     } else if(c == 'w') { /* sigma-c */

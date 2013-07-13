@@ -9,11 +9,14 @@
 #include <stdlib.h>
 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
+
   int m;
-  fprintf(cfg->log, "  Running chain.\n"); 
+  
+  if(cfg->verbose)
+    printf("  Running chain.\n"); 
   
   for(m = 0; m < cfg->M; ++m){
-    fprintf(cfg->log, "    iter %d | ", m);
+    fprintf(log, "    iter %d | ", m);
 
     sampleC(host_a, dev_a, cfg); 
     sampleTau(host_a, dev_a, cfg);
@@ -32,6 +35,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     samplePhiAlpDel(host_a, dev_a, cfg); 
 
     fprintf(cfg->time, "\n");
-    fprintf(cfg->log, "\n");
+    fprintf(log, "\n");
   }
 } 

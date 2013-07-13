@@ -65,7 +65,8 @@ __host__ void sampleDel(Chain *host_a, Chain *dev_a, Config* cfg){ /* host */
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "del ");
+  if(cfg->verbose)
+    printf("del ");
 
   sampleDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleDel_kernel2<<<1, 1>>>(dev_a);

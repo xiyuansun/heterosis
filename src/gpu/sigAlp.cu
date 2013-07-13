@@ -38,14 +38,15 @@ __global__ void sampleSigAlp_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
 }
 
 __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
- 
+
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
   
-  fprintf(cfg->log, "sigAlp ");
+  if(cfg->verbose)
+    fprintf("sigAlp ");
 
   if(cfg->constSigAlp)
     return;

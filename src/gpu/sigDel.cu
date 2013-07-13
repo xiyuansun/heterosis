@@ -38,13 +38,15 @@ __global__ void sampleSigDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void sampleSigDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "sigDel ");
+  if(cfg->verbose)
+    printf("sigDel ");
 
   if(cfg->constSigDel || !cfg->heterosis)
     return;

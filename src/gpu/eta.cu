@@ -37,13 +37,15 @@ __global__ void sampleEta_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEta(Chain *host_a, Chain *dev_a, Config *cfg){
+
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "eta ");
+  if(cfg->verbose)
+    printf("eta ");
 
   sampleEta_kernel1<<<1, 1>>>(dev_a);
   sampleEta_kernel2<<<G_GRID, G_BLOCK>>>(dev_a);

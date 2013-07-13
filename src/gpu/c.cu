@@ -88,14 +88,14 @@ __global__ void sampleC_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
 
 __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int n;
-  
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);  
   
-  fprintf(cfg->log, "c ");
+  if(cfg->verbose)
+    printf("c ");
    
   sampleC_kernel1<<<N_GRID, N_BLOCK>>>(dev_a);
 

@@ -30,13 +30,15 @@ __global__ void sampleTau_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
 }
 
 void sampleTau(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "tau ");
+  if(cfg->verbose)
+    printf("tau ");
 
   if(cfg->constTau)
     return;

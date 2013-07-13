@@ -10,6 +10,7 @@
 #include <string.h>
 
 void printProbs(Chain *a, Config *cfg){
+
   int m, g, G = cfg->G, niter = cfg->M - cfg->burnin;
   num_t *alp, *del;
   num_t prob_de, prob_hph, prob_lph, prob_mph;
@@ -21,8 +22,9 @@ void printProbs(Chain *a, Config *cfg){
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
-    
-  fprintf(cfg->log, "  Printing heterosis / diff-expr probabilities.\n");
+  
+  if(cfg->verbose)  
+    printf("  Printing heterosis / diff-expr probabilities.\n");
 
   sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
   fp = fopen(file, "w"); 

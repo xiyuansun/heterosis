@@ -89,7 +89,8 @@ __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "d ");
+  if(cfg->verbose)
+    printf("d ");
 
   if(cfg->constD)
     return;

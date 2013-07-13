@@ -16,6 +16,7 @@ typedef struct {
   int burnin; 
   int heterosis;
   int parmsFlag;
+  int log;
   
   /* curand states */
   

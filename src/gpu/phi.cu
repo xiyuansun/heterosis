@@ -51,13 +51,15 @@ __global__ void samplePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void samplePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "phi ");
+  if(cfg->verbose)
+    printf("phi ");
 
   samplePhi_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   samplePhi_kernel2<<<1, 1>>>(dev_a);

@@ -25,6 +25,7 @@ Config *config(int argc, char **argv){
   cfg->M = 10;
   cfg->burnin = cfg->M / 2;
   cfg->joint = 0;
+  cfg->verbose = 0;
 
   /* default initialization constants */
 
@@ -65,9 +66,7 @@ Config *config(int argc, char **argv){
   system("mkdir -p ../out/");
   system("mkdir -p ../out/probs/");
   
-  cfg->log = fopen("../out/log.txt", "w+");
-  
-  cfg->time = fopen("../out/time.txt", "w+");
+  cfg->time = fopen("../out/cfg->time.txt", "w");
   fprintf(cfg->time, "c ");
 
   if(!cfg->constTau){
@@ -77,12 +76,12 @@ Config *config(int argc, char **argv){
  
   if(!cfg->constPiAlp){
     cfg->piAlp = rbeta(cfg->aAlp, cfg->bAlp);
-    fprintf(cfg->time, "piDel ");
+    fprintf(cfg->time, "pi-alpha ");
   }
   
   if(!cfg->constPiDel){
     cfg->piDel = rbeta(cfg->aDel, cfg->bDel);
-    fprintf(cfg->time, "piDel ");
+    fprintf(cfg->time, "pi-delta ");
   }
 
   if(!cfg->constD){
@@ -92,48 +91,48 @@ Config *config(int argc, char **argv){
  
   if(!cfg->constThePhi){
     cfg->thePhi = rnormal(0, cfg->gamPhi);
-    fprintf(cfg->time, "thePhi ");
+    fprintf(cfg->time, "theta-phi ");
   }
 
   if(!cfg->constTheAlp){
     cfg->theAlp = rnormal(0, cfg->gamAlp);
-    fprintf(cfg->time, "theAlp ");
+    fprintf(cfg->time, "theta-alpha ");
   }
 
   if(!cfg->constTheDel){
     cfg->theDel = rnormal(0, cfg->gamDel);
-    fprintf(cfg->time, "theDel ");
+    fprintf(cfg->time, "theta-delta ");
   }
  
   if(!cfg->constSigC){
     cfg->sigC = runiform(0, cfg->sigC0);
-    fprintf(cfg->time, "sigC ");
+    fprintf(cfg->time, "sigma-c ");
   }
   
   if(!cfg->constSigPhi){
     cfg->sigPhi = runiform(0, cfg->sigPhi0);
-    fprintf(cfg->time, "sigPhi ");
+    fprintf(cfg->time, "sigma-phi ");
   }
 
   if(!cfg->constSigAlp){
     cfg->sigAlp = runiform(0, cfg->sigAlp0);
-    fprintf(cfg->time, "sigAlp ");
+    fprintf(cfg->time, "sigma-alpha ");
   }
 
   if(!cfg->constSigDel){
     cfg->sigDel = runiform(0, cfg->sigDel0);
-    fprintf(cfg->time, "sigDel ");
+    fprintf(cfg->time, "sigma-delta ");
   }
   
-  fprintf(cfg->time, "eta eps ");
+  fprintf(cfg->time, "eta epsilon ");
   
   if(cfg->joint){
-    fprintf(cfg->time, "phiAlpDel ");
+    fprintf(cfg->time, "phi-alpha-delta-joint ");
   } else {
-    fprintf(cfg->time, "phi alp del ");
+    fprintf(cfg->time, "phi alpha delta ");
   }
   
-  cfg->timeConfig = fopen("../out/timeConfig.txt", "w+");
+  cfg->timeConfig = fopen("../out/cfg->timeConfig.txt", "w");
   fprintf(cfg->timeConfig, "alloc probs ");
   
   if(cfg->ratesFlag){

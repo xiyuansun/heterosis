@@ -10,13 +10,11 @@ typedef struct {
   int chainNum; /* index of current chain */
   int chains; /* number of chains */
 
-  FILE *log;
   FILE *time;
   FILE *timeConfig;
 
   char dataFile[BUF]; /* space-delimited text file with G rows and N columns */
   char groupFile[BUF]; /* space-delimited text file with 1 row and N entries */
-  char logFile[BUF];
   
   int ratesFlag; /* choice to output acceptance rates */
   int hyperFlag; /* choice to output hyperparameters */
@@ -26,6 +24,7 @@ typedef struct {
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */
   int seed; /* seed for random number generators */
   int heterosis; /* indicate whether the program will test for heterosis */
+  int verbose;
 
   int M; /* length of chain (not including initial values) */
   int N; /* number of libraries (samples) */

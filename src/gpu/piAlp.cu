@@ -27,13 +27,15 @@ __global__ void samplePiAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 } 
 
 __host__ void samplePiAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "piAlp ");
+  if(cfg->verbose)
+    printf("piAlp ");
 
   if(cfg->constPiAlp)
     return;

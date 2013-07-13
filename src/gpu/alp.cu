@@ -70,7 +70,8 @@ void sampleAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "alp ");
+  if(cfg->verbose)
+    printf("alpha ");
 
   sampleAlp_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleAlp_kernel2<<<1, 1>>>(dev_a);

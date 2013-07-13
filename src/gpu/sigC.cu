@@ -33,13 +33,16 @@ __global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){ 
+
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-  fprintf(cfg->log, "sigC "); 
+  if(cfg->verbose)
+    fprintf("sigC "); 
+
   sampleSigC_kernel<<<1, 1>>>(dev_a);
   
   cudaEventRecord(stop, 0);

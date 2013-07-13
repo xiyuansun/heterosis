@@ -24,7 +24,8 @@ void printHyper(Chain *a, Config *cfg){
   cudaEventRecord(start, 0);
   
   if(cfg->hyperFlag){
-    fprintf(cfg->log, "  Printing hyperparameters.\n");
+    if(cfg->verbose)
+      printf("  Printing hyperparameters.\n");
 
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");

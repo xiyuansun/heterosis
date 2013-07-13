@@ -103,6 +103,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
+
   int n, g, N, G, i, *grp, *seeds, *dev_seeds;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
@@ -121,7 +122,9 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     return;
   }
 
-  fprintf(cfg->log, "  Allocating chain.\n"); 
+  if(cfg->verbose)
+    printf("  Allocating chain.\n"); 
+    
   allocChainDevice(host_a, dev_a, cfg);
 
   /* data and configuration info */

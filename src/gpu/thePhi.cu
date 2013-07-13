@@ -29,13 +29,15 @@ __global__ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 } 
 
 __host__ void sampleThePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
+
   float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
 
-   fprintf(cfg->log, "thePhi ");
+  if(cfg->verbose)
+    printf("thePhi ");
 
   if(cfg->constThePhi)
     return;
