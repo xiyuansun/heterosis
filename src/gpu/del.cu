@@ -67,19 +67,16 @@ __host__ void sampleDel(Chain *host_a, Chain *dev_a, Config* cfg){ /* host */
 
   fprintf(cfg->log, "del ");
 
-printf("ho\n");
-
-
   sampleDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   sampleDel_kernel2<<<1, 1>>>(dev_a);
 
-printf("hum\n");
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&myTime, start, stop);
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
-  printf("h000\n");
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
+
+printf("gone\n");
 }
