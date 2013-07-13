@@ -62,7 +62,7 @@ __host__ void sampleDel(Chain *host_a, Chain *dev_a, Config* cfg){ /* host */
   if(cfg->verbose)
     printf("del ");
 
-  sampleDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  sampleDel_kernel<<<G_GRID, G_BLOCK>>>(dev_a);
 
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
