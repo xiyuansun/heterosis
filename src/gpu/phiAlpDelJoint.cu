@@ -58,10 +58,21 @@ __global__ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     oldDel = a->del[iG(a->mDel, g)];
     newDel = delProp(a, g);
 
-    dl = lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
+
+
+/*
+    dl =  lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
        - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel);
     lp = 0 < dl ? 0 : dl;
     lu = log(runiformDevice(a, g, 0, 1));
+    
+    */
+    
+    
+    lp = -1;
+    lu = 0;
+    dl = 0;
+    
     
     if(lu < lp){ /* accept */
       a->phi[iG(a->mPhi + 1, g)] = newPhi;
@@ -100,8 +111,8 @@ __host__ void samplePhiAlpDelJoint(Chain *host_a, Chain *dev_a, Config *cfg){ /*
 
   fprintf(cfg->log, "phiAlpDelJoint ");
 
- /* samplePhiAlpDelJoint_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
-  samplePhiAlpDelJoint_kernel2<<<1, 1>>>(dev_a);*/
+  samplePhiAlpDelJoint_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  samplePhiAlpDelJoint_kernel2<<<1, 1>>>(dev_a);
 
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
