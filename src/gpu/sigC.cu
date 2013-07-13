@@ -8,8 +8,9 @@
 #include <time.h>
 
 __global__ void sampleSigC_kernel(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
-
-  num_t rate = 0;
+  int n;
+  num_t rate = 0, lb;
+  
   for(n = 0; n < a->N; ++n) 
     rate += a->c[n] * a->c[n];
   
@@ -27,7 +28,7 @@ __host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){
   num_t myTime;
   cudaEvent_t start, stop;
   
-  if(a->constSigC)
+  if(cfg->constSigC)
     return; 
   
   cudaEventCreate(&start);
@@ -46,3 +47,4 @@ __host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventDestroy(stop);
 
   cfg->timeSigC = myTime;
+}
