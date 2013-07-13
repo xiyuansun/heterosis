@@ -37,6 +37,8 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     samplePhiAlpDel(host_a, dev_a, cfg); 
 
     fprintf(cfg->time, "\n");
-    fprintf(log, "\n");
+    
+    if(cfg->verbose)
+      fprintf("\n");
   }
 } 
