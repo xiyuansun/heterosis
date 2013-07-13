@@ -50,7 +50,7 @@ __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
       if(a->mAlp >= a->burnin)
         ++a->accAlp[g];
     } else { */ /* reject */
-      a->alp[iG(a->mAlp + 1, g)] = a->alp[iG(a->mAlp, g)] /*old;*/
+      a->alp[iG(a->mAlp + 1, g)] = a->alp[iG(a->mAlp, g)]; /*old;*/
  /*   }
   }
   
