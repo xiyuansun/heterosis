@@ -38,8 +38,8 @@ __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
   if(g < G){ 
     old = a->alp[iG(a->mAlp, g)];
- /*   nw = alpProp(a, g);
-    
+    nw = alpProp(a, g);
+ /*   
     dl = lAlp(a, g, nw) - lAlp(a, g, old);
     lp = 0 < dl ? 0 : dl;
     lu = log(runiformDevice(a, g, 0, 1));
