@@ -126,7 +126,7 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
         fprintf(fp, NUM_TF, accDel[i]); fprintf(fp, " ");
         fprintf(fp, NUM_TF, accEps[i]); fprintf(fp, " ");
       } else {
-        fprintf(fp, ". . . . ");
+        fprintf(fp, ". . . . "); 
       }
 
       fprintf(fp, "\n");
