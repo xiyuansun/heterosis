@@ -7,7 +7,7 @@
 #include <time.h>
 
 void lC_kernel1(Chain *a, int n){ /* kernel <<<G, 1>>> */
-  int g, N = a->N, G = a->G;
+  int g, G = a->G;
   
   for(g = 0; g < a->G; ++g)
     a->tmp1[g] = exp(a->eps[iG(n, g)] + mu(a, n, a->phi[g], 
@@ -48,7 +48,7 @@ void lC(Chain *a, int n, int newArg){ /* host */
 }
 
 void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
-  int n, N = a->N;
+  int n;
   
   for(n = 0; n < a->N; ++n){
     a->Old[n] = a->c[n];
@@ -58,7 +58,7 @@ void sampleC_kernel1(Chain *a){ /* kernel <<<1, N>>> */
 }
 
 void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
-  int n, N = a->N;
+  int n;
   num_t dl, lp, lu;
 
   for(n = 0; n < a->N; ++n){ 
@@ -97,7 +97,6 @@ void sampleC(Chain *a, Config *cfg){ /* host */
   }
 
   sampleC_kernel2(a);
-  sampleC_kernel3(a);
     
   cfg->timeC = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

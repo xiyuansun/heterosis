@@ -7,14 +7,14 @@
 #include <time.h>
 
 num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
-  int N = a->N, G = a->G;
+  int G = a->G;
   return a->y[iG(n, g)] * arg - exp(a->c[n] + arg + mu(a, n, a->phi[g], 
                                      a->alp[g], a->del[g])) 
                           - (arg * arg) / (2 * pow(a->eta[g], 2));
 }
 
 void sampleEps_kernel(Chain *a){ /* kernel <<<N, G>>> */
-  int n, g, N = a->N, G = a->G;
+  int n, g, G = a->G;
   num_t old, nw, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){

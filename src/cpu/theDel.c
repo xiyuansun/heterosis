@@ -8,7 +8,7 @@
 #include <time.h>
 
 void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+  int g;
 
   for(g = 0; g < a->G; ++g){ 
     if(pow(a->del[g], 2) > 1e-6){

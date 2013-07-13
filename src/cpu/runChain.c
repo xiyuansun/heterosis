@@ -35,11 +35,9 @@ void runChain(Chain *a, Config *cfg){
     sampleEps(a, cfg);
     samplePhiAlpDel(a, cfg);
     
-    printIntermResults(a, cfg);
+    intermResults(a, cfg);
     
     if(cfg->verbose)
       printf("\n");
-      
-    fprintf(cfg->time, "\n");
   }
 }

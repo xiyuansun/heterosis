@@ -43,7 +43,6 @@ void lC_kernel3(Chain*, int, int);
 void lC(Chain*, int, int);
 void sampleC_kernel1(Chain*);
 void sampleC_kernel2(Chain*);
-void sampleC_kernel3(Chain*);
 void sampleC(Chain*, Config*);
 
 num_t lEps(Chain*, int, int, num_t);

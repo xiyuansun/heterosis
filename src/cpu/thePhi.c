@@ -8,7 +8,7 @@
 #include <time.h>
 
 void sampleThePhi_kernel1(Chain *a){ /* pairwise sum in Thrust */
-  int g, G = a->G;
+  int g;
   
   a->tmp1[0] = 0; 
   for(g = 0; g < a->G; ++g)

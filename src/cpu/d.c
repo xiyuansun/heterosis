@@ -8,7 +8,7 @@
 #include <time.h>
 
 void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+  int g;
 
   for(g = 0; g < a->G; ++g){ 
     a->tmp1[g] = 2 * log(a->eta[g]);

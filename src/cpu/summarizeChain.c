@@ -6,8 +6,10 @@
 #include <stdlib.h>
 
 void summarizeChain(Chain *a, Config *cfg){
-  int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin;
+  int n, g, i, G = cfg->G,  niter = cfg->M - cfg->burnin;
   num_t accD, accC, accPhi, accAlp, accDel, accEps; 
+  FILE *fp;
+  char file[BUF];
 
   /* differential expression and heterosis probabilities */
   
@@ -15,13 +17,12 @@ void summarizeChain(Chain *a, Config *cfg){
   fp = fopen(file, "w");
   
   for(g = 0; g < G; ++g){
-    
-    fprintf(fp, NUM_TF, ((num_t) a->dex) / niter); printf(" ");
+    fprintf(fp, NUM_TF, ((num_t) a->dex[g]) / niter); fprintf(fp, " ");
     
     if(cfg->heterosis){
-      fprintf(fp, NUM_TF, ((num_t) a->hph) / niter); printf(" ");
-      fprintf(fp, NUM_TF, ((num_t) a->lph) / niter); printf(" ");
-      fprintf(fp, NUM_TF, ((num_t) a->mph) / niter); printf(" ");
+      fprintf(fp, NUM_TF, ((num_t) a->hph[g]) / niter); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, ((num_t) a->lph[g]) / niter); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, ((num_t) a->mph[g]) / niter); fprintf(fp, " ");
     }
   }
  

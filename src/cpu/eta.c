@@ -11,7 +11,7 @@ void sampleEta_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g, N = a->N, G = a->G;
+  int n, g, G = a->G;
   num_t shape = a->s1, rate;
 
   for(g = 0; g < a->G; ++g){

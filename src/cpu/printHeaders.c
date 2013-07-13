@@ -9,7 +9,7 @@
 
 void printHeaders(Config *cfg){
   FILE *fp;
-  int n, g, N = cfg->N, G = cfg->G;
+  int n, g;
   char file[BUF];
 
   /* differential expression and heterosis probabilities */
@@ -104,7 +104,7 @@ void printHeaders(Config *cfg){
     }
     
     fprintf(fp, "c tau pi-alpha pi-delta d theta-phi theta-alpha theta-delta sigma-c ");
-    fpritnf(fp, "sigma-phi sigma-alpha sigma-delta eta epsilon phi alpha delta\n");
+    fprintf(fp, "sigma-phi sigma-alpha sigma-delta eta epsilon phi alpha delta\n");
     
     fclose(fp);  
   }

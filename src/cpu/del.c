@@ -6,8 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-num_t delProp(Chain *a, int g){ /* device */
-  int G = a->G;      
+num_t delProp(Chain *a, int g){ /* device */    
 
   num_t gam = a->gamDel;
   num_t sig = a->sigDel;
@@ -30,7 +29,7 @@ num_t delProp(Chain *a, int g){ /* device */
 }
 
 num_t lDel(Chain *a, int g, num_t arg){ /* device */ 
-  int n, N = a->N, G = a->G;
+  int n, G = a->G;
   num_t s = 0, tmp; 
   
   for(n = 0; n < a->N; ++n){
@@ -52,7 +51,7 @@ num_t lDel(Chain *a, int g, num_t arg){ /* device */
 }
 
 void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+  int g;
   num_t old, nw, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){ 

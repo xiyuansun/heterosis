@@ -8,7 +8,6 @@
 #include <time.h>
 
 num_t alpProp(Chain *a, int g){ /* device */
-  int G = a->G;
 
   num_t gam = a->gamAlp;
   num_t sig = a->sigAlp;
@@ -32,7 +31,7 @@ num_t alpProp(Chain *a, int g){ /* device */
 
 num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   
-  int n, N = a->N, G = a->G;
+  int n, G = a->G;
   num_t s = 0, tmp;
    
   for(n = 0; n < a->N; ++n){
@@ -55,7 +54,7 @@ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
 
 void sampleAlp_kernel(Chain *a){ /* kernel <<<G, 1>>> */
 
-  int g, G = a->G;
+  int g;
   num_t old, nw, dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){ 
@@ -70,7 +69,7 @@ void sampleAlp_kernel(Chain *a){ /* kernel <<<G, 1>>> */
     if(lu < lp){ /* accept */
       a->alp[g] = nw;
       
-      if(a->mAlp >= a->burnin)
+      if(a->m >= a->burnin)
         ++a->accAlp[g];
     } 
   }

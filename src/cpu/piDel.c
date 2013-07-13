@@ -8,7 +8,7 @@
 #include <time.h>
 
 void samplePiDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+  int g;
 
   for(g = 0; g < a->G; ++g){ 
     if(pow(a->del[g], 2) > 1e-6){
@@ -46,5 +46,5 @@ void samplePiDel(Chain *a, Config *cfg){ /* host */
   samplePiDel_kernel2(a);
   samplePiDel_kernel3(a);
 
-  time = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  cfg->timePiDel = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

@@ -11,7 +11,7 @@ int cmpfunc (const void *a, const void *b){
 }
 
 void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g, N = a->N, G = a->G;
+  int n, g, G = a->G;
   num_t u;
 
   for(g = 0; g < a->G; ++g){

@@ -8,7 +8,7 @@
 #include <time.h>
 
 void samplePiAlp_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
-  int g, G = a->G;
+  int g;
 
   for(g = 0; g < a->G; ++g){ 
     if(pow(a->alp[g], 2) > 1e-6){
@@ -46,5 +46,5 @@ void samplePiAlp(Chain *a, Config *cfg){ /* host */
   samplePiAlp_kernel2(a);  
   samplePiAlp_kernel3(a);
 
-  time = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  cfg->timePiAlp = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

@@ -7,7 +7,7 @@
 #include <time.h>
 
 num_t lPhi(Chain *a, int g, num_t arg){ /* device */
-  int n, N = a->N, G = a->G;
+  int n, G = a->G;
   num_t ret, s = 0, tmp = 0; 
 
   for(n = 0; n < a->N; ++n){
@@ -21,7 +21,7 @@ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
 }
 
 void samplePhi_kernel(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+  int g;
   num_t old, nw, dl, lp, lu;
   
   for(g = 0; g < a->G; ++g){ 

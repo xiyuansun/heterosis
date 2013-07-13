@@ -9,7 +9,8 @@
 
 void intermResults(Chain *a, Config *cfg){
   FILE *fp;
-  int n, g, N = cfg->N, G = cfg->G;
+  char file[BUF];
+  int n, g, G = cfg->G;
   
   /* hyperparameters */
   
@@ -25,67 +26,67 @@ void intermResults(Chain *a, Config *cfg){
     if(cfg->constSigC){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->sigC); fprintf(" ");
+      fprintf(fp, NUM_TF, a->sigC); fprintf(fp, " ");
     }
     
     if(cfg->constD){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->d); fprintf(" ");
+      fprintf(fp, NUM_TF, a->d); fprintf(fp, " ");
     }
     
     if(cfg->constTau){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->tau); fprintf(" ");
+      fprintf(fp, NUM_TF, a->tau); fprintf(fp, " ");
     }
     
     if(cfg->constThePhi){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->thePhi); fprintf(" ");
+      fprintf(fp, NUM_TF, a->thePhi); fprintf(fp, " ");
     }
     
     if(cfg->constTheAlp){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->theAlp); fprintf(" ");
+      fprintf(fp, NUM_TF, a->theAlp); fprintf(fp, " ");
     }
     
     if(cfg->constTheDel){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->theDel); fprintf(" ");
+      fprintf(fp, NUM_TF, a->theDel); fprintf(fp, " ");
     }
     
     if(cfg->constSigPhi){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->sigPhi); fprintf(" ");
+      fprintf(fp, NUM_TF, a->sigPhi); fprintf(fp, " ");
     }
     
     if(cfg->constSigAlp){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->sigAlp); fprintf(" ");
+      fprintf(fp, NUM_TF, a->sigAlp); fprintf(fp, " ");
     }
     
     if(cfg->constSigDel){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->sigDel); fprintf(" ");
+      fprintf(fp, NUM_TF, a->sigDel); fprintf(fp, " ");
     }
     
     if(cfg->constPiAlp){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->sigPiAlp); fprintf(" ");
+      fprintf(fp, NUM_TF, a->piAlp); fprintf(fp, " ");
     }
     
     if(cfg->constPiDel){
       fprintf(fp, ". ");
     } else {
-      fprintf(fp, NUM_TF, a->sigPiDel); fprintf(" ");
+      fprintf(fp, NUM_TF, a->piDel); fprintf(fp, " ");
     }
 
     fprintf(fp, "\n");
@@ -141,12 +142,12 @@ void intermResults(Chain *a, Config *cfg){
   
   if(a->m > cfg->burnin){
     for(g = 0; g < G; ++g){
-      a->dex += ((alp[g] * alp[g]) > 1e-6);
+      a->dex += ((a->alp[g] * a->alp[g]) > 1e-6);
   
       if(cfg->heterosis){
-        a->hph += (del[g] > fabs(alp[g]));
-        a->lph += (del[g] < -fabs(alp[g]));
-        a->mph += (fabs(del[g]) > 1e-6);
+        a->hph += (a->del[g] > fabs(a->alp[g]));
+        a->lph += (a->del[g] < -fabs(a->alp[g]));
+        a->mph += (fabs(a->del[g]) > 1e-6);
       }
     }
   }

@@ -90,10 +90,10 @@ typedef struct {
   
   /* counts toward differential expression and heterosis */
   
-  int dex;
-  int hph;
-  int lph; 
-  int mph;
+  int *dex;
+  int *hph;
+  int *lph; 
+  int *mph;
   
   /* indicate choices to hold each hyperparameter constant */
   

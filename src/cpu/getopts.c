@@ -20,7 +20,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"parms", no_argument, 0, 'p'},
     {"rates", no_argument, 0, 'r'},  
     {"verbose", no_argument, 0, 'v'},
-    {"time", no_argument, 0, 't'}
+    {"time", no_argument, 0, 't'},
     {"seed", required_argument, 0, 's'},   
     {"sigma-c0", required_argument, 0, 'x'},
     {"d0", required_argument, 0, 'f'},

@@ -9,9 +9,8 @@
 
 void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
 
-  int n, N = a->N;
+  int n;
   num_t rate, shape, lb;
-  double time;
   clock_t start = clock();
 
   if(a->constSigC)

@@ -8,7 +8,7 @@
 
 num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel){ /* device */
  
-  int n, N = a->N, G = a->G;
+  int n, G = a->G;
   num_t ret, s = 0, tmp = 0;
 
   for(n = 0; n < a->N; ++n){
@@ -42,7 +42,7 @@ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel)
 }
 
 void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
-  int g, G = a->G;
+  int g;
   num_t oldPhi, newPhi, oldAlp, newAlp, oldDel, newDel;
   num_t dl, lp, lu;
 
@@ -69,7 +69,7 @@ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
 
       a->tunePhi[g] *= 1.1; 
 
-      if(a->mPhi >= a->burnin){
+      if(a->m >= a->burnin){
         ++a->accPhi[g];
         ++a->accAlp[g];
         ++a->accDel[g];
@@ -81,7 +81,7 @@ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
 }
 
 void samplePhiAlpDelJoint(Chain *a, Config *cfg){ /* host */
-
+  num_t time;
   clock_t start = clock();
 
   if(cfg->verbose)

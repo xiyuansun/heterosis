@@ -40,7 +40,7 @@ void printChain(Chain *a){
   pf2(a->eps, a->N, a->G, "eps =\n");
   pf1(a->eta, a->G, "eta =\n");
   printf("d = "); printf(NUM_TF, a->d); printf("\n");
-  printf(a->tau, "tau =\n"); printf(NUM_TF, a->d); printf("\n");
+  printf("tau =\n"); printf(NUM_TF, a->d); printf("\n");
   pf1(a->phi, a->G, "phi =\n");
   pf1(a->alp, a->G, "alp =\n");
   pf1(a->del, a->G, "del =\n");
@@ -53,10 +53,10 @@ void printChain(Chain *a){
   printf("piAlp =\n"); printf(NUM_TF, a->piAlp); printf("\n"); 
   printf("piDel =\n"); printf(NUM_TF, a->piDel); printf("\n");
   
-  printf("dex = %d\n", a->dex);
-  printf("hph = %d\n", a->hph);
-  printf("lph = %d\n", a->lph);
-  printf("mph = %d\n\n", a->mph);
+  pi1(a->dex, a->G, "dex =\n");
+  pi1(a->dex, a->G, "hph =\n");
+  pi1(a->dex, a->G, "lph =\n"); 
+  pi1(a->dex, a->G, "mph =\n");
   
   printf("tuneD = "); printf(NUM_TF, a->tuneD); printf("\n");
   pf1(a->tuneC, a->N, "tuneC =\n");
