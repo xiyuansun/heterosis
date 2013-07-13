@@ -9,12 +9,12 @@
 
 #define iG(n, g) ((n) * G + (g))
 
-#define CUDA_CALL(x){if(x) != cudaSuccess{ \
+#define CUDA_CALL(x) {if(x) != cudaSuccess{ \
   printf("CUDA error at %s:%d\n", __FILE__, __LINE__); \
   printf("  %s\n", cudaGetErrorString(cudaGetLastError())); \
   exit(EXIT_FAILURE);}}
   
-#define FREE(x, onHost){if(onhost){free(x);} else {CUDA_CALL(cudaFree(x))}}
+#define FREE(x, onHost) {if(onhost){free(x);} else {CUDA_CALL(cudaFree(x))}}
 
 __host__ void pi1(int*, int, const char*);
 __host__ void pf1(num_t*, int, const char*);
@@ -278,7 +278,6 @@ inline __device__ num_t rbetaDevice(Chain *chain, int g, num_t a, num_t b){
 }
 
 inline __device__ num_t alpProp(Chain *a, int g){ /* device */
-  int G = a->G;
 
   num_t gam = a->gamAlp;
   num_t sig = a->sigAlp;
@@ -300,8 +299,7 @@ inline __device__ num_t alpProp(Chain *a, int g){ /* device */
   return nw;
 }
 
-inline __device__ num_t delProp(Chain *a, int g){ /* device */
-  int G = a->G;      
+inline __device__ num_t delProp(Chain *a, int g){ /* device */   
 
   num_t gam = a->gamDel;
   num_t sig = a->sigDel;

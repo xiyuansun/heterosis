@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 __host__ Chain *allocChainHost(Config *cfg){
-
+  int N = cfg->N, G = cfg->G;
   Chain *a = (Chain*) malloc(sizeof(Chain));
   
   if(cfg->verbose)
@@ -112,7 +112,7 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
   
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->tuneC), cfg->N * sizeof(num_t)));
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->tunePhi), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->tuneEps), fg->N * cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->tuneEps), cfg->N * cfg->G * sizeof(num_t)));
 
   /* number of acceptances for Metropolis steps */
 
