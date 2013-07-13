@@ -100,8 +100,8 @@ __host__ void samplePhiAlpDelJoint(Chain *host_a, Chain *dev_a, Config *cfg){ /*
 
   fprintf(cfg->log, "phiAlpDelJoint ");
 
-  samplePhiAlpDelJoint_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
-  samplePhiAlpDelJoint_kernel2<<<1, 1>>>(dev_a);
+ /* samplePhiAlpDelJoint_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  samplePhiAlpDelJoint_kernel2<<<1, 1>>>(dev_a);*/
 
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
