@@ -14,7 +14,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   printHeaders(host_a, dev_a, cfg);
   
-  for(m = 0; m < a->M; ++m){
+  for(m = 0; m < cfg->M; ++m){
     
     if(cfg->verbose)
       printf("    iter %d | ", m);
@@ -35,7 +35,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleEps(host_a, dev_a,  cfg);
     samplePhiAlpDel(host_a, dev_a, cfg); 
     
-    intermResults(host_a, dev_a, cfg);
+    interimResults(host_a, dev_a, cfg);
     
     if(cfg->verbose)
       printf("\n");
