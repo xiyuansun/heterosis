@@ -26,8 +26,8 @@ __global__ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
   num_t gs = a->gamAlp * a->gamAlp;
-  /*num_t ss = a->sigAlp[a->mSigAlp] * a->sigAlp[a->mSigAlp];
-  num_t den = a->s1 * gs + ss;
+  num_t ss = a->sigAlp[a->mSigAlp] * a->sigAlp[a->mSigAlp];
+  /*num_t den = a->s1 * gs + ss;
 
   num_t m = gs * a->s2 / den;
   num_t s = sqrt(gs * ss / den);
