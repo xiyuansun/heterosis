@@ -6,8 +6,8 @@
 
 num_t rgamma(num_t shape, num_t rate, num_t lb){
    
-  num_t A, c, d, r, u, v, w, x, z, eps, eps0, 
-        haznaz, lam, ret, tmp1, tmp2;
+  num_t lA, c, d, r, u, lu, v, w, x, z, eps, eps0, 
+        haznaz, lam, ret, tmp1, tmp2, n, nmax = 100;
 
   if(shape <= 0){
     printf("Error: bad shape: ");
@@ -34,22 +34,24 @@ num_t rgamma(num_t shape, num_t rate, num_t lb){
       eps = eps0;
     }
 
-    A = pow((1 - eps)/(shape - 1), shape - 1) * exp(shape - 1);
+    tmp1 = shape - 1;
+    lA = tmp1 * (log(1 - eps) - log(tmp1)) + tmp1;
 
-    while(1){
+    for(n = 0; n < nmax; ++n){
       x = - (1/eps) * log(runiform(0, 1)) + lb * rate;
-      u = runiform(0, 1);
+      lu = log(runiform(0, 1));
 
-      if(u < A * pow(x, shape - 1) * exp((eps - 1) * x))
-        return(x / rate);
+      if(lu < lA + tmp1 * log(x) + (eps - 1) * x)
+        return (x / rate);
     }
+    return (x / rate);
 
   } else if(shape >= 1){ /* Marsaglia and Tsang (2000) */
 
     d = shape - 1/3;
     c = 1 / sqrt(9 * d);
 
-    while(1){
+    for(n = 0; n < nmax; ++n){
       v = -1;
       while(v <= 0){
         x = rnormal(0, 1);
@@ -65,12 +67,14 @@ num_t rgamma(num_t shape, num_t rate, num_t lb){
           return(ret);
 
         if(log(u) < 0.5 * pow(x, 2) + d * (1 - v + log(v)))
-          return(ret);
+          return ret;
       }
     }
+    return ret;
+    
   } else if (0.135 <= shape && shape < 1){ /* Kundu and Gupta (2006) */
 
-    while(1){      
+    for(n = 0; n < nmax; ++n){      
 
       u = runiform(0, 1);
       x = -2 * log(1 - pow(u, 1 / shape));
@@ -83,12 +87,14 @@ num_t rgamma(num_t shape, num_t rate, num_t lb){
         tmp2 = pow(x, shape - 1)* tmp1 * pow(2, 1 - shape) * pow(1 - tmp1, 1 - shape);
 
         if(v < tmp2)
-          return(ret);
+          return ret;
       }
     }
+    return ret;
+    
   } else{ /* Martin and Liu (2013) */
    
-    while(1){  
+    for(n = 0; n < nmax; ++n){  
       lam = 1/shape - 1;
       w = shape / (exp(1 - shape));
       r = 1 / (1 + w); 
@@ -110,8 +116,10 @@ num_t rgamma(num_t shape, num_t rate, num_t lb){
         }
 
         if(haznaz > runiform(0, 1))
-          return(ret);
+          return ret;
       }
     }
+    
+    return ret;
   }
 }

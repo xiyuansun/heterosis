@@ -76,16 +76,6 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t lp = 0 < dl ? 0 : dl;
   num_t lu = log(runiform(0, 1));
 
-/*
-  printf("\n\nlNew = %0.3f\n", a->lNew[0]);
-  printf("lOld = %0.3f\n", a->lOld[0]);
-  printf("New = %0.3f\n", a->New[0]);
-  printf("Old = %0.3f\n", a->Old[0]);
-  printf("lu = %0.3f\n", a->lNew[0]);
-  printf("ld = %0.3f\n", a->lOld[0]);
-  printf("lp = %0.3f\n\n", a->lOld[0]);
-*/
-
   if(lu < lp){ /* accept */
     a->d = a->New[0];
     a->tuneD *= 1.1; /* Increase the proposal variance to avoid getting 

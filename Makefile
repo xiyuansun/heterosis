@@ -1,10 +1,10 @@
 CC=gcc
 NVCC=nvcc
 
-CCFLAGS=-c -Wall -pedantic -ansi -Iinclude/cpu
+CCFLAGS= -c -Wall -pedantic -Iinclude/cpu
 NVCCFLAGS=-c -Iinclude/gpu -arch=sm_20
 
-LDFLAGS=-lm
+LDFLAGS= -lm
 
 BINDIR=bin/
 OBJDIR=obj/
