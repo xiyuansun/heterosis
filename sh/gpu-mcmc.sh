@@ -1,1 +1,1 @@
-nice -19 nohup ../bin/gpu-mcmc --data ../data/test/largeData.txt --group ../data/test/largeGroup.txt -v -r -h -p -M 50000 -b 2000 1>> stdout.txt 2>> stderr.txt &
+nice -19 nohup ../bin/gpu-mcmc --data ../data/test/largeData.txt --group ../data/test/largeGroup.txt -v -r -h -p -M 10000 -b 2000 1>> stdout.txt 2>> stderr.txt &
