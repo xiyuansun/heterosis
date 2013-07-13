@@ -64,7 +64,7 @@ gpu: $(GPUBIN)
 $(GPUBIN): $(NVCCOBJ) 
 	$(NVCC) $(NVCCOBJ) $(LDFLAGS) -o $(GPUBIN) 
 
-$(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu
+$(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu gpudirs
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
 
 .INTERMEDIATE: cpudirs gpudirs dirs
