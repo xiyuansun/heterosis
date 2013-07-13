@@ -86,6 +86,8 @@ Config *config(int argc, char **argv){
    *  All the others must be given initial values.
    */
    
+   printf("1\n");
+   
   if(!cfg->constTau)
     cfg->tau = sqrt(rgamma(cfg->aTau, cfg->bTau, 0));
  
