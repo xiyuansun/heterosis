@@ -18,4 +18,5 @@ void oneChain(Config *cfg){
   summarizeChain(host_a, dev_a, cfg);
 
   freeChain(host_a, cfg, 0);
+  cudaFree(dev_a);
 } 
