@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <time.h>
 
+__global__ void updateM(Chain* a){
+  ++a->m;
+}
+
 void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   FILE *fp;
   char file[BUF];
@@ -116,7 +120,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(alp, host_a->alp, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(del, host_a->del, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
   
-  if(a->m > cfg->burnin){
+  if(cfg->m > cfg->burnin){
     for(g = 0; g < G; ++g){
       a->dex[g] += ((a->alp[g] * a->alp[g]) > 1e-6);
   
@@ -220,5 +224,5 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   }
   
   ++cfg->m;
-  ++a->m;
+  updateM<<<1, 1>>>(dev_a);
 }

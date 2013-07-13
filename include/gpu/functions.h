@@ -75,7 +75,6 @@ __device__ num_t lAlp(Chain*, int, num_t);
 __global__ void sampleAlp_kernel(Chain*);
 __host__ void sampleAlp(Chain*, Chain*, Config*);
 
-
 __device__ num_t lDel(Chain*, int, num_t);
 __global__ void sampleDel_kernel(Chain*);
 __host__ void sampleDel(Chain*, Chain*, Config*);
@@ -134,6 +133,7 @@ __host__ void oneChain(Config*);
 __host__ void chains(int, char**);
 
 __host__ void printHeaders(Chain*, Chain*, Config*);
+__global__ void updateM(Chain*);
 __host__ void interimResults(Chain*, Chain*, Config*);
 __host__ void summarizeChain(Chain*, Chain*, Config*);
 
