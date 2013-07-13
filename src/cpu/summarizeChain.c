@@ -43,9 +43,8 @@ void summarizeChain(Chain *a, Config *cfg){
   
   fclose(fp);
   
-  /* acceptance rates of Metropolis steps */
-  
   if(cfg->ratesFlag){
+  
     if(cfg->verbose)
       printf("  Printing acceptance rates of metropolis steps.\n");
   
@@ -56,88 +55,59 @@ void summarizeChain(Chain *a, Config *cfg){
       printf("ERROR: unable to create file, %s\n", file);
       return;
     }
-       
-    accD    = a->accD;
-    accD   /= niter;
-    
-    accC    = a->accC[0];
-    accC   /= niter;
-    
-    accPhi  = a->accPhi[0];
-    accPhi /= niter;
-
-    accAlp  = a->accAlp[0];
-    accAlp /= niter;
-    
-    accDel  = a->accDel[0];
-    accDel /= niter;
-  
-    accEps = 0;  
-    for(n = 0; n < cfg->N; ++n)
-      accEps += a->accEps[iG(n, 0)];
-    accEps /= (niter * cfg->N);
-    
-    fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
-    fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
-    fprintf(fp, "\n");
-
-    for(i = 1; i < cfg->N; ++i){
-    
-      accC    = a->accC[i];
-      accC   /= niter;
-    
-      accPhi  = a->accPhi[i];
-      accPhi /= niter;
-
-      accAlp  = a->accAlp[i];
-      accAlp /= niter;
-    
-      accDel  = a->accDel[i];
-      accDel /= niter;
-  
-      accEps = 0;  
-      for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[iG(n, i)];
-      accEps /= (niter * cfg->N);
+        
+    accC = (num_t*) malloc(cfg->N * sizeof(num_t));
+    accPhi = (num_t*) malloc(cfg->G * sizeof(num_t));
+    accAlp = (num_t*) malloc(cfg->G * sizeof(num_t));
+    accDel = (num_t*) malloc(cfg->G * sizeof(num_t));
+    accEps = (num_t*) malloc(cfg->G * sizeof(num_t));   
       
-      fprintf(fp, ". ");
-      fprintf(fp, NUM_TF, accC);   fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
+    accD = a->accD / (num_t) niter;
+    
+    for(n = 0; n < cfg->N; ++n)
+      accC[n] = a->accC[n] / (num_t) niter;
+      
+    for(g = 0; g < cfg->G; ++g){
+      accPhi[g] = a->accPhi[g] / (num_t) niter;
+      accAlp[g] = a->accAlp[g] / (num_t) niter;
+      accDel[g] = a->accDel[g] / (num_t) niter;
+      
+      accEps[g] = 0;
+      for(n = 0; n < cfg->N; ++n)
+        accEps[g] += a->accEps[iG(n, g)] / (num_t) niter;
+    }  
+    
+    for(i = 0; i < MAX_NG; ++i){
+      if(!i){
+        fprintf(fp, NUM_TF, accD);   fprintf(fp, " ");
+      } else {
+        fprintf(fp, ". ");
+      }
+    
+      if(i < cfg->N){
+        fprintf(fp, NUM_TF, accC[g]);   fprintf(fp, " ");
+      } else {
+        fprintf(fp, ". ");
+      }
+      
+      if(i < cfg->G){
+        fprintf(fp, NUM_TF, accPhi[g]); fprintf(fp, " ");
+        fprintf(fp, NUM_TF, accAlp[g]); fprintf(fp, " ");
+        fprintf(fp, NUM_TF, accDel[g]); fprintf(fp, " ");
+        fprintf(fp, NUM_TF, accEps[g]); fprintf(fp, " ");
+      } else {
+        fprintf(fp, ". . . . ");
+      }
+
       fprintf(fp, "\n");
     }
     
-    for(i = cfg->N; i < cfg->G; ++i){
+    free(accC);
+    free(accPhi);
+    free(accAlp);
+    free(accDel);
+    free(accEps);
     
-      accPhi  = a->accPhi[i];
-      accPhi /= niter;
-
-      accAlp  = a->accAlp[i];
-      accAlp /= niter;
-    
-      accDel  = a->accDel[i];
-      accDel /= niter;
-  
-      accEps = 0;  
-      
-      for(n = 0; n < cfg->N; ++n)
-        accEps += a->accEps[iG(n, i)];
-      accEps /= (niter * cfg->N);
-      
-      fprintf(fp, ". . ");
-      fprintf(fp, NUM_TF, accPhi); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accAlp); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accDel); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, accEps); fprintf(fp, " ");
-      fprintf(fp, "\n");
-    }    
-
     fclose(fp);
   }
 }
