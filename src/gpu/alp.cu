@@ -37,26 +37,26 @@ __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   num_t old, nw, dl, lp, lu;
 
   if(g < G){ 
- /*   old = a->alp[iG(a->mAlp, g)];
-    nw = alpProp(a, g);
+    old = a->alp[iG(a->mAlp, g)];
+ /*   nw = alpProp(a, g);
     
     dl = lAlp(a, g, nw) - lAlp(a, g, old);
     lp = 0 < dl ? 0 : dl;
     lu = log(runiformDevice(a, g, 0, 1));
+    */
     
-    if(lu < lp){ */ /* accept */
-    /*  a->alp[iG(a->mAlp + 1, g)] = nw;
+    lu = 1;
+    lp = -1;
+    
+    if(lu < lp){  /* accept */
+      a->alp[iG(a->mAlp + 1, g)] = nw;
       
       if(a->mAlp >= a->burnin)
         ++a->accAlp[g];
-    } else { */ /* reject */
-      a->alp[iG(a->mAlp + 1, g)] = a->alp[iG(a->mAlp, g)]; /*old;*/
- /*   } */
+    } else {  /* reject */
+      a->alp[iG(a->mAlp + 1, g)] = old;
+    } 
   }
-  
-
-  
-  
 } 
 
 __global__ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
