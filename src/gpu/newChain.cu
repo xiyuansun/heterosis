@@ -6,11 +6,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cmpfunc (const void *a, const void *b){
+__host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+__global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g = IDX, G = a->G;
   num_t u;
 
@@ -45,7 +45,7 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g, G = a->G;
 
   a->m = 1;
@@ -80,7 +80,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   }
 }
 
-Chain *newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
+void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   int n, g, N, G, i, *grp, *seeds, *dev_seeds;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
