@@ -97,8 +97,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   
   if(grp == NULL){
     free(y);
-    
-    return NULL;
+    return;
   }
   
   if(cfg->verbose)
