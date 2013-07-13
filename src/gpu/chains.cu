@@ -22,5 +22,5 @@ __host__ void chains(int argc, char **argv){
 
   if(cfg->verbose)
     printf("Done running mcmc.\n");
-  free(cfg);
+  freeConfig(cfg);
 }
