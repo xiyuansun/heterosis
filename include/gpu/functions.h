@@ -42,7 +42,7 @@ __global__ void newChain_kernel1(Chain*);
 __global__ void newChain_kernel2(Chain*);
 __host__ void newChain(Chain**, Chain**, Config*);
 __host__ void printChain(Chain*, Chain*, Config*);
-__host__ void freeChain(Chain*, Config*);
+__host__ void freeChain(Chain*, Config*, int);
 
 __host__ num_t runiform(num_t, num_t);
 __host__ num_t rnormal(num_t, num_t);
