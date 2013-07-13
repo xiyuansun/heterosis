@@ -9,7 +9,10 @@
 
 #define iG(n, g) ((n) * G + (g))
 
-#define CUDA_CALL(x) {}
+#define CUDA_CALL(x) {if((x) != cudaSuccess){ \
+  printf("CUDA error at %s:%d\n",__FILE__,__LINE__); \
+  printf("  %s\n", cudaGetErrorString(cudaGetLastError())); \
+  exit(EXIT_FAILURE);}} 
   
 #define FREE(x, onHost) {if(onhost){free(x);} else {CUDA_CALL(cudaFree(x))}}
 
