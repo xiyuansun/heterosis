@@ -18,7 +18,9 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
   
-  fprintf(cfg->log, "  Copying chain from device to host. Takes a LONG time.\n");
+  if(cfg->verbose)
+    printf("    Copying chain from device to host.\n");
+
   allocChainHost(&allHost_a, cfg); 
   
   /* curand states */
@@ -146,6 +148,5 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventDestroy(stop);
   
   fprintf(cfg->timeConfig, "%0.3f ", myTime/MILLISECS); /* elapsed time */
-  cudaDeviceSynchronize();
   return allHost_a;
 }
