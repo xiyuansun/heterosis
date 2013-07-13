@@ -39,6 +39,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     fprintf(cfg->time, "\n");
     
     if(cfg->verbose)
-      fprintf("\n");
+      printf("\n");
   }
 } 
