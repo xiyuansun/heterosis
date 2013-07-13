@@ -52,11 +52,12 @@ NVCCOBJ=$(foreach name, $(NVCCDEP), $(NVCCOBJDIR)$(name).o)
 all: cpu
 
 cpu: $(CPUBIN)
+	echo $(CCDEP)
 	
 $(CPUBIN): $(CCOBJ) $(BINDIR) 
 	$(CC) $(CCOBJ) $(LDFLAGS) -o $(CPUBIN) 
 
-$(CCOBJDIR)%.o: $(CCSRCDIR)%.c ${CCOBJDIR}
+$(CCOBJDIR)%.o: $(CCSRCDIR)%.c $(CCOBJDIR)
 	$(CC) $(CCFLAGS) $< -o $@ 
 
 gpu: $(GPUBIN)
@@ -70,7 +71,7 @@ $(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu $(NVCCOBJDIR)
 $(BINDIR):
 	mkdir $(BINDIR)
 
-${CCOBJDIR}: $(OBJDIR)
+$(CCOBJDIR): $(OBJDIR)
 	mkdir $(CCOBJDIR)
 	
 $(NVCCOBJDIR): $(OBJDIR)
