@@ -13,48 +13,48 @@ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel)
 
   for(n = 0; n < a->N; ++n){
     tmp = mu(a, n, argPhi, argAlp, argDel);
-    s += a->y[iG(n, g)] * tmp - exp(a->c[iN(a->mC, n)] + 
-         a->eps[iNG(a->mEps, n, g)] + tmp);
+    s += a->y[iG(n, g)] * tmp - exp(a->c[n] + 
+         a->eps[iG(n, g)] + tmp);
   }
 
   /* phi part */
-  ret = s - pow(argPhi - a->thePhi[a->mThePhi], 2) / (2 * pow(a->sigPhi[a->mSigPhi], 2));
+  ret = s - pow(argPhi - a->thePhi, 2) / (2 * pow(a->sigPhi, 2));
 
   /* alpha part */
   if(argAlp * argAlp > 1e-6){
-    tmp = -pow(argAlp - a->theAlp[a->mTheAlp], 2) / (2 * pow(a->sigAlp[a->mSigAlp], 2)) -
-                log(1 - a->piAlp[a->mPiAlp]);
+    tmp = -pow(argAlp - a->theAlp, 2) / (2 * pow(a->sigAlp, 2)) -
+                log(1 - a->piAlp);
   } else {
-    tmp = log(a->piAlp[a->mPiAlp]);
+    tmp = log(a->piAlp);
   }
 
   ret = ret + tmp;
 
   /* delta part */
   if(argDel * argDel > 1e-6){
-    tmp = -pow(argDel - a->theDel[a->mTheDel], 2) / (2 * pow(a->sigDel[a->mSigDel], 2)) -
-                log(1 - a->piDel[a->mPiDel]);
+    tmp = -pow(argDel - a->theDel, 2) / (2 * pow(a->sigDel, 2)) -
+                log(1 - a->piDel);
   } else {
-    tmp = log(a->piDel[a->mPiDel]);
+    tmp = log(a->piDel);
   }
 
   return ret + tmp;
 }
 
-void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
   num_t oldPhi, newPhi, oldAlp, newAlp, oldDel, newDel;
   num_t dl, lp, lu;
 
   for(g = 0; g < a->G; ++g){
 
-    oldPhi = a->phi[iG(a->mPhi, g)];
+    oldPhi = a->phi[g];
     newPhi = rnormal(oldPhi, a->tunePhi[g]);
 
-    oldAlp = a->alp[iG(a->mAlp, g)];
+    oldAlp = a->alp[g];
     newAlp = alpProp(a, g);
 
-    oldDel = a->del[iG(a->mDel, g)];
+    oldDel = a->del[g];
     newDel = delProp(a, g);
 
     dl = lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
@@ -63,9 +63,9 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     lu = log(runiform(0, 1));
     
     if(lu < lp){ /* accept */
-      a->phi[iG(a->mPhi + 1, g)] = newPhi;
-      a->alp[iG(a->mAlp + 1, g)] = newAlp;
-      a->del[iG(a->mDel + 1, g)] = newDel;
+      a->phi[g] = newPhi;
+      a->alp[g] = newAlp;
+      a->del[g] = newDel;
 
       a->tunePhi[g] *= 1.1; 
 
@@ -75,31 +75,23 @@ void samplePhiAlpDelJoint_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
         ++a->accDel[g];
       }
     } else { /* reject */
-      a->phi[iG(a->mPhi + 1, g)] = oldPhi;
-      a->alp[iG(a->mAlp + 1, g)] = oldAlp;
-      a->del[iG(a->mDel + 1, g)] = oldDel;
-
       a->tunePhi[g] /= 1.1;
     }
   }
 }
 
-void samplePhiAlpDelJoint_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  ++a->mPhi;
-  ++a->mAlp;
-  ++a->mDel;
-}
-
 void samplePhiAlpDelJoint(Chain *a, Config *cfg){ /* host */
-  double time;
+
   clock_t start = clock();
 
   if(cfg->verbose)
     printf("phiAlpDelJoint ");
   
-  samplePhiAlpDelJoint_kernel1(a);
-  samplePhiAlpDelJoint_kernel2(a);
+  samplePhiAlpDelJoint_kernel(a);
 
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "--%0.3f ", time);
+  time = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
+  
+  cfg->timePhi = time;
+  cfg->timeAlp = time;
+  cfg->timeDel = time;  
 }

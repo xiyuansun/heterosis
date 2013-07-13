@@ -12,23 +12,22 @@ void sampleThePhi_kernel1(Chain *a){ /* pairwise sum in Thrust */
   
   a->tmp1[0] = 0; 
   for(g = 0; g < a->G; ++g)
-    a->tmp1[0] += a->phi[iG(a->mPhi, g)];
+    a->tmp1[0] += a->phi[g];
 }
 
 void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t gs = a->gamPhi * a->gamPhi;
-  num_t ss = a->sigPhi[a->mSigPhi] * a->sigPhi[a->mSigPhi];
+  num_t ss = a->sigPhi * a->sigPhi;
   num_t den = (a->G * gs + ss);
 
   num_t m = gs * a->tmp1[0] / den;
   num_t s = gs * ss / den;
 
-  a->thePhi[a->mThePhi + 1] = rnormal(m, s);
-  ++a->mThePhi;
+  a->thePhi = rnormal(m, s);
 }
 
 void sampleThePhi(Chain *a, Config *cfg){ /* host */  
-  double time;
+
   clock_t start = clock();
 
   if(cfg->constThePhi)
@@ -40,6 +39,5 @@ void sampleThePhi(Chain *a, Config *cfg){ /* host */
   sampleThePhi_kernel1(a);
   sampleThePhi_kernel2(a);
   
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  cfg->timeThePhi = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

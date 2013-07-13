@@ -22,6 +22,7 @@ Config *config(int argc, char **argv){
   cfg->parmsFlag = 0;
 
   cfg->chains = 2;
+  cfg->m = 1;
   cfg->M = 10;
   cfg->burnin = cfg->M / 2;
   cfg->joint = 0;
@@ -57,6 +58,24 @@ Config *config(int argc, char **argv){
   cfg->constSigDel = 0;
   cfg->constPiAlp = 0;
   cfg->constPiDel = 0;
+  
+  cfg->timeC = 0;
+  cfg->timeTau = 0;
+  cfg->timePiAlp = 0;
+  cfg->timePiDel = 0;
+  cfg->timeD = 0;
+  cfg->timeThePhi = 0;
+  cfg->timeTheAlp = 0;
+  cfg->timeTheDel = 0;
+  cfg->timeSigC = 0;
+  cfg->timeSigPhi = 0;
+  cfg->timeSigAlp = 0;
+  cfg->timeSigDel = 0;
+  cfg->timeEta = 0;
+  cfg->timeEps = 0;
+  cfg->timePhi = 0;
+  cfg->timeAlp = 0;
+  cfg->timeDel = 0;
 
   getopts(cfg, argc, argv);
   srand(cfg->seed);
@@ -68,7 +87,7 @@ Config *config(int argc, char **argv){
    
   system("mkdir -p ../out/");
   system("mkdir -p ../out/probs/");
-
+  
   if(cfg->ratesFlag)
     system("mkdir -p ../out/rates/");
   
@@ -78,72 +97,8 @@ Config *config(int argc, char **argv){
   if(cfg->parmsFlag)
     system("mkdir -p ../out/parms/"); 
   
-  cfg->time = fopen("../out/time.txt", "w");
-  fprintf(cfg->time, "c ");
-
-  if(!cfg->constTau){
-    cfg->tau = sqrt(rgamma(cfg->aTau, cfg->bTau, 0));
-    fprintf(cfg->time, "tau ");
-  }
- 
-  if(!cfg->constPiAlp){
-    cfg->piAlp = rbeta(cfg->aAlp, cfg->bAlp);
-    fprintf(cfg->time, "piDel ");
-  }
+  if(cfg->timeFlag)
+    system("mkdir -p ../out/time/");
   
-  if(!cfg->constPiDel){
-    cfg->piDel = rbeta(cfg->aDel, cfg->bDel);
-    fprintf(cfg->time, "piDel ");
-  }
-
-  if(!cfg->constD){
-    cfg->d = runiform(0, cfg->d0);
-    fprintf(cfg->time, "d ");
-  }
-
-  if(!cfg->constThePhi){
-    cfg->thePhi = rnormal(0, cfg->gamPhi);
-    fprintf(cfg->time, "thePhi ");
-  }
-
-  if(!cfg->constTheAlp){
-    cfg->theAlp = rnormal(0, cfg->gamAlp);
-    fprintf(cfg->time, "theAlp ");
-  }
-
-  if(!cfg->constTheDel){
-    cfg->theDel = rnormal(0, cfg->gamDel);
-    fprintf(cfg->time, "theDel ");
-  }
- 
-  if(!cfg->constSigC){
-    cfg->sigC = runiform(0, cfg->sigC0);
-    fprintf(cfg->time, "sigC ");
-  }
-  
-  if(!cfg->constSigPhi){
-    cfg->sigPhi = runiform(0, cfg->sigPhi0);
-    fprintf(cfg->time, "sigPhi ");
-  }
-
-  if(!cfg->constSigAlp){
-    cfg->sigAlp = runiform(0, cfg->sigAlp0);
-    fprintf(cfg->time, "sigAlp ");
-  }
-
-  if(!cfg->constSigDel){
-    cfg->sigDel = runiform(0, cfg->sigDel0);
-    fprintf(cfg->time, "sigDel ");
-  }
-  
-  fprintf(cfg->time, "eta eps ");
-  
-  if(cfg->joint){
-    fprintf(cfg->time, "phiAlpDel ");
-  } else {
-    fprintf(cfg->time, "phi alp del ");
-  }
-
-  fprintf(cfg->time, "\n"); 
   return cfg;
 }

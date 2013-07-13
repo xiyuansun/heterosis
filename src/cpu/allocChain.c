@@ -20,23 +20,12 @@ Chain *allocChain(Config *cfg){
 
   /* parameters */
 
-  a->c      = (num_t*) malloc((cfg->M + 1) * cfg->N * sizeof(num_t));
-  a->sigC   = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->eps    = (num_t*) malloc((cfg->M + 1) * cfg->N * cfg->G * sizeof(num_t));
-  a->eta    = (num_t*) malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
-  a->d      = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));  
-  a->tau    = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->phi    = (num_t*) malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
-  a->thePhi = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->sigPhi = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->alp    = (num_t*) malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
-  a->theAlp = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->sigAlp = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->piAlp  = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->del    = (num_t*) malloc((cfg->M + 1) * cfg->G * sizeof(num_t));
-  a->theDel = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->sigDel = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
-  a->piDel  = (num_t*) malloc((cfg->M + 1) * sizeof(num_t));
+  a->c      = (num_t*) malloc( cfg->N * sizeof(num_t));
+  a->eps    = (num_t*) malloc( cfg->N * cfg->G * sizeof(num_t));
+  a->eta    = (num_t*) malloc( cfg->G * sizeof(num_t));
+  a->phi    = (num_t*) malloc( cfg->G * sizeof(num_t));
+  a->alp    = (num_t*) malloc( cfg->G * sizeof(num_t));
+  a->del    = (num_t*) malloc( cfg->G * sizeof(num_t));
   
   /* temporary and return values */
 
@@ -61,6 +50,13 @@ Chain *allocChain(Config *cfg){
   a->accAlp = (int*) malloc(cfg->G * sizeof(int));
   a->accDel = (int*) malloc(cfg->G * sizeof(int));
   a->accEps = (int*) malloc(cfg->N * cfg->G * sizeof(int));
+  
+  /* counts toward differential expression and heterosis */
+  
+  a->dex = (int*) malloc(cfg->G * sizeof(int));
+  a->hph = (int*) malloc(cfg->G * sizeof(int));
+  a->lph = (int*) malloc(cfg->G * sizeof(int));
+  a->mph = (int*) malloc(cfg->G * sizeof(int));
     
   return a;
 }

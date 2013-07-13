@@ -11,8 +11,8 @@ void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    a->tmp1[g] = 2 * log(a->eta[iG(a->mEta, g)]);
-    a->tmp2[g] = 1/(a->eta[iG(a->mEta, g)] * a->eta[iG(a->mEta, g)]);
+    a->tmp1[g] = 2 * log(a->eta[g]);
+    a->tmp2[g] = 1/(a->eta[g] * a->eta[g]);
   }
 }
 
@@ -41,7 +41,7 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
     arg = a->Old[0];
   }
 
-  tmp = arg * a->tau[a->mTau] * a->tau[a->mTau] / 2;
+  tmp = arg * a->tau * a->tau / 2;
   ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(tmp);
   ret -= (arg/2 + 1) * a->s1 - tmp * a->s2;
 
@@ -73,7 +73,7 @@ void lD(Chain *a, int newArg){ /* host */
 }
 
 void sampleD_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
-  a->Old[0] = a->d[a->mD];
+  a->Old[0] = a->d;
   
   do {
     a->New[0] = rnormal(a->Old[0], a->tuneD);
@@ -86,23 +86,20 @@ void sampleD_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t lu = log(runiform(0, 1));
 
   if(lu < lp){ /* accept */
-    a->d[a->mD + 1] = a->New[0];
+    a->d = a->New[0];
     a->tuneD *= 1.1; /* Increase the proposal variance to avoid getting 
                                   stuck in a mode */
     
-    if(a->mD >= a->burnin) 
+    if(a->m >= a->burnin) 
       ++a->accD;
   } else { /* reject */
-    a->d[a->mD + 1] = a->Old[0];
     a->tuneD /= 1.1; /* If you're rejecting too often, decrease the proposal 
                                   variance to sample closer to the last accepted value. */
   }
-
-  ++a->mD;
 }
 
 void sampleD(Chain *a, Config *cfg){ /* host */
-  double time;
+
   clock_t start = clock();
   
   if(cfg->constD)
@@ -118,6 +115,5 @@ void sampleD(Chain *a, Config *cfg){ /* host */
 
   sampleD_kernel2(a);
 
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  cfg->timeD = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

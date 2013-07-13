@@ -7,7 +7,7 @@
 #include <time.h>
 
 void sampleEta_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
-  a->s1 = (a->N + a->d[a->mD]) / 2; 
+  a->s1 = (a->N + a->d) / 2; 
 }
 
 void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
@@ -18,24 +18,20 @@ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 
     rate = 0;
     for(n = 0; n < a->N; ++n) 
-      rate += pow(a->eps[iNG(a->mEps, n, g)], 2);
+      rate += pow(a->eps[iG(n, g)], 2);
   
-    rate = (rate + a->d[a->mD] * a->tau[a->mTau] * a->tau[a->mTau]) / 2; 
+    rate = (rate + a->d * a->tau * a->tau) / 2; 
 
     if(shape >= 1 && rate > 0){
-      a->eta[iG(a->mEta + 1, g)] = 1/sqrt(rgamma(shape, rate, 0));
+      a->eta[g] = 1/sqrt(rgamma(shape, rate, 0));
     } else {
-      a->eta[iG(a->mEta + 1, g)] = a->eta[iG(a->mEta, g)];
+      a->eta[g] = a->eta[g];
     }
   }
 }
 
-void sampleEta_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
-  ++a->mEta;
-}
-
 void sampleEta(Chain *a, Config *cfg){
-  double time;
+
   clock_t start = clock();
 
   if(cfg->verbose)
@@ -43,8 +39,6 @@ void sampleEta(Chain *a, Config *cfg){
 
   sampleEta_kernel1(a);
   sampleEta_kernel2(a);
-  sampleEta_kernel3(a);
 
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  cfg->timeEta = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

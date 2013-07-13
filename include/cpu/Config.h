@@ -8,10 +8,8 @@
 typedef struct {
 
   int chainNum; /* index of current chain */
+  int m; /* current place in current chain */
   int chains; /* number of chains */
-  
-  FILE *log;
-  FILE *time;
 
   char dataFile[BUF]; /* space-delimited text file with G rows and N columns */
   char groupFile[BUF]; /* space-delimited text file with 1 row and N entries */
@@ -74,6 +72,26 @@ typedef struct {
   int constSigDel;
   int constPiAlp;
   int constPiDel;
+  
+  /* total time spent sampling each parameter */
+  
+  num_t timeC;
+  num_t timeTau;
+  num_t timePiAlp;
+  num_t timePiDel;
+  num_t timeD;
+  num_t timeThePhi;
+  num_t timeTheAlp;
+  num_t timeTheDel;
+  num_t timeSigC;
+  num_t timeSigPhi;
+  num_t timeSigAlp;
+  num_t timeSigDel;
+  num_t timeEta;
+  num_t timeEps;
+  num_t timePhi;
+  num_t timeAlp;
+  num_t timeDel;
 
 } Config;
 

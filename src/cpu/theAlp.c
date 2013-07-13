@@ -11,9 +11,9 @@ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){
-    if(pow(a->alp[iG(a->mAlp, g)], 2) > 1e-6){
+    if(pow(a->alp[g], 2) > 1e-6){
       a->tmp1[g] = 1;
-      a->tmp2[g] = a->alp[iG(a->mAlp, g)];
+      a->tmp2[g] = a->alp[g];
     } else {
       a->tmp1[g] = 0;
       a->tmp2[g] = 0;
@@ -43,18 +43,17 @@ void sampleTheAlp_kernel3(Chain *a){ /* parallel pairwise sum in Thrust */
 void sampleTheAlp_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
 
   num_t gs = pow(a->gamAlp, 2);
-  num_t ss = pow(a->sigAlp[a->mSigAlp], 2);
+  num_t ss = pow(a->sigAlp, 2);
   num_t den = a->s1 * gs + ss;
 
   num_t m = gs * a->s2 / den;
   num_t s = sqrt(gs * ss / den);
 
-  a->theAlp[a->mTheAlp + 1] = rnormal(m, s);
-  ++a->mTheAlp;
+  a->theAlp = rnormal(m, s);
 }
 
 void sampleTheAlp(Chain *a, Config *cfg){ /* host */
-  double time;
+
   clock_t start = clock();
 
   if(cfg->constTheAlp)
@@ -68,6 +67,5 @@ void sampleTheAlp(Chain *a, Config *cfg){ /* host */
   sampleTheAlp_kernel3(a);
   sampleTheAlp_kernel4(a);
 
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  cfg->timeTheAlp = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

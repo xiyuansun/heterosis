@@ -11,9 +11,9 @@ void sampleTheDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    if(pow(a->del[iG(a->mDel, g)], 2) > 1e-6){
+    if(pow(a->del[g], 2) > 1e-6){
       a->tmp1[g] = 1;
-      a->tmp2[g] = a->del[iG(a->mDel, g)];
+      a->tmp2[g] = a->del[g];
     } else {
       a->tmp1[g] = 0;
       a->tmp2[g] = 0;
@@ -43,18 +43,17 @@ void sampleTheDel_kernel3(Chain *a){ /* pairwise sum in Thrust */
 void sampleTheDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
 
   num_t gs = pow(a->gamDel, 2);
-  num_t ss = pow(a->sigDel[a->mSigDel], 2);
+  num_t ss = pow(a->sigDel, 2);
   num_t den = a->s1 * gs + ss;
 
   num_t m = gs * a->s2 / den;
   num_t s = sqrt(gs * ss / den);
 
-  a->theDel[a->mTheDel + 1] = rnormal(m, s);
-  ++a->mTheDel;
+  a->theDel = rnormal(m, s);
 }
 
 void sampleTheDel(Chain *a, Config *cfg){ /* host */
-  double time;
+
   clock_t start = clock();
 
   if(cfg->constTheDel || !cfg->heterosis)
@@ -68,6 +67,5 @@ void sampleTheDel(Chain *a, Config *cfg){ /* host */
   sampleTheDel_kernel3(a);
   sampleTheDel_kernel4(a);
   
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);  
+  cfg->timeTheDel = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

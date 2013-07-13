@@ -16,27 +16,27 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
   for(g = 0; g < a->G; ++g){
 
-    a->phi[iG(0, g)] = rnormal(a->thePhi[0], a->sigPhi[0]);
+    a->phi[g] = rnormal(a->thePhi, a->sigPhi);
 
     u = runiform(0, 1);
-    if(u < a->piAlp[0]){
-      a->alp[iG(0, g)] = 0;
+    if(u < a->piAlp){
+      a->alp[g] = 0;
     } else {
-      a->alp[iG(0, g)] = rnormal(a->theAlp[0], a->sigAlp[0]);
+      a->alp[g] = rnormal(a->theAlp, a->sigAlp);
     }
     
     u = runiform(0, 1);
-    if(u < a->piDel[0]){
-      a->del[iG(0, g)] = 0;
+    if(u < a->piDel){
+      a->del[g] = 0;
     } else {
-      a->del[iG(0, g)] = rnormal(a->theDel[0], a->sigDel[0]);
+      a->del[g] = rnormal(a->theDel, a->sigDel);
     }
  
-    a->eta[iG(0, g)] = 1/sqrt(rgamma(a->d[0] / 2, 
-                   a->d[0] * a->tau[0] * a->tau[0] / 2, 0));
+    a->eta[g] = 1/sqrt(rgamma(a->d / 2, 
+                   a->d * a->tau * a->tau / 2, 0));
 
     for(n = 0; n < a->N; ++n)
-      a->eps[iNG(0, n, g)] = rnormal(0, a->eta[iG(0, g)]);
+      a->eps[iG(n, g)] = rnormal(0, a->eta[g]);
     
   }
 }
@@ -44,31 +44,15 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   int n, g, G = a->G;
 
-  a->mC = 0;
-  a->mSigC = 0;
-
-  a->mEps = 0;
-  a->mEta = 0;
-  a->mD = 0;
-  a->mTau = 0;
-
-  a->mPhi = 0;
-  a->mAlp = 0;
-  a->mDel = 0;
-
-  a->mThePhi = 0;
-  a->mTheAlp = 0;
-  a->mTheDel = 0;
-
-  a->mSigPhi = 0;
-  a->mSigAlp = 0;
-  a->mSigDel = 0;
-
-  a->mPiAlp = 0;
-  a->mPiDel = 0;
-
-  a->tuneD = 100;
-
+  a->m = 1;
+  
+  /* counts toward differential expression and heterosis */
+  
+  a->dex = 0;
+  a->hph = 0;
+  a->lph = 0;
+  a->mph = 0; 
+  
   for(n = 0; n < a->N; ++n)
     a->tuneC[n] = 1;
 
@@ -160,17 +144,17 @@ Chain *newChain(Config *cfg){ /* host */
   
   /* hyperparameters */
   
-  a->sigC[0]   = cfg->sigC;
-  a->d[0]      = cfg->d;
-  a->tau[0]    = cfg->tau;
-  a->thePhi[0] = cfg->thePhi;
-  a->theAlp[0] = cfg->theAlp;
-  a->theDel[0] = cfg->theDel;
-  a->sigPhi[0] = cfg->sigPhi;
-  a->sigAlp[0] = cfg->sigAlp;
-  a->sigDel[0] = cfg->sigDel;
-  a->piAlp[0]  = cfg->piAlp;
-  a->piDel[0]  = cfg->piDel;
+  a->sigC   = cfg->sigC;
+  a->d      = cfg->d;
+  a->tau    = cfg->tau;
+  a->thePhi = cfg->thePhi;
+  a->theAlp = cfg->theAlp;
+  a->theDel = cfg->theDel;
+  a->sigPhi = cfg->sigPhi;
+  a->sigAlp = cfg->sigAlp;
+  a->sigDel = cfg->sigDel;
+  a->piAlp  = cfg->piAlp;
+  a->piDel  = cfg->piDel;
   
   /* choices to hold hyperparameters constant */
   
@@ -185,6 +169,8 @@ Chain *newChain(Config *cfg){ /* host */
   a->constSigDel = cfg->constSigDel;
   a->constPiAlp  = cfg->constPiAlp;
   a->constPiDel  = cfg->constPiDel;
+  
+  /* initial normalization factors, c */
   
   lqts = (num_t*) malloc(cfg->N * sizeof(num_t));
   tmpv = (num_t*) malloc(cfg->G * sizeof(num_t));
@@ -203,7 +189,7 @@ Chain *newChain(Config *cfg){ /* host */
   s /= cfg->N;
   
   for(n = 0; n < cfg->N; ++n)
-    a->c[iN(0, n)] = lqts[n] - s;
+    a->c[n] = lqts[n] - s;
   
   newChain_kernel1(a);
   newChain_kernel2(a);

@@ -11,7 +11,7 @@ void samplePiDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    if(pow(a->del[iG(a->mDel, g)], 2) > 1e-6){
+    if(pow(a->del[g], 2) > 1e-6){
       a->tmp1[g] = 1; 
     } else {
       a->tmp1[g] = 0;
@@ -29,12 +29,11 @@ void samplePiDel_kernel2(Chain *a){ /* pairwise sum in Thrust */
 }
 
 void samplePiDel_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
-  a->piDel[a->mPiDel + 1] = rbeta(a->G + a->s1 + a->aTau, a->s1 + a->bTau);
-  ++a->mPiDel;
+  a->piDel = rbeta(a->G + a->s1 + a->aTau, a->s1 + a->bTau);
 }
 
 void samplePiDel(Chain *a, Config *cfg){ /* host */
-  double time;
+
   clock_t start = clock();
 
   if(cfg->constPiDel || !cfg->heterosis)
@@ -47,6 +46,5 @@ void samplePiDel(Chain *a, Config *cfg){ /* host */
   samplePiDel_kernel2(a);
   samplePiDel_kernel3(a);
 
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  time = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

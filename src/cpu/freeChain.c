@@ -18,23 +18,12 @@ void freeChain(Chain *a, Config *cfg){
   /* parameters */
   
   free(a->c);
-  free(a->sigC);
   free(a->eps);
   free(a->eta);
-  free(a->d);
-  free(a->tau);
   free(a->phi);
-  free(a->thePhi);
-  free(a->sigPhi);
   free(a->alp);
-  free(a->theAlp);
-  free(a->sigAlp);
-  free(a->piAlp);
   free(a->del);
-  free(a->theDel);
-  free(a->sigDel);
-  free(a->piDel);
-  
+
   /* temporary and return values */
   
   free(a->tmp1);

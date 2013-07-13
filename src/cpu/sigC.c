@@ -22,20 +22,15 @@ void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
 
   rate = 0;
   for(n = 0; n < a->N; ++n) 
-    rate += a->c[iN(a->mC, n)] * a->c[iN(a->mC, n)];
+    rate += a->c[n] * a->c[n];
   
   shape = (a->N - 1) / 2; 
   rate = rate / 2;
   lb = 1 / pow(a->sigC0, 2); 
 
   if(shape >= 1 && rate > 0){
-    a->sigC[a->mSigC + 1] = 1/sqrt(rgamma(shape, rate, lb));
-  } else {
-    a->sigC[a->mSigC + 1] = a->sigC[a->mSigC];
-  }
+    a->sigC = 1/sqrt(rgamma(shape, rate, lb));
+  } 
 
-  ++a->mSigC;
-
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  cfg->timeSigC = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

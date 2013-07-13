@@ -24,5 +24,5 @@ void chains(int argc, char **argv){
   if(cfg->verbose)
     printf("Done running mcmc.\n");
 
-  freeConfig(cfg);
+  free(cfg);
 }

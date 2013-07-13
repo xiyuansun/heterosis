@@ -19,7 +19,6 @@ void pf3(num_t*, int, int, int, const char*);
 Config *config(int, char**);
 void getopts(Config*, int, char**);
 void printConfig(Config*);
-void freeConfig(Config*);
 
 int *mySampleInt(int, int);
 int *readGrp(Config*);
@@ -48,8 +47,7 @@ void sampleC_kernel3(Chain*);
 void sampleC(Chain*, Config*);
 
 num_t lEps(Chain*, int, int, num_t);
-void sampleEps_kernel1(Chain*);
-void sampleEps_kernel2(Chain*);
+void sampleEps_kernel(Chain*);
 void sampleEps(Chain*, Config*);
 
 void lD_kernel1(Chain*);
@@ -62,25 +60,21 @@ void sampleD_kernel2(Chain*);
 void sampleD(Chain*, Config*);
 
 num_t lPhi(Chain*, int, num_t);
-void samplePhi_kernel1(Chain*);
-void samplePhi_kernel2(Chain*);
+void samplePhi_kernel(Chain*);
 void samplePhi(Chain*, Config*);
 
 num_t alpProp(Chain*, int);
 num_t lAlp(Chain*, int, num_t);
-void sampleAlp_kernel1(Chain*);
-void sampleAlp_kernel2(Chain*);
+void sampleAlp_kernel(Chain*);
 void sampleAlp(Chain*, Config*);
 
 num_t delProp(Chain*, int);
 num_t lDel(Chain*, int, num_t);
-void sampleDel_kernel1(Chain*);
-void sampleDel_kernel2(Chain*);
+void sampleDel_kernel(Chain*);
 void sampleDel(Chain*, Config*);
 
 num_t lPhiAlpDelJoint(Chain*, int, num_t, num_t, num_t);
-void samplePhiAlpDel_kernel1Joint(Chain*);
-void samplePhiAlpDel_kernel2Joint(Chain*);
+void samplePhiAlpDelJoint_kernel(Chain*);
 void samplePhiAlpDelJoint(Chain*, Config*);
 
 void samplePhiAlpDel(Chain*, Config*);
@@ -89,7 +83,6 @@ void sampleSigC(Chain*, Config*);
 
 void sampleEta_kernel1(Chain*);
 void sampleEta_kernel2(Chain*);
-void sampleEta_kernel3(Chain*);
 void sampleEta(Chain*, Config*);
 
 void sampleTau_kernel1(Chain*);
@@ -144,10 +137,8 @@ void runChain(Chain*, Config*);
 void oneChain(Config*);
 void chains(int, char**);
 
-void printProbs(Chain*, Config*);
-void printRates(Chain*, Config*);
-void printHyper(Chain*, Config*);
-void printParms(Chain*, Config*);
+void printHeaders(Config*);
+void intermResults(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
 
 #endif /* FUNCTIONS_H */

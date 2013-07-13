@@ -11,7 +11,7 @@ void samplePiAlp_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
   int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    if(pow(a->alp[iG(a->mAlp, g)], 2) > 1e-6){
+    if(pow(a->alp[g], 2) > 1e-6){
       a->tmp1[g] = 1;
     } else {
       a->tmp1[g] = 0;
@@ -29,12 +29,11 @@ void samplePiAlp_kernel2(Chain *a){ /* pairwise sum in Thrust */
 }
 
 void samplePiAlp_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
-  a->piAlp[a->mPiAlp + 1] = rbeta(a->G + a->s1 + a->aTau, a->s1 + a->bTau);
-  ++a->mPiAlp;
+  a->piAlp = rbeta(a->G + a->s1 + a->aTau, a->s1 + a->bTau);
 }
 
 void samplePiAlp(Chain *a, Config *cfg){ /* host */
-  double time;
+
   clock_t start = clock();
 
   if(cfg->constPiAlp)
@@ -47,6 +46,5 @@ void samplePiAlp(Chain *a, Config *cfg){ /* host */
   samplePiAlp_kernel2(a);  
   samplePiAlp_kernel3(a);
 
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  time = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

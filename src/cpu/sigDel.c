@@ -11,8 +11,8 @@ void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g, G = a->G;
 
   for(g = 0; g < a->G; ++g){ 
-    if(pow(a->del[iG(a->mDel, g)], 2) > 1e-6){
-      a->tmp1[g] = pow(a->del[iG(a->mDel, g)] - a->theDel[a->mTheDel], 2);
+    if(pow(a->del[g], 2) > 1e-6){
+      a->tmp1[g] = pow(a->del[g] - a->theDel, 2);
       a->tmp2[g] = 1;
     } else {
       a->tmp1[g] = 0;
@@ -46,16 +46,14 @@ void sampleSigDel_kernel4(Chain *a){ /* kernel <<<1, 1>>> */
   num_t lb = 1/pow(a->sigDel0, 2);
 
   if(shape >= 1 && rate > 0){
-    a->sigDel[a->mSigDel + 1] = 1/sqrt(rgamma(shape, rate, lb));
+    a->sigDel = 1/sqrt(rgamma(shape, rate, lb));
   } else {
-    a->sigDel[a->mSigDel + 1] = a->sigDel[a->mSigDel];
+    a->sigDel = a->sigDel;
   }
-
-  ++a->mSigDel;
 }
 
 void sampleSigDel(Chain *a, Config *cfg){ /* host */
-  double time;
+
   clock_t start = clock();
 
   if(cfg->constSigDel || !cfg->heterosis)
@@ -69,6 +67,5 @@ void sampleSigDel(Chain *a, Config *cfg){ /* host */
   sampleSigDel_kernel3(a);
   sampleSigDel_kernel4(a);
 
-  time = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
-  fprintf(cfg->time, "%0.3f ", time);
+  cfg->timeSigDel = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

@@ -15,6 +15,7 @@ typedef struct {
   int burnin; 
   int heterosis;
   int parmsFlag;
+  int m; /* current place in the chain */
   
   /* initialization constants */
   
@@ -36,26 +37,26 @@ typedef struct {
   /* samples of parameters and hyperparameters */
   
   num_t *c;
-    num_t *sigC;
+    num_t sigC;
    
   num_t *eps;
     num_t *eta;
-      num_t *d;
-      num_t *tau;
+      num_t d;
+      num_t tau;
       
   num_t *phi;
-    num_t *thePhi;
-    num_t *sigPhi;
+    num_t thePhi;
+    num_t sigPhi;
     
   num_t *alp;
-    num_t *theAlp;
-    num_t *sigAlp;
-    num_t *piAlp;
+    num_t theAlp;
+    num_t sigAlp;
+    num_t piAlp;
     
   num_t *del;
-    num_t *theDel;
-    num_t *sigDel;
-    num_t *piDel;
+    num_t theDel;
+    num_t sigDel;
+    num_t piDel;
     
   /* temporary and return values of kernels */
 
@@ -71,30 +72,6 @@ typedef struct {
   num_t *lOld;
   num_t *lNew;
   
-  /* current place in the chain of each parameter */
-  
-  int mC;
-    int mSigC;
-    
-  int mEps;
-    int mEta;
-      int mD;
-      int mTau;
-      
-  int mPhi;
-    int mThePhi;
-    int mSigPhi;
-    
-  int mAlp;
-    int mTheAlp;
-    int mSigAlp;
-    int mPiAlp;
-    
-  int mDel;
-    int mTheDel;
-    int mSigDel;
-    int mPiDel;
-    
   /* tuning parameters for metropolis steps */
   
   num_t *tuneC;
@@ -110,6 +87,13 @@ typedef struct {
   int *accPhi;
   int *accAlp;
   int *accDel;
+  
+  /* counts toward differential expression and heterosis */
+  
+  int dex;
+  int hph;
+  int lph; 
+  int mph;
   
   /* indicate choices to hold each hyperparameter constant */
   
