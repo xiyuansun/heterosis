@@ -16,6 +16,8 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
  printf("\n2\n");
     fprintf(cfg->log, "    iter %d | ", m);
 
+printf("\n3\n");
+
     sampleC(host_a, dev_a, cfg); 
     sampleTau(host_a, dev_a, cfg);
     samplePiAlp(host_a, dev_a, cfg);
@@ -34,7 +36,5 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
     fprintf(cfg->time, "\n");
     fprintf(cfg->log, "\n");
-    
-    printf("\n1\n");
   }
 } 
