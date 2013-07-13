@@ -4,7 +4,7 @@
 
 int *readGrp(Config *cfg){
 
-  int i, j, n, *grp, match, nunique = 0, *unique;
+  int i, j, n, *grp, match = 0, nunique = 0, *unique;
   FILE *fp;
 
   if(cfg->N < 2){
@@ -20,7 +20,7 @@ int *readGrp(Config *cfg){
   }
   
   grp = (int*) malloc(cfg->N * sizeof(int));
-  unique = (int*) malloc(cfg->N * sizeof(int));
+  unique = (int*) calloc(cfg->N, sizeof(int));
   
   for(n = 0; n < cfg->N; ++n)
     fscanf(fp, "%d", grp + n);

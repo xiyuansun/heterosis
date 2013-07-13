@@ -20,7 +20,7 @@ __host__ int *readGrp(Config *cfg){
   }
   
   grp = (int*) malloc(cfg->N * sizeof(int));
-  unique = (int*) malloc(cfg->N * sizeof(int));
+  unique = (int*) calloc(cfg->N, sizeof(int));
   
   for(n = 0; n < cfg->N; ++n)
     fscanf(fp, "%d", grp + n);
