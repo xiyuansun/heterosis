@@ -79,6 +79,7 @@ printf("hum\n");
   cudaEventElapsedTime(&myTime, start, stop);
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
+  printf("h000\n");
   
   fprintf(cfg->time, "%0.3f ", myTime/MILLISECS); /* elapsed time */
 }
