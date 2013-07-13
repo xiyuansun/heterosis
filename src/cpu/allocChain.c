@@ -7,14 +7,14 @@
 
 Chain *allocChain(Config *cfg){
 
-  Chain *a = malloc(sizeof(Chain));
+  Chain *a = (Chain*) calloc(1, sizeof(Chain));
   
   if(cfg->verbose)
     printf("  Allocating chain.\n");
   
   /* data */  
   
-  a->y = (count_t*) calloc(cfg->N * cfg->G, sizeof(count_t));
+  a->y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t));
   a->yMeanG = (num_t*) malloc(cfg->N * sizeof(num_t));
   a->grp = (int*) malloc(cfg->N * sizeof(int));
 
