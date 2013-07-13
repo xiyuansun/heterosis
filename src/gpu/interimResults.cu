@@ -27,7 +27,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
     if(cfg->constSigC){
       fprintf(fp, ". ");
     } else {
-      CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->sigC0), sizeof(num_t), cudaMemcpyDeviceToHost));
+      CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->sigC), sizeof(num_t), cudaMemcpyDeviceToHost));
       fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
     }
     

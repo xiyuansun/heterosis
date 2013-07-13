@@ -12,7 +12,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   if(cfg->verbose)
     printf("  Running chain.\n");
   
-  printHeaders(a, cfg);
+  printHeaders(host_a, dev_a, cfg);
   
   for(m = 0; m < a->M; ++m){
     
@@ -35,7 +35,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleEps(host_a, dev_a,  cfg);
     samplePhiAlpDel(host_a, dev_a, cfg); 
     
-    intermResults(host_a, dev_a,  cfg);
+    intermResults(host_a, dev_a, cfg);
     
     if(cfg->verbose)
       printf("\n");

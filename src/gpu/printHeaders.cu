@@ -7,10 +7,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-void printHeaders(Chain *a, Config *cfg){
+void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   FILE *fp;
   int n, g, G = cfg->G;
   char file[BUF];
+  num_t tmp, *tmpv,;
  
   /* differential expression and heterosis probabilities */
   
@@ -41,17 +42,38 @@ void printHeaders(Chain *a, Config *cfg){
     
     /* print initial values */
     
-	fprintf(fp, NUM_TF, a->sigC); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->d); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->tau); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->thePhi); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->theAlp); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->theDel); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->sigPhi); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->sigAlp); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->sigDel); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->piAlp); fprintf(fp, " ");
-	fprintf(fp, NUM_TF, a->piDel); fprintf(fp, "\n");
+    CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->sigC), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->d), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->tau), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->thePhi), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->theAlp), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->theDel), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->sigPhi), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->sigAlp), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->sigDel), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->piAlp), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
+	
+	CUDA_CALL(cudaMemcpy(&(tmp), &(dev_a->piDel), sizeof(num_t), cudaMemcpyDeviceToHost));
+	fprintf(fp, NUM_TF, tmp); fprintf(fp, "\n");
     
     fclose(fp);
   }
@@ -92,39 +114,48 @@ void printHeaders(Chain *a, Config *cfg){
     
     /* print initial values */
 
+    tmpv = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));
+  
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->c, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(n = 0; n < cfg->N; ++n){
-      fprintf(fp, NUM_TF, a->c[n]);
+      fprintf(fp, NUM_TF, tmpv[n]);
       fprintf(fp, " ");
     }
     
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->phi, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, a->phi[g]);
+      fprintf(fp, NUM_TF, tmpv[g]);
       fprintf(fp, " ");
     }
     
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->alp, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, a->alp[g]);
+      fprintf(fp, NUM_TF, tmpv[g]);
       fprintf(fp, " ");
     }
     
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->del, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, a->del[g]);
+      fprintf(fp, NUM_TF, tmpv[g]);
       fprintf(fp, " ");
     }
     
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->eta, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, a->eta[g]);
+      fprintf(fp, NUM_TF, tmpv[g]);
       fprintf(fp, " ");
     }
     
+    CUDA_CALL(cudaMemcpy(tmpv, host_a->eps, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g)
       for(n = 0; n < cfg->N; ++n){
-        fprintf(fp, NUM_TF, a->eps[iG(n, g)]);
+        fprintf(fp, NUM_TF, tmpv[iG(n, g)]);
         fprintf(fp, " ");
       }
      
     fprintf(fp, "\n");  
     fclose(fp);
+    free(tmpv);
   }
   
   /* acceptance rates of Metropolis steps */
