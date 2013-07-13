@@ -15,6 +15,7 @@ typedef struct {
   int N; /* number of libraries (samples) */
   int G; /* number of genes */
   int burnin; 
+  int heterosis;
   int m; /* current place in the chain */
   
   /* curand states */
