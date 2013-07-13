@@ -27,12 +27,12 @@ __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
   num_t gs = a->gamAlp * a->gamAlp;
   num_t ss = a->sigAlp[a->mSigAlp] * a->sigAlp[a->mSigAlp];
-  /*num_t den = a->s1 * gs + ss;
+  num_t den = a->s1 * gs + ss;
 
   num_t m = gs * a->s2 / den;
   num_t s = sqrt(gs * ss / den);
 
-  a->theAlp[a->mTheAlp + 1] = rnormalDevice(a, 1, m, s);
+  /*a->theAlp[a->mTheAlp + 1] = rnormalDevice(a, 1, m, s);
   ++a->mTheAlp;*/
 }
 
