@@ -13,7 +13,9 @@ __host__ void chains(int argc, char **argv){
     printf("Running %d chains.\n", cfg->chains);
   
   for(i = 0; i < cfg->chains; ++i){
-    fprintf(log, "Chain %d\n", i);
+    if(cfg->verbose) 
+      printf("Chain %d\n", i);
+
     cfg->chainNum = i;
     oneChain(cfg);
   }
