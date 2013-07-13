@@ -13,7 +13,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"data", required_argument, 0, 'i'},
     {"group", required_argument, 0, 'g'},
     {"chains", required_argument, 0, 'c'},
-    {"iter", required_argument, 0, 'M'},
+    {"iter", required_argument, 0, 'm'},
     {"burnin", required_argument, 0, 'b'},
     {"rates", no_argument, 0, 'r'},  
     {"hyper", no_argument, 0, 'h'},
@@ -53,13 +53,13 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "A:ab:B:c:C:d:e:f:g:G:hHi:jJk:l:m:M:n:o:pPq:rRs:S:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
+        "A:b:B:c:C:d:D:e:f:g:G:hHi:I:jJk:l:m:M:n:pPq:rRs:S:t:u:vVw:x:y:z:Z:1:2:3:4:5:6:7:8:9:0:",
         long_options, &option_index);
     
     if(c == -1)
       break;
       
-    if(c == 'i' || c == 'D'){ /* data */
+    if(c == 'i' || c == 'I'){ /* data */
       strcpy(cfg->dataFile, optarg);
       
     } else if(c == 'g' || c == 'G') { /* group */
