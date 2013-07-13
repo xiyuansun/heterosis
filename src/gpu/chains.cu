@@ -10,7 +10,7 @@ __host__ void chains(int argc, char **argv){
   Config *cfg = config(argc, argv); 
   
   if(cfg->verbose)  
-    printf("Running %d chains.\n", cfg->chains);
+    printf("Running %d chain(s).\n", cfg->chains);
   
   for(i = 0; i < cfg->chains; ++i){
     if(cfg->verbose) 

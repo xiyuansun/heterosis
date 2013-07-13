@@ -23,8 +23,14 @@ void printProbs(Chain *a, Config *cfg){
   cudaEventCreate(&stop);
   cudaEventRecord(start, 0);
   
-  if(cfg->verbose)  
-    printf("  Printing heterosis / diff-expr probabilities.\n");
+  if(cfg->verbose){ 
+    printf("  Printing differential expression ");
+
+    if(cfg->heterosis)
+      printf("and heterosis  ");
+      
+    printf("probabilities.\n");
+  }
 
   sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
   fp = fopen(file, "w"); 
