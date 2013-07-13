@@ -26,8 +26,11 @@ Config *config(int argc, char **argv){
   cfg->chains = 2;
   cfg->m = 1;
   cfg->M = 10;
+  cfg->N = 0;
+  cfg->G = 0;
   cfg->burnin = cfg->M / 2;
   cfg->joint = 0;
+  cfg->seed = 0;
 
   /* default initialization constants */
 
@@ -87,7 +90,7 @@ Config *config(int argc, char **argv){
    */
    
   if(!cfg->constTau)
-    cfg->tau = sqrt(rgamma(2, 3, 0));
+    cfg->tau = sqrt(rgamma(cfg->aTau, cfg->bTau, 0));
  
   if(!cfg->constPiAlp)
     cfg->piAlp = rbeta(cfg->aAlp, cfg->bAlp);
