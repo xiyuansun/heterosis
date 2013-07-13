@@ -115,16 +115,16 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
       }
     
       if(i < cfg->N){
-        fprintf(fp, NUM_TF, accC[g]);   fprintf(fp, " ");
+        fprintf(fp, NUM_TF, accC[i]);   fprintf(fp, " ");
       } else {
         fprintf(fp, ". ");
       }
       
       if(i < cfg->G){
-        fprintf(fp, NUM_TF, accPhi[g]); fprintf(fp, " ");
-        fprintf(fp, NUM_TF, accAlp[g]); fprintf(fp, " ");
-        fprintf(fp, NUM_TF, accDel[g]); fprintf(fp, " ");
-        fprintf(fp, NUM_TF, accEps[g]); fprintf(fp, " ");
+        fprintf(fp, NUM_TF, accPhi[i]); fprintf(fp, " ");
+        fprintf(fp, NUM_TF, accAlp[i]); fprintf(fp, " ");
+        fprintf(fp, NUM_TF, accDel[i]); fprintf(fp, " ");
+        fprintf(fp, NUM_TF, accEps[i]); fprintf(fp, " ");
       } else {
         fprintf(fp, ". . . . ");
       }
