@@ -51,7 +51,7 @@ __host__ void sampleEps(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("eps ");
 
-  sampleEps_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  sampleEps_kernel<<<G_GRID, G_BLOCK>>>(dev_a);
 
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
