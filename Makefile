@@ -59,7 +59,7 @@ $(CPUBIN): $(CCOBJ)
 $(CCOBJDIR)%.o: $(CCSRCDIR)%.c cpudirs
 	$(CC) $(CCFLAGS) $< -o $@ 
 
-gpu: $(GPUBIN) dirs
+gpu: $(GPUBIN)
 	
 $(GPUBIN): $(NVCCOBJ) 
 	$(NVCC) $(NVCCOBJ) $(LDFLAGS) -o $(GPUBIN) 
