@@ -32,8 +32,9 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleEps(host_a, dev_a, cfg);
     samplePhiAlpDel(host_a, dev_a, cfg); 
 
-printf("\ngone\n");
     fprintf(cfg->time, "\n");
     fprintf(cfg->log, "\n");
+    
+    printf("\ngone\n");
   }
 } 
