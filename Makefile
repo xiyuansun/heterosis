@@ -53,23 +53,31 @@ all: cpu
 
 cpu: $(CPUBIN)
 	
-$(CPUBIN): $(CCOBJ) 
-	mkdir -p $(BINDIR)
-	$(CC) $(CCOBJ) -o $(BINDIR)mcmc $(LDFLAGS)
+$(CPUBIN): $(CCOBJ) $(BINDIR) 
+	$(CC) $(CCOBJ) $(LDFLAGS) -o $(CPUBIN) 
 
-$(CCOBJDIR)%.o: $(CCSRCDIR)%.c
-	mkdir -p $(CCOBJDIR)
+$(CCOBJDIR)%.o: $(CCSRCDIR)%.c ${CCOBJDIR}
 	$(CC) $(CCFLAGS) $< -o $@ 
 
 gpu: $(GPUBIN)
 	
-$(GPUBIN): $(NVCCOBJ)
-	mkdir -p $(BINDIR)
-	$(NVCC) $(NVCCOBJ) -o $(BINDIR)gpumcmc $(LDFLAGS)
+$(GPUBIN): $(NVCCOBJ) $(BINDIR)
+	$(NVCC) $(NVCCOBJ) $(LDFLAGS) -o $(GPUBIN) 
 
-$(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu
-	mkdir -p $(NVCCOBJDIR)
+$(NVCCOBJDIR)%.o: $(NVCCSRCDIR)%.cu $(NVCCOBJDIR)
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
+
+$(BINDIR):
+	mkdir $(BINDIR)
+
+${CCOBJDIR}: $(OBJDIR)
+	mkdir $(CCOBJDIR)
+	
+$(NVCCOBJDIR): $(OBJDIR)
+	mkdir $(NVCCOBJDIR)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
 
 clean:
 	rm -rf $(OBJDIR)

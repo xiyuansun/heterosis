@@ -121,8 +121,6 @@ __host__ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     return;
   }
 
-  printConfig(cfg);
-
   fprintf(cfg->log, "  Allocating chain.\n"); 
   allocChainDevice(host_a, dev_a, cfg);
 

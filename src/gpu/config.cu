@@ -65,7 +65,7 @@ Config *config(int argc, char **argv){
   system("mkdir -p ../out/");
   system("mkdir -p ../out/probs/");
   
-  cfg->log = stdout; /*fopen("../out/log.txt", "w+");*/
+  cfg->log = fopen("../out/log.txt", "w+");
   
   cfg->time = fopen("../out/time.txt", "w+");
   fprintf(cfg->time, "c ");
