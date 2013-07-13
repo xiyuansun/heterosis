@@ -98,7 +98,7 @@ __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   fprintf(cfg->log, "c ");
    
   sampleC_kernel1<<<N_GRID, N_BLOCK>>>(dev_a);
-printf("\n2\n");
+
   for(n = 0; n < cfg->N; ++n){ 
     lC(host_a, dev_a, cfg, n, 1);
     lC(host_a, dev_a, cfg, n, 0);
