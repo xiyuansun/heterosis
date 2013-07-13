@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cmpfunc (const void *a, const void *b){
+__host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
@@ -91,7 +91,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   G = cfg->G;
   
   if(y == NULL)
-    return NULL;
+    return;
 
   grp = readGrp(cfg);
   

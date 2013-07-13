@@ -35,7 +35,7 @@ __host__ Chain *allocChainHost(Config*);
 __host__ void allocChainDevice(Chain**, Chain**, Config*);
 __host__ Chain *chainDeviceToHost(Chain*, Chain*, Config*);
 
-__host__ void cmpfunc(const void*, const void*);
+__host__ int cmpfunc(const void*, const void*);
 __global__ void curand_setup_kernel(Chain*, int*);
 
 __global__ void newChain_kernel1(Chain*);
