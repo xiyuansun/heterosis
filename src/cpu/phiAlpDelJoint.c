@@ -58,10 +58,10 @@ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
     newDel = delProp(a, g);
 
     dl = lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
-       - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel);
+       - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel); 
     lp = 0 < dl ? 0 : dl;
-    lu = log(runiform(0, 1));
-    
+    lu = log(runiform(0, 1)); 
+
     if(lu < lp){ /* accept */
       a->phi[g] = newPhi;
       a->alp[g] = newAlp;
@@ -69,7 +69,7 @@ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
 
       a->tunePhi[g] *= 1.1; 
 
-      if(a->m >= a->burnin){
+      if(a->m > a->burnin){
         ++a->accPhi[g];
         ++a->accAlp[g];
         ++a->accDel[g];
@@ -85,10 +85,9 @@ void samplePhiAlpDelJoint(Chain *a, Config *cfg){ /* host */
   clock_t start = clock();
 
   if(cfg->verbose)
-    printf("phiAlpDelJoint ");
+    printf("phiAlpDelJoint ");  
   
-  samplePhiAlpDelJoint_kernel(a);
-
+  samplePhiAlpDelJoint_kernel(a); 
   time = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
   
   cfg->timePhi = time;

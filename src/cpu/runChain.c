@@ -16,6 +16,7 @@ void runChain(Chain *a, Config *cfg){
   printHeaders(a, cfg);
   
   for(m = 0; m < a->M; ++m){
+    
     if(cfg->verbose)
       printf("    iter %d | ", m);
     
@@ -33,7 +34,7 @@ void runChain(Chain *a, Config *cfg){
     sampleSigDel(a, cfg);
     sampleEta(a, cfg);
     sampleEps(a, cfg);
-    samplePhiAlpDel(a, cfg);
+    samplePhiAlpDel(a, cfg); 
     
     intermResults(a, cfg);
     

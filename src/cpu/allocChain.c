@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Chain *allocChainHost(Config *cfg){
+Chain *allocChain(Config *cfg){
 
   Chain *a = (Chain*) malloc(sizeof(Chain));
   
