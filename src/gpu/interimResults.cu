@@ -11,10 +11,10 @@ __global__ void updateProbs(Chain *a){
   int g = IDX;
 
   if(a->m > a->burnin){
-    if(g < G){
+    if(g < a->G){
       a->dex[g] += ((a->alp[g] * a->alp[g]) > 1e-6);
   
-      if(cfg->heterosis){
+      if(a->heterosis){
         a->hph[g] += (a->del[g] > fabs(a->alp[g]));
         a->lph[g] += (a->del[g] < -fabs(a->alp[g]));
         a->mph[g] += (fabs(a->del[g]) > 1e-6);
