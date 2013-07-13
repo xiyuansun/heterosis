@@ -33,8 +33,8 @@ __device__ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
 
 __global__ void sampleAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
  
- /* int g = IDX, G = a->G;
-  num_t old, nw, dl, lp, lu;
+  int g = IDX, G = a->G;
+ /* num_t old, nw, dl, lp, lu;
 
   if(g < G){ 
     old = a->alp[iG(a->mAlp, g)];
