@@ -38,7 +38,8 @@ void sampleEta(Chain *a, Config *cfg){
   double time;
   clock_t start = clock();
 
-  fprintf(cfg->log, "eta ");
+  if(cfg->verbose)
+    printf("eta ");
 
   sampleEta_kernel1(a);
   sampleEta_kernel2(a);

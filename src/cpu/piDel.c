@@ -40,7 +40,8 @@ void samplePiDel(Chain *a, Config *cfg){ /* host */
   if(cfg->constPiDel || !cfg->heterosis)
     return;
 
-  fprintf(cfg->log, "piDel ");
+  if(cfg->verbose)
+    printf("piDel ");
 
   samplePiDel_kernel1(a);
   samplePiDel_kernel2(a);

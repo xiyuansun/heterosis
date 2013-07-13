@@ -48,7 +48,8 @@ void sampleEps(Chain *a, Config *cfg){ /* host */
   double time;
   clock_t start = clock();
 
-  fprintf(cfg->log, "eps ");
+  if(cfg->verbose)
+    printf("eps ");
   
   sampleEps_kernel1(a);
   sampleEps_kernel2(a);

@@ -13,17 +13,18 @@ void getopts(Config *cfg, int argc, char **argv){
     {"data", required_argument, 0, 'i'},
     {"group", required_argument, 0, 'g'},
     {"chains", required_argument, 0, 'c'},
-    {"iter", required_argument, 0, 'M'},
+    {"iter", required_argument, 0, 'm'},
     {"burnin", required_argument, 0, 'b'},
     {"rates", no_argument, 0, 'r'},  
     {"hyper", no_argument, 0, 'h'},
     {"parms", no_argument, 0, 'p'},
     {"joint", no_argument, 0, 'j'},  
-    {"seed", required_argument, 0, 's'},  
+    {"seed", required_argument, 0, 's'}, 
+    {"verbose", no_argument, 0, 'v'},  
     {"sigma-c0", required_argument, 0, 'x'},
     {"d0", required_argument, 0, 'f'},
     {"a-tau", required_argument, 0, 'k'},
-    {"a-alpha", required_argument, 0, 'l'},
+    {"a-alpha", required_argument, 0, '0'},
     {"a-delta", required_argument, 0, '9'},  
     {"b-tau", required_argument, 0, 'n'},
     {"b-alpha", required_argument, 0, 'A'},
@@ -33,7 +34,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"gamma-delta", required_argument, 0, '8'},
     {"sigma-phi0", required_argument, 0, 't'},
     {"sigma-alpha0", required_argument, 0, 'u'},
-    {"sigma-delta0", required_argument, 0, 'v'},
+    {"sigma-delta0", required_argument, 0, 'l'},
     {"sigma-c", required_argument, 0, 'w'},
     {"d", required_argument, 0, 'd'},
     {"tau", required_argument, 0, 'y'},
@@ -52,13 +53,13 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "A:ab:B:c:C:d:e:f:g:G:hHi:jJk:l:m:M:n:o:pPq:rRs:S:t:u:v:w:x:y:z:1:2:3:4:5:6:7:8:9:",
+        "A:b:B:c:C:d:D:e:f:g:G:hHi:I:jJk:l:m:M:n:pPq:rRs:S:t:u:vVw:x:y:z:Z:1:2:3:4:5:6:7:8:9:0:",
         long_options, &option_index);
     
     if(c == -1)
       break;
       
-    if(c == 'i' || c == 'D'){ /* data */
+    if(c == 'i' || c == 'I'){ /* data */
       strcpy(cfg->dataFile, optarg);
       
     } else if(c == 'g' || c == 'G') { /* group */
@@ -88,6 +89,9 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 's' || c == 'S') { /* seed */
       cfg->seed = atoi(optarg);
     
+    } else if(c == 'v' || c == 'V') { /* verbose */
+      cfg->verbose = 1;
+    
     } else if(c == 'x') { /* sigma-c0 */
       cfg->sigC0 = atof(optarg);
     
@@ -97,7 +101,7 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'k') { /* a-tau */
       cfg->aTau = atof(optarg);
     
-    } else if(c == 'l') { /* a-alpha */
+    } else if(c == '0') { /* a-alpha */
       cfg->aAlp = atof(optarg);
     
     } else if(c == '9') { /* a-delta */
@@ -127,7 +131,7 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == 'u') { /* sigma-alpha0 */
       cfg->sigAlp0 = atof(optarg);
     
-    } else if(c == 'v') { /* sigma-delta0 */
+    } else if(c == 'l') { /* sigma-delta0 */
       cfg->sigDel0 = atof(optarg);
     
     } else if(c == 'w') { /* sigma-c */

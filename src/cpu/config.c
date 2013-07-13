@@ -25,6 +25,7 @@ Config *config(int argc, char **argv){
   cfg->M = 10;
   cfg->burnin = cfg->M / 2;
   cfg->joint = 0;
+  cfg->verbose = 0;
 
   /* default initialization constants */
 
@@ -76,11 +77,6 @@ Config *config(int argc, char **argv){
   
   if(cfg->parmsFlag)
     system("mkdir -p ../out/parms/"); 
-    
-  cfg->log = fopen("../out/log.txt", "w");
-  
-  if(cfg->log == NULL)
-    printf("ERROR: could not create log.\n");
   
   cfg->time = fopen("../out/time.txt", "w");
   fprintf(cfg->time, "c ");

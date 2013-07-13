@@ -54,7 +54,8 @@ void samplePhi(Chain *a, Config *cfg){ /* host */
   double time;
   clock_t start = clock();
   
-  fprintf(cfg->log, "phi ");
+  if(cfg->verbose)
+    printf("phi ");
   
   samplePhi_kernel1(a);
   samplePhi_kernel2(a);

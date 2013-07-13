@@ -86,8 +86,9 @@ void sampleAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 void sampleAlp(Chain *a, Config *cfg){ /* host */
   double time;
   clock_t start = clock();
-
-  fprintf(cfg->log, "alp ");
+  
+  if(cfg->verbose)
+    printf("alp ");
     
   sampleAlp_kernel1(a);
   sampleAlp_kernel2(a);

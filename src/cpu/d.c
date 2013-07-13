@@ -107,8 +107,9 @@ void sampleD(Chain *a, Config *cfg){ /* host */
   
   if(cfg->constD)
     return;
-    
-  fprintf(cfg->log, "d ");
+  
+  if(cfg->verbose)  
+    fprintf("d ");
    
   sampleD_kernel1(a);
 

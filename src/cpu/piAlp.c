@@ -40,7 +40,8 @@ void samplePiAlp(Chain *a, Config *cfg){ /* host */
   if(cfg->constPiAlp)
     return;
 
-  fprintf(cfg->log, "piAlp ");
+  if(cfg->verbose)
+    printf("piAlp ");
 
   samplePiAlp_kernel1(a);
   samplePiAlp_kernel2(a);  

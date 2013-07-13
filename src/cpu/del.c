@@ -83,7 +83,8 @@ void sampleDel(Chain *a, Config *cfg){ /* host */
   double time;
   clock_t start = clock();
   
-  fprintf(cfg->log, "del ");
+  if(cfg->verbose)
+    printf("del ");
   
   sampleDel_kernel1(a);
   sampleDel_kernel2(a);

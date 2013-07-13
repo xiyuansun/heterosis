@@ -92,7 +92,8 @@ void sampleC(Chain *a, Config *cfg){ /* host */
   double time;
   clock_t start = clock();
 
-  fprintf(cfg->log, "c ");
+  if(cfg->verbose)
+    printf("c ");
   
   sampleC_kernel1(a);
 

@@ -66,7 +66,7 @@ Config *config(int argc, char **argv){
   system("mkdir -p ../out/");
   system("mkdir -p ../out/probs/");
   
-  cfg->time = fopen("../out/cfg->time.txt", "w");
+  cfg->time = fopen("../out/time.txt", "w");
   fprintf(cfg->time, "c ");
 
   if(!cfg->constTau){
@@ -132,7 +132,7 @@ Config *config(int argc, char **argv){
     fprintf(cfg->time, "phi alpha delta ");
   }
   
-  cfg->timeConfig = fopen("../out/cfg->timeConfig.txt", "w");
+  cfg->timeConfig = fopen("../out/timeConfig.txt", "w");
   fprintf(cfg->timeConfig, "alloc probs ");
   
   if(cfg->ratesFlag){

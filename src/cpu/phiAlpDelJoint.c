@@ -94,7 +94,8 @@ void samplePhiAlpDelJoint(Chain *a, Config *cfg){ /* host */
   double time;
   clock_t start = clock();
 
-  fprintf(cfg->log, "phiAlpDelJoint ");
+  if(cfg->verbose)
+    printf("phiAlpDelJoint ");
   
   samplePhiAlpDelJoint_kernel1(a);
   samplePhiAlpDelJoint_kernel2(a);
