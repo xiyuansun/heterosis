@@ -14,7 +14,7 @@
   printf("  %s\n", cudaGetErrorString(cudaGetLastError())); \
   exit(EXIT_FAILURE);}} 
   
-#define FREE(x, onHost) {if(onhost){free(x);} else {CUDA_CALL(cudaFree(x))}}
+#define FREE(x, onHost) {if(onHost){free(x);} else {CUDA_CALL(cudaFree(x))}}
 
 __host__ void pi1(int*, int, const char*);
 __host__ void pf1(num_t*, int, const char*);
