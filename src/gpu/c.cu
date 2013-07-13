@@ -96,7 +96,7 @@ __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventRecord(start, 0);  
   
   fprintf(cfg->log, "c ");
-  
+   printf("\n2\n");
   sampleC_kernel1<<<N_GRID, N_BLOCK>>>(dev_a);
 
   for(n = 0; n < cfg->N; ++n){ 
