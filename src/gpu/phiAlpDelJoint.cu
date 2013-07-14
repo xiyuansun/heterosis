@@ -99,7 +99,7 @@ __host__ void samplePhiAlpDelJoint(Chain *host_a, Chain *dev_a, Config *cfg){ /*
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   
-  cfg->timePhi = myTime;
-  cfg->timeAlp = myTime;
-  cfg->timeDel = myTime;  
+  cfg->timePhi = myTime / MILLISECS;
+  cfg->timeAlp = myTime / MILLISECS;
+  cfg->timeDel = myTime / MILLISECS;  
 }

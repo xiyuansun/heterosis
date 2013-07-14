@@ -46,5 +46,5 @@ __host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
 
-  cfg->timeSigC = myTime;
+  cfg->timeSigC = myTime / MILLISECS;
 }

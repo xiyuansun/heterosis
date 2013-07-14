@@ -65,5 +65,5 @@ __host__ void samplePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
 
-  cfg->timePhi = myTime;
+  cfg->timePhi = myTime / MILLISECS;
 }

@@ -50,5 +50,5 @@ __host__ void sampleEta(Chain *host_a, Chain *dev_a, Config *cfg){
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   
-  cfg->timeEta = myTime;
+  cfg->timeEta = myTime / MILLISECS;
 }

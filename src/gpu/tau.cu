@@ -52,5 +52,5 @@ void sampleTau(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
 
-  cfg->timeTau = myTime;
+  cfg->timeTau = myTime / MILLISECS;
 }

@@ -52,5 +52,5 @@ __host__ void samplePiAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
 
-  cfg->timePiAlp = myTime;
+  cfg->timePiAlp = myTime / MILLISECS;
 }

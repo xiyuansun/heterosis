@@ -70,5 +70,5 @@ __host__ void sampleDel(Chain *host_a, Chain *dev_a, Config* cfg){ /* host */
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
 
-  cfg->timeDel = myTime;
+  cfg->timeDel = myTime / MILLISECS;
 }

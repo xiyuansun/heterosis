@@ -65,5 +65,5 @@ __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
 
-  cfg->timeSigAlp = myTime;
+  cfg->timeSigAlp = myTime / MILLISECS;
 }

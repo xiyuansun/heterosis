@@ -109,5 +109,5 @@ __host__ void sampleD(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
 
-  cfg->timeD = myTime;
+  cfg->timeD = myTime / MILLISECS;
 }

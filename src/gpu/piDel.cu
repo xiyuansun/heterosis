@@ -52,5 +52,5 @@ __host__ void samplePiDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
 
-  cfg->timePiDel = myTime;
+  cfg->timePiDel = myTime / MILLISECS;
 }

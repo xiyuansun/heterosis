@@ -72,5 +72,5 @@ __host__ void sampleAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   
-  cfg->timeAlp = myTime;
+  cfg->timeAlp = myTime / MILLISECS;
 }
