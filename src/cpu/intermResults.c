@@ -193,7 +193,7 @@ void intermResults(Chain *a, Config *cfg){
   
   /* update across-chain sum of model likelihoods */
   
-  sumLogLik_kernel(a)
+  sumLogLik_kernel(a);
   
   ++cfg->m;
   ++a->m;
