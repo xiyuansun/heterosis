@@ -84,11 +84,6 @@ Config *config(int argc, char **argv){
 
   getopts(cfg, argc, argv);
   srand(cfg->seed);
-
-  /* 
-   *  All hyperparameters set in getopts() will be treated as constant.
-   *  All the others must be given initial values.
-   */
    
   if(!cfg->constTau)
     cfg->tau = sqrt(rgamma(cfg->aTau, cfg->bTau, 0));
@@ -113,7 +108,7 @@ Config *config(int argc, char **argv){
  
   if(!cfg->constSigC)
     cfg->sigC = runiform(0, cfg->sigC0);
-  
+   
   if(!cfg->constSigPhi)
     cfg->sigPhi = runiform(0, cfg->sigPhi0);
 
