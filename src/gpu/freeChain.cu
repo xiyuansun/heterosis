@@ -7,7 +7,7 @@
 __host__ void freeChain(Chain *a, Config *cfg, int onHost){
 
   if(cfg->verbose)
-    printf("  freeing chain.\n\n");
+    printf("  Freeing chain.\n\n");
 
   FREE(a->states, onHost);
   
