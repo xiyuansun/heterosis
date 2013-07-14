@@ -29,7 +29,7 @@ DEP+=c sigC eta d tau eps
 DEP+=thePhi theAlp theDel
 DEP+=sigPhi sigAlp sigDel
 DEP+=piAlp piDel
-DEP+=intermResults summarizeChain
+DEP+=interimResults summarizeChain
 DEP+=updateDICprep dic
 DEP+=mcmc main
 
