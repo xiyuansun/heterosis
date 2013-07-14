@@ -35,7 +35,7 @@ void printChain(Chain *a){
   printf("sigAlp0 = "); printf(NUM_TF, a->sigAlp0); printf("\n");
   printf("sigDel0 = "); printf(NUM_TF, a->sigDel0); printf("\n\n");
   */
-  pf1(a->c, a->N, "c =\n");
+ /* pf1(a->c, a->N, "c =\n");
   printf("sigC = "); printf(NUM_TF, a->sigC); printf("\n\n"); 
   pf2(a->eps, a->N, a->G, "eps =\n");
   pf1(a->eta, a->G, "eta =\n");
@@ -92,7 +92,7 @@ void printChain(Chain *a){
   printf("constSigDel = %d\n", a->constSigDel);
   printf("constPiAlp = %d\n", a->constPiAlp);
   printf("constPiDel = %d\n\n", a->constPiDel);
-
+*/
   /* for computing DIC */
   
   printf("meanLogLik = "); printf(NUM_TF, a->meanLogLik); printf("\n"); 
