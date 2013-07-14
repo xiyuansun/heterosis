@@ -14,7 +14,7 @@ __global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, in
 }
 
 Config *config(int argc, char **argv){
-  int N, G, i, *seeds;
+  int N, G, i, *seeds, *dev_seeds;
   
   Config *cfg = (Config*) malloc(sizeof(Config));
   cfg->chainNum = 1;
