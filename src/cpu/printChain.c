@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 void printChain(Chain *a){
-
+/*
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
@@ -15,6 +15,8 @@ void printChain(Chain *a){
   printf("burnin = %d\n", a->burnin);
   printf("heterosis = %d\n", a->heterosis);
   printf("parmsFlag = %d\n", a->parmsFlag);
+  
+  printf("sumLogLik = "); printf(NUM_TF, a->sumLogLik); printf("\n");
 
   pi2(a->y, a->N, a->G, "y = \n");
   pf1(a->yMeanG, a->N, "yMeanG =\n");
@@ -91,5 +93,15 @@ void printChain(Chain *a){
   printf("constSigAlp = %d\n", a->constSigAlp);
   printf("constSigDel = %d\n", a->constSigDel);
   printf("constPiAlp = %d\n", a->constPiAlp);
-  printf("constPiDel = %d\n", a->constPiDel);
+  printf("constPiDel = %d\n\n", a->constPiDel);
+*/
+
+  printf("sumLogLik = "); printf(NUM_TF, a->sumLogLik); printf("\n");
+  pf1(a->sumC, a->N, "sumC =\n");
+  pf1(a->sumPhi, a->G, "sumPhi =\n");
+  pf1(a->sumAlp, a->G, "sumAlp =\n");
+  pf1(a->sumDel, a->G, "sumDel =\n");
+  pf2(a->sumEps, a->N, a->G, "sumEps =\n");
+  
+  printf("\n---\n");
 }

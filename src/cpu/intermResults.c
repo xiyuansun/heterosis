@@ -186,6 +186,11 @@ void intermResults(Chain *a, Config *cfg){
     fclose(fp);  
   }
   
+  /* update across-chain sum of model likelihoods */
+  
+  if(a->m > a->burnin)
+    ++a->sumLogLik;
+  
   ++cfg->m;
   ++a->m;
 }

@@ -20,8 +20,27 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     a->lph[g] = 0;
     a->mph[g] = 0;
 
+    a->tunePhi[g] = 1;
+    
+    a->accPhi[g] = 0;
+    a->accAlp[g] = 0;
+    a->accDel[g] = 0;
+    
+    a->sumPhi[g] = 0;
+    a->sumAlp[g] = 0;
+    a->sumDel[g] = 0;
+    
     a->phi[g] = rnormal(a->thePhi, a->sigPhi);
-
+    a->eta[g] = 1/sqrt(rgamma(a->d / 2, 
+                   a->d * a->tau * a->tau / 2, 0));
+ 
+    for(n = 0; n < a->N; ++n){
+      a->eps[iG(n, g)] = rnormal(0, a->eta[g]);
+      a->tuneEps[iG(n, g)] = 1; 
+      a->accEps[iG(n, g)] = 0;
+      a->sumEps[iG(n, g)] = 0; 
+    }
+    
     u = runiform(0, 1);
     if(u < a->piAlp){
       a->alp[g] = 0;
@@ -35,48 +54,22 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     } else {
       a->del[g] = rnormal(a->theDel, a->sigDel);
     }
- 
-    a->eta[g] = 1/sqrt(rgamma(a->d / 2, 
-                   a->d * a->tau * a->tau / 2, 0));
-
-    for(n = 0; n < a->N; ++n)
-      a->eps[iG(n, g)] = rnormal(0, a->eta[g]);
-    
   }
 }
 
 void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  int n, g, G = a->G;
+  int n;
 
   a->m = 1;
-  
-  /* counts toward differential expression and heterosis */
+  a->sumLogLik = 0;
   
   a->tuneD = 400;
-  
-  for(n = 0; n < a->N; ++n)
-    a->tuneC[n] = 1;
-
-  for(g = 0; g < a->G; ++g){
-    a->tunePhi[g] = 1;
-
-    for(n = 0; n < a->N; ++n)
-      a->tuneEps[iG(n, g)] = 1;
-  }
-  
   a->accD = 0;
 
   for(n = 0; n < a->N; ++n){
+    a->tuneC[n] = 1; 
     a->accC[n] = 0;
-  
-    for(g = 0; g < a->G; ++g)
-      a->accEps[iG(n, g)] = 0;
-  }
-
-  for(g = 0; g < a->G; ++g){
-    a->accPhi[g] = 0;
-    a->accAlp[g] = 0;
-    a->accDel[g] = 0;
+    a->sumC[n] = 0;
   }
 }
 
