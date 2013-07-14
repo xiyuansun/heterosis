@@ -25,7 +25,6 @@
 
 #define MILLISECS 1.0 /* number of milliseconds in a unit of time in output */
 
-
 typedef int count_t;
 typedef float num_t;
 
