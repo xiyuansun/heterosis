@@ -20,6 +20,10 @@ typedef struct {
   int timeFlag; /* output how much time it takes to sample each kind of parameter */
   int verbose;
   int diagnostics;
+  
+  /* curand states */
+  
+  curandState_t states;
    
   int burnin; /* burn-in of chain. Defaults to M/2. */
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */

@@ -7,6 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+__global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, int G){ /* kernel <<<G, 1>>> */
+  int id = IDX;
+  if(id < MAX_NG)
+    curand_init(seeds[id], id, 0, &(states[id]));
+}
+
 Config *config(int argc, char **argv){
 
   Config *cfg = (Config*) malloc(sizeof(Config));
@@ -84,6 +90,17 @@ Config *config(int argc, char **argv){
 
   getopts(cfg, argc, argv);
   srand(cfg->seed);
+  
+  /* set up CURAND */
+  
+  seeds = (int*) malloc(MAX_NG * sizeof(int));
+  CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
+
+  for(i = 0; i < MAX_NG; ++i)
+    seeds[i] = rand();
+    
+  CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
+  curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(cfg->states, dev_seeds, cfg->N, cfg->G);
 
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.

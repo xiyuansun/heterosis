@@ -12,12 +12,6 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-__global__ void curand_setup_kernel(Chain *a, int *seeds){ /* kernel <<<G, 1>>> */
-  int id = IDX, N = a->N, G = a->G;
-  if(id < MAX_NG)
-    curand_init(seeds[id], id, 0, &(a->states[id]));
-}
-
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g = IDX, G = a->G;
   num_t u;
@@ -196,17 +190,6 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     tmpv[n] = lqts[n] - s;
     
   CUDA_CALL(cudaMemcpy((*host_a)->c, tmpv, cfg->N *sizeof(num_t), cudaMemcpyHostToDevice));
-
-  /* set up CURAND */
-  
-  seeds = (int*) malloc(MAX_NG * sizeof(int));
-  CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
-
-  for(i = 0; i < MAX_NG; ++i)
-    seeds[i] = rand();
-    
-  CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
-  curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(*dev_a, dev_seeds);
   
   newChain_kernel1<<<G_GRID, G_BLOCK>>>(*dev_a);
   newChain_kernel2<<<1, 1>>>(*dev_a);

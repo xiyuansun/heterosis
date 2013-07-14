@@ -24,5 +24,6 @@ void chains(int argc, char **argv){
   if(cfg->verbose)
     printf("Done running mcmc.\n");
 
+  cudaFree(cfg->states);
   free(cfg);
 }
