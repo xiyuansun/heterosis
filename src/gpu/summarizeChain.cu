@@ -6,8 +6,8 @@
 #include <stdlib.h>
 
 void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
-  int n, g, i, G = cfg->G,  niter = cfg->M - cfg->burnin;
-  num_t accD, *accC, *accPhi, *accAlp, *accDel, *accEps, *dex, *hph, *lph, *mph; 
+  int n, g, i, G = cfg->G,  niter = cfg->M - cfg->burnin, *dex, *hph, *lph, *mph;
+  num_t accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
   int nAccD, *nAccC, *nAccPhi, *nAccAlp, *nAccDel, *nAccEps;
   FILE *fp;
   char file[BUF];
@@ -42,12 +42,12 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(mph, host_a->mph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
   
   for(g = 0; g < G; ++g){
-    fprintf(fp, NUM_TF, ((num_t) a->dex[g]) / niter); fprintf(fp, " ");
+    fprintf(fp, NUM_TF, ((num_t) dex[g]) / niter); fprintf(fp, " ");
     
     if(cfg->heterosis){
-      fprintf(fp, NUM_TF, ((num_t) a->hph[g]) / niter); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, ((num_t) a->lph[g]) / niter); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, ((num_t) a->mph[g]) / niter); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, ((num_t) hph[g]) / niter); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, ((num_t) lph[g]) / niter); fprintf(fp, " ");
+      fprintf(fp, NUM_TF, ((num_t) mph[g]) / niter); fprintf(fp, " ");
     }
     fprintf(fp, "\n");
   }
