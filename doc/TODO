@@ -1,4 +1,2 @@
-1) scale down storage on gpu
-2) compute DIC in both versions (summary).
-3) compute Gelman factors 
-4) write documentation
+1) compute Gelman factors 
+2) write documentation
