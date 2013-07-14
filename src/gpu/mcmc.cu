@@ -27,6 +27,9 @@ void mcmc(int argc, char **argv){
 
     cfg->chainNum = i;
     
+    
+    printChain(host_a, dev_a, cfg);
+    
     runChain(host_a, dev_a, cfg);
     summarizeChain(host_a, dev_a, cfg);
 
