@@ -36,7 +36,7 @@ Config *config(int argc, char **argv){
   cfg->M = 10;
   cfg->N = 0;
   cfg->G = 0;
-  cfg->burnin = cfg->M / 2;
+  cfg->burnin = M / 2;
   cfg->joint = 0;
   cfg->seed = 22;
 
