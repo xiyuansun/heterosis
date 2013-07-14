@@ -101,9 +101,7 @@ Config *config(int argc, char **argv){
   N = cfg->N;
   G = cfg->G;
   
-  printf("ho\n");
 printf("%d %d %d %d\n", N, G, 1, 2);
-printf("hum\n");
   
   if(cfg->y == NULL){
     return NULL;
