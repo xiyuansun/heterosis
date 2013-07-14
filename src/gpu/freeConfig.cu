@@ -7,11 +7,11 @@
 
 __host__ void allocConfig(Config *cfg){
   free(cfg->y);
-  free(cfg->group);
+  free(cfg->grp);
   free(cfg->yMeanG);
   
   cudaFree(cfg->devY);
-  cudaFree(cfg->devGroup);
+  cudaFree(cfg->devGrp);
   cudaFree(cfg->devYMeanG);
 
   free(cfg);  
