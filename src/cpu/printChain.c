@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 void printChain(Chain *a){
-/*
+
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
@@ -92,14 +92,14 @@ void printChain(Chain *a){
   printf("constSigDel = %d\n", a->constSigDel);
   printf("constPiAlp = %d\n", a->constPiAlp);
   printf("constPiDel = %d\n\n", a->constPiDel);
-*/
+
   /* for computing DIC */
-  /*
+  
   printf("meanLogLik = "); printf(NUM_TF, a->meanLogLik); printf("\n"); 
   printf("logLikMeans = "); printf(NUM_TF, a->logLikMean); printf("\n"); 
   printf("dic = "); printf(NUM_TF, a->dic); printf("\n"); 
   
-  pf1(a->meanC, a->N, "meanC =\n");*/
+  pf1(a->meanC, a->N, "meanC =\n");
   pf1(a->meanPhi, a->G, "meanPhi =\n");
   pf1(a->meanAlp, a->G, "meanAlp =\n");
   pf1(a->meanDel, a->G, "meanDel =\n"); 
