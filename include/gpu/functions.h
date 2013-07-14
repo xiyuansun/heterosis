@@ -329,7 +329,7 @@ inline __device__ num_t delProp(Chain *a, int g){ /* device */
 
 
 inline __device__ float lfact(int n){
-  ret = 0;
+  float ret = 0;
   
   while(n > 1){
     ret += (n ? log((float) n) : log(FLT_MIN));
