@@ -97,6 +97,8 @@ Config *config(int argc, char **argv){
   N = cfg->N;
   G = cfg->G;
   
+  printf("%d %d\n", cfg->N, cfg->G);
+  
   seeds = (int*) malloc(MAX_NG * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
   CUDA_CALL(cudaMalloc((void**) &(cfg->states), MAX_NG * sizeof(curandState_t)));  
