@@ -19,10 +19,10 @@ __global__ void curand_setup_kernel(Chain *a, int *seeds){ /* kernel <<<G, 1>>> 
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
-  int n, g = IDX;
+  int n, g = IDX, G = a->G;
   num_t u;
 
-  if(g < a->G){
+  if(g < G){
     a->dex[g] = 0;
     a->hph[g] = 0;
     a->lph[g] = 0;
