@@ -56,7 +56,7 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
       a->alp[g] = rnormalDevice(a, g, a->theAlp, a->sigAlp);
     }
     
-    u = runiform(0, 1);
+    u = runiformDevice(a, g, 0, 1);
     if(u < a->piDel){
       a->del[g] = 0;
     } else {
