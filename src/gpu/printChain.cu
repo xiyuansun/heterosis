@@ -40,7 +40,7 @@ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   pf2(a->eps, a->N, a->G, "eps =\n");
   pf1(a->eta, a->G, "eta =\n");
   printf("d = "); printf(NUM_TF, a->d); printf("\n");
-  printf("tau = "); printf(NUM_TF, a->d); printf("\n");
+  printf("tau = "); printf(NUM_TF, a->tau); printf("\n");
   pf1(a->phi, a->G, "phi =\n");
   pf1(a->alp, a->G, "alp =\n");
   pf1(a->del, a->G, "del =\n");
