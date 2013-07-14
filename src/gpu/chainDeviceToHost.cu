@@ -126,7 +126,7 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   /* for computing DIC */
   
   CUDA_CALL(cudaMemcpy(allHost_a->meanC, cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMemcpy(allHost_a->meanPhi), cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMemcpy(allHost_a->meanPhi, cfg->G * sizeof(num_t)));
   CUDA_CALL(cudaMemcpy(allHost_a->meanAlp, cfg->G * sizeof(num_t)));
   CUDA_CALL(cudaMemcpy(allHost_a->meanDel, cfg->G * sizeof(num_t)));
   CUDA_CALL(cudaMemcpy(allHost_a->meanEps, cfg->N * cfg->G * sizeof(num_t)));  
