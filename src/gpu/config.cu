@@ -98,8 +98,6 @@ Config *config(int argc, char **argv){
   /* read data and grp */
   
   cfg->y = readData(cfg);
-    printf("outside readdata %d %d\n", cfg->N, cfg->G);
-  
   
   N = cfg->N;
   G = cfg->G;
@@ -108,7 +106,9 @@ Config *config(int argc, char **argv){
     return NULL;
   }
 
+printf("outside readdata %d %d\n", cfg->N, cfg->G);
   cfg->grp = readGrp(cfg);
+  
   
   if(cfg->grp == NULL){
     free(cfg->y);
