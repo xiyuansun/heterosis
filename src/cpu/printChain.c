@@ -98,10 +98,10 @@ void printChain(Chain *a){
   printf("meanLogLik = "); printf(NUM_TF, a->meanLogLik); printf("\n"); 
   printf("logLikMeans = "); printf(NUM_TF, a->logLikMean); printf("\n"); 
   printf("dic = "); printf(NUM_TF, a->dic); printf("\n"); 
-  */
+  
   pf1(a->meanC, a->N, "meanC =\n");
   pf1(a->meanPhi, a->G, "meanPhi =\n");
-  pf1(a->meanAlp, a->G, "meanAlp =\n");
+  pf1(a->meanAlp, a->G, "meanAlp =\n");*/
   pf1(a->meanDel, a->G, "meanDel =\n"); 
   pf2(a->meanEps, a->N, a->G, "meanEps =\n");
 
