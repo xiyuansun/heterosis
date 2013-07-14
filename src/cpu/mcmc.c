@@ -20,8 +20,8 @@ void mcmc(int argc, char **argv){
   
   for(i = 0; i < cfg->chains; ++i){
   
-    printChain(a);
-  
+    /*printChain(a);
+  */
     if(cfg->verbose)
       printf("Chain %d\n", i);
 
