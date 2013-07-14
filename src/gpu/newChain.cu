@@ -36,7 +36,7 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     a->accAlp[g] = 0;
     a->accDel[g] = 0;
 
-    a->tunePhi[g] = 1;
+    a->tunePhi[g] = 1; 
 
     for(n = 0; n < a->N; ++n){
       a->accEps[iG(n, g)] = 0;
