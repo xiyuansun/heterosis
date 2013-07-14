@@ -93,12 +93,14 @@ void printChain(Chain *a){
   printf("constPiAlp = %d\n", a->constPiAlp);
   printf("constPiDel = %d\n\n", a->constPiDel);
 */
-  printf("sumLogLik = "); printf(NUM_TF, a->sumLogLik); printf("\n");
+  
   pf1(a->sumC, a->N, "sumC =\n");
   pf1(a->sumPhi, a->G, "sumPhi =\n");
   pf1(a->sumAlp, a->G, "sumAlp =\n");
   pf1(a->sumDel, a->G, "sumDel =\n");
   pf2(a->sumEps, a->N, a->G, "sumEps =\n");
+  
+  pf1(a->logLiks, a->M - a->burnin, "logLiks =\n");
   
   printf("\n-------\n");
 }

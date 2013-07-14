@@ -17,7 +17,7 @@ typedef struct {
   int parmsFlag;
   int m; /* current place in the chain */
   
-  num_t sumLogLik; /* for computing DIC */
+  num_t *logLiks; /* for computing DIC */
   
   /* initialization constants */
   

@@ -66,5 +66,7 @@ Chain *allocChain(Config *cfg){
   a->sumAlp = (num_t*) malloc(cfg->G * sizeof(num_t));
   a->sumDel = (num_t*) malloc(cfg->G * sizeof(num_t));
     
+  a->logLiks = (num_t*) malloc((cfg->M - cfg->burnin) * sizeof(num_t)); 
+    
   return a;
 }

@@ -63,5 +63,7 @@ void freeChain(Chain *a, Config *cfg){
   free(a->sumAlp);
   free(a->sumDel);
   
+  free(a->logLiks);
+  
   free(a);
 }

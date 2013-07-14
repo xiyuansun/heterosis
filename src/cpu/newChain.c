@@ -58,13 +58,14 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 }
 
 void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  int n;
+  int m, n;
 
   a->m = 1;
-  a->sumLogLik = 0;
-  
   a->tuneD = 400;
   a->accD = 0;
+
+  for(m = 0; m < (a->M - a->burnin); ++m)
+    a->logLiks[m] = 0;
 
   for(n = 0; n < a->N; ++n){
     a->tuneC[n] = 1; 

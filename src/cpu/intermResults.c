@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void sumLogLik_kernel1(Chain *a){ /* kernel<<<G, 1>>> */
+void logLiks_kernel1(Chain *a){ /* kernel<<<G, 1>>> */
   int n, g, N = a->N, G = a->G;
   num_t lam;
   
@@ -21,24 +21,24 @@ void sumLogLik_kernel1(Chain *a){ /* kernel<<<G, 1>>> */
   }
 }
 
-void sumLogLik_kernel2(Chain *a){
-  a->sumLogLik += a->s1;
+void logLiks_kernel2(Chain *a){
+  a->logLiks[a->m - a->burnin - 1] = a->s1;
 }
 
-void sumLogLik(Chain *a, Config *cfg){
+void logLiks(Chain *a, Config *cfg){
   int g;
   
   if(cfg->m <= cfg->burnin)
     return;
 
-  sumLogLik_kernel1(a);
+  logLiks_kernel1(a);
   
   /* pairwise sum in thrust */
   a->s1 = 0;
   for(g = 0; g < cfg->G; ++g)
     a->s1 += a->tmp1[g];
   
-  sumLogLik_kernel2(a);
+  logLiks_kernel2(a);
 }
 
 void intermResults(Chain *a, Config *cfg){
@@ -221,7 +221,7 @@ void intermResults(Chain *a, Config *cfg){
   }
   
   /* update across-chain sum of model likelihoods */
-  sumLogLik(a, cfg);
+  logLiks(a, cfg);
   
   ++cfg->m;
   ++a->m;
