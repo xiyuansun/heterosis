@@ -328,7 +328,7 @@ inline __device__ num_t delProp(Chain *a, int g){ /* device */
 }
 
 inline __device__ int lfact(int n){
-  return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + log(n));
+  return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + log((float) n));
 }
 
 inline __device__ num_t logLik(count_t *y, int *group, int N, int G, 
