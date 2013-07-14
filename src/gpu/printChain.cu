@@ -34,7 +34,7 @@ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   printf("sigPhi0 = "); printf(NUM_TF, a->sigPhi0); printf("\n");
   printf("sigAlp0 = "); printf(NUM_TF, a->sigAlp0); printf("\n");
   printf("sigDel0 = "); printf(NUM_TF, a->sigDel0); printf("\n\n");
-  
+  */
   pf1(a->c, a->N, "c =\n");
   printf("sigC = "); printf(NUM_TF, a->sigC); printf("\n\n"); 
   pf2(a->eps, a->N, a->G, "eps =\n");
@@ -52,7 +52,7 @@ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   printf("sigDel = "); printf(NUM_TF, a->sigDel); printf("\n");
   printf("piAlp = "); printf(NUM_TF, a->piAlp); printf("\n"); 
   printf("piDel = "); printf(NUM_TF, a->piDel); printf("\n\n");
-*/
+
   pi1(a->dex, a->G, "dex =\n");
   pi1(a->hph, a->G, "hph =\n");
   pi1(a->lph, a->G, "lph =\n"); 
