@@ -23,7 +23,7 @@ Config *config(int argc, char **argv){
   /* default filenames */        
 
   strcpy(cfg->dataFile, "../data/data.txt"); 
-  strcpy(cfg->grpFile, "../data/grp.txt");
+  strcpy(cfg->groupFile, "../data/grp.txt");
    
   cfg->ratesFlag = 0;
   cfg->hyperFlag = 0;
