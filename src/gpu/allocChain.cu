@@ -70,7 +70,7 @@ __host__ Chain *allocChainHost(Config *cfg){
 #include <stdlib.h>
 
 __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
-
+  int N = cfg->N, G = cfg->G;
   *host_a = (Chain*) malloc(sizeof(Chain));
  
   /* data */   
