@@ -20,7 +20,6 @@ void getopts(Config *cfg, int argc, char **argv){
     {"parms", no_argument, 0, 'p'},
     {"rates", no_argument, 0, 'r'},  
     {"verbose", no_argument, 0, 'v'},
-    {"diagnostics", no_argument, 0, 'E'},
     {"time", no_argument, 0, 't'},
     {"seed", required_argument, 0, 's'},   
     {"sigma-c0", required_argument, 0, 'x'},
@@ -55,7 +54,7 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "A:b:B:c:C:d:D:e:Ef:g:G:hHi:I:jJk:l:m:M:n:pPq:rRs:S:tTu:vVw:x:X:y:z:Z:1:2:3:4:5:6:7:8:9:0:",
+        "A:b:B:c:C:d:D:e:f:g:G:hHi:I:jJk:l:m:M:n:pPq:rRs:S:tTu:vVw:x:X:y:z:Z:1:2:3:4:5:6:7:8:9:0:",
         long_options, &option_index);
     
     if(c == -1)
@@ -93,9 +92,6 @@ void getopts(Config *cfg, int argc, char **argv){
     
     } else if(c == 'v' || c == 'V') { /* verbose */
       cfg->verbose = 1;
-    
-    } else if(c == 'E') { /* diagnostics */
-      cfg->diagnostics = 1;
     
     } else if(c == 's' || c == 'S') { /* seed */
       cfg->seed = atoi(optarg);

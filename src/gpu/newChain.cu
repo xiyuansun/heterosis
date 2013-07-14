@@ -67,10 +67,6 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->accD = 0;
   a->tuneD = 400;
   
-  a->meanLogLik = 0;
-  a->logLikMean = 0;
-  a->dic = 0;
-  
   for(n = 0; n < a->N; ++n){
     a->accC[n] = 0;
     a->tuneC[n] = 1;
@@ -199,6 +195,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
 
   /* set up CURAND */
   
+  srand(cfg->seed);
   seeds = (int*) malloc(MAX_NG * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
 

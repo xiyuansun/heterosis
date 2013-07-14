@@ -122,17 +122,7 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->hph), cfg->G * sizeof(int)));
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->lph), cfg->G * sizeof(int)));
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->mph), cfg->G * sizeof(int)));
-
-  /* for computing DIC */
   
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->meanC), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->meanPhi), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->meanAlp), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->meanDel), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->meanEps), cfg->N * cfg->G * sizeof(num_t)));  
-  
-  /* pointer to chain on the device */
-
   CUDA_CALL(cudaMalloc((void**) dev_a, sizeof(Chain)));
   CUDA_CALL(cudaMemcpy(*dev_a, *host_a, sizeof(Chain), cudaMemcpyHostToDevice));
 }
