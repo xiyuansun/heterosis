@@ -108,6 +108,8 @@ Config *config(int argc, char **argv){
   free(seeds);
   cudaFree(dev_seeds);
 
+printf("curand setup on cfg\n");
+
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.
    *  All the others must be given initial values.
