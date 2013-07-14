@@ -213,7 +213,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
 
   /* hyperparameters */
   
-  copyHyperParms(host_a, dev_a, cfg);
+  copyHyperParms(*host_a, *dev_a, cfg);
     
   /* data */
   
