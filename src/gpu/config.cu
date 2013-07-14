@@ -98,10 +98,9 @@ Config *config(int argc, char **argv){
   /* read data and grp */
   
   cfg->y = readData(cfg);
+  
   N = cfg->N;
   G = cfg->G;
-  
-printf("%d %d\n", cfg->N, cfg->G);
   
   if(cfg->y == NULL){
     return NULL;
