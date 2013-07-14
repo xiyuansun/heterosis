@@ -140,7 +140,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 Chain *newChain(Config *cfg){ /* host */
   int n, g, N, G, *grp;
   count_t *y;
-  num_t s, tmp;
+  num_t tmp;
   Chain *a;
 
   y = readData(cfg);
@@ -170,8 +170,6 @@ Chain *newChain(Config *cfg){ /* host */
   a->N = cfg->N;
   a->G = cfg->G;
   a->burnin = cfg->burnin;
-  a->heterosis = cfg->heterosis;
-  a->parmsFlag = cfg->parmsFlag;
   
   for(n = 0; n < cfg->N; ++n){
     
