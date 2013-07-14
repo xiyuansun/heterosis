@@ -136,6 +136,8 @@ Config *config(int argc, char **argv){
   for(i = 0; i < MAX_NG; ++i)
     seeds[i] = rand();
     
+   printf("hi\n"); 
+    
   CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
   curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(cfg->states, dev_seeds, cfg->N, cfg->G);
 
