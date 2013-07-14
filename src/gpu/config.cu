@@ -138,8 +138,10 @@ Config *config(int argc, char **argv){
   if(cfg->timeFlag)
     system("mkdir -p ../out/time/");
   
-  if(cfg->diagnostics)
+  if(cfg->diagnostics){
     system("mkdir -p ../out/diagnostics/");
+    system("rm -f ../out/diagnostics/dic.txt");
+  }
   
   return cfg;
 }
