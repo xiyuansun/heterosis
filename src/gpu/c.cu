@@ -24,7 +24,7 @@ __global__ void lC_kernel2(Chain *a, int n, int newArg){ /* kernel <<<1, 1>>> */
     arg = a->Old[n];
   }
 
-  ret = arg * a->G * a->yMeanG[n] - exp(arg) * a->tmp2[0] - (arg*arg) / 
+  ret = arg * a->G * a->yMeanG[n] - exp(arg) * a->s1 - (arg*arg) / 
         (2 * a->sigC * a->sigC);
 
   if(newArg){

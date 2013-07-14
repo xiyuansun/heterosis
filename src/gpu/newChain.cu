@@ -60,7 +60,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   
   /* counts toward differential expression and heterosis */
   
-  a->tuneD = 100;
+  a->tuneD = 300;
   
   for(n = 0; n < a->N; ++n)
     a->tuneC[n] = 1;
