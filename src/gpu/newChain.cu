@@ -21,37 +21,37 @@ __global__ void curand_setup_kernel(Chain *a, int *seeds){ /* kernel <<<G, 1>>> 
 __host__ void copyHyperParms(Chain *host_a, Chain *dev_a, Config *cfg){
 
   if(cfg->constSigC)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->sigC), &(cfg->sigC), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->sigC), &(cfg->sigC), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constD)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->d), &(cfg->d), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->d), &(cfg->d), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constTau)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->tau), &(cfg->tau), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->tau), &(cfg->tau), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constThePhi)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->thePhi), &(cfg->thePhi), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->thePhi), &(cfg->thePhi), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constTheAlp)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->theAlp), &(cfg->theAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->theAlp), &(cfg->theAlp), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constTheDel)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->theDel), &(cfg->theDel), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->theDel), &(cfg->theDel), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constSigPhi)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->sigPhi), &(cfg->sigPhi), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->sigPhi), &(cfg->sigPhi), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constSigAlp)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->sigAlp), &(cfg->sigAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->sigAlp), &(cfg->sigAlp), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constSigDel)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->sigDel), &(cfg->sigDel), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->sigDel), &(cfg->sigDel), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constPiAlp)  
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->piAlp), &(cfg->piAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->piAlp), &(cfg->piAlp), sizeof(num_t), cudaMemcpyHostToDevice));
 
   if(cfg->constPiDel)
-    CUDA_CALL(cudaMemcpy(&((*dev_a)->piDel), &(cfg->piDel), sizeof(num_t), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(&(dev_a->piDel), &(cfg->piDel), sizeof(num_t), cudaMemcpyHostToDevice));
 }
 
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
