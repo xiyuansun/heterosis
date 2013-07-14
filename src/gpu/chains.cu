@@ -23,7 +23,7 @@ void chains(int argc, char **argv){
   for(i = 0; i < cfg->chains; ++i){
   
     if(cfg->verbose)
-      printf("Chain %d\n", i);
+      printf("  Chain %d\n", i);
 
     cfg->chainNum = i;
     
