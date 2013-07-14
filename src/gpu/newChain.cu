@@ -75,19 +75,6 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   int n, g, G, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
-
-  y = readData(cfg);
-  G = cfg->G;
-  
-  if(y == NULL)
-    return;
-
-  grp = readGrp(cfg);
-  
-  if(grp == NULL){
-    free(y);
-    return;
-  }
   
   if(cfg->verbose)
     printf("  Allocating chain.\n"); 
@@ -146,25 +133,6 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy(&((*dev_a)->sigDel), &(cfg->sigDel), sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&((*dev_a)->piAlp), &(cfg->piAlp), sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&((*dev_a)->piDel), &(cfg->piDel), sizeof(num_t), cudaMemcpyHostToDevice));
-  
-  /* data */
-  
-  CUDA_CALL(cudaMemcpy((*host_a)->grp, grp, cfg->N * sizeof(int), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy((*host_a)->y, y, cfg->N * cfg->G * sizeof(int), cudaMemcpyHostToDevice));
-  
-  yMeanG = (num_t*) malloc(cfg->N * sizeof(num_t));
-
-  for(n = 0; n < cfg->N; ++n){
-    tmp = 0;
-    
-    for(g = 0; g < cfg->G; ++g)
-      tmp += y[iG(n, g)];
-    
-    tmp /= cfg->G;
-    yMeanG[n] = tmp;   
-  }
-
-  CUDA_CALL(cudaMemcpy((*host_a)->yMeanG, yMeanG, cfg->N * sizeof(num_t), cudaMemcpyHostToDevice));
 
   /* initial normalization factors, c */
   

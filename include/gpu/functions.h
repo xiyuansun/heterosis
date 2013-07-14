@@ -24,6 +24,9 @@ __host__ void pf2(num_t*, int, int, const char*);
 __host__ void pi3(int*, int, int, int, const char*);
 __host__ void pf3(num_t*, int, int, int, const char*);
 
+
+__host__ void allocConfig(Config*);
+__host__ void freeConfig(Config*);
 __host__ Config *config(int, char**);
 __host__ void getopts(Config*, int, char**);
 __host__ void printConfig(Config*);

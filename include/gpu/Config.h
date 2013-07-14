@@ -24,6 +24,17 @@ typedef struct {
   /* curand states */
   
   curandState_t *states;
+  
+  /* data */
+  
+  count_t *y;
+  count_t *devY;
+  
+  int *group;
+  int *devGroup;
+  
+  num_t *yMeanG;
+  num_t *devYMeanG;
    
   int burnin; /* burn-in of chain. Defaults to M/2. */
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */
