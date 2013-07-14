@@ -132,7 +132,7 @@ void samplePiDel(Chain*, Config*);
 
 void runChain(Chain*, Config*);
 void resetChain(Chain*, Config*);
-void chains(int, char**);
+void mcmc(int, char**);
 
 num_t logLik(count_t*, int*, int, int, num_t*, num_t*, num_t*, num_t*, num_t*);
 void updateDICprep(Chain*);
