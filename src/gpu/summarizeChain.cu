@@ -31,10 +31,10 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
     return;
   }
   
-  dex = (num_t*) malloc(cfg->G * sizeof(int));
-  hph = (num_t*) malloc(cfg->G * sizeof(int));
-  lph = (num_t*) malloc(cfg->G * sizeof(int));
-  mph = (num_t*) malloc(cfg->G * sizeof(int));
+  dex = (int*) malloc(cfg->G * sizeof(int));
+  hph = (int*) malloc(cfg->G * sizeof(int));
+  lph = (int*) malloc(cfg->G * sizeof(int));
+  mph = (int*) malloc(cfg->G * sizeof(int));
   
   CUDA_CALL(cudaMemcpy(dex, host_a->dex, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(hph, host_a->hph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
