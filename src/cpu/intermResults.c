@@ -7,6 +7,11 @@
 #include <stdlib.h>
 #include <time.h>
 
+void sumLogLik_kernel(Chain *a){
+  if(a->m > a->burnin)
+    ++a->sumLogLik;
+}
+
 void intermResults(Chain *a, Config *cfg){
   FILE *fp;
   char file[BUF];
@@ -188,8 +193,7 @@ void intermResults(Chain *a, Config *cfg){
   
   /* update across-chain sum of model likelihoods */
   
-  if(a->m > a->burnin)
-    ++a->sumLogLik;
+  sumLogLik_kernel(a)
   
   ++cfg->m;
   ++a->m;

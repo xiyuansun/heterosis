@@ -135,6 +135,7 @@ void oneChain(Config*);
 void chains(int, char**);
 
 void printHeaders(Chain*, Config*);
+void sumLogLik_kernel(Chain*);
 void intermResults(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
 
