@@ -8,13 +8,13 @@
 #include <string.h>
 
 __global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, int G){ /* kernel <<<G, 1>>> */
-  int id = IDX, N, G, i;
+  int id = IDX;
   if(id < MAX_NG)
     curand_init(seeds[id], id, 0, &(states[id]));
 }
 
 Config *config(int argc, char **argv){
-  int *seeds;
+  int N, G, i, *seeds;
   
   Config *cfg = (Config*) malloc(sizeof(Config));
   cfg->chainNum = 1;
