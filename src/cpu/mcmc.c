@@ -34,8 +34,8 @@ void mcmc(int argc, char **argv){
   }
   
   freeChain(a, cfg);
-  /*free(cfg);
-  */
+  free(cfg);
+  
   if(cfg->verbose)
     printf("Done.\n");
 }
