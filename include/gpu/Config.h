@@ -23,7 +23,7 @@ typedef struct {
   
   /* curand states */
   
-  curandState_t states;
+  curandState_t *states;
    
   int burnin; /* burn-in of chain. Defaults to M/2. */
   int joint; /* indicate joint sampling of phi_g, alpha_g, and delta_g */
