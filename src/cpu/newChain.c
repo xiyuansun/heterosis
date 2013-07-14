@@ -97,6 +97,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 
     a->tunePhi[g] = 1;
 
+    a->meanPhi[g] = 0;
     a->meanAlp[g] = 0;
     a->meanDel[g] = 0;
 

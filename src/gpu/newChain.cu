@@ -133,6 +133,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
       a->tuneEps[iG(n, g)] = 1;
     }
     
+    a->meanPhi[g] = 0;
     a->meanAlp[g] = 0;
     a->meanDel[g] = 0;
     
