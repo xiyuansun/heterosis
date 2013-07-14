@@ -9,9 +9,6 @@ __host__ Chain *allocChainHost(Config *cfg){
   int N = cfg->N, G = cfg->G;
   Chain *a = (Chain*) malloc(sizeof(Chain));
   
-  if(cfg->verbose)
-    printf("  Allocating chain.\n");
-  
   /* curand states */
   
   a->states = (curandState_t*) malloc(MAX_NG * sizeof(curandState_t));
@@ -75,9 +72,6 @@ __host__ Chain *allocChainHost(Config *cfg){
 __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
 
   *host_a = (Chain*) malloc(sizeof(Chain));
-  
-  if(cfg->verbose)
-    printf("  Allocating chain.\n");
 
   /* curand states */
   
