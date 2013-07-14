@@ -30,8 +30,8 @@ typedef struct {
   count_t *y;
   count_t *devY;
   
-  int *group;
-  int *devGroup;
+  int *grp;
+  int *devGrp;
   
   num_t *yMeanG;
   num_t *devYMeanG;
