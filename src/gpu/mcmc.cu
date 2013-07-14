@@ -9,9 +9,6 @@ void mcmc(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
   Chain *host_a = NULL, *dev_a = NULL;
-  
-  if(cfg->verbose)
-    printf("Running %d chain(s).\n", cfg->chains);
 
   newChain(&host_a, &dev_a, cfg);  
   
@@ -19,6 +16,9 @@ void mcmc(int argc, char **argv){
     free(cfg);
     exit(EXIT_FAILURE);
   }
+  
+  if(cfg->verbose)
+    printf("Running %d chain(s).\n", cfg->chains);
   
   for(i = 0; i < cfg->chains; ++i){
   
@@ -35,9 +35,8 @@ void mcmc(int argc, char **argv){
   
   freeChain(host_a, cfg, 0);
   cudaFree(dev_a);
+  free(cfg);
   
   if(cfg->verbose)
-    printf("Done running mcmc.\n");
-
-  free(cfg);
+    printf("Done.\n");
 }

@@ -10,7 +10,74 @@ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
-void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+void copyHyperParms(Chain *a, Config *cfg){
+   
+  a->sigC = cfg->sigC;
+  a->d = cfg->d;
+  a->tau = cfg->tau;
+  a->thePhi = cfg->thePhi;
+  a->theAlp = cfg->theAlp;
+  a->theDel = cfg->theDel;
+  a->sigPhi = cfg->sigPhi;
+  a->sigAlp = cfg->sigAlp;
+  a->sigDel = cfg->sigDel;
+  a->piAlp = cfg->piAlp;
+  a->piDel = cfg->piDel;
+}
+
+void newChain_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
+  int n;
+
+  a->m = 1; 
+  a->accD = 0;
+  a->tuneD = 400;
+  
+  a->meanLogLik = 0;
+  a->logLikMean = 0;
+  a->dic = 0;
+  
+  for(n = 0; n < a->N; ++n){
+    a->meanC[n] = 0;
+    a->c[n] = 0;
+    a->accC[n] = 0;
+    a->tuneC[n] = 1;
+  }
+  
+  if(!a->constTau)
+    a->tau = sqrt(rgamma(a->aTau, a->bTau, 0));
+ 
+  if(!a->constPiAlp)
+    a->piAlp = rbeta(a->aAlp, a->bAlp);
+  
+  if(!a->constPiDel)
+    a->piDel = rbeta(a->aDel, a->bDel);
+
+  if(!a->constD)
+    a->d = runiform(0, a->d0);
+ 
+  if(!a->constThePhi)
+    a->thePhi = rnormal(0, a->gamPhi);
+
+  if(!a->constTheAlp)
+    a->theAlp = rnormal(0, a->gamAlp);
+
+  if(!a->constTheDel)
+    a->theDel = rnormal(0, a->gamDel);
+ 
+  if(!a->constSigC)
+    a->sigC = runiform(0, a->sigC0);
+   
+  if(!a->constSigPhi)
+    a->sigPhi = runiform(0, a->sigPhi0);
+
+  if(!a->constSigAlp)
+    a->sigAlp = runiform(0, a->sigAlp0);
+ 
+  if(!a->constSigDel)
+    a->sigDel = runiform(0, a->sigDel0);  
+}
+
+void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g, G = a->G;
   num_t u;
 
@@ -30,10 +97,14 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
     a->tunePhi[g] = 1;
 
+    a->meanAlp[g] = 0;
+    a->meanDel[g] = 0;
+
     for(n = 0; n < a->N; ++n){
+      a->eps[iG(n, g)] = rnormal(0, a->eta[g]);
+      a->meanEps[iG(n, g)] = 0;
       a->accEps[iG(n, g)] = 0;
       a->tuneEps[iG(n, g)] = 1;
-      a->eps[iG(n, g)] = rnormal(0, a->eta[g]);
     }
     
     u = runiform(0, 1);
@@ -49,23 +120,6 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     } else {
       a->del[g] = rnormal(a->theDel, a->sigDel);
     }
-  }
-}
-
-void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  int n;
-
-  a->m = 1; 
-  a->accD = 0;
-  a->tuneD = 400;
-  
-  a->meanLogLik = 0;
-  a->logLikMean = 0;
-  a->dic = 0;
-  
-  for(n = 0; n < a->N; ++n){
-    a->accC[n] = 0;
-    a->tuneC[n] = 1;
   }
 }
 
@@ -90,6 +144,9 @@ Chain *newChain(Config *cfg){ /* host */
     
     return NULL;
   }
+  
+  if(cfg->verbose)
+    printf("Allocating chain object.\n");
   
   a = allocChain(cfg);
 

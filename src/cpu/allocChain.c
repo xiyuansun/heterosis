@@ -9,9 +9,6 @@ Chain *allocChain(Config *cfg){
 
   Chain *a = (Chain*) malloc(sizeof(Chain));
   
-  if(cfg->verbose)
-    printf("  Allocating chain.\n");
-  
   /* data */   
   
   a->y = (count_t*) malloc(cfg->N * cfg->G * sizeof(count_t));

@@ -133,13 +133,15 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
       a->tuneEps[iG(n, g)] = 1;
     }
     
+    a->meanAlp[g] = 0;
+    a->meanDel[g] = 0;
+    
     u = runiformDevice(a, g, 0, 1);
     if(u < a->piAlp){
       a->alp[g] = 0;
     } else {
       a->alp[g] = rnormalDevice(a, g, a->theAlp, a->sigAlp);
     }
-    a->meanAlp[g] = 0;
     
     u = runiformDevice(a, g, 0, 1);
     if(u < a->piDel){
@@ -147,7 +149,6 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
     } else {
       a->del[g] = rnormalDevice(a, g, a->theDel, a->sigDel);
     }
-    a->meanDel[g] = 0;
   }
 }
 
@@ -172,7 +173,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   }
   
   if(cfg->verbose)
-    printf("  Allocating chain.\n"); 
+    printf("Allocating chain object.\n"); 
     
   allocChainDevice(host_a, dev_a, cfg);
   

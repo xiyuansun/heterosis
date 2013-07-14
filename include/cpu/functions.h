@@ -131,7 +131,7 @@ void samplePiDel_kernel3(Chain*);
 void samplePiDel(Chain*, Config*);
 
 void runChain(Chain*, Config*);
-void oneChain(Config*);
+void resetChain(Chain*, Config*);
 void chains(int, char**);
 
 num_t logLik(count_t*, int*, int, int, num_t*, num_t*, num_t*, num_t*, num_t*);
