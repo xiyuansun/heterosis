@@ -226,7 +226,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   }
   
   /* update across-chain sum of model likelihoods */
-  sumLogLik_kernel<<<1, 1>>>(a);
+  sumLogLik_kernel<<<1, 1>>>(dev_a);
   
   ++cfg->m;
   updateM<<<1, 1>>>(dev_a);
