@@ -18,7 +18,94 @@ __global__ void curand_setup_kernel(Chain *a, int *seeds){ /* kernel <<<G, 1>>> 
     curand_init(seeds[id], id, 0, &(a->states[id]));
 }
 
-__global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
+__host__ void copyHyperParms(Chain *host_a, Chain *dev_a, Config *cfg){
+
+  if(cfg->constSigC)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->sigC), &(cfg->sigC), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constD)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->d), &(cfg->d), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constTau)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->tau), &(cfg->tau), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constThePhi)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->thePhi), &(cfg->thePhi), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constTheAlp)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->theAlp), &(cfg->theAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constTheDel)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->theDel), &(cfg->theDel), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constSigPhi)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->sigPhi), &(cfg->sigPhi), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constSigAlp)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->sigAlp), &(cfg->sigAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constSigDel)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->sigDel), &(cfg->sigDel), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constPiAlp)  
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->piAlp), &(cfg->piAlp), sizeof(num_t), cudaMemcpyHostToDevice));
+
+  if(cfg->constPiDel)
+    CUDA_CALL(cudaMemcpy(&((*dev_a)->piDel), &(cfg->piDel), sizeof(num_t), cudaMemcpyHostToDevice));
+}
+
+__global__ void newChain_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
+  int n;
+
+  a->m = 1; 
+  a->accD = 0;
+  a->tuneD = 400;
+  
+  a->meanLogLik = 0;
+  a->logLikMean = 0;
+  a->dic = 0;
+  
+  for(n = 0; n < a->N; ++n){
+    a->c[n] = 0;
+    a->accC[n] = 0;
+    a->tuneC[n] = 1;
+  }
+  
+  if(!a->constTau)
+    a->tau = sqrt(rgammaDevice(a, 1, a->aTau, a->bTau, 0));
+ 
+  if(!a->constPiAlp)
+    a->piAlp = rbetaDevice(a, 1, a->aAlp, a->bAlp);
+  
+  if(!a->constPiDel)
+    a->piDel = rbetaDevice(a, 1, a->aDel, a->bDel);
+
+  if(!a->constD)
+    a->d = runiformDevice(a, 1, 0, a->d0);
+ 
+  if(!a->constThePhi)
+    a->thePhi = rnormalDevice(a, 1, 0, a->gamPhi);
+
+  if(!a->constTheAlp)
+    a->theAlp = rnormalDevice(a, 1, 0, a->gamAlp);
+
+  if(!a->constTheDel)
+    a->theDel = rnormalDevice(a, 1, 0, a->gamDel);
+ 
+  if(!a->constSigC)
+    a->sigC = runiformDevice(a, 1, 0, a->sigC0);
+   
+  if(!a->constSigPhi)
+    a->sigPhi = runiformDevice(a, 1, 0, a->sigPhi0);
+
+  if(!a->constSigAlp)
+    a->sigAlp = runiformDevice(a, 1, 0, a->sigAlp0);
+ 
+  if(!a->constSigDel)
+    a->sigDel = runiformDevice(a, 1, 0, a->sigDel0);  
+}
+
+__global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g = IDX, G = a->G;
   num_t u;
 
@@ -57,24 +144,6 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     } else {
       a->del[g] = rnormalDevice(a, g, a->theDel, a->sigDel);
     }
-  }
-}
-
-__global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  int n;
-
-  a->m = 1; 
-  a->accD = 0;
-  a->tuneD = 400;
-  
-  a->meanLogLik = 0;
-  a->logLikMean = 0;
-  a->dic = 0;
-  
-  for(n = 0; n < a->N; ++n){
-    a->c[n] = 0;
-    a->accC[n] = 0;
-    a->tuneC[n] = 1;
   }
 }
 
@@ -144,18 +213,8 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
 
   /* hyperparameters */
   
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->sigC), &(cfg->sigC), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->d), &(cfg->d), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->tau), &(cfg->tau), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->thePhi), &(cfg->thePhi), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->theAlp), &(cfg->theAlp), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->theDel), &(cfg->theDel), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->sigPhi), &(cfg->sigPhi), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->sigAlp), &(cfg->sigAlp), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->sigDel), &(cfg->sigDel), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->piAlp), &(cfg->piAlp), sizeof(num_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(&((*dev_a)->piDel), &(cfg->piDel), sizeof(num_t), cudaMemcpyHostToDevice));
-  
+  copyHyperParms(host_a, dev_a, cfg);
+    
   /* data */
   
   CUDA_CALL(cudaMemcpy((*host_a)->grp, grp, cfg->N * sizeof(int), cudaMemcpyHostToDevice));
@@ -186,8 +245,10 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
   curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(*dev_a, dev_seeds);
   
-  newChain_kernel1<<<G_GRID, G_BLOCK>>>(*dev_a);
-  newChain_kernel2<<<1, 1>>>(*dev_a);
+  /* set up the bulk of the chain */
+  
+  newChain_kernel1<<<1, 1>>>(*dev_a);
+  newChain_kernel2<<<G_GRID, G_BLOCK>>>(*dev_a);
  
   free(yMeanG);
   free(grp);
