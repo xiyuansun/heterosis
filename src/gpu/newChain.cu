@@ -72,7 +72,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
-  int n, g, N, G, i, *grp, *seeds, *dev_seeds;
+  int n, g, N, G, i, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
 
@@ -199,6 +199,4 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   free(tmpv); 
   free(grp);
   free(y);
-  free(seeds);
-  cudaFree(dev_seeds);
 }

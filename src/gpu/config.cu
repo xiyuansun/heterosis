@@ -14,7 +14,8 @@ __global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, in
 }
 
 Config *config(int argc, char **argv){
-
+  int *seeds;
+  
   Config *cfg = (Config*) malloc(sizeof(Config));
   cfg->chainNum = 1;
   
@@ -101,6 +102,9 @@ Config *config(int argc, char **argv){
     
   CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
   curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(cfg->states, dev_seeds, cfg->N, cfg->G);
+
+  free(seeds);
+  cudaFree(dev_seeds);
 
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.
