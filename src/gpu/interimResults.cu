@@ -27,7 +27,7 @@ __global__ void updateM(Chain* a){
   ++a->m;
 }
 
-void sumLogLik_kernel(Chain *a){
+__global__ void sumLogLik_kernel(Chain *a){
   if(a->m > a->burnin)
     ++a->sumLogLik;
 }
