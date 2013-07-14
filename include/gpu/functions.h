@@ -327,9 +327,11 @@ inline __device__ num_t delProp(Chain *a, int g){ /* device */
   return nw;
 }
 
+/*
 inline __device__ int lfact(int n){
   return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + log((float) n));
 }
+*/
 
 inline __device__ num_t logLik(count_t *y, int *group, int N, int G, 
               num_t *c, num_t *phi, num_t *alp, num_t *del, num_t *eps){
@@ -348,7 +350,7 @@ inline __device__ num_t logLik(count_t *y, int *group, int N, int G,
 	  }
 	
       llam = c[n] + eps[iG(n, g)] + mu;
-      ret += y[iG(n, g)] * llam - exp(llam) - lfact(y[iG(n, g)]);
+      ret += y[iG(n, g)] * llam - exp(llam); /* - lfact(y[iG(n, g)]); */
     }
   }
 
