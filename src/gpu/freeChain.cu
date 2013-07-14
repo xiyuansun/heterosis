@@ -57,13 +57,5 @@ __host__ void freeChain(Chain *a, Config *cfg, int onHost){
   FREE(a->lph, onHost);
   FREE(a->mph, onHost);
   
-  /* sums across iterations of parameters needed to compute DIC */
-
-  FREE(a->sumC, onHost);
-  FREE(a->sumEps, onHost);
-  FREE(a->sumPhi, onHost);
-  FREE(a->sumAlp, onHost);
-  FREE(a->sumDel, onHost);
-  
   free(a);
 }

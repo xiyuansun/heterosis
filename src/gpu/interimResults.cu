@@ -27,11 +27,6 @@ __global__ void updateM(Chain* a){
   ++a->m;
 }
 
-__global__ void sumLogLik_kernel(Chain *a){
-  if(a->m > a->burnin)
-    ++a->sumLogLik;
-}
-
 void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   FILE *fp;
   char file[BUF];
@@ -224,9 +219,6 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
 
     fclose(fp);  
   }
-  
-  /* update across-chain sum of model likelihoods */
-  sumLogLik_kernel<<<1, 1>>>(dev_a);
   
   ++cfg->m;
   updateM<<<1, 1>>>(dev_a);

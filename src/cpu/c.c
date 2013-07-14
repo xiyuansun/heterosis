@@ -79,9 +79,6 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
                                        proposal variance to sample closer to 
                                        the last accepted value. */
     }
-    
-    if(a->m > a->burnin) 
-      a->sumC[n] += a->c[n];   
   }
 }
 

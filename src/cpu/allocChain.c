@@ -58,15 +58,5 @@ Chain *allocChain(Config *cfg){
   a->lph = (int*) malloc(cfg->G * sizeof(int));
   a->mph = (int*) malloc(cfg->G * sizeof(int));
     
-  /* sums across iterations of parameters needed to compute DIC */
-  
-  a->sumC   = (num_t*) malloc(cfg->N * sizeof(num_t));
-  a->sumEps = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));
-  a->sumPhi = (num_t*) malloc(cfg->G * sizeof(num_t));
-  a->sumAlp = (num_t*) malloc(cfg->G * sizeof(num_t));
-  a->sumDel = (num_t*) malloc(cfg->G * sizeof(num_t));
-    
-  a->logLiks = (num_t*) malloc((cfg->M - cfg->burnin) * sizeof(num_t)); 
-    
   return a;
 }

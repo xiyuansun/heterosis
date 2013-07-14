@@ -7,40 +7,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-void logLiks_kernel1(Chain *a){ /* kernel<<<G, 1>>> */
-  int n, g, N = a->N, G = a->G;
-  num_t lam;
-  
-  for(g = 0; g < G; ++g){
-    a->tmp1[g] = 0;
-    for(n = 0; n < N; ++n){
-      lam = a->c[n] + a->eps[iG(n, g)] 
-          + mu(a, n, a->phi[g], a->alp[g], a->del[g]);
-      a->tmp1[g] += a->y[iG(n, g)] * lam - exp(lam);
-    }
-  }
-}
-
-void logLiks_kernel2(Chain *a){
-  a->logLiks[a->m - a->burnin - 1] = a->s1;
-}
-
-void logLiks(Chain *a, Config *cfg){
-  int g;
-  
-  if(cfg->m <= cfg->burnin)
-    return;
-
-  logLiks_kernel1(a);
-  
-  /* pairwise sum in thrust */
-  a->s1 = 0;
-  for(g = 0; g < cfg->G; ++g)
-    a->s1 += a->tmp1[g];
-  
-  logLiks_kernel2(a);
-}
-
 void intermResults(Chain *a, Config *cfg){
   FILE *fp;
   char file[BUF];
@@ -219,9 +185,6 @@ void intermResults(Chain *a, Config *cfg){
 
     fclose(fp);  
   }
-  
-  /* update across-chain sum of model likelihoods */
-  logLiks(a, cfg);
   
   ++cfg->m;
   ++a->m;

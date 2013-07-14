@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 void printChain(Chain *a){
-/*
+
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
@@ -91,16 +91,5 @@ void printChain(Chain *a){
   printf("constSigAlp = %d\n", a->constSigAlp);
   printf("constSigDel = %d\n", a->constSigDel);
   printf("constPiAlp = %d\n", a->constPiAlp);
-  printf("constPiDel = %d\n\n", a->constPiDel);
-*/
-  
-  pf1(a->sumC, a->N, "sumC =\n");
-  pf1(a->sumPhi, a->G, "sumPhi =\n");
-  pf1(a->sumAlp, a->G, "sumAlp =\n");
-  pf1(a->sumDel, a->G, "sumDel =\n");
-  pf2(a->sumEps, a->N, a->G, "sumEps =\n");
-  
-  pf1(a->logLiks, a->M - a->burnin, "logLiks =\n");
-  
-  printf("\n-------\n");
+  printf("constPiDel = %d\n", a->constPiDel);
 }

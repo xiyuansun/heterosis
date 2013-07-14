@@ -43,9 +43,6 @@ __global__ void samplePhi_kernel(Chain *a){ /* kernel <<<G, 1>>> */
       a->phi[g] = old;
       a->tunePhi[g] /= 1.1; 
     }
-    
-    if(a->m > a->burnin)
-      a->sumPhi[g] += a->phi[g];
   }
 }
 

@@ -135,12 +135,7 @@ void oneChain(Config*);
 void chains(int, char**);
 
 void printHeaders(Chain*, Config*);
-void sumLogLik_kernel(Chain*);
 void intermResults(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
-
-void logLiks_kernel1(Chain*);
-void logLiks_kernel2(Chain*);
-void logLiks(Chain*, Config*);
 
 #endif /* FUNCTIONS_H */

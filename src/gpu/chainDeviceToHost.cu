@@ -29,8 +29,6 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(allHost_a->G), &(dev_a->G), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->burnin), &(dev_a->burnin), sizeof(int), cudaMemcpyDeviceToHost));
   
-  CUDA_CALL(cudaMemcpy(&(allHost_a->sumLogLik), &(dev_a->sumLogLik), sizeof(num_t), cudaMemcpyDeviceToHost));
-  
   /* data */
 
   CUDA_CALL(cudaMemcpy(allHost_a->y, host_a->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyDeviceToHost));
@@ -120,16 +118,10 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiAlp), &(dev_a->constPiAlp), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->constPiDel), &(dev_a->constPiDel), sizeof(int), cudaMemcpyDeviceToHost));
 
-  CUDA_CALL(cudaMemcpy(allHost_a->dex, host_a->dex, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(allHost_a->hph, host_a->hph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));  
-  CUDA_CALL(cudaMemcpy(allHost_a->lph, host_a->lph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(allHost_a->mph, host_a->mph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  
-  CUDA_CALL(cudaMemcpy(allHost_a->sumC, host_a->sumC, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(allHost_a->sumPhi, host_a->sumPhi, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));  
-  CUDA_CALL(cudaMemcpy(allHost_a->sumAlp, host_a->sumAlp, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(allHost_a->sumDel, host_a->sumDel, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(allHost_a->sumEps, host_a->sumEps, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->dex, host_a->dex,  cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->hph, host_a->hph,  cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));  
+  CUDA_CALL(cudaMemcpy(allHost_a->lph, host_a->lph,  cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->mph, host_a->mph,  cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
   
   return allHost_a;
 }

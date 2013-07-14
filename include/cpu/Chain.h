@@ -17,8 +17,6 @@ typedef struct {
   int parmsFlag;
   int m; /* current place in the chain */
   
-  num_t *logLiks; /* for computing DIC */
-  
   /* initialization constants */
   
   num_t sigC0;
@@ -110,14 +108,6 @@ typedef struct {
   int constSigDel;
   int constPiAlp;
   int constPiDel;
-  
-  /* sums across iterations of parameters needed to compute DIC */
-  
-  num_t *sumC;
-  num_t *sumEps;
-  num_t *sumPhi;
-  num_t *sumAlp;
-  num_t *sumDel;
 
 } Chain;
 

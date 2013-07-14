@@ -18,8 +18,6 @@ typedef struct {
   int heterosis;
   int m; /* current place in the chain */
   
-  num_t sumLogLik; /* for computing DIC */
-  
   /* curand states */
   
   curandState_t *states;
@@ -115,14 +113,6 @@ typedef struct {
   int constSigDel;
   int constPiAlp;
   int constPiDel;
-  
-  /* sums across iterations of parameters needed to compute DIC */
-  
-  num_t *sumC;
-  num_t *sumEps;
-  num_t *sumPhi;
-  num_t *sumAlp;
-  num_t *sumDel;
 
 } Chain;
 

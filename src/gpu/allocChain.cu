@@ -58,14 +58,6 @@ __host__ Chain *allocChainHost(Config *cfg){
   a->hph = (int*) malloc(cfg->G * sizeof(int));
   a->lph = (int*) malloc(cfg->G * sizeof(int));
   a->mph = (int*) malloc(cfg->G * sizeof(int));
-
-  /* sums across iterations of parameters needed to compute DIC */
-  
-  a->sumC   = (num_t*) malloc(cfg->N * sizeof(num_t));
-  a->sumEps = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));
-  a->sumPhi = (num_t*) malloc(cfg->G * sizeof(num_t));
-  a->sumAlp = (num_t*) malloc(cfg->G * sizeof(num_t));
-  a->sumDel = (num_t*) malloc(cfg->G * sizeof(num_t));
     
   return a;
 }
@@ -130,16 +122,6 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->hph), cfg->G * sizeof(int)));
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->lph), cfg->G * sizeof(int)));
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->mph), cfg->G * sizeof(int)));
-
-  /* sums across iterations of parameters needed to compute DIC */
-  
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->sumC), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->sumPhi), cfg->G * sizeof(num_t)));  
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->sumAlp), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->sumDel), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->sumEps), cfg->N * cfg->G * sizeof(num_t)));
-  
-  /* chain pointer on the device */ 
   
   CUDA_CALL(cudaMalloc((void**) dev_a, sizeof(Chain)));
   CUDA_CALL(cudaMemcpy(*dev_a, *host_a, sizeof(Chain), cudaMemcpyHostToDevice));

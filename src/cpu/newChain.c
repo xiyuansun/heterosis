@@ -20,25 +20,20 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     a->lph[g] = 0;
     a->mph[g] = 0;
 
-    a->tunePhi[g] = 1;
-    
-    a->accPhi[g] = 0;
-    a->accAlp[g] = 0;
-    a->accDel[g] = 0;
-    
-    a->sumPhi[g] = 0;
-    a->sumAlp[g] = 0;
-    a->sumDel[g] = 0;
-    
     a->phi[g] = rnormal(a->thePhi, a->sigPhi);
     a->eta[g] = 1/sqrt(rgamma(a->d / 2, 
                    a->d * a->tau * a->tau / 2, 0));
- 
+
+    a->accPhi[g] = 0;
+    a->accAlp[g] = 0;
+    a->accDel[g] = 0;
+
+    a->tunePhi[g] = 1;
+
     for(n = 0; n < a->N; ++n){
-      a->eps[iG(n, g)] = rnormal(0, a->eta[g]);
-      a->tuneEps[iG(n, g)] = 1; 
       a->accEps[iG(n, g)] = 0;
-      a->sumEps[iG(n, g)] = 0; 
+      a->tuneEps[iG(n, g)] = 1;
+      a->eps[iG(n, g)] = rnormal(0, a->eta[g]);
     }
     
     u = runiform(0, 1);
@@ -58,19 +53,15 @@ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 }
 
 void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  int m, n;
+  int n;
 
-  a->m = 1;
-  a->tuneD = 400;
+  a->m = 1; 
   a->accD = 0;
-
-  for(m = 0; m < (a->M - a->burnin); ++m)
-    a->logLiks[m] = 0;
-
+  a->tuneD = 400;
+  
   for(n = 0; n < a->N; ++n){
-    a->tuneC[n] = 1; 
     a->accC[n] = 0;
-    a->sumC[n] = 0;
+    a->tuneC[n] = 1;
   }
 }
 

@@ -55,15 +55,5 @@ void freeChain(Chain *a, Config *cfg){
   free(a->lph);
   free(a->mph);
   
-  /* sums across iterations of parameters needed to compute DIC */
-
-  free(a->sumC);
-  free(a->sumEps);
-  free(a->sumPhi);
-  free(a->sumAlp);
-  free(a->sumDel);
-  
-  free(a->logLiks);
-  
   free(a);
 }
