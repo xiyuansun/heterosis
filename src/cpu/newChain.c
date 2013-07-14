@@ -126,7 +126,7 @@ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 Chain *newChain(Config *cfg){ /* host */
   int n, g, N, G, *grp;
   count_t *y;
-  num_t *lqts, s = 0, tmp, *tmpv;
+  num_t s, tmp;
   Chain *a;
 
   y = readData(cfg);
@@ -220,8 +220,6 @@ Chain *newChain(Config *cfg){ /* host */
   newChain_kernel1(a);
   newChain_kernel2(a);
   
-  free(lqts);
-  free(tmpv);
   free(grp);
   free(y);
 
