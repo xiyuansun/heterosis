@@ -66,6 +66,7 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
   a->dic = 0;
   
   for(n = 0; n < a->N; ++n){
+    a->meanC[n] = 0;
     a->c[n] = 0;
     a->accC[n] = 0;
     a->tuneC[n] = 1;
@@ -126,9 +127,10 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
     a->tunePhi[g] = 1; 
 
     for(n = 0; n < a->N; ++n){
+      a->eps[iG(n, g)] = rnormalDevice(a, g, 0, a->eta[g]);
+      a->meanEps[iG(n, g)] = 0;
       a->accEps[iG(n, g)] = 0;
       a->tuneEps[iG(n, g)] = 1;
-      a->eps[iG(n, g)] = rnormalDevice(a, g, 0, a->eta[g]);
     }
     
     u = runiformDevice(a, g, 0, 1);
@@ -137,6 +139,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
     } else {
       a->alp[g] = rnormalDevice(a, g, a->theAlp, a->sigAlp);
     }
+    a->meanAlp[g] = 0;
     
     u = runiformDevice(a, g, 0, 1);
     if(u < a->piDel){
@@ -144,6 +147,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
     } else {
       a->del[g] = rnormalDevice(a, g, a->theDel, a->sigDel);
     }
+    a->meanDel[g] = 0;
   }
 }
 
