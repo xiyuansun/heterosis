@@ -72,6 +72,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->dic = 0;
   
   for(n = 0; n < a->N; ++n){
+    a->c[n] = 0;
     a->accC[n] = 0;
     a->tuneC[n] = 1;
   }
@@ -173,30 +174,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   }
 
   CUDA_CALL(cudaMemcpy((*host_a)->yMeanG, yMeanG, cfg->N * sizeof(num_t), cudaMemcpyHostToDevice));
-
-  /* initial normalization factors, c */
   
-  lqts = (num_t*) malloc(cfg->N * sizeof(num_t));
-  tmpv = (num_t*) malloc(cfg->G * sizeof(num_t));
-  
-  s = 0;
-  for(n = 0; n < cfg->N; ++n){
-    for(g = 0; g < cfg->G; ++g)
-      tmpv[g] = y[iG(n, g)];
-      
-    qsort(tmpv, cfg->G, sizeof(num_t), cmpfunc);   
-     
-    lqts[n] = log(tmpv[(int) floor(cfg->G * 0.75)]);
-    s += lqts[n];
-  }
-  
-  s /= cfg->N;
-  
-  for(n = 0; n < cfg->N; ++n)
-    tmpv[n] = lqts[n] - s;
-    
-  CUDA_CALL(cudaMemcpy((*host_a)->c, tmpv, cfg->N *sizeof(num_t), cudaMemcpyHostToDevice));
-
   /* set up CURAND */ 
   
   seeds = (int*) malloc(MAX_NG * sizeof(int));
