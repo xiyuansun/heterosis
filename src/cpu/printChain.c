@@ -100,9 +100,9 @@ void printChain(Chain *a){
   printf("dic = "); printf(NUM_TF, a->dic); printf("\n"); 
   */
   pf1(a->meanC, a->N, "meanC =\n");
-  pf1(a->meanPhi, a->N, "meanPhi =\n");
-  pf1(a->meanAlp, a->N, "meanAlp =\n");
-  pf1(a->meanDel, a->N, "meanDel =\n"); 
+  pf1(a->meanPhi, a->G, "meanPhi =\n");
+  pf1(a->meanAlp, a->G, "meanAlp =\n");
+  pf1(a->meanDel, a->G, "meanDel =\n"); 
   pf2(a->meanEps, a->N, a->G, "meanEps =\n");
 
 }
