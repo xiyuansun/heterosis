@@ -104,6 +104,16 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<1, 1>>> */
  
   if(!a->constSigDel)
     a->sigDel = runiformDevice(a, 1, 0, a->sigDel0);  
+    
+  a->s1 = 0;
+  a->s2 = 0;
+
+  for(n = 0; n < a->N; ++n){
+    a->Old[n] = 0;
+    a->New[n] = 0;
+    a->lOld[n] = 0;
+    a->lNew[n] = 0;
+  }
 }
 
 __global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
@@ -111,6 +121,9 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   num_t u;
 
   if(g < G){
+    a->tmp1[g] = 0;
+    a->tmp2[g] = 0;
+    
     a->dex[g] = 0;
     a->hph[g] = 0;
     a->lph[g] = 0;

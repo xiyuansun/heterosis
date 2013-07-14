@@ -35,7 +35,7 @@ void printChain(Chain *a){
   printf("sigAlp0 = "); printf(NUM_TF, a->sigAlp0); printf("\n");
   printf("sigDel0 = "); printf(NUM_TF, a->sigDel0); printf("\n\n");
   
- /* pf1(a->c, a->N, "c =\n");
+  pf1(a->c, a->N, "c =\n");
   printf("sigC = "); printf(NUM_TF, a->sigC); printf("\n\n"); 
   pf2(a->eps, a->N, a->G, "eps =\n");
   pf1(a->eta, a->G, "eta =\n");
@@ -69,7 +69,7 @@ void printChain(Chain *a){
   pi1(a->accAlp, a->G, "accAlp =\n");
   pi1(a->accDel, a->G, "accDel =\n");
   pi2(a->accEps, a->N, a->G, "accEps =\n");
-    */
+    
   printf("s1 = "); printf(NUM_TF, a->s1); printf("\n");
   printf("s2 = "); printf(NUM_TF, a->s2); printf("\n\n");
   
