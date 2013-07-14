@@ -29,7 +29,21 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     a->mph[g] = 0;
 
     a->phi[g] = rnormalDevice(a, g, a->thePhi, a->sigPhi);
+    a->eta[g] = 1/sqrt(rgammaDevice(a, g, a->d / 2, 
+                   a->d * a->tau * a->tau / 2, 0));
 
+    a->accPhi[g] = 0;
+    a->accAlp[g] = 0;
+    a->accDel[g] = 0;
+
+    a->tunePhi[g] = 1;
+
+    for(n = 0; n < a->N; ++n){
+      a->accEps[iG(n, g)] = 0;
+      a->tuneEps[iG(n, g)] = 1;
+      a->eps[iG(n, g)] = rnormalDevice(a, g, 0, a->eta[g]);
+    }
+    
     u = runiformDevice(a, g, 0, 1);
     if(u < a->piAlp){
       a->alp[g] = 0;
@@ -43,48 +57,19 @@ __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
     } else {
       a->del[g] = rnormalDevice(a, g, a->theDel, a->sigDel);
     }
- 
-    a->eta[g] = 1/sqrt(rgammaDevice(a, g, a->d / 2, 
-                   a->d * a->tau * a->tau / 2, 0));
-
-    for(n = 0; n < a->N; ++n)
-      a->eps[iG(n, g)] = rnormalDevice(a, g, 0, a->eta[g]);
-    
   }
 }
 
 __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
-  int n, g, G = a->G;
+  int n;
 
-  a->m = 1;
-  
-  /* counts toward differential expression and heterosis */
-  
-  a->tuneD = 300;
-  
-  for(n = 0; n < a->N; ++n)
-    a->tuneC[n] = 1;
-
-  for(g = 0; g < a->G; ++g){
-    a->tunePhi[g] = 1;
-
-    for(n = 0; n < a->N; ++n)
-      a->tuneEps[iG(n, g)] = 1;
-  }
-  
+  a->m = 1; 
   a->accD = 0;
-
+  a->tuneD = 400;
+  
   for(n = 0; n < a->N; ++n){
     a->accC[n] = 0;
-  
-    for(g = 0; g < a->G; ++g)
-      a->accEps[iG(n, g)] = 0;
-  }
-
-  for(g = 0; g < a->G; ++g){
-    a->accPhi[g] = 0;
-    a->accAlp[g] = 0;
-    a->accDel[g] = 0;
+    a->tuneC[n] = 1;
   }
 }
 
