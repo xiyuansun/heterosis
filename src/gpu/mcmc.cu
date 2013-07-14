@@ -35,8 +35,9 @@ void mcmc(int argc, char **argv){
   
   freeChain(host_a, cfg, 0);
   cudaFree(dev_a);
-  free(cfg);
   
   if(cfg->verbose)
     printf("Done.\n");
+
+  free(cfg);
 }
