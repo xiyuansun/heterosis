@@ -57,6 +57,14 @@ Chain *allocChain(Config *cfg){
   a->hph = (int*) malloc(cfg->G * sizeof(int));
   a->lph = (int*) malloc(cfg->G * sizeof(int));
   a->mph = (int*) malloc(cfg->G * sizeof(int));
+  
+  /* for computing DIC */
+  
+  a->meanC = (num_t*) malloc(cfg->N * sizeof(num_t));
+  a->meanPhi = (num_t*) malloc(cfg->G * sizeof(num_t));
+  a->meanAlp = (num_t*) malloc(cfg->G * sizeof(num_t));
+  a->meanDel = (num_t*) malloc(cfg->G * sizeof(num_t));
+  a->meanEps = (num_t*) malloc(cfg->N * cfg->G * sizeof(num_t));  
     
   return a;
 }

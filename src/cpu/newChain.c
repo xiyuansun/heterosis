@@ -59,6 +59,10 @@ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->accD = 0;
   a->tuneD = 400;
   
+  a->meanLogLik = 0;
+  a->logLikMean = 0;
+  a->dic = 0;
+  
   for(n = 0; n < a->N; ++n){
     a->accC[n] = 0;
     a->tuneC[n] = 1;

@@ -113,4 +113,20 @@ void summarizeChain(Chain *a, Config *cfg){
     
     fclose(fp);
   }
+  
+  /* DIC */
+
+  if(cfg->diagnostics){
+	fp = fopen("../out/diagnostics/dic.txt", "a");
+  
+	if(fp == NULL){
+	  printf("ERROR: unable to create file, %s\n", file);
+	  return;
+	}
+  
+	dic(a);
+	fprintf(fp, NUM_TF, a->dic);
+	fprintf(fp, "\n");
+	fclose(fp);
+  }
 }

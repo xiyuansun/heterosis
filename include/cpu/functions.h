@@ -134,6 +134,10 @@ void runChain(Chain*, Config*);
 void oneChain(Config*);
 void chains(int, char**);
 
+num_t logLik(count_t*, int*, int, int, num_t*, num_t*, num_t*, num_t*, num_t*);
+void updateDICprep(Chain*);
+void dic(Chain*);
+
 void printHeaders(Chain*, Config*);
 void intermResults(Chain*, Config*);
 void summarizeChain(Chain*, Config*);

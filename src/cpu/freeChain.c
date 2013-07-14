@@ -55,5 +55,13 @@ void freeChain(Chain *a, Config *cfg){
   free(a->lph);
   free(a->mph);
   
+  /* for computing DIC */
+  
+  free(a->meanC);
+  free(a->meanPhi);  
+  free(a->meanAlp);
+  free(a->meanDel);
+  free(a->meanEps);  
+  
   free(a);
 }

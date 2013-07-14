@@ -30,6 +30,7 @@ CCDEP+=sigPhi sigAlp sigDel
 CCDEP+=piAlp piDel
 CCDEP+=runChain oneChain 
 CCDEP+=printHeaders intermResults summarizeChain
+CCDEP+=logLik updateDICprep dic
 CCDEP+=main
 
 NVCCDEP=printArrays config getopts printConfig readGrp readData

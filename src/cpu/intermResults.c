@@ -186,6 +186,9 @@ void intermResults(Chain *a, Config *cfg){
     fclose(fp);  
   }
   
+  if(cfg->diagnostics)
+    updateDICprep(a);
+  
   ++cfg->m;
   ++a->m;
 }
