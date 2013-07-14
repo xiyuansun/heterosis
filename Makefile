@@ -33,7 +33,8 @@ CCDEP+=printHeaders intermResults summarizeChain
 CCDEP+=logLik updateDICprep dic
 CCDEP+=main
 
-NVCCDEP=printArrays config getopts printConfig readGrp readData
+NVCCDEP=printArrays readGrp readData
+NVCCDEP+=allocConfig freeConfig config getopts printConfig
 NVCCDEP+=allocChain newChain chainDeviceToHost printChain freeChain chains
 NVCCDEP+=runiform rnormal rgamma rbeta
 NVCCDEP+=c sigC eta d tau eps
