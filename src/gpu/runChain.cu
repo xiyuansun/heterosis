@@ -37,8 +37,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     
     interimResults(host_a, dev_a, cfg);
     
-    printChain(host_a, dev_a, cfg);
-    
     if(cfg->verbose)
       printf("\n");
   }

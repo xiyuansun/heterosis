@@ -15,8 +15,6 @@ void printChain(Chain *a){
   printf("burnin = %d\n", a->burnin);
   printf("heterosis = %d\n", a->heterosis);
   printf("parmsFlag = %d\n", a->parmsFlag);
-  
-  printf("sumLogLik = "); printf(NUM_TF, a->sumLogLik); printf("\n");
 
   pi2(a->y, a->N, a->G, "y = \n");
   pf1(a->yMeanG, a->N, "yMeanG =\n");
