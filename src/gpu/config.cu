@@ -101,7 +101,7 @@ Config *config(int argc, char **argv){
   N = cfg->N;
   G = cfg->G;
   
-printf("%d %d %d %d\n", N, G, 1, 2);
+pi2(cfg->y, 4, 8, "y = \n");
   
   if(cfg->y == NULL){
     return NULL;
