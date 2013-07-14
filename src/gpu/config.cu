@@ -16,6 +16,7 @@ __global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, in
 
 Config *config(int argc, char **argv){
   int n, g, i, N, G, *seeds, *dev_seeds;
+  num_t tmp;
   
   Config *cfg = (Config*) malloc(sizeof(Config));
   cfg->chainNum = 1;
@@ -100,14 +101,14 @@ Config *config(int argc, char **argv){
   G = cfg->G;
   
   if(cfg->y == NULL){
-    return;
+    return NULL;
   }
 
   cfg->grp = readGrp(cfg);
   
   if(cfg->grp == NULL){
     free(cfg->y);
-    return;
+    return NULL;
   }
   
   allocConfig(cfg);
