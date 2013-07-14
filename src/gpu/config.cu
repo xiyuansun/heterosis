@@ -8,7 +8,7 @@
 #include <string.h>
 
 __global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, int G){ /* kernel <<<G, 1>>> */
-  int id = IDX;
+  int id = IDX, N, G, i;
   if(id < MAX_NG)
     curand_init(seeds[id], id, 0, &(states[id]));
 }
@@ -93,6 +93,8 @@ Config *config(int argc, char **argv){
   srand(cfg->seed);
   
   /* set up CURAND */
+  N = cfg->N;
+  G = cfg->G;
   
   seeds = (int*) malloc(MAX_NG * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
