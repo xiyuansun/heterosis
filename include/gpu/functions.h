@@ -24,7 +24,6 @@ __host__ void pf2(num_t*, int, int, const char*);
 __host__ void pi3(int*, int, int, int, const char*);
 __host__ void pf3(num_t*, int, int, int, const char*);
 
-__host__ void freeConfig(Config*);
 __host__ Config *config(int, char**);
 __host__ void getopts(Config*, int, char**);
 __host__ void printConfig(Config*);
@@ -37,7 +36,7 @@ __host__ void allocChainDevice(Chain**, Chain**, Config*);
 __host__ Chain *chainDeviceToHost(Chain*, Chain*, Config*);
 
 __host__ int cmpfunc(const void*, const void*);
-__global__ void curand_setup_kernel(curandState_t*, int*, int, int);
+__global__ void curand_setup_kernel(Chain*, int*);
 
 __global__ void newChain_kernel1(Chain*);
 __global__ void newChain_kernel2(Chain*);

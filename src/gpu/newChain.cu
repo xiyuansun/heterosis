@@ -12,6 +12,12 @@ __host__ int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
 }
 
+__global__ void curand_setup_kernel(Chain *a, int *seeds){ /* kernel <<<G, 1>>> */
+  int id = IDX, N = a->N, G = a->G;
+  if(id < MAX_NG)
+    curand_init(seeds[id], id, 0, &(a->states[id]));
+}
+
 __global__ void newChain_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int n, g = IDX, G = a->G;
   num_t u;
@@ -72,8 +78,24 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
-  int n, g, G;
-  num_t *lqts, s, *tmpv;
+  int n, g, N, G, i, *grp, *seeds, *dev_seeds;
+  count_t *y;
+  num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
+
+  y = readData(cfg);
+  
+  N = cfg->N;
+  G = cfg->G;
+  
+  if(y == NULL)
+    return;
+
+  grp = readGrp(cfg);
+  
+  if(grp == NULL){
+    free(y);
+    return;
+  }
   
   if(cfg->verbose)
     printf("  Allocating chain.\n"); 
@@ -132,6 +154,25 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   CUDA_CALL(cudaMemcpy(&((*dev_a)->sigDel), &(cfg->sigDel), sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&((*dev_a)->piAlp), &(cfg->piAlp), sizeof(num_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(&((*dev_a)->piDel), &(cfg->piDel), sizeof(num_t), cudaMemcpyHostToDevice));
+  
+  /* data */
+  
+  CUDA_CALL(cudaMemcpy((*host_a)->grp, grp, cfg->N * sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy((*host_a)->y, y, cfg->N * cfg->G * sizeof(int), cudaMemcpyHostToDevice));
+  
+  yMeanG = (num_t*) malloc(cfg->N * sizeof(num_t));
+
+  for(n = 0; n < cfg->N; ++n){
+    tmp = 0;
+    
+    for(g = 0; g < cfg->G; ++g)
+      tmp += y[iG(n, g)];
+    
+    tmp /= cfg->G;
+    yMeanG[n] = tmp;   
+  }
+
+  CUDA_CALL(cudaMemcpy((*host_a)->yMeanG, yMeanG, cfg->N * sizeof(num_t), cudaMemcpyHostToDevice));
 
   /* initial normalization factors, c */
   
@@ -141,7 +182,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   s = 0;
   for(n = 0; n < cfg->N; ++n){
     for(g = 0; g < cfg->G; ++g)
-      tmpv[g] = cfg->y[iG(n, g)];
+      tmpv[g] = y[iG(n, g)];
       
     qsort(tmpv, cfg->G, sizeof(num_t), cmpfunc);   
      
@@ -155,10 +196,26 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     tmpv[n] = lqts[n] - s;
     
   CUDA_CALL(cudaMemcpy((*host_a)->c, tmpv, cfg->N *sizeof(num_t), cudaMemcpyHostToDevice));
+
+  /* set up CURAND */
+  
+  seeds = (int*) malloc(MAX_NG * sizeof(int));
+  CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
+
+  for(i = 0; i < MAX_NG; ++i)
+    seeds[i] = rand();
+    
+  CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
+  curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(*dev_a, dev_seeds);
   
   newChain_kernel1<<<G_GRID, G_BLOCK>>>(*dev_a);
   newChain_kernel2<<<1, 1>>>(*dev_a);
  
+  free(yMeanG);
   free(lqts);
   free(tmpv); 
+  free(grp);
+  free(y);
+  free(seeds);
+  cudaFree(dev_seeds);
 }

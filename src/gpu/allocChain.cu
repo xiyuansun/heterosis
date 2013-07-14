@@ -70,9 +70,13 @@ __host__ Chain *allocChainHost(Config *cfg){
 #include <stdlib.h>
 
 __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
-  int N = cfg->N, G = cfg->G;
+
   *host_a = (Chain*) malloc(sizeof(Chain));
- 
+
+  /* curand states */
+  
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->N * cfg->G * sizeof(curandState_t)));
+  
   /* data */   
   
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->y), cfg->N * cfg->G * sizeof(count_t)));
@@ -126,16 +130,7 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->meanAlp), cfg->G * sizeof(num_t)));
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->meanDel), cfg->G * sizeof(num_t)));
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->meanEps), cfg->N * cfg->G * sizeof(num_t)));  
-
-  /* take data and curand states from Config object */
   
-  (*host_a)->y = cfg->devY;
-  (*host_a)->grp = cfg->devGrp;
-  (*host_a)->yMeanG = cfg->devYMeanG;  
-  
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), MAX_NG * sizeof(curandState_t)));
-  (*host_a)->states = cfg->states;
- 
   /* pointer to chain on the device */
 
   CUDA_CALL(cudaMalloc((void**) dev_a, sizeof(Chain)));

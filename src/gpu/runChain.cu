@@ -14,8 +14,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   printHeaders(host_a, dev_a, cfg);
   
-  printChain(host_a, dev_a, cfg);
-  
   for(m = 0; m < cfg->M; ++m){
     
     if(cfg->verbose)

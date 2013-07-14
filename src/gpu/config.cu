@@ -1,31 +1,21 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
-#include <curand_kernel.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-__global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, int G){ /* kernel <<<G, 1>>> */
-  int id = IDX;
-  if(id < MAX_NG)
-    curand_init(seeds[id], id, 0, &(states[id]));
-}
-
 Config *config(int argc, char **argv){
-  int n, g, i, N, G, *seeds, *dev_seeds;
-  num_t tmp;
-  curandState_t *states;
-  
+
   Config *cfg = (Config*) malloc(sizeof(Config));
   cfg->chainNum = 1;
   
   /* default filenames */        
 
   strcpy(cfg->dataFile, "../data/data.txt"); 
-  strcpy(cfg->groupFile, "../data/grp.txt");
+  strcpy(cfg->groupFile, "../data/group.txt");
    
   cfg->ratesFlag = 0;
   cfg->hyperFlag = 0;
@@ -94,57 +84,6 @@ Config *config(int argc, char **argv){
 
   getopts(cfg, argc, argv);
   srand(cfg->seed);
-  
-  /* read data and grp */
-  
-  cfg->y = readData(cfg);
-  
-  N = cfg->N;
-  G = cfg->G;
-  
-  if(cfg->y == NULL){
-    return NULL;
-  }
-  
-  cfg->grp = readGrp(cfg);
-  
-  if(cfg->grp == NULL){
-    free(cfg->y);
-    return NULL;
-  }
-  
-  cfg->yMeanG = (num_t*) malloc(cfg->N * sizeof(num_t));
-
-  for(n = 0; n < cfg->N; ++n){
-    tmp = 0;
-    
-    for(g = 0; g < cfg->G; ++g)
-      tmp += cfg->y[iG(n, g)];
-    
-    tmp /= cfg->G;
-    cfg->yMeanG[n] = tmp;   
-  }
-
-  CUDA_CALL(cudaMalloc((void**) &(cfg->devY), cfg->N * cfg->G * sizeof(count_t)));
-  CUDA_CALL(cudaMalloc((void**) &(cfg->devGrp), cfg->N * sizeof(count_t)));
-  CUDA_CALL(cudaMalloc((void**) &(cfg->devYMeanG), cfg->N * sizeof(count_t)));
-  
-  CUDA_CALL(cudaMemcpy(cfg->devY, cfg->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(cfg->devGrp, cfg->grp, cfg->N * sizeof(int), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(cfg->devYMeanG, cfg->yMeanG, cfg->N * sizeof(int), cudaMemcpyHostToDevice));  
-    
-  /* set up CURAND */
-  
-  seeds = (int*) malloc(MAX_NG * sizeof(int));
-  CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
-  CUDA_CALL(cudaMalloc((void**) &states, MAX_NG * sizeof(curandState_t)));  
-
-  for(i = 0; i < MAX_NG; ++i)
-    seeds[i] = rand(); 
-    
-  CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
-  curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(states, dev_seeds, cfg->N, cfg->G);
-  cfg->states = states;
 
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.
@@ -204,7 +143,5 @@ Config *config(int argc, char **argv){
     system("rm -f ../out/diagnostics/dic.txt");
   }
   
-  free(seeds);
-  cudaFree(dev_seeds);
   return cfg;
 }
