@@ -13,8 +13,8 @@ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
   printf("G = %d\n\n", a->G);  
-/*  printf("burnin = %d\n", a->burnin);
-  printf("heterosis = %d\n\n", a->heterosis);
+  printf("burnin = %d\n", a->burnin);
+/*  printf("heterosis = %d\n\n", a->heterosis);
 
   pi2(a->y, a->N, a->G, "y = \n");
   pf1(a->yMeanG, a->N, "yMeanG =\n");
