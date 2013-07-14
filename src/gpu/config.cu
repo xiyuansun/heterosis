@@ -17,6 +17,7 @@ __global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, in
 Config *config(int argc, char **argv){
   int n, g, i, N, G, *seeds, *dev_seeds;
   num_t tmp;
+  curandState_t *states;
   
   Config *cfg = (Config*) malloc(sizeof(Config));
   cfg->chainNum = 1;
@@ -131,15 +132,14 @@ Config *config(int argc, char **argv){
   
   seeds = (int*) malloc(MAX_NG * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
-  CUDA_CALL(cudaMalloc((void**) &(cfg->states), MAX_NG * sizeof(curandState_t)));  
+  CUDA_CALL(cudaMalloc((void**) &states, MAX_NG * sizeof(curandState_t)));  
 
   for(i = 0; i < MAX_NG; ++i)
-    seeds[i] = rand();
-    
-   printf("hi\n"); 
+    seeds[i] = rand(); 
     
   CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
-  curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(cfg->states, dev_seeds, cfg->N, cfg->G);
+  curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(states, dev_seeds, cfg->N, cfg->G);
+  cfg->states = states;
 
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.
