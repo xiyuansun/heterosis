@@ -130,8 +130,8 @@ void intermResults(Chain *a, Config *cfg){
       fprintf(fp, " ");
     }
     
-    for(g = 0; g < cfg->G; ++g)
-      for(n = 0; n < cfg->N; ++n){
+    for(n = 0; n < cfg->N; ++n)
+      for(g = 0; g < cfg->G; ++g){
         fprintf(fp, NUM_TF, a->eps[iG(n, g)]);
         fprintf(fp, " ");
       }

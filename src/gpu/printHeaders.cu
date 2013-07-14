@@ -109,9 +109,9 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
       
     for(g = 0; g < cfg->G; ++g)
       fprintf(fp, "eta%d ", g);
-      
-    for(g = 0; g < cfg->G; ++g)
-      for(n = 0; n < cfg->N; ++n)
+    
+    for(n = 0; n < cfg->N; ++n)  
+      for(g = 0; g < cfg->G; ++g)    
         fprintf(fp, "epsilon_lib%d_gene%d ", n, g);
 
     fprintf(fp, "\n");   
@@ -151,8 +151,8 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     }
     
     CUDA_CALL(cudaMemcpy(tmpv, host_a->eps, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-    for(g = 0; g < cfg->G; ++g)
-      for(n = 0; n < cfg->N; ++n){
+    for(n = 0; n < cfg->N; ++n)
+      for(g = 0; g < cfg->G; ++g){
         fprintf(fp, NUM_TF, tmpv[iG(n, g)]);
         fprintf(fp, " ");
       }
