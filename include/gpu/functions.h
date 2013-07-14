@@ -137,7 +137,7 @@ __global__ void updateDICprep(Chain*);
 __global__ void dic(Chain*);
 
 __host__ void printHeaders(Chain*, Chain*, Config*);
-__global__ void updateProbs(Chain*);
+__global__ void updateProbs(Chain*, int);
 __global__ void updateM(Chain*);
 __host__ void interimResults(Chain*, Chain*, Config*);
 __host__ void summarizeChain(Chain*, Chain*, Config*);

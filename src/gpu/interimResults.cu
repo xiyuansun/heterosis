@@ -7,14 +7,14 @@
 #include <stdlib.h>
 #include <time.h>
 
-__global__ void updateProbs(Chain *a){
+__global__ void updateProbs(Chain *a, int heterosis){
   int g = IDX;
 
   if(a->m > a->burnin){
     if(g < a->G){
       a->dex[g] += ((a->alp[g] * a->alp[g]) > 1e-6);
   
-      if(a->heterosis){
+      if(heterosis){
         a->hph[g] += (a->del[g] > fabs(a->alp[g]));
         a->lph[g] += (a->del[g] < -fabs(a->alp[g]));
         a->mph[g] += (fabs(a->del[g]) > 1e-6);
@@ -128,7 +128,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   
   /* heterosis and differential expression probabilities */
   
-  updateProbs<<<G_GRID, G_BLOCK>>>(dev_a);
+  updateProbs<<<G_GRID, G_BLOCK>>>(dev_a, cfg->heterosis);
   
   /* parameters */
   
