@@ -15,7 +15,7 @@ __global__ void curand_setup_kernel(curandState_t *states, int *seeds, int N, in
 }
 
 Config *config(int argc, char **argv){
-  int N, G, i, *seeds, *dev_seeds;
+  int n, g, i, N, G, *seeds, *dev_seeds;
   
   Config *cfg = (Config*) malloc(sizeof(Config));
   cfg->chainNum = 1;
@@ -23,7 +23,7 @@ Config *config(int argc, char **argv){
   /* default filenames */        
 
   strcpy(cfg->dataFile, "../data/data.txt"); 
-  strcpy(cfg->groupFile, "../data/group.txt");
+  strcpy(cfg->grpFile, "../data/grp.txt");
    
   cfg->ratesFlag = 0;
   cfg->hyperFlag = 0;
@@ -93,7 +93,7 @@ Config *config(int argc, char **argv){
   getopts(cfg, argc, argv);
   srand(cfg->seed);
   
-  /* read data and group */
+  /* read data and grp */
   
   cfg->y = readData(cfg);
   N = cfg->N;
@@ -105,7 +105,7 @@ Config *config(int argc, char **argv){
 
   cfg->grp = readGrp(cfg);
   
-  if(grp == NULL){
+  if(cfg->grp == NULL){
     free(cfg->y);
     return;
   }
@@ -123,7 +123,7 @@ Config *config(int argc, char **argv){
   }
   
   CUDA_CALL(cudaMemcpy(cfg->devY, cfg->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyHostToDevice));
-  CUDA_CALL(cudaMemcpy(cfg->devGroup, cfg->group, cfg->N * sizeof(int), cudaMemcpyHostToDevice));
+  CUDA_CALL(cudaMemcpy(cfg->devGrp, cfg->grp, cfg->N * sizeof(int), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(cfg->devYMeanG, cfg->yMeanG, cfg->N * sizeof(int), cudaMemcpyHostToDevice));  
     
   /* set up CURAND */
