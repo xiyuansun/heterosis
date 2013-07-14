@@ -129,7 +129,7 @@ __global__ void samplePiDel_kernel2(Chain*);
 __host__ void samplePiDel(Chain*, Chain*, Config*);
 
 __host__ void runChain(Chain*, Chain*, Config*);
-__host__ void oneChain(Config*);
+__host__ void resetChain(Chain*, Chain*, Config*);
 __host__ void chains(int, char**);
 
 __global__ void updateDICprep(Chain*);
