@@ -197,7 +197,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     
   CUDA_CALL(cudaMemcpy((*host_a)->c, tmpv, cfg->N *sizeof(num_t), cudaMemcpyHostToDevice));
 
-  /* set up CURAND */
+  /* set up CURAND */ 
   
   seeds = (int*) malloc(MAX_NG * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
