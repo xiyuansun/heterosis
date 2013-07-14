@@ -157,8 +157,8 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
 	  return;
 	}
   
-	dic(dev_a);
-	CUDA_CALL(cudaMemcpy(&tmp, &(dev_a->dic), sizeof(num), cudaMemcpyDeviceToHost));
+	dic<<<1, 1>>>(dev_a);
+	CUDA_CALL(cudaMemcpy(&tmp, &(dev_a->dic), sizeof(num_t), cudaMemcpyDeviceToHost));
 	
 	fprintf(fp, NUM_TF, tmp);
 	fprintf(fp, "\n");

@@ -199,7 +199,6 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
 
   /* set up CURAND */
   
-  srand(cfg->seed);
   seeds = (int*) malloc(MAX_NG * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
 
