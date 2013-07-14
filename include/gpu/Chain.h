@@ -114,6 +114,18 @@ typedef struct {
   int constPiAlp;
   int constPiDel;
 
+  /* for computing DIC */
+  
+  num_t *meanC;
+  num_t *meanPhi;
+  num_t *meanAlp;
+  num_t *meanDel;
+  num_t *meanEps;
+  
+  num_t meanLogLik;
+  num_t logLikMean;
+  num_t dic;
+
 } Chain;
 
 #endif /* CHAIN_H */

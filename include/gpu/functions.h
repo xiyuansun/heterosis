@@ -132,6 +132,9 @@ __host__ void runChain(Chain*, Chain*, Config*);
 __host__ void oneChain(Config*);
 __host__ void chains(int, char**);
 
+__global__ void updateDICprep(Chain*);
+__global__ void dic(Chain*);
+
 __host__ void printHeaders(Chain*, Chain*, Config*);
 __global__ void updateProbs(Chain*);
 __global__ void updateM(Chain*);
@@ -321,6 +324,30 @@ inline __device__ num_t delProp(Chain *a, int g){ /* device */
   }
 
   return nw;
+}
+
+inline __device__ num_t logLik(count_t *y, int *group, int N, int G, 
+              num_t *c, num_t *phi, num_t *alp, num_t *del, num_t *eps){
+  int n, g;
+  num_t ret = 0, mu, lam;
+  
+  for(n = 0; n < N; ++n){
+    for(g = 0; g < G; ++g){
+      
+	  if(group[n] == 1){
+		mu = phi[g] - alp[g];
+	  } else if(group[n] == 2){
+		mu = phi[g] + del[g];
+	  } else {
+		mu = phi[g] + alp[g];
+	  }
+	
+      lam = c[n] + eps[iG(n, g)] + mu;
+      ret += y[iG(n, g)] * lam - exp(lam);
+    }
+  }
+
+  return ret;
 }
 
 #endif /* FUNCTIONS_H */

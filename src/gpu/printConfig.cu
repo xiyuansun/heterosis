@@ -17,7 +17,8 @@ void printConfig(Config *cfg){
   printf("hyperFlag = %d\n", cfg->hyperFlag);
   printf("parmsFlag = %d\n", cfg->parmsFlag);
   printf("timeFlag = %d\n", cfg->timeFlag);
-  printf("verbose = %d\n\n", cfg->verbose);
+  printf("verbose = %d\n", cfg->verbose);
+  printf("diagnostics = %d\n\n", cfg->diagnostics);
   
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);
