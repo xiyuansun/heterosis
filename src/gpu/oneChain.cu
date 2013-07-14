@@ -17,6 +17,13 @@ void oneChain(Config *cfg){
   runChain(host_a, dev_a, cfg);
   summarizeChain(host_a, dev_a, cfg);
 
+
+  printConfig(cfg);
+  
+  printf("\n\n------\n\n");
+  
+  printChain(a, cfg);
+
   freeChain(host_a, cfg, 0);
   cudaFree(dev_a);
 } 
