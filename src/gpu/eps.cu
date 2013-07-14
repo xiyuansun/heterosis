@@ -10,7 +10,7 @@ __device__ num_t lEps(Chain *a, int n, int g, num_t arg){ /* device */
   int G = a->G;
   return a->y[iG(n, g)] * arg - exp(a->c[n] + arg + mu(a, n, a->phi[g], 
                                      a->alp[g], a->del[g])) 
-                          - (arg * arg) / (2 * pow(a->eta[g], 2));
+                          - (arg * arg) / (2 * pow((float) a->eta[g], 2));
 }
 
 __global__ void sampleEps_kernel(Chain *a){ /* kernel <<<N, G>>> */

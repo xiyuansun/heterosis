@@ -18,7 +18,7 @@ __device__ num_t lDel(Chain *a, int g, num_t arg){ /* device */
   }
  
   if(arg * arg > 1e-6){
-    tmp = -pow(arg - a->theDel, 2) / (2 * pow(a->sigDel, 2)) -
+    tmp = -pow((float) (arg - a->theDel), 2) / (2 * pow((float) a->sigDel, 2)) -
                 log(1 - a->piDel);
   } else {
     tmp = log(a->piDel);

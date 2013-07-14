@@ -21,7 +21,7 @@ __device__ num_t lAlp(Chain *a, int g, num_t arg){ /* device */
   }
  
   if(arg * arg > 1e-6){
-    tmp = -pow(arg - a->theAlp, 2) / (2 * pow(a->sigAlp, 2)) -
+    tmp = -pow((float) (arg - a->theAlp), 2) / (2 * pow((float) a->sigAlp, 2)) -
                 log(1 - a->piAlp);
   } else {
     tmp = log(a->piAlp);

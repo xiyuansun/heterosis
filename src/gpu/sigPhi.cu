@@ -11,13 +11,13 @@ __global__ void sampleSigPhi_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX;
 
   if(g < a->G) 
-    a->tmp1[g] = pow(a->phi[g] - a->thePhi, 2);
+    a->tmp1[g] = pow((float) (a->phi[g] - a->thePhi), 2);
 }
 
 __global__ void sampleSigPhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t rate = a->s1 / 2;
   num_t shape = (a->G - 1) / 2;
-  num_t lb = 1/pow(a->sigPhi0, 2);
+  num_t lb = 1/pow((float) a->sigPhi0, 2);
 
   if(shape >= 1 && rate > 0){
     a->sigPhi = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));

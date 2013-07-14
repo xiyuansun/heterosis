@@ -18,11 +18,11 @@ __device__ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, nu
   }
 
   /* phi part */
-  ret = s - pow(argPhi - a->thePhi, 2) / (2 * pow(a->sigPhi, 2));
+  ret = s - pow((float) (argPhi - a->thePhi), 2) / (2 * pow((float) a->sigPhi, 2));
 
   /* alpha part */
   if(argAlp * argAlp > 1e-6){
-    tmp = -pow(argAlp - a->theAlp, 2) / (2 * pow(a->sigAlp, 2)) -
+    tmp = -pow((float) (argAlp - a->theAlp), 2) / (2 * pow((float) a->sigAlp, 2)) -
                 log(1 - a->piAlp);
   } else {
     tmp = log(a->piAlp);
@@ -32,7 +32,7 @@ __device__ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, nu
 
   /* delta part */
   if(argDel * argDel > 1e-6){
-    tmp = -pow(argDel - a->theDel, 2) / (2 * pow(a->sigDel, 2)) -
+    tmp = -pow((float) (argDel - a->theDel), 2) / (2 * pow((float) a->sigDel, 2)) -
                 log(1 - a->piDel);
   } else {
     tmp = log(a->piDel);

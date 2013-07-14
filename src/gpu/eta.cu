@@ -18,7 +18,7 @@ __global__ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
 
     rate = 0;
     for(n = 0; n < a->N; ++n) 
-      rate += pow(a->eps[iG(n, g)], 2);
+      rate += pow((float) a->eps[iG(n, g)], 2);
   
     rate = (rate + a->d * a->tau * a->tau) / 2; 
 

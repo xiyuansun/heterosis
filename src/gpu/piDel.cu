@@ -11,7 +11,7 @@ __global__ void samplePiDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX;
 
   if(g < a->G){ 
-    if(pow(a->del[g], 2) > 1e-6){
+    if(pow((float) a->del[g], 2) > 1e-6){
       a->tmp1[g] = 1; 
     } else {
       a->tmp1[g] = 0;

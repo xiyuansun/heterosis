@@ -11,7 +11,7 @@ __global__ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX;
 
   if(g < a->G){
-    if(pow(a->alp[g], 2) > 1e-6){
+    if(pow((float) a->alp[g], 2) > 1e-6){
       a->tmp1[g] = 1;
       a->tmp2[g] = a->alp[g];
     } else {
@@ -23,8 +23,8 @@ __global__ void sampleTheAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 
 __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
-  num_t gs = pow(a->gamAlp, 2);
-  num_t ss = pow(a->sigAlp, 2);
+  num_t gs = pow((float) a->gamAlp, 2);
+  num_t ss = pow((float) a->sigAlp, 2);
   num_t den = a->s1 * gs + ss;
 
   num_t m = gs * a->s2 / den;

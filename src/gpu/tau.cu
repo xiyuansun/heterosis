@@ -11,7 +11,7 @@ __global__ void sampleTau_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX;
   
   if(g < a->G)
-    a->tmp1[g] = 1/pow(a->eta[g], 2);
+    a->tmp1[g] = 1/pow((float) a->eta[g], 2);
 }
 
 __global__ void sampleTau_kernel2(Chain *a){ /* kernel<<<1, 1>>> */

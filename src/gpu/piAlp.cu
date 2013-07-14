@@ -11,7 +11,7 @@ __global__ void samplePiAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX;
 
   if(g < a->G){ 
-    if(pow(a->alp[g], 2) > 1e-6){
+    if(pow((float) a->alp[g], 2) > 1e-6){
       a->tmp1[g] = 1;
     } else {
       a->tmp1[g] = 0;
@@ -19,7 +19,7 @@ __global__ void samplePiAlp_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   }
 }
 
-__global__ void samplePiAlp_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
+__global__ void samplePiAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   a->piAlp = rbetaDevice(a, 1, a->G + a->s1 + a->aTau, a->s1 + a->bTau);
 }
 

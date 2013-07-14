@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-__global__ void sampleSigC_kernel(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
+__global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
   int n;
   num_t shape, rate = 0, lb;
   
@@ -16,7 +16,7 @@ __global__ void sampleSigC_kernel(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> *
   
   shape = (a->N - 1) / 2; 
   rate = rate / 2;
-  lb = 1 / pow(a->sigC0, 2); 
+  lb = 1 / pow((float) a->sigC0, 2); 
 
   if(shape >= 1 && rate > 0){
     a->sigC = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));

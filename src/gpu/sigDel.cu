@@ -12,8 +12,8 @@ __global__ void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g = IDX;
 
   if(g < a->G){ 
-    if(pow(a->del[g], 2) > 1e-6){
-      a->tmp1[g] = pow(a->del[g] - a->theDel, 2);
+    if(pow((float) a->del[g], 2) > 1e-6){
+      a->tmp1[g] = pow((float) (a->del[g] - a->theDel), 2);
       a->tmp2[g] = 1;
     } else {
       a->tmp1[g] = 0;
@@ -25,7 +25,7 @@ __global__ void sampleSigDel_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
 __global__ void sampleSigDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t shape = (a->s2 - 1) / 2;
   num_t rate = a->s1 / 2;
-  num_t lb = 1/pow(a->sigDel0, 2);
+  num_t lb = 1/pow((float) a->sigDel0, 2);
 
   if(shape >= 1 && rate > 0){
     a->sigDel = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));
