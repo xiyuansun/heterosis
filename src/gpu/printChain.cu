@@ -8,7 +8,7 @@
 void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
   Chain *a = chainDeviceToHost(host_a, dev_a, cfg);
-
+/*
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
@@ -69,7 +69,7 @@ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   pi1(a->accAlp, a->G, "accAlp =\n");
   pi1(a->accDel, a->G, "accDel =\n");
   pi2(a->accEps, a->N, a->G, "accEps =\n");
-    
+    */
   printf("s1 = "); printf(NUM_TF, a->s1); printf("\n");
   printf("s2 = "); printf(NUM_TF, a->s2); printf("\n\n");
   
