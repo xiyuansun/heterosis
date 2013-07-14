@@ -73,7 +73,7 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   int n, g, G;
-  num_t *lqts, s, *tmpv, *yMeanG;
+  num_t *lqts, s, *tmpv;
   
   if(cfg->verbose)
     printf("  Allocating chain.\n"); 
@@ -141,7 +141,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   s = 0;
   for(n = 0; n < cfg->N; ++n){
     for(g = 0; g < cfg->G; ++g)
-      tmpv[g] = y[iG(n, g)];
+      tmpv[g] = cfg->y[iG(n, g)];
       
     qsort(tmpv, cfg->G, sizeof(num_t), cmpfunc);   
      
