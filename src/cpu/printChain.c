@@ -69,7 +69,7 @@ void printChain(Chain *a){
   pi1(a->accAlp, a->G, "accAlp =\n");
   pi1(a->accDel, a->G, "accDel =\n");
   pi2(a->accEps, a->N, a->G, "accEps =\n");
-    
+    */
   printf("s1 = "); printf(NUM_TF, a->s1); printf("\n");
   printf("s2 = "); printf(NUM_TF, a->s2); printf("\n\n");
   
@@ -92,7 +92,7 @@ void printChain(Chain *a){
   printf("constSigDel = %d\n", a->constSigDel);
   printf("constPiAlp = %d\n", a->constPiAlp);
   printf("constPiDel = %d\n\n", a->constPiDel);
-*/
+
   /* for computing DIC */
   
   printf("meanLogLik = "); printf(NUM_TF, a->meanLogLik); printf("\n"); 
