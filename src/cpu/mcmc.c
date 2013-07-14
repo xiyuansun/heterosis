@@ -19,9 +19,9 @@ void mcmc(int argc, char **argv){
     printf("Running %d chain(s).\n", cfg->chains);
   
   for(i = 0; i < cfg->chains; ++i){
-  
+  /*
     printChain(a);
-  
+  */
     if(cfg->verbose)
       printf("Chain %d\n", i);
 
