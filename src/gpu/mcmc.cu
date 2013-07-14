@@ -22,10 +22,6 @@ void mcmc(int argc, char **argv){
   
   for(i = 0; i < cfg->chains; ++i){
   
-    /*
-    printChain(host_a, dev_a, cfg);
-    */
-  
     if(cfg->verbose)
       printf("  Chain %d\n", i);
 
