@@ -6,10 +6,14 @@
 #include <string.h>
 #include <unistd.h>
 
+int lfact(int n){
+  return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + log(n));
+}
+
 num_t logLik(count_t *y, int *group, int N, int G, 
               num_t *c, num_t *phi, num_t *alp, num_t *del, num_t *eps){
   int n, g;
-  num_t ret = 0, mu, lam;
+  num_t ret = 0, mu, llam;
   
   for(n = 0; n < N; ++n){
     for(g = 0; g < G; ++g){
@@ -22,8 +26,8 @@ num_t logLik(count_t *y, int *group, int N, int G,
 		mu = phi[g] + alp[g];
 	  }
 	
-      lam = c[n] + eps[iG(n, g)] + mu;
-      ret += y[iG(n, g)] * lam - exp(lam);
+      llam = c[n] + eps[iG(n, g)] + mu;
+      ret += y[iG(n, g)] * llam - exp(llam) - lfact(y[iG(n, g)]);
     }
   }
 

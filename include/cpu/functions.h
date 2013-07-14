@@ -7,6 +7,8 @@
 
 #define iG(n, g) ((n) * G + (g))
 
+int lfact(int n);
+
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);
 void pi2(int*, int, int, const char*);
@@ -18,7 +20,6 @@ Config *config(int, char**);
 void getopts(Config*, int, char**);
 void printConfig(Config*);
 
-int *mySampleInt(int, int);
 int *readGrp(Config*);
 count_t *readData(Config*);
 
