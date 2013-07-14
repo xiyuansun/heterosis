@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
-  int n, g, i, G = cfg->G,  niter = cfg->M - cfg->burnin, *dex, *hph, *lph, *mph;
+  int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin, *dex, *hph, *lph, *mph;
   num_t accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
   int nAccD, *nAccC, *nAccPhi, *nAccAlp, *nAccDel, *nAccEps;
   FILE *fp;
