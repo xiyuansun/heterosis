@@ -23,9 +23,10 @@ int *readGrp(Config*);
 count_t *readData(Config*);
 
 Chain *allocChain(Config*);
-Chain *newChain(Config*);
+void copyHyperParms(Chain*, Config*);
 void newChain_kernel1(Chain*);
 void newChain_kernel2(Chain*);
+Chain *newChain(Config*);
 void printChain(Chain*);
 void freeChain(Chain*, Config*);
 
