@@ -102,13 +102,13 @@ Config *config(int argc, char **argv){
   for(i = 0; i < MAX_NG; ++i)
     seeds[i] = rand();
     
+  printf("curand setup on cfg\n");  
+    
   CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
   curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(cfg->states, dev_seeds, cfg->N, cfg->G);
 
   free(seeds);
   cudaFree(dev_seeds);
-
-printf("curand setup on cfg\n");
 
   /* 
    *  All hyperparameters set in getopts() will be treated as constant.
