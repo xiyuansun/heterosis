@@ -7,6 +7,7 @@ int *readGrp(Config *cfg){
   int i, j, n, *grp, match = 0, nunique = 0, *unique;
   FILE *fp;
 
+printf("outside readdata %d %d\n", cfg->N, cfg->G);
   if(cfg->N < 2){
     printf("ERROR: bad experimental design.\n");
     exit(EXIT_FAILURE);

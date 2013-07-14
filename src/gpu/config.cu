@@ -105,10 +105,8 @@ Config *config(int argc, char **argv){
   if(cfg->y == NULL){
     return NULL;
   }
-
-printf("outside readdata %d %d\n", cfg->N, cfg->G);
-  cfg->grp = readGrp(cfg);
   
+  cfg->grp = readGrp(cfg);
   
   if(cfg->grp == NULL){
     free(cfg->y);
