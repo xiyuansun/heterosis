@@ -72,9 +72,8 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
-  int n, g, G, *grp;
-  count_t *y;
-  num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
+  int n, g, G;
+  num_t *lqts, s, *tmpv, *yMeanG;
   
   if(cfg->verbose)
     printf("  Allocating chain.\n"); 
@@ -160,9 +159,6 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   newChain_kernel1<<<G_GRID, G_BLOCK>>>(*dev_a);
   newChain_kernel2<<<1, 1>>>(*dev_a);
  
-  free(yMeanG);
   free(lqts);
   free(tmpv); 
-  free(grp);
-  free(y);
 }
