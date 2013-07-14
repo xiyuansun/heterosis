@@ -327,7 +327,7 @@ inline __device__ num_t delProp(Chain *a, int g){ /* device */
   return nw;
 }
 
-inline __host__ __device__ int lfact(int n){
+inline __device__ int lfact(int n){
   return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + log(n));
 }
 
