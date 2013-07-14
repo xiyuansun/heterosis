@@ -22,6 +22,7 @@ Config *config(int argc, char **argv){
   cfg->parmsFlag = 0;
   cfg->timeFlag = 0;
   cfg->verbose = 0;
+  cfg->diagnostics = 0;
 
   cfg->chains = 2;
   cfg->m = 1;
@@ -136,6 +137,11 @@ Config *config(int argc, char **argv){
   
   if(cfg->timeFlag)
     system("mkdir -p ../out/time/");
+  
+  if(cfg->diagnostics){
+    system("mkdir -p ../out/diagnostics/");
+    system("rm -f ../out/diagnostics/dic.txt");
+  }
   
   return cfg;
 }

@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 
-void updateDICprep(Chain *a){
+__global__ void updateDICprep(Chain *a){ /* kernel<<<1, 1>>> */
   
   int n, g, N = a->N, G = a->G, m = a->m - a->burnin;
   num_t s1, s2, ll = logLik(a->y, a->grp, a->N, a->G, a->c, a->phi, a->alp, a->del, a->eps);

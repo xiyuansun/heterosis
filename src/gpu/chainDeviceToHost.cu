@@ -123,5 +123,17 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(allHost_a->lph, host_a->lph,  cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(allHost_a->mph, host_a->mph,  cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
   
+  /* for computing DIC */
+  
+  CUDA_CALL(cudaMemcpy(allHost_a->meanC, host_a->meanC, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->meanPhi, host_a->meanPhi, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->meanAlp, host_a->meanAlp, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->meanDel, host_a->meanDel, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(allHost_a->meanEps, host_a->meanEps, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));  
+ 
+  CUDA_CALL(cudaMemcpy(&(allHost_a->meanLogLik), &(dev_a->meanLogLik), sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(&(allHost_a->logLikMean), &(dev_a->logLikMean), sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(&(allHost_a->dic), &(dev_a->dic), sizeof(num_t), cudaMemcpyDeviceToHost));  
+  
   return allHost_a;
 }

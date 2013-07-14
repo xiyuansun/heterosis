@@ -43,7 +43,7 @@ NVCCDEP+=sigPhi sigAlp sigDel
 NVCCDEP+=piAlp piDel
 NVCCDEP+=runChain oneChain 
 NVCCDEP+=printHeaders interimResults summarizeChain
-#NVCCDEP+=updateDICprep dic
+NVCCDEP+=updateDICprep dic
 NVCCDEP+=main
 
 CCOBJ=$(foreach name, $(CCDEP), $(CCOBJDIR)$(name).o)

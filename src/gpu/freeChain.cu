@@ -57,5 +57,13 @@ __host__ void freeChain(Chain *a, Config *cfg, int onHost){
   FREE(a->lph, onHost);
   FREE(a->mph, onHost);
   
+  /* for computing DIC */
+  
+  FREE(a->meanC, onHost);
+  FREE(a->meanPhi, onHost);  
+  FREE(a->meanAlp, onHost);
+  FREE(a->meanDel, onHost);
+  FREE(a->meanEps, onHost);  
+  
   free(a);
 }

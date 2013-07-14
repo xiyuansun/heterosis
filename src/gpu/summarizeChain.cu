@@ -7,7 +7,7 @@
 
 void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin, *dex, *hph, *lph, *mph;
-  num_t accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
+  num_t tmp, accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
   int nAccD, *nAccC, *nAccPhi, *nAccAlp, *nAccDel, *nAccEps;
   FILE *fp;
   char file[BUF];
@@ -146,4 +146,22 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
     
     fclose(fp);
   }
+  
+  /* DIC */
+
+  if(cfg->diagnostics){
+	fp = fopen("../out/diagnostics/dic.txt", "a");
+  
+	if(fp == NULL){
+	  printf("ERROR: unable to create file, %s\n", file);
+	  return;
+	}
+  
+	dic<<<1, 1>>>(dev_a);
+	CUDA_CALL(cudaMemcpy(&tmp, &(dev_a->dic), sizeof(num_t), cudaMemcpyDeviceToHost));
+	
+	fprintf(fp, NUM_TF, tmp);
+	fprintf(fp, "\n");
+	fclose(fp);
+  }  
 }
