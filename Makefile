@@ -21,7 +21,7 @@ NVCCOBJDIR=$(OBJDIR)gpu/
 NVCCSRCDIR=$(SRCDIR)gpu/
 
 CCDEP=printArrays config getopts printConfig readGrp readData
-CCDEP+=allocChain newChain printChain freeChain chains
+CCDEP+=allocChain newChain printChain freeChain
 CCDEP+=mu runiform rnormal rgamma rbeta
 CCDEP+=c sigC eta d tau eps
 CCDEP+=phi alp del phiAlpDelJoint phiAlpDel
@@ -31,10 +31,10 @@ CCDEP+=piAlp piDel
 CCDEP+=runChain resetChain 
 CCDEP+=printHeaders intermResults summarizeChain
 CCDEP+=logLik updateDICprep dic
-CCDEP+=main
+CCDEP+=mcmc main
 
 NVCCDEP=printArrays config getopts printConfig readGrp readData
-NVCCDEP+=allocChain newChain chainDeviceToHost printChain freeChain chains
+NVCCDEP+=allocChain newChain chainDeviceToHost printChain freeChain 
 NVCCDEP+=runiform rnormal rgamma rbeta
 NVCCDEP+=c sigC eta d tau eps
 NVCCDEP+=phi alp del phiAlpDelJoint phiAlpDel
@@ -44,7 +44,7 @@ NVCCDEP+=piAlp piDel
 NVCCDEP+=runChain resetChain
 NVCCDEP+=printHeaders interimResults summarizeChain
 NVCCDEP+=updateDICprep dic
-NVCCDEP+=main
+NVCCDEP+=mcmc main
 
 CCOBJ=$(foreach name, $(CCDEP), $(CCOBJDIR)$(name).o)
 NVCCOBJ=$(foreach name, $(NVCCDEP), $(NVCCOBJDIR)$(name).o)

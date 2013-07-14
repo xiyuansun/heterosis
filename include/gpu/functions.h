@@ -131,7 +131,7 @@ __host__ void samplePiDel(Chain*, Chain*, Config*);
 
 __host__ void runChain(Chain*, Chain*, Config*);
 __host__ void resetChain(Chain*, Chain*, Config*);
-__host__ void chains(int, char**);
+__host__ void mcmc(int, char**);
 
 __global__ void updateDICprep(Chain*);
 __global__ void dic(Chain*);
