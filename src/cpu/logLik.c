@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <float.h>
 
-int lfact(int n){
-  return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + log(n));
+float lfact(int n){
+  return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + (n ? log((float) n) : log(FLT_MIN)));
 }
 
 num_t logLik(count_t *y, int *group, int N, int G, 

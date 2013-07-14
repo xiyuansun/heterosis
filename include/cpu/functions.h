@@ -7,7 +7,7 @@
 
 #define iG(n, g) ((n) * G + (g))
 
-int lfact(int n);
+float lfact(int n);
 
 void pi1(int*, int, const char*);
 void pf1(num_t*, int, const char*);
