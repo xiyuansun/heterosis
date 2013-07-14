@@ -11,12 +11,11 @@ typedef struct {
   num_t *yMeanG; /* gene-wise mean expression levels */
   int *grp; /* assignment of libraries (samples) to treatment groups */ 
 
+  int m; /* current place in the chain */
   int M; /* length of chain */
   int N; /* number of libraries (samples) */
   int G; /* number of genes */
   int burnin; 
-  int heterosis;
-  int m; /* current place in the chain */
   
   /* curand states */
   
