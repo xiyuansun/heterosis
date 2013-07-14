@@ -130,7 +130,7 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
   /* take data and curand states from Config object */
   
   (*host_a)->y = cfg->devY;
-  (*host_a)->group = cfg->devGroup;
+  (*host_a)->grp = cfg->devGrp;
   (*host_a)->yMeanG = cfg->devYMeanG;  
   
   CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), MAX_NG * sizeof(curandState_t)));
