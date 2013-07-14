@@ -56,7 +56,7 @@ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   pi1(a->dex, a->G, "dex =\n");
   pi1(a->hph, a->G, "hph =\n");
   pi1(a->lph, a->G, "lph =\n"); 
-  pi1(a->mph, a->G, "mph =\n");
+  pi1(a->mph, a->G, "mph =\n"); 
   
   printf("tuneD = "); printf(NUM_TF, a->tuneD); printf("\n");
   pf1(a->tuneC, a->N, "tuneC =\n");
@@ -104,9 +104,6 @@ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
   pf1(a->meanAlp, a->N, "meanAlp =\n");
   pf1(a->meanDel, a->N, "meanDel =\n");
   pf2(a->meanEps, a->N, a->G, "meanEps =\n");
-
-
-printf("\n\n\n-----\n\n\n");
 
   freeChain(a, cfg, 1);
 }
