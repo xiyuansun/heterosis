@@ -140,9 +140,10 @@ Config *config(int argc, char **argv){
   CUDA_CALL(cudaMemcpy(dev_seeds, seeds, MAX_NG * sizeof(int), cudaMemcpyHostToDevice));
 
 printf("%d %d %d %d\n", N, G, NG_GRID, NG_BLOCK);
+printf("hum\n");
 
   curand_setup_kernel<<<NG_GRID, NG_BLOCK>>>(states, dev_seeds, cfg->N, cfg->G);
-printf("hum\n");
+
 
   cfg->states = states;
 
