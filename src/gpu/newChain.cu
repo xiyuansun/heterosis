@@ -72,13 +72,11 @@ __global__ void newChain_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 }
 
 void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
-  int n, g, N, G, *grp;
+  int n, g, G, *grp;
   count_t *y;
   num_t *lqts, s = 0, tmp, *tmpv, *yMeanG;
 
   y = readData(cfg);
-  
-  N = cfg->N;
   G = cfg->G;
   
   if(y == NULL)
