@@ -23,7 +23,11 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     return;
   }  
   
-  fprintf(fp, "diff-expression high-parent-heterosis low-parent-heterosis mid-parent-heterosis\n");
+  fprintf(fp, "diff-expression ");
+  if(cfg->heterosis)
+    fprintf(fp, "high-parent-heterosis low-parent-heterosis mid-parent-heterosis");
+  fprintf(fp, "\n");
+  
   fclose(fp);
   
   /* hyperparameters */
