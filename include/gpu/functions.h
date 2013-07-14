@@ -6,6 +6,7 @@
 #include <constants.h>
 #include <cuda.h>
 #include <curand_kernel.h>
+#include <float.h>
 
 #define iG(n, g) ((n) * G + (g))
 
@@ -176,7 +177,7 @@ inline __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, n
   if((shape >= 1) && (shape - 1 < lb * rate)){ /* Chung (1998) */
 
     c = lb * rate;
-    eps0 = (c - shape + sqrt(pow((float) (c - shape), 2) + 4 * c))/(2 * c);
+    eps0 = (c - shape + sqrt(pow((num_t) (c - shape), 2) + 4 * c))/(2 * c);
 
     if(eps0 > 1){
       eps = 0.75;
@@ -205,7 +206,7 @@ inline __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, n
       v = -1;
       while(v <= 0){
         x = rnormalDevice(a, g, 0, 1);
-        v = pow((float) (1 + c*x), 3);
+        v = pow((num_t) (1 + c*x), 3);
       }
 
       ret = d * v / rate;
@@ -213,10 +214,10 @@ inline __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, n
       if(ret > lb){
         u = runiformDevice(a, g, 0, 1);
 
-        if(u < 1 - 0.0331 * pow((float) x, 4))
+        if(u < 1 - 0.0331 * pow((num_t) x, 4))
           return(ret);
 
-        if(log(u) < 0.5 * pow((float) x, 2) + d * (1 - v + log(v)))
+        if(log(u) < 0.5 * pow((num_t) x, 2) + d * (1 - v + log(v)))
           return ret;
       }
     }
@@ -227,15 +228,15 @@ inline __device__ num_t rgammaDevice(Chain *a, int g, num_t shape, num_t rate, n
     for(n = 0; n < nmax; ++n){      
 
       u = runiformDevice(a, g, 0, 1);
-      x = -2 * log(1 - pow((float) u, 1 / shape));
+      x = -2 * log(1 - pow((num_t) u, 1 / shape));
       ret = x / rate;
 
       if(ret > lb){
         v = runiformDevice(a, g, 0, 1);
 
         tmp1 = exp(-x/2);
-        tmp2 = pow((float) x, shape - 1)* tmp1 * pow((float) 2, 1 - shape) 
-             * pow((float) (1.0 - tmp1), 1 - shape);
+        tmp2 = pow((num_t) x, shape - 1)* tmp1 * pow((num_t) 2, 1 - shape) 
+             * pow((num_t) (1.0 - tmp1), 1 - shape);
 
         if(v < tmp2)
           return ret;
@@ -328,11 +329,11 @@ inline __device__ num_t delProp(Chain *a, int g){ /* device */
 }
 
 
-inline __device__ float lfact(int n){
-  float ret = 0;
+inline __device__ num_t lfact(int n){
+  num_t ret = 0;
   
   while(n > 1){
-    ret += (n ? log((float) n) : log(FLT_MIN));
+    ret += (n ? log((num_t) n) : log(FLT_MIN));
     --n;
   }
 

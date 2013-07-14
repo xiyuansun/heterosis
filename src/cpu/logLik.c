@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <float.h>
 
-float lfact(int n){
-  return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + (n ? log((float) n) : log(FLT_MIN)));
+num_t lfact(int n){
+  return (n == 1 || n == 0) ? 1 : (lfact(n - 1) + (n ? log((num_t) n) : log(FLT_MIN)));
 }
 
 num_t logLik(count_t *y, int *group, int N, int G, 
