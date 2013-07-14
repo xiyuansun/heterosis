@@ -217,27 +217,6 @@ Chain *newChain(Config *cfg){ /* host */
   a->constPiAlp  = cfg->constPiAlp;
   a->constPiDel  = cfg->constPiDel;
   
-  /* initial normalization factors, c */
-  
-  lqts = (num_t*) malloc(cfg->N * sizeof(num_t));
-  tmpv = (num_t*) malloc(cfg->G * sizeof(num_t));
-  
-  s = 0;
-  for(n = 0; n < cfg->N; ++n){
-    for(g = 0; g < cfg->G; ++g)
-      tmpv[g] = y[iG(n, g)];
-      
-    qsort(tmpv, cfg->G, sizeof(num_t), cmpfunc);   
-     
-    lqts[n] = log(tmpv[(int) floor(cfg->G * 0.75)]);
-    s += lqts[n];
-  }
-  
-  s /= cfg->N;
-  
-  for(n = 0; n < cfg->N; ++n)
-    a->c[n] = lqts[n] - s;
-  
   newChain_kernel1(a);
   newChain_kernel2(a);
   
