@@ -190,8 +190,6 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   newChain_kernel2<<<1, 1>>>(*dev_a);
  
   free(yMeanG);
-  free(lqts);
-  free(tmpv); 
   free(grp);
   free(y);
   free(seeds);
