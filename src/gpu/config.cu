@@ -1,6 +1,7 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <curand_kernel.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
@@ -98,6 +99,7 @@ Config *config(int argc, char **argv){
   
   seeds = (int*) malloc(MAX_NG * sizeof(int));
   CUDA_CALL(cudaMalloc((void**) &dev_seeds, MAX_NG * sizeof(int)));  
+  CUDA_CALL(cudaMalloc((void**) &(cfg->states), MAX_NG * sizeof(curandState_t)));  
 
   for(i = 0; i < MAX_NG; ++i)
     seeds[i] = rand();
