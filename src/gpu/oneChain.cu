@@ -22,7 +22,7 @@ void oneChain(Config *cfg){
   
   printf("\n\n------\n\n");
   
-  printChain(a, cfg);
+  printChain(host_a, dev_a, cfg);
 
   freeChain(host_a, cfg, 0);
   cudaFree(dev_a);
