@@ -98,6 +98,8 @@ Config *config(int argc, char **argv){
   /* read data and grp */
   
   cfg->y = readData(cfg);
+    printf("outside readdata %d %d\n", cfg->N, cfg->G);
+  
   
   N = cfg->N;
   G = cfg->G;
