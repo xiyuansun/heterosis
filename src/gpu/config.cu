@@ -119,7 +119,7 @@ Config *config(int argc, char **argv){
 
   if(!cfg->constSigAlp)
     cfg->sigAlp = runiform(0, cfg->sigAlp0);
-
+ 
   if(!cfg->constSigDel)
     cfg->sigDel = runiform(0, cfg->sigDel0);
    
