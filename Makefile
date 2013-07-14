@@ -1,7 +1,7 @@
 CC=gcc
 NVCC=nvcc
 
-CCFLAGS= -c -Wall -pedantic -Iinclude/cpu
+CCFLAGS=-c -Wall -pedantic -Iinclude/cpu
 NVCCFLAGS=-c -Iinclude/gpu -arch=sm_20
 
 LDFLAGS= -lm
