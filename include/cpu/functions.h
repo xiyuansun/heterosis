@@ -139,4 +139,8 @@ void sumLogLik_kernel(Chain*);
 void intermResults(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
 
+void sumLogLik_kernel1(Chain*);
+void sumLogLik_kernel2(Chain*);
+void sumLogLik(Chain*, Config*);
+
 #endif /* FUNCTIONS_H */

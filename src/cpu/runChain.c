@@ -38,6 +38,8 @@ void runChain(Chain *a, Config *cfg){
     
     intermResults(a, cfg);
     
+    printChain(a);
+    
     if(cfg->verbose)
       printf("\n");
   }

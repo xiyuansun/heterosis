@@ -7,9 +7,38 @@
 #include <stdlib.h>
 #include <time.h>
 
-void sumLogLik_kernel(Chain *a){
-  if(a->m > a->burnin)
-    ++a->sumLogLik;
+void sumLogLik_kernel1(Chain *a){ /* kernel<<<G, 1>>> */
+  int n, g, N = a->N, G = a->G;
+  num_t lam;
+  
+  for(g = 0; g < G; ++g){
+    a->tmp1[g] = 0;
+    for(n = 0; n < N; ++n){
+      lam = a->c[n] + a->eps[iG(n, g)] 
+          + mu(a, n, a->phi[g], a->alp[g], a->del[g]);
+      a->tmp1[g] += a->y[iG(n, g)] * lam - exp(lam);
+    }
+  }
+}
+
+void sumLogLik_kernel2(Chain *a){
+  a->sumLogLik += a->s1;
+}
+
+void sumLogLik(Chain *a, Config *cfg){
+  int g;
+  
+  if(cfg->m <= cfg->burnin)
+    return;
+
+  sumLogLik_kernel1(a);
+  
+  /* pairwise sum in thrust */
+  a->s1 = 0;
+  for(g = 0; g < cfg->G; ++g)
+    a->s1 += a->tmp1[g];
+  
+  sumLogLik_kernel2(a);
 }
 
 void intermResults(Chain *a, Config *cfg){
@@ -192,7 +221,7 @@ void intermResults(Chain *a, Config *cfg){
   }
   
   /* update across-chain sum of model likelihoods */
-  sumLogLik_kernel(a);
+  sumLogLik(a, cfg);
   
   ++cfg->m;
   ++a->m;
