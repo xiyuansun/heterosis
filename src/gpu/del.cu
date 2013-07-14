@@ -48,6 +48,9 @@ __global__ void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
     } else { /* reject */
       a->del[g] = old;
     }
+    
+    if(a->m > a->burnin)
+      a->sumDel[g] += a->del[g];
   }
 }
 

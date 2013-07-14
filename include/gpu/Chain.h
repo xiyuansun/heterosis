@@ -18,6 +18,8 @@ typedef struct {
   int heterosis;
   int m; /* current place in the chain */
   
+  num_t sumLogLik; /* for computing DIC */
+  
   /* curand states */
   
   curandState_t *states;
