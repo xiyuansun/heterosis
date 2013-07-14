@@ -101,8 +101,8 @@ void printChain(Chain *a){
   
   pf1(a->meanC, a->N, "meanC =\n");
   pf1(a->meanPhi, a->N, "meanPhi =\n");
-  pf1(a->meanAlp, a->N, "meanAlp =\n");*/
-  pf1(a->meanDel, a->N, "meanDel =\n"); 
+  pf1(a->meanAlp, a->N, "meanAlp =\n");
+  pf1(a->meanDel, a->N, "meanDel =\n");*/ 
   pf2(a->meanEps, a->N, a->G, "meanEps =\n");
 
 }
