@@ -31,15 +31,15 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
     return;
   }
   
-  dex = (num_t*) malloc(cfg->G * sizeof(num_t));
-  hph = (num_t*) malloc(cfg->G * sizeof(num_t));
-  lph = (num_t*) malloc(cfg->G * sizeof(num_t));
-  mph = (num_t*) malloc(cfg->G * sizeof(num_t));
+  dex = (num_t*) malloc(cfg->G * sizeof(int));
+  hph = (num_t*) malloc(cfg->G * sizeof(int));
+  lph = (num_t*) malloc(cfg->G * sizeof(int));
+  mph = (num_t*) malloc(cfg->G * sizeof(int));
   
-  CUDA_CALL(cudaMemcpy(dex, host_a->dex, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(hph, host_a->hph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(lph, host_a->lph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(mph, host_a->mph, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(dex, host_a->dex, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(hph, host_a->hph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(lph, host_a->lph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(mph, host_a->mph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
   
   for(g = 0; g < G; ++g){
     fprintf(fp, NUM_TF, ((num_t) dex[g]) / niter); fprintf(fp, " ");
