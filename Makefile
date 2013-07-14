@@ -34,7 +34,7 @@ CCDEP+=logLik updateDICprep dic
 CCDEP+=main
 
 NVCCDEP=printArrays readGrp readData
-NVCCDEP+=allocConfig freeConfig config getopts printConfig
+NVCCDEP+=freeConfig config getopts printConfig
 NVCCDEP+=allocChain newChain chainDeviceToHost printChain freeChain chains
 NVCCDEP+=runiform rnormal rgamma rbeta
 NVCCDEP+=c sigC eta d tau eps

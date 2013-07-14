@@ -16,8 +16,6 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   for(m = 0; m < cfg->M; ++m){
     
-    printChain(host_a, dev_a, cfg);
-    
     if(cfg->verbose)
       printf("    iter %d | ", m);
     

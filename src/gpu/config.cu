@@ -113,7 +113,7 @@ Config *config(int argc, char **argv){
     return NULL;
   }
   
-  allocConfig(cfg);
+  cfg->yMeanG = (num_t*) malloc(cfg->N * sizeof(num_t));
 
   for(n = 0; n < cfg->N; ++n){
     tmp = 0;
@@ -124,6 +124,10 @@ Config *config(int argc, char **argv){
     tmp /= cfg->G;
     cfg->yMeanG[n] = tmp;   
   }
+
+  CUDA_CALL(cudaMalloc((void**) &(cfg->devY), cfg->N * cfg->G * sizeof(count_t)));
+  CUDA_CALL(cudaMalloc((void**) &(cfg->devGrp), cfg->N * sizeof(count_t)));
+  CUDA_CALL(cudaMalloc((void**) &(cfg->devYMeanG), cfg->N * sizeof(count_t)));
   
   CUDA_CALL(cudaMemcpy(cfg->devY, cfg->y, cfg->N * cfg->G * sizeof(count_t), cudaMemcpyHostToDevice));
   CUDA_CALL(cudaMemcpy(cfg->devGrp, cfg->grp, cfg->N * sizeof(int), cudaMemcpyHostToDevice));
