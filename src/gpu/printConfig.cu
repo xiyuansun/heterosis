@@ -6,7 +6,7 @@
 
 void printConfig(Config *cfg){
 
-  printf("chainNum = %d\n", cfg->chainNum);
+/*  printf("chainNum = %d\n", cfg->chainNum);
   printf("m = %d\n", cfg->m);
   printf("chains = %d\n\n", cfg->chains);
   
@@ -30,7 +30,7 @@ void printConfig(Config *cfg){
   
   printf("M = %d\n", cfg->M);
   printf("N = %d\n", cfg->N);
-  printf("G = %d\n\n", cfg->G);
+  printf("G = %d\n\n", cfg->G); */
   
   printf("sigC0 = "); printf(NUM_TF, cfg->sigC0); printf("\n");
   printf("d0 = "); printf(NUM_TF, cfg->d0); printf("\n");
