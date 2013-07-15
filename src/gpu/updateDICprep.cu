@@ -44,7 +44,7 @@ __global__ void updateDICprep_kernel2(Chain *a){ /* kernel<<<G, 1>>> */
 		a->meanEps[iG(n, g)] = a->eps[iG(n, g)];
 
 	} else if(m > 0) {
-	  s1 = ((m - 1)/((num_t) m));
+	  s1 = ((m - 1)/((num_t) m)); 
 	  s2 = (1/((num_t) m));
    
 	  a->meanPhi[g] = s1 * a->meanPhi[g] + s2 * a->phi[g];
