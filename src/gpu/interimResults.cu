@@ -130,7 +130,7 @@ __host__ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   int n, g, G = cfg->G;
   char file[BUF];
   FILE *fp;
-  num_t tmp, *tmpv;
+  num_t *tmpv;
 
   if(cfg->parms){
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
