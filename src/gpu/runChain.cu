@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+ 
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
   
