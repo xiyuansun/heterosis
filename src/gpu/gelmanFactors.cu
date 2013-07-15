@@ -42,7 +42,7 @@ __host__ num_t gelmanFactor(num_t **x, int I, int J){
   int i, j;
   num_t tmp, x__ = 0, *x_j, W = 0, B = 0;  
   
-  x_j = calloc(J, sizeof(num_t));   
+  x_j = (num_t*) calloc(J, sizeof(num_t));   
   
   for(i = 0; i < I; ++i){  
     for(j = 0; j < J; ++j){
@@ -97,9 +97,9 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
     ++nRows;
     
   I = nRows - burnin - 1;  
-  x = malloc(I * sizeof(num_t*));
+  x = (num_t**) malloc(I * sizeof(num_t*));
   for(i = 0; i < I; ++i)
-    x[i] = malloc(J * sizeof(num_t));
+    x[i] = (num_t*) malloc(J * sizeof(num_t));
  
   rewind(fp);
   fscanf(fp, "%s ", parmName);
