@@ -189,7 +189,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("Allocating chain object.\n"); 
     
- // allocChainDevice(host_a, dev_a, cfg);
+  allocChainDevice(host_a, dev_a, cfg);
   
   /* configuration info */
   
