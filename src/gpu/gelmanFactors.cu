@@ -84,6 +84,9 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
   
   J = getNumFiles(dir);
 
+printf("hi\n");
+
+
   if(J < 2){
     printf("ERROR: you need at least 2 chains.\n");
     fclose(outfp);
