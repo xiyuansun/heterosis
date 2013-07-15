@@ -158,6 +158,7 @@ __host__ void printDIC(Chain *host_a, Chain *dev_a, Config *cfg){
 
   FILE *fp;
   char file[BUF];
+  num_t tmp;
   
   if(cfg->dic){
   
