@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-oneIteration(Chain *host_a, Chain *dev_a, Config *cfg){
+__host__ void oneIteration(Chain *host_a, Chain *dev_a, Config *cfg){
   ++cfg->chainNum;
 
   if(cfg->verbose)
