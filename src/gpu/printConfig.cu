@@ -20,12 +20,12 @@ void printConfig(Config *cfg){
   printf("verbose = %d\n", cfg->verbose);
   printf("dic = %d\n", cfg->dic);
   printf("gelman = %d\n\n", cfg->gelman);
- */ 
+ 
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);
   printf("seed = %d\n\n", cfg->seed);
   printf("heterosis = %d\n\n", cfg->heterosis);
-  
+ */ 
   printf("M = %d\n", cfg->M);
   printf("N = %d\n", cfg->N);
   printf("G = %d\n\n", cfg->G);
