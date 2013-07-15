@@ -22,7 +22,7 @@ void mcmc(int argc, char **argv){
 
     if(cfg->verbose)
       printf("\n  Chain %d\n", i);
-
+ 
     cfg->chainNum = i;
     
     runChain(a, cfg);
