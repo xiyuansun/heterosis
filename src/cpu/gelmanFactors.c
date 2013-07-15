@@ -100,6 +100,8 @@ void oneDir(char *dir, FILE *outfp, int burnin){
     exit(EXIT_FAILURE);
   }
   
+  printf("%d\n", MAXROW);
+  
   while(fgets(row, MAXROW, fp) != NULL)
     ++nRows;
     
