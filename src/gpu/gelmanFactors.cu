@@ -83,10 +83,7 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
   num_t **x, fac;
   
   J = getNumFiles(dir);
-
-printf("hi\n");
-
-
+  
   if(J < 2){
     printf("ERROR: you need at least 2 chains.\n");
     fclose(outfp);
@@ -110,6 +107,8 @@ printf("hi\n");
   while(!sscanf(parmName, "%f", &fac)){
     
     ++parmNum;
+    
+    printf("%d\n", parNum);
     
     extractOneParm(x, dir, outfp, parmName, parmNum, nRows, J, burnin); 
     fac = gelmanFactor(x, I, J);
