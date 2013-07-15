@@ -40,7 +40,7 @@ void mcmc(int argc, char **argv){
     gelmanFactors(cfg);
   
       
-        printf("%d\n", parmNum);
+        printf("hi\n");
   
   if(cfg->verbose)
     printf("Done.\n");
