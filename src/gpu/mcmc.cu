@@ -11,6 +11,10 @@ __host__ void oneIteration(Chain *host_a, Chain *dev_a, Config *cfg){
   if(cfg->verbose)
     printf("  Chain %d of %d.\n", cfg->chainNum, cfg->chains);
       
+printChain(host_a, dev_a, cfg);      
+      
+      
+      
   runChain(host_a, dev_a, cfg);
   summarizeChain(host_a, dev_a, cfg);
   resetChain(host_a, dev_a, cfg);
@@ -21,7 +25,13 @@ void mcmc(int argc, char **argv){
   Config *cfg = config(argc, argv); 
   Chain *host_a = NULL, *dev_a = NULL;
 
+
+printConfig(cfg);
+
   newChain(&host_a, &dev_a, cfg);  
+
+
+printConfig(cfg);
   
   if(host_a == NULL){
     free(cfg);
