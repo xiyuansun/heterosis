@@ -18,7 +18,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     
     if(cfg->verbose)
       printf("    iter %d | ", m);
-    
+/*    
     sampleC(host_a, dev_a,  cfg);
     sampleTau(host_a, dev_a,  cfg);
     samplePiAlp(host_a, dev_a, cfg);
@@ -34,7 +34,7 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     sampleEta(host_a, dev_a,  cfg);
     sampleEps(host_a, dev_a,  cfg);
     samplePhiAlpDel(host_a, dev_a, cfg); 
-    
+  */  
     interimResults(host_a, dev_a, cfg);
     
     if(cfg->verbose)
