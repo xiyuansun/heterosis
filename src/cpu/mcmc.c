@@ -17,6 +17,8 @@ void mcmc(int argc, char **argv){
   
   if(cfg->verbose)
     printf("Running %d chain(s).\n", cfg->chains);
+ 
+printConfig(cfg); 
   
   for(i = 0; i < cfg->chains; ++i){
 
@@ -27,6 +29,9 @@ void mcmc(int argc, char **argv){
     
     runChain(a, cfg);
     summarizeChain(a, cfg);
+
+
+printChain(a);
 
     resetChain(a, cfg);
   }
