@@ -5,7 +5,7 @@
 #include <string.h>
 
 void printConfig(Config *cfg){
-
+/*
   printf("chainNum = %d\n", cfg->chainNum);
   printf("m = %d\n", cfg->m);
   printf("chains = %d\n\n", cfg->chains);
@@ -20,7 +20,7 @@ void printConfig(Config *cfg){
   printf("verbose = %d\n", cfg->verbose);
   printf("dic = %d\n", cfg->dic);
   printf("gelman = %d\n\n", cfg->gelman);
-  
+ */ 
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);
   printf("seed = %d\n\n", cfg->seed);
