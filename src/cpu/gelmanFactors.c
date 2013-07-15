@@ -79,12 +79,12 @@ void oneDir(char *dir, FILE *outfp, int burnin){
 
   char parmName[BUF], filename[BUF], row[MAXROW];
   FILE *fp;
-  int i, I, J, parmNum = 0, nRows = 0, nfiles;
+  int i, I, J, parmNum = 0, nRows = 0;
   num_t **x, fac;
   
   J = getNumFiles(dir);
 
-  if(nfiles < 2){
+  if(J < 2){
     printf("ERROR: you need at least 2 chains.\n");
     fclose(outfp);
     exit(EXIT_FAILURE);
