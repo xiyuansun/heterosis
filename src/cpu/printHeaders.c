@@ -6,12 +6,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 
 void printHeaders(Chain *a, Config *cfg){
   FILE *fp;
   int n, g, G = cfg->G;
   char file[BUF];
- 
+   
+  chdir(cfg->outDir); 
+   
   /* differential expression and heterosis probabilities */
   
   if(cfg->probs){

@@ -11,14 +11,15 @@
 
 Config *config(int argc, char **argv){
 
+  char cmd[BUF];
   Config *cfg = (Config*) malloc(sizeof(Config));
-  mode_t process_mask;
   
   /* default filenames */        
 
   strcpy(cfg->dataFile, "../data/data.txt"); 
   strcpy(cfg->groupFile, "../data/group.txt");
   strcpy(cfg->outDir, "../out");
+  getcwd(cfg->cwd, BUF);  
    
   cfg->probs = 0; 
   cfg->rates = 0;
@@ -101,52 +102,33 @@ Config *config(int argc, char **argv){
   cfg->sigDel = -1;
   cfg->piAlp = -1;
   cfg->piDel = -1;
-
+  
   getopts(cfg, argc, argv);
-  srand(cfg->seed);
+  srand(cfg->seed);   
    
   if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic){
-    process_mask = umask(0);
-    mkdir(cfg->outDir, S_IRWXU | S_IRWXG | S_IRWXO); 
-    umask(process_mask);
+    sprintf(cmd, "mkdir -p %s", cfg->outDir);
+    system(cmd);
     chdir(cfg->outDir); 
   }
    
-  if(cfg->probs){
-    process_mask = umask(0);
-    mkdir("probs", S_IRWXU | S_IRWXG | S_IRWXO);
-    umask(process_mask);
-  }
+  if(cfg->probs)
+    system("mkdir -p probs");
   
-  if(cfg->rates){
-    process_mask = umask(0);
-    mkdir("rates", S_IRWXU | S_IRWXG | S_IRWXO);
-    umask(process_mask);
-  }
+  if(cfg->rates)
+    system("mkdir -p rates");
   
-  if(cfg->hyper){
-    process_mask = umask(0);
-    mkdir("hyper", S_IRWXU | S_IRWXG | S_IRWXO);
-    umask(process_mask);
-  }
+  if(cfg->hyper)
+    system("mkdir -p hyper");
   
-  if(cfg->parms){
-    process_mask = umask(0);
-    mkdir("parms", S_IRWXU | S_IRWXG | S_IRWXO); 
-    umask(process_mask);
-  }
+  if(cfg->parms)
+    system("mkdir -p parms");
   
-  if(cfg->time){
-    process_mask = umask(0);
-    mkdir("time", S_IRWXU | S_IRWXG | S_IRWXO);
-    umask(process_mask);
-  }
+  if(cfg->time)
+    system("mkdir -p time");
   
-  if(cfg->dic){
-    process_mask = umask(0);
-    mkdir("diagnostics", S_IRWXU | S_IRWXG | S_IRWXO);
-    umask(process_mask);
-  }
+  if(cfg->dic)
+    system("mkdir -p diagnostics");
   
   return cfg;
 }

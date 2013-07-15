@@ -12,7 +12,8 @@ void printConfig(Config *cfg){
   
   printf("dataFile = %s\n", cfg->dataFile);
   printf("groupFile = %s\n", cfg->groupFile);
-  printf("outDir = %s\n\n", cfg->outDir);
+  printf("outDir = %s\n", cfg->outDir);
+  printf("cwd = %s\n\n", cfg->cwd);
 
   printf("probs = %d\n", cfg->probs);
   printf("rates = %d\n", cfg->rates);

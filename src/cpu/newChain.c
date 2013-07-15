@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 int cmpfunc (const void *a, const void *b){
    return ( *(num_t*)a - *(num_t*)b );
@@ -143,6 +145,7 @@ Chain *newChain(Config *cfg){ /* host */
   num_t tmp;
   Chain *a;
 
+  chdir(cfg->cwd); 
   y = readData(cfg);
   
   N = cfg->N;
@@ -158,6 +161,8 @@ Chain *newChain(Config *cfg){ /* host */
     
     return NULL;
   }
+  
+  chdir(cfg->outDir); 
   
   if(cfg->verbose)
     printf("Allocating chain object.\n");
