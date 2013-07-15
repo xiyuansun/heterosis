@@ -14,10 +14,10 @@ typedef struct {
   char dataFile[BUF]; /* space-delimited text file with G rows and N columns */
   char groupFile[BUF]; /* space-delimited text file with 1 row and N entries */
 
-  int ratesFlag; /* choice to output acceptance rates */
-  int hyperFlag; /* choice to output hyperparameters */
-  int parmsFlag; /* choice to output parameters */
-  int timeFlag; /* output how much time it takes to sample each kind of parameter */
+  int rates; /* choice to output acceptance rates */
+  int hyper; /* choice to output hyperparameters */
+  int parms; /* choice to output parameters */
+  int time; /* output how much time it takes to sample each kind of parameter */
   int verbose;
   int dic;
   int gelman;
