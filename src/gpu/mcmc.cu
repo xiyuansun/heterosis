@@ -27,10 +27,10 @@ void mcmc(int argc, char **argv){
 
     cfg->chainNum = i;
     
-    runChain(host_a, dev_a, cfg);
-    summarizeChain(host_a, dev_a, cfg);
+   // runChain(host_a, dev_a, cfg);
+   // summarizeChain(host_a, dev_a, cfg);
 
-    resetChain(host_a, dev_a, cfg);
+//    resetChain(host_a, dev_a, cfg);
   }
   
   freeChain(host_a, cfg, 0);
