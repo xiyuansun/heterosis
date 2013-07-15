@@ -17,6 +17,7 @@ Config *config(int argc, char **argv){
   strcpy(cfg->dataFile, "../data/data.txt"); 
   strcpy(cfg->groupFile, "../data/group.txt");
    
+  cfg->probs = 0; 
   cfg->rates = 0;
   cfg->hyper = 0;
   cfg->parms = 0;
@@ -86,8 +87,13 @@ Config *config(int argc, char **argv){
   getopts(cfg, argc, argv);
   srand(cfg->seed);
    
-  system("mkdir -p ../out/");
-  system("mkdir -p ../out/probs/");
+  system("rm -rf ../out/");  
+   
+  if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic || cfg->gelman) 
+    system("mkdir -p ../out/"); 
+   
+  if(cfg->probs)
+    system("mkdir -p ../out/probs/");
   
   if(cfg->rates)
     system("mkdir -p ../out/rates/");

@@ -17,7 +17,8 @@ void getopts(Config *cfg, int argc, char **argv){
     {"burnin", required_argument, 0, 'b'},
     {"joint", no_argument, 0, 'j'}, 
     {"hyper", no_argument, 0, 'h'},
-    {"parms", no_argument, 0, 'p'},
+    {"probs", no_argument, 0, 'p'},
+    {"parms", no_argument, 0, 'P'},
     {"rates", no_argument, 0, 'r'},  
     {"verbose", no_argument, 0, 'v'},
     {"dic", no_argument, 0, 'E'},
@@ -82,6 +83,9 @@ void getopts(Config *cfg, int argc, char **argv){
 
     } else if(c == 'h' || c == 'H') { /* hyper */
       cfg->hyper = 1;
+    
+    } else if(c == 'p' || c == 'p') { /* probs */
+      cfg->probs = 1;
     
     } else if(c == 'p' || c == 'P') { /* parms */
       cfg->parms = 1;

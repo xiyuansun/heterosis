@@ -14,6 +14,7 @@ typedef struct {
   char dataFile[BUF]; /* space-delimited text file with G rows and N columns */
   char groupFile[BUF]; /* space-delimited text file with 1 row and N entries */
 
+  int probs; /* choice to output heterosis / diff expr probabilities */
   int rates; /* choice to output acceptance rates */
   int hyper; /* choice to output hyperparameters */
   int parms; /* choice to output parameters */

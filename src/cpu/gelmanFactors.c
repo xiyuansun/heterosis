@@ -81,7 +81,8 @@ void oneDir(char *dir, FILE *outfp, int burnin){
   char parmName[BUF], filename[BUF], row[MAXROW];
   FILE *fp;
   int i, I, J, parmNum = 0, nRows = 0;
-  num_t **x, fac;
+  num_t **x;
+  float fac;
   
   J = getNumFiles(dir);
 
@@ -112,7 +113,10 @@ void oneDir(char *dir, FILE *outfp, int burnin){
     extractOneParm(x, dir, outfp, parmName, parmNum, nRows, J, burnin); 
     fac = gelmanFactor(x, I, J);
     
-    fprintf(outfp, "%s %0.3f\n", parmName, fac); 
+    fprintf(outfp, "%s ", parmName);
+    fprintf(outfp, NUM_TF, fac); 
+    fprintf(outfp, "\n");
+    
     fscanf(fp, "%s ", parmName);
   }
 
