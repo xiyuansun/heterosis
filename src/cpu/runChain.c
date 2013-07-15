@@ -18,7 +18,7 @@ void runChain(Chain *a, Config *cfg){
   for(m = 0; m < a->M; ++m){
     
     if(cfg->verbose)
-      printf("    iter %d | ", m);
+      printf("    iter %d | ", m + 1);
     
     sampleC(a, cfg);
     sampleTau(a, cfg);

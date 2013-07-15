@@ -3,7 +3,7 @@ oneParm = function(dir, parmName, parmNum, outFile, nfiles){
 
   l = mcmc.list()
   for(i in 1:nfiles){
-    cmd = paste("cut -d ' ' -f", parmNum, " ", dir, "chain", i - 1, ".txt", sep="")
+    cmd = paste("cut -d ' ' -f", parmNum, " ", dir, "chain", i, ".txt", sep="")
     con = pipe(cmd)
     l[[i]] = mcmc(as.numeric(scan(con, what = character(), quiet = T)[-1]))
     close(con)
@@ -14,7 +14,7 @@ oneParm = function(dir, parmName, parmNum, outFile, nfiles){
 }
 
 readHeader = function(dir){
-  con = file(paste(dir, "chain0.txt", sep = ""), "r") 
+  con = file(paste(dir, "chain1.txt", sep = ""), "r") 
   h = readLines(con, 1)
   close(con)
   strsplit(h, split = " ")[[1]]
@@ -34,8 +34,17 @@ oneDir = function(dir, outFile){
     oneParm(dir, h[i], i, outFile, nfiles)
 }
 
-gelmanFactors = function(){
-  outFile = "../out/diagnostics/gelman-factors.txt"  
+gelmanFactors = function(outFile = "../out/diagnostics/gelman-factors.txt"){
+
+
+  if(!file.exists("../out/")){
+    print("ERROR: no mcmc output to work with.")
+    return(NULL);
+  }
+
+  if(!file.exists("../out/diagnostics"))
+    dir.create("../out/diagnostics")
+    
   write("parameter gelman-point-est 95%-upper-bd", outFile, append = T, sep = " ")
 
   dirs = paste("../out/", c("hyper/", "parms/"), sep = "")

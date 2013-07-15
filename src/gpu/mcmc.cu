@@ -41,4 +41,4 @@ void mcmc(int argc, char **argv){
     printf("Done.\n");
 
   free(cfg);
-}
+} 
