@@ -21,8 +21,6 @@ void mcmc(int argc, char **argv){
   Config *cfg = config(argc, argv); 
   Chain *a = newChain(cfg);
   
-  printConfig(cfg); 
-  
   if(a == NULL){
     free(cfg);
     exit(EXIT_FAILURE);
