@@ -58,7 +58,10 @@ __global__ void updateDICprep_kernel2(Chain *a){ /* kernel<<<G, 1>>> */
 }
 
 __host__ void updateDICprep(Chain *a, Config *cfg){
-  updateDICprep_kernel1<<<1, 1>>>(a);
-  updateDICprep_kernel2<<<G_GRID, G_BLOCK>>>(a);
+
+  if(cfg->m >= cfg->burnin){
+    updateDICprep_kernel1<<<1, 1>>>(a);
+    updateDICprep_kernel2<<<G_GRID, G_BLOCK>>>(a);
+  }
 }
 
