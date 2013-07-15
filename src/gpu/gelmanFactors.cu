@@ -7,7 +7,7 @@
 
 __host__ int getNumFiles(char *dir){
   FILE *fp;
-  char buf[BUF], cmd[BUF];
+  char buf[MAXROW], cmd[BUF];
   
   sprintf(cmd, "ls %s | wc -l", dir);
   fp = popen(cmd, "r");
