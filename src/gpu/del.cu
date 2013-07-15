@@ -53,7 +53,7 @@ __global__ void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
 
 __host__ void sampleDel(Chain *host_a, Chain *dev_a, Config* cfg){ /* host */
 
-  num_t myTime;
+  float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);

@@ -25,7 +25,7 @@ __global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
 
 __host__ void sampleSigC(Chain *host_a, Chain *dev_a, Config *cfg){ 
 
-  num_t myTime;
+  float myTime;
   cudaEvent_t start, stop;
   
   if(cfg->constSigC)

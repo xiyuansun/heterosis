@@ -35,7 +35,7 @@ __global__ void sampleTheAlp_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 __host__ void sampleTheAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  num_t myTime;
+  float myTime;
   cudaEvent_t start, stop;
   
   if(cfg->constTheAlp)

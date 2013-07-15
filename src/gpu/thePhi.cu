@@ -29,7 +29,7 @@ __global__ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 __host__ void sampleThePhi(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  num_t myTime;
+  float myTime;
   cudaEvent_t start, stop;
   
   if(cfg->constTheDel || !cfg->heterosis)

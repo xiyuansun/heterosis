@@ -34,7 +34,7 @@ __global__ void sampleSigAlp_kernel2(Chain *a){ /* parallel pairwise sum in Thru
 
 __host__ void sampleSigAlp(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  num_t myTime;
+  float myTime;
   cudaEvent_t start, stop;
   
   if(cfg->constSigAlp)

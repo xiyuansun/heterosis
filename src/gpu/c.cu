@@ -81,7 +81,7 @@ __global__ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
 
 __host__ void sampleC(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   int n;
-  num_t myTime;
+  float myTime;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);

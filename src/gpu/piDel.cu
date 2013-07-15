@@ -25,7 +25,7 @@ __global__ void samplePiDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
 
 __host__ void samplePiDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
 
-  num_t myTime;
+  float myTime;
   cudaEvent_t start, stop;
   
   if(cfg->constPiDel || !cfg->heterosis)
