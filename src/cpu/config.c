@@ -34,6 +34,7 @@ Config *config(int argc, char **argv){
   cfg->burnin = cfg->M / 2;
   cfg->joint = 0;
   cfg->seed = 22;
+  cfg->heterosis = 1;
 
   /* default initialization constants */
 
