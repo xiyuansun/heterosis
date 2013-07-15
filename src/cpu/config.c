@@ -102,7 +102,6 @@ Config *config(int argc, char **argv){
     system("mkdir -p ../out/time/");
   
   if(cfg->dic || cfg->gelman){
-  
     system("mkdir -p ../out/diagnostics/");
     system("rm -f ../out/diagnostics/dic.txt");
     system("rm -f ../out/diagnostics/dic.txt");
