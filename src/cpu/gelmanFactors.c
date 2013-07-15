@@ -99,6 +99,8 @@ void oneDir(char *dir, FILE *outfp, int burnin){
   
   while(fgets(row, MAXROW, fp) != NULL)
     ++nRows;
+  
+  printf("hum\n");
     
   I = nRows - burnin - 1;  
   x = malloc(I * sizeof(num_t*));
