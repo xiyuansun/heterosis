@@ -108,12 +108,13 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
     
     ++parmNum;
     
-    printf("%d\n", parmNum);
-    
     extractOneParm(x, dir, outfp, parmName, parmNum, nRows, J, burnin); 
     fac = gelmanFactor(x, I, J);
     
     fprintf(outfp, "%s %0.3f\n", parmName, fac); 
+    
+        printf("%d\n", parmNum);
+    
     fscanf(fp, "%s ", parmName);
   }
 
