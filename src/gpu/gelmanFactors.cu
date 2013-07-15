@@ -116,6 +116,8 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
         printf("%d\n", parmNum);
     
     fscanf(fp, "%s ", parmName);
+    
+    printf("ho\n", parmNum);
   }
 
   for(i = 0; i < J; ++i)
