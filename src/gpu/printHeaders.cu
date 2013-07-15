@@ -17,7 +17,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   
   if(cfg->probs){
 
-	sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
+	sprintf(file, "/probs/chain%d.txt", cfg->chainNum);
 	fp = fopen(file, "w");
   
 	if(fp == NULL){
@@ -36,7 +36,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   /* hyperparameters */
   
   if(cfg->hyper){
-    sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
+    sprintf(file, "/hyper/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");
     
     if(fp == NULL){
@@ -88,7 +88,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   /* parameters */
   
   if(cfg->parms){
-    sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
+    sprintf(file, "/parms/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");
     
     if(fp == NULL){
@@ -169,7 +169,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   
   if(cfg->rates){
   
-    sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
+    sprintf(file, "/rates/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w"); 
     
     if(fp == NULL){
@@ -185,7 +185,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   
   if(cfg->time){
   
-    sprintf(file, "../out/time/chain%d.txt", cfg->chainNum);
+    sprintf(file, "/time/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w"); 
   
     if(fp == NULL){
