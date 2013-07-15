@@ -1,4 +1,6 @@
 #include <constants.h>
+#include <cuda.h>
+#include <curand_kernel.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -65,7 +67,7 @@ __host__ void pi3(int *v, int l1, int l2, int l3, const char* m){
   }
 }
 
-void pf3(num_t *v, int l1, int l2, int l3, const char* m){
+__host__ void pf3(num_t *v, int l1, int l2, int l3, const char* m){
   int i, j, k;
   printf("%s", m);
   for(i = 0; i < l1; ++i){
