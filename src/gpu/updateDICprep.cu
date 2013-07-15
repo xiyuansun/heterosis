@@ -20,7 +20,9 @@ __global__ void updateDICprep_kernel1(Chain *a){ /* kernel<<<1, 1>>> */
       a->meanC[n] = a->c[n];
       
   } else {
-
+    s1 = ((m - 1)/((num_t) m));
+	s2 = (1/((num_t) m));
+	
     a->meanLogLik = s1 * (a->meanLogLik) + s2 * ll;
 
     for(n = 0; n < N; ++n)
@@ -59,7 +61,7 @@ __global__ void updateDICprep_kernel2(Chain *a){ /* kernel<<<G, 1>>> */
   }
 }
 
-__host__ void updateDICprep(Chain *a){
+__host__ void updateDICprep(Chain *a, Config *cfg){
   updateDICprep_kernel1<<<1, 1>>>(a);
   updateDICprep_kernel2<<<G_GRID, G_BLOCK>>>(a);
 }
