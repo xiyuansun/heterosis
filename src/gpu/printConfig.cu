@@ -14,7 +14,7 @@ void printConfig(Config *cfg){
   printf("groupFile = %s\n", cfg->groupFile);
   printf("outDir = %s\n", cfg->outDir);
   printf("cwd = %s\n\n", cfg->cwd); 
-
+/*
   printf("probs = %d\n", cfg->probs);
   printf("rates = %d\n", cfg->rates);
   printf("hyper = %d\n", cfg->hyper);
@@ -22,7 +22,7 @@ void printConfig(Config *cfg){
   printf("time = %d\n", cfg->time);
   printf("verbose = %d\n", cfg->verbose);
   printf("dic = %d\n\n", cfg->dic);
- 
+ */
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);
   printf("seed = %d\n\n", cfg->seed);
