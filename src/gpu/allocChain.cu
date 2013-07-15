@@ -91,22 +91,22 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
 
   /* parameters */
 
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->c), cfg->N * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->eps), cfg->N * cfg->G * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->eta), cfg->G * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->phi), cfg->G * sizeof(num_t)));
- // CUDA_CALL(cudaMalloc((void**) &((*host_a)->alp), cfg->G * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->del), cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->c), cfg->N * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->eps), cfg->N * cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->eta), cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->phi), cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->alp), cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->del), cfg->G * sizeof(num_t)));
   
   /* temporary and return values */
 
- // CUDA_CALL(cudaMalloc((void**) &((*host_a)->tmp1), cfg->G * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->tmp2), cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->tmp1), cfg->G * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->tmp2), cfg->G * sizeof(num_t)));
 
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->Old), cfg->N * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->New), cfg->N * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->lOld), cfg->N * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->lNew), cfg->N * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->Old), cfg->N * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->New), cfg->N * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->lOld), cfg->N * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->lNew), cfg->N * sizeof(num_t)));
 
   /* tuning parameters for Metropolis steps */
   
