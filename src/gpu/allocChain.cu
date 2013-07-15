@@ -81,13 +81,13 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
 
   /* curand states */
   
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->N * cfg->G * sizeof(curandState_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->N * cfg->G * sizeof(curandState_t)));
   
   /* data */   
   
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->y), cfg->N * cfg->G * sizeof(count_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->yMeanG), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->grp), cfg->N * sizeof(int)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->y), cfg->N * cfg->G * sizeof(count_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->yMeanG), cfg->N * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->grp), cfg->N * sizeof(int)));
 
   /* parameters */
 
