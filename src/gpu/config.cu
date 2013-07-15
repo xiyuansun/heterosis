@@ -6,15 +6,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 Config *config(int argc, char **argv){
 
+  char cmd[BUF];
   Config *cfg = (Config*) malloc(sizeof(Config));
   
   /* default filenames */        
 
   strcpy(cfg->dataFile, "../data/data.txt"); 
   strcpy(cfg->groupFile, "../data/group.txt");
+  strcpy(cfg->outDir, "../out");
+  getcwd(cfg->cwd, BUF);  
    
   cfg->rates = 0;
   cfg->hyper = 0;
@@ -97,32 +102,31 @@ Config *config(int argc, char **argv){
   cfg->piDel = -1;
 
   getopts(cfg, argc, argv);
-  srand(cfg->seed);
+  srand(cfg->seed);   
    
-  system("rm -rf ../out/");  
-   
-  if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic) 
-    system("mkdir -p ../out/"); 
+  if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic){
+    sprintf(cmd, "mkdir -p %s", cfg->outDir);
+    system(cmd);
+    chdir(cfg->outDir); 
+  }
    
   if(cfg->probs)
-    system("mkdir -p ../out/probs/");
+    system("mkdir -p probs");
   
   if(cfg->rates)
-    system("mkdir -p ../out/rates/");
+    system("mkdir -p rates");
   
   if(cfg->hyper)
-    system("mkdir -p ../out/hyper/");
+    system("mkdir -p hyper");
   
   if(cfg->parms)
-    system("mkdir -p ../out/parms/"); 
+    system("mkdir -p parms");
   
   if(cfg->time)
-    system("mkdir -p ../out/time/");
+    system("mkdir -p time");
   
-  if(cfg->dic){
-    system("mkdir -p ../out/diagnostics/");
-    system("rm -f ../out/diagnostics/dic.txt");
-  }
+  if(cfg->dic)
+    system("mkdir -p diagnostics");
   
   return cfg;
 }

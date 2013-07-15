@@ -171,6 +171,7 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
   count_t *y;
   num_t tmp, *yMeanG;
 
+  chdir(cfg->cwd); 
   y = readData(cfg);
   
   N = cfg->N;
@@ -185,6 +186,8 @@ void newChain(Chain **host_a, Chain **dev_a, Config *cfg){ /* host */
     free(y);
     return;
   }
+  
+  chdir(cfg->outDir); 
   
   if(cfg->verbose)
     printf("Allocating chain object.\n"); 
