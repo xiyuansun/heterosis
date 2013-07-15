@@ -84,6 +84,20 @@ Config *config(int argc, char **argv){
   cfg->timePhi = 0;
   cfg->timeAlp = 0;
   cfg->timeDel = 0;
+  
+  /* unset hyperparameters get value -1 */
+  
+  cfg->sigC = -1;
+  cfg->d = -1;
+  cfg->tau = -1;
+  cfg->thePhi = -1;
+  cfg->theAlp = -1;
+  cfg->theDel = -1;
+  cfg->sigPhi = -1;
+  cfg->sigAlp = -1;
+  cfg->sigDel = -1;
+  cfg->piAlp = -1;
+  cfg->piDel = -1;
 
   getopts(cfg, argc, argv);
   srand(cfg->seed);
