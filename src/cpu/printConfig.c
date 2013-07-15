@@ -19,8 +19,7 @@ void printConfig(Config *cfg){
   printf("parms = %d\n", cfg->parms);
   printf("time = %d\n", cfg->time);
   printf("verbose = %d\n", cfg->verbose);
-  printf("dic = %d\n", cfg->dic);
-  printf("gelman = %d\n\n", cfg->gelman);
+  printf("dic = %d\n\n", cfg->dic);
   
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);

@@ -34,9 +34,6 @@ void mcmc(int argc, char **argv){
   
   freeChain(a, cfg);
   
-  if(cfg->gelman)
-    gelmanFactors(cfg);
-  
   if(cfg->verbose)
     printf("Done.\n");
     
