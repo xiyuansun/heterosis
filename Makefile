@@ -33,8 +33,8 @@ DEP+=interimResults summarizeChain
 DEP+=updateDICprep dic
 DEP+=mcmc main
 
-CCDEP=$(DEP) mu logLik
-NVCCDEP=$(DEP) chainDeviceToHost 
+CCDEP=mu logLik $(DEP)
+NVCCDEP=chainDeviceToHost $(DEP)
 
 CCOBJ=$(foreach name, $(CCDEP), $(CCOBJDIR)$(name).o)
 NVCCOBJ=$(foreach name, $(NVCCDEP), $(NVCCOBJDIR)$(name).o)
