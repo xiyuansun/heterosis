@@ -17,12 +17,13 @@ Config *config(int argc, char **argv){
   strcpy(cfg->dataFile, "../data/data.txt"); 
   strcpy(cfg->groupFile, "../data/group.txt");
    
-  cfg->ratesFlag = 0;
-  cfg->hyperFlag = 0;
-  cfg->parmsFlag = 0;
-  cfg->timeFlag = 0;
+  cfg->rates = 0;
+  cfg->hyper = 0;
+  cfg->parms = 0;
+  cfg->time = 0;
   cfg->verbose = 0;
-  cfg->diagnostics = 0;
+  cfg->dic = 0;
+  cfg->gelman = 0;
 
   cfg->chains = 2;
   cfg->m = 1;
@@ -88,16 +89,16 @@ Config *config(int argc, char **argv){
   system("mkdir -p ../out/");
   system("mkdir -p ../out/probs/");
   
-  if(cfg->ratesFlag)
+  if(cfg->rates)
     system("mkdir -p ../out/rates/");
   
-  if(cfg->hyperFlag)
+  if(cfg->hyper)
     system("mkdir -p ../out/hyper/");
   
-  if(cfg->parmsFlag)
+  if(cfg->parms)
     system("mkdir -p ../out/parms/"); 
   
-  if(cfg->timeFlag)
+  if(cfg->time)
     system("mkdir -p ../out/time/");
   
   if(cfg->diagnostics){

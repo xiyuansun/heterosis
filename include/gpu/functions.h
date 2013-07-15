@@ -145,6 +145,12 @@ __global__ void updateM(Chain*);
 __host__ void interimResults(Chain*, Chain*, Config*);
 __host__ void summarizeChain(Chain*, Chain*, Config*);
 
+__host__ int getNumFiles(char*);
+__host__ void extractOneParm(num_t**, char*, FILE*, char*, int, int, int, int);
+__host__ num_t gelmanFactor(num_t**, int, int);
+__host__ void oneDir(char*, FILE*, int);
+__host__ void gelmanFactors(Config*);
+
 inline __device__ num_t mu(Chain *a, int n, num_t phi, num_t alp, num_t del){
   if(a->grp[n] == 1){
     return phi - alp;

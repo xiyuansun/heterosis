@@ -60,7 +60,7 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   /* acceptance rates of Metropolis steps */
   
-  if(cfg->ratesFlag){
+  if(cfg->rates){
   
     if(cfg->verbose)
       printf("  Printing acceptance rates of metropolis steps.\n");
@@ -149,7 +149,8 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
   
   /* DIC */
 
-  if(cfg->diagnostics){
+  if(cfg->dic){
+  
 	fp = fopen("../out/diagnostics/dic.txt", "a");
   
 	if(fp == NULL){

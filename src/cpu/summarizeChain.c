@@ -115,7 +115,7 @@ void summarizeChain(Chain *a, Config *cfg){
     fclose(fp);
   }
     
-  /* dic */ 
+  /* DIC */ 
   
   if(cfg->dic){
      

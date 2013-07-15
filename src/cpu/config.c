@@ -104,12 +104,8 @@ Config *config(int argc, char **argv){
   if(cfg->dic || cfg->gelman){
   
     system("mkdir -p ../out/diagnostics/");
-    
-    if(cfg->dic)
-      system("rm -f ../out/diagnostics/dic.txt");
-      
-    if(cfg->gelman)
-      system("rm -f ../out/diagnostics/dic.txt");
+    system("rm -f ../out/diagnostics/dic.txt");
+    system("rm -f ../out/diagnostics/dic.txt");
   }
   
   return cfg;

@@ -36,6 +36,9 @@ void mcmc(int argc, char **argv){
   freeChain(host_a, cfg, 0);
   cudaFree(dev_a);
   
+  if(cfg->gelman)
+    gelmanFactors(cfg);
+  
   if(cfg->verbose)
     printf("Done.\n");
 

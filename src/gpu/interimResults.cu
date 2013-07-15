@@ -35,7 +35,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   
   /* hyperparameters */
   
-  if(cfg->hyperFlag){
+  if(cfg->hyper){
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
     
@@ -132,7 +132,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   
   /* parameters */
   
-  if(cfg->parmsFlag){
+  if(cfg->parms){
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
     
@@ -188,7 +188,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   
   /* time spent in each sampler */
   
-  if(cfg->timeFlag){
+  if(cfg->time){
   
     sprintf(file, "../out/time/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a"); 
@@ -220,7 +220,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
     fclose(fp);  
   }
   
-  if(cfg->diagnostics)
+  if(cfg->dic)
     updateDICprep(dev_a, cfg);
   
   ++cfg->m;

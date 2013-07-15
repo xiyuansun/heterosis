@@ -20,7 +20,8 @@ void getopts(Config *cfg, int argc, char **argv){
     {"parms", no_argument, 0, 'p'},
     {"rates", no_argument, 0, 'r'},  
     {"verbose", no_argument, 0, 'v'},
-    {"diagnostics", no_argument, 0, 'E'},
+    {"dic", no_argument, 0, 'E'},
+    {"gelman", no_argument, 0, 'F'},
     {"time", no_argument, 0, 't'},
     {"seed", required_argument, 0, 's'},   
     {"sigma-c0", required_argument, 0, 'x'},
@@ -55,7 +56,7 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "A:b:B:c:C:d:D:e:Ef:g:G:hHi:I:jJk:l:m:M:n:pPq:rRs:S:tTu:vVw:x:X:y:z:Z:1:2:3:4:5:6:7:8:9:0:",
+        "A:b:B:c:C:d:D:e:Ef:Fg:G:hHi:I:jJk:l:m:M:n:pPq:rRs:S:tTu:vVw:x:X:y:z:Z:1:2:3:4:5:6:7:8:9:0:",
         long_options, &option_index);
     
     if(c == -1)
@@ -80,22 +81,25 @@ void getopts(Config *cfg, int argc, char **argv){
       cfg->joint = 1;
 
     } else if(c == 'h' || c == 'H') { /* hyper */
-      cfg->hyperFlag = 1;
+      cfg->hyper = 1;
     
     } else if(c == 'p' || c == 'P') { /* parms */
-      cfg->parmsFlag = 1;
+      cfg->parms = 1;
     
     } else if(c == 'r' || c == 'R') { /* rates */
-      cfg->ratesFlag = 1;
+      cfg->rates = 1;
     
     } else if(c == 't' || c == 'T') { /* time */
-      cfg->timeFlag = 1;
+      cfg->time = 1;
     
     } else if(c == 'v' || c == 'V') { /* verbose */
       cfg->verbose = 1;
     
-    } else if(c == 'E') { /* diagnostics */
-      cfg->diagnostics = 1;
+    } else if(c == 'E') { /* DIC */
+      cfg->dic = 1;
+    
+    } else if(c == 'F') { /* Gelman factors */
+      cfg->gelman = 1;
     
     } else if(c == 's' || c == 'S') { /* seed */
       cfg->seed = atoi(optarg);
