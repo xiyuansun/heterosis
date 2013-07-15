@@ -21,7 +21,7 @@ void mcmc(int argc, char **argv){
   for(i = 0; i < cfg->chains; ++i){
 
     if(cfg->verbose)
-      printf("Chain %d\n", i);
+      printf("\n  Chain %d\n", i);
 
     cfg->chainNum = i;
     
