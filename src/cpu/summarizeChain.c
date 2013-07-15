@@ -4,12 +4,13 @@
 #include <functions.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void summarizeChain(Chain *a, Config *cfg){
   int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin;
   num_t accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
-  FILE *fp;
   char file[BUF];
+  FILE *fp;
 
   /* differential expression and heterosis probabilities */
   
@@ -43,7 +44,7 @@ void summarizeChain(Chain *a, Config *cfg){
   
   fclose(fp);
   
-  if(cfg->ratesFlag){
+  if(cfg->rates){
   
     if(cfg->verbose)
       printf("  Printing acceptance rates of metropolis steps.\n");
@@ -113,16 +114,17 @@ void summarizeChain(Chain *a, Config *cfg){
     
     fclose(fp);
   }
+    
+  /* dic */ 
   
-  /* DIC */
-
-  if(cfg->diagnostics){
-	fp = fopen("../out/diagnostics/dic.txt", "a");
+  if(cfg->dic){
+     
+    fp = fopen("../out/diagnostics/dic.txt", "a");
   
 	if(fp == NULL){
 	  printf("ERROR: unable to create file, %s\n", file);
 	  return;
-	}
+	} 
   
 	dic(a);
 	fprintf(fp, NUM_TF, a->dic);

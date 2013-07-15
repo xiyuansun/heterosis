@@ -27,7 +27,7 @@ void printHeaders(Chain *a, Config *cfg){
   
   /* hyperparameters */
   
-  if(cfg->hyperFlag){
+  if(cfg->hyper){
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");
     
@@ -58,7 +58,7 @@ void printHeaders(Chain *a, Config *cfg){
   
   /* parameters */
   
-  if(cfg->parmsFlag){
+  if(cfg->parms){
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w");
     
@@ -129,7 +129,7 @@ void printHeaders(Chain *a, Config *cfg){
   
   /* acceptance rates of Metropolis steps */
   
-  if(cfg->ratesFlag){
+  if(cfg->rates){
   
     sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w"); 
@@ -145,7 +145,7 @@ void printHeaders(Chain *a, Config *cfg){
   
   /* time spent sampling each parameter */
   
-  if(cfg->timeFlag){
+  if(cfg->time){
   
     sprintf(file, "../out/time/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "w"); 

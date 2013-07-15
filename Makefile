@@ -30,7 +30,7 @@ DEP+=thePhi theAlp theDel
 DEP+=sigPhi sigAlp sigDel
 DEP+=piAlp piDel
 DEP+=interimResults summarizeChain
-DEP+=updateDICprep dic
+DEP+=updateDICprep dic gelmanFactors
 DEP+=mcmc main
 
 CCDEP=mu logLik $(DEP)
