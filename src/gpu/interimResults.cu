@@ -221,7 +221,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   }
   
   if(cfg->diagnostics)
-    updateDICprep<<<1, 1>>>(dev_a);
+    updateDICprep<<<1, 1>>>(dev_a, cfg);
   
   ++cfg->m;
   updateM<<<1, 1>>>(dev_a);
