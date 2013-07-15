@@ -12,6 +12,7 @@ void getopts(Config *cfg, int argc, char **argv){
   struct option long_options[] = {
     {"data", required_argument, 0, 'i'},
     {"group", required_argument, 0, 'g'},
+    {"out", required_argument, 0, 'o'},
     {"chains", required_argument, 0, 'c'},
     {"iter", required_argument, 0, 'm'},
     {"burnin", required_argument, 0, 'b'},
@@ -56,7 +57,7 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "A:b:B:c:C:d:D:e:Ef:g:G:hHi:I:jJk:l:m:M:n:pPq:rRs:S:tTu:vVw:x:X:y:z:Z:1:2:3:4:5:6:7:8:9:0:",
+        "A:b:B:c:C:d:D:e:Ef:g:G:hHi:I:jJk:l:m:M:n:o:O:pPq:rRs:S:tTu:vVw:x:X:y:z:Z:1:2:3:4:5:6:7:8:9:0:",
         long_options, &option_index);
     
     if(c == -1)
@@ -67,6 +68,9 @@ void getopts(Config *cfg, int argc, char **argv){
       
     } else if(c == 'g' || c == 'G') { /* group */
       strcpy(cfg->groupFile, optarg);
+            
+    } else if(c == 'o' || c == 'O') { /* out */
+      strcpy(cfg->outDir, optarg);
             
     } else if(c == 'c' || c == 'C') { /* number of chains */
       cfg->chains = atoi(optarg);

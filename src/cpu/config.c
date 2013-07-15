@@ -6,15 +6,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 Config *config(int argc, char **argv){
 
   Config *cfg = (Config*) malloc(sizeof(Config));
+  mode_t process_mask;
   
   /* default filenames */        
 
   strcpy(cfg->dataFile, "../data/data.txt"); 
   strcpy(cfg->groupFile, "../data/group.txt");
+  strcpy(cfg->outDir, "../out");
    
   cfg->probs = 0; 
   cfg->rates = 0;
@@ -101,30 +105,48 @@ Config *config(int argc, char **argv){
   getopts(cfg, argc, argv);
   srand(cfg->seed);
    
-  system("rm -rf ../out/");  
+  if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic){
+    process_mask = umask(0);
+    mkdir(cfg->outDir, S_IRWXU | S_IRWXG | S_IRWXO); 
+    umask(process_mask);
+    chdir(cfg->outDir); 
+  }
    
-  if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic) 
-    system("mkdir -p ../out/"); 
-   
-  if(cfg->probs)
-    system("mkdir -p ../out/probs/");
+  if(cfg->probs){
+    process_mask = umask(0);
+    mkdir("probs", S_IRWXU | S_IRWXG | S_IRWXO);
+    umask(process_mask);
+  }
   
-  if(cfg->rates)
-    system("mkdir -p ../out/rates/");
+  if(cfg->rates){
+    process_mask = umask(0);
+    mkdir("rates", S_IRWXU | S_IRWXG | S_IRWXO);
+    umask(process_mask);
+  }
   
-  if(cfg->hyper)
-    system("mkdir -p ../out/hyper/");
+  if(cfg->hyper){
+    process_mask = umask(0);
+    mkdir("hyper", S_IRWXU | S_IRWXG | S_IRWXO);
+    umask(process_mask);
+  }
   
-  if(cfg->parms)
-    system("mkdir -p ../out/parms/"); 
+  if(cfg->parms){
+    process_mask = umask(0);
+    mkdir("parms", S_IRWXU | S_IRWXG | S_IRWXO); 
+    umask(process_mask);
+  }
   
-  if(cfg->time)
-    system("mkdir -p ../out/time/");
+  if(cfg->time){
+    process_mask = umask(0);
+    mkdir("time", S_IRWXU | S_IRWXG | S_IRWXO);
+    umask(process_mask);
+  }
   
   if(cfg->dic){
-    system("mkdir -p ../out/diagnostics/");
-    system("rm -f ../out/diagnostics/dic.txt");
+    process_mask = umask(0);
+    mkdir("diagnostics", S_IRWXU | S_IRWXG | S_IRWXO);
+    umask(process_mask);
   }
-
+  
   return cfg;
 }

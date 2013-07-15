@@ -157,7 +157,6 @@ __host__ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
 __host__ void printDIC(Chain *host_a, Chain *dev_a, Config *cfg){
 
   FILE *fp;
-  char file[BUF];
   num_t tmp;
   
   if(cfg->dic){
@@ -165,7 +164,7 @@ __host__ void printDIC(Chain *host_a, Chain *dev_a, Config *cfg){
 	fp = fopen("../out/diagnostics/dic.txt", "a");
   
 	if(fp == NULL){
-	  printf("ERROR: unable to create file, %s\n", file);
+	  printf("ERROR: unable to create file, diagnostics/dic.txt.\n");
 	  return;
 	}
   

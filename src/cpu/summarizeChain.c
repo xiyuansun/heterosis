@@ -22,7 +22,7 @@ void printProbs(Chain *a, Config *cfg){
 	  printf("probabilities.\n");
 	}
   
-	sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
+	sprintf(file, "probs/chain%d.txt", cfg->chainNum);
 	fp = fopen(file, "a");
   
 	if(fp == NULL){
@@ -56,7 +56,7 @@ void printRates(Chain *a, Config *cfg){
     if(cfg->verbose)
       printf("  Printing acceptance rates of metropolis steps.\n");
   
-    sprintf(file, "../out/rates/chain%d.txt", cfg->chainNum);
+    sprintf(file, "rates/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a"); 
     
     if(fp == NULL){
@@ -124,15 +124,15 @@ void printRates(Chain *a, Config *cfg){
 }
 
 void printDIC(Chain *a, Config *cfg){
-  char file[BUF];
+
   FILE *fp;
 
   if(cfg->dic){
      
-    fp = fopen("../out/diagnostics/dic.txt", "a");
+    fp = fopen("diagnostics/dic.txt", "a");
   
 	if(fp == NULL){
-	  printf("ERROR: unable to create file, %s\n", file);
+	  printf("ERROR: unable to create file, diagnostics/dic.txt\n");
 	  return;
 	} 
   
