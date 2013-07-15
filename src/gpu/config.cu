@@ -10,7 +10,7 @@
 Config *config(int argc, char **argv){
 
   Config *cfg = (Config*) malloc(sizeof(Config));
-  cfg->chainNum = 1;
+  cfg->chainNum = 0;
   
   /* default filenames */        
 
@@ -23,7 +23,6 @@ Config *config(int argc, char **argv){
   cfg->time = 0;
   cfg->verbose = 0;
   cfg->dic = 0;
-  cfg->gelman = 0;
 
   cfg->chains = 2;
   cfg->m = 1;
@@ -100,8 +99,13 @@ Config *config(int argc, char **argv){
   getopts(cfg, argc, argv);
   srand(cfg->seed);
    
-  system("mkdir -p ../out/");
-  system("mkdir -p ../out/probs/");
+  system("rm -rf ../out/");  
+   
+  if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic) 
+    system("mkdir -p ../out/"); 
+   
+  if(cfg->probs)
+    system("mkdir -p ../out/probs/");
   
   if(cfg->rates)
     system("mkdir -p ../out/rates/");
@@ -115,14 +119,8 @@ Config *config(int argc, char **argv){
   if(cfg->time)
     system("mkdir -p ../out/time/");
   
-  if((cfg->chains < 2) && cfg->gelman){
-    printf("ERROR: must have at least 2 chains for Gelman factors.\n");
-    cfg->gelman = 0;
-  }
-  
-  if(cfg->dic || cfg->gelman){
+  if(cfg->dic){
     system("mkdir -p ../out/diagnostics/");
-    system("rm -f ../out/diagnostics/dic.txt");
     system("rm -f ../out/diagnostics/dic.txt");
   }
   

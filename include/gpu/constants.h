@@ -1,10 +1,6 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define USE_R 0 /* set to 1 to use R script, gelman-factors.r, 
-                 * to compute Gelman factors.
-                 */
-
 #define BUF 256
 #define MAXROW 16384
 #define NUM_TF "%0.3f"

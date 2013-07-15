@@ -5,61 +5,66 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
+__host__ void printProbs(Chain *host_a, Chain *dev_a, Config *cfg){
+
   int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin, *dex, *hph, *lph, *mph;
-  num_t tmp, accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
-  int nAccD, *nAccC, *nAccPhi, *nAccAlp, *nAccDel, *nAccEps;
   FILE *fp;
   char file[BUF];
 
-  /* differential expression and heterosis probabilities */
+  if(cfg->probs){
+    if(cfg->verbose){
+	  printf("  Printing differential expression ");
+	
+	  if(cfg->heterosis)
+		printf("and heterosis ");
+	  
+	  printf("probabilities.\n");
+	}
   
-  if(cfg->verbose){
-    printf("  Printing differential expression ");
-    
-    if(cfg->heterosis)
-      printf("and heterosis ");
-      
-    printf("probabilities.\n");
+	sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
+	fp = fopen(file, "a");
+  
+	if(fp == NULL){
+	  printf("ERROR: unable to create file, %s\n", file);
+	  return;
+	}
+  
+	dex = (int*) malloc(cfg->G * sizeof(int));
+	hph = (int*) malloc(cfg->G * sizeof(int));
+	lph = (int*) malloc(cfg->G * sizeof(int));
+	mph = (int*) malloc(cfg->G * sizeof(int));
+  
+	CUDA_CALL(cudaMemcpy(dex, host_a->dex, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+	CUDA_CALL(cudaMemcpy(hph, host_a->hph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+	CUDA_CALL(cudaMemcpy(lph, host_a->lph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+	CUDA_CALL(cudaMemcpy(mph, host_a->mph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
+  
+	for(g = 0; g < G; ++g){
+	  fprintf(fp, NUM_TF, ((num_t) dex[g]) / niter); fprintf(fp, " ");
+	
+	  if(cfg->heterosis){
+		fprintf(fp, NUM_TF, ((num_t) hph[g]) / niter); fprintf(fp, " ");
+		fprintf(fp, NUM_TF, ((num_t) lph[g]) / niter); fprintf(fp, " ");
+		fprintf(fp, NUM_TF, ((num_t) mph[g]) / niter); fprintf(fp, " ");
+	  }
+	  fprintf(fp, "\n");
+	}
+  
+	free(dex);
+	free(hph);
+	free(lph);
+	free(mph);
+	fclose(fp);
   }
-  
-  sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
-  fp = fopen(file, "a");
-  
-  if(fp == NULL){
-    printf("ERROR: unable to create file, %s\n", file);
-    return;
-  }
-  
-  dex = (int*) malloc(cfg->G * sizeof(int));
-  hph = (int*) malloc(cfg->G * sizeof(int));
-  lph = (int*) malloc(cfg->G * sizeof(int));
-  mph = (int*) malloc(cfg->G * sizeof(int));
-  
-  CUDA_CALL(cudaMemcpy(dex, host_a->dex, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(hph, host_a->hph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(lph, host_a->lph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
-  CUDA_CALL(cudaMemcpy(mph, host_a->mph, cfg->G * sizeof(int), cudaMemcpyDeviceToHost));
-  
-  for(g = 0; g < G; ++g){
-    fprintf(fp, NUM_TF, ((num_t) dex[g]) / niter); fprintf(fp, " ");
-    
-    if(cfg->heterosis){
-      fprintf(fp, NUM_TF, ((num_t) hph[g]) / niter); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, ((num_t) lph[g]) / niter); fprintf(fp, " ");
-      fprintf(fp, NUM_TF, ((num_t) mph[g]) / niter); fprintf(fp, " ");
-    }
-    fprintf(fp, "\n");
-  }
-  
-  free(dex);
-  free(hph);
-  free(lph);
-  free(mph);
-  fclose(fp);
-  
-  /* acceptance rates of Metropolis steps */
-  
+}
+
+__host__ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
+
+  int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin;
+  int *dex, *hph, *lph, *mph;
+  FILE *fp;
+  char file[BUF];
+
   if(cfg->rates){
   
     if(cfg->verbose)
@@ -146,9 +151,13 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
     
     fclose(fp);
   }
-  
-  /* DIC */
+}
 
+__host__ void printDIC(Chain *host_a, Chain *dev_a, Config *cfg){
+
+  FILE *fp;
+  char file[BUF];
+  
   if(cfg->dic){
   
 	fp = fopen("../out/diagnostics/dic.txt", "a");
@@ -165,4 +174,11 @@ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
 	fprintf(fp, "\n");
 	fclose(fp);
   }  
+}
+
+__host__ void summarizeChain(Chain *host_a, Chain *dev_a, Config *cfg){
+
+  printProbs(host_a, dev_a, cfg);
+  printRates(host_a, dev_a, cfg);
+  printDIC(host_a, dev_a, cfg);
 }

@@ -15,20 +15,23 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
  
   /* differential expression and heterosis probabilities */
   
-  sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
-  fp = fopen(file, "w");
+  if(cfg->probs){
+
+	sprintf(file, "../out/probs/chain%d.txt", cfg->chainNum);
+	fp = fopen(file, "w");
   
-  if(fp == NULL){
-    printf("ERROR: unable to create file, %s\n", file);
-    return;
-  }  
+	if(fp == NULL){
+	  printf("ERROR: unable to create file, %s\n", file);
+	  return;
+	}  
   
-  fprintf(fp, "diff-expression ");
-  if(cfg->heterosis)
-    fprintf(fp, "high-parent-heterosis low-parent-heterosis mid-parent-heterosis");
-  fprintf(fp, "\n");
+	fprintf(fp, "diff-expression ");
+	if(cfg->heterosis)
+	  fprintf(fp, "high-parent-heterosis low-parent-heterosis mid-parent-heterosis");
+	fprintf(fp, "\n");
   
-  fclose(fp);
+	fclose(fp);
+  }
   
   /* hyperparameters */
   

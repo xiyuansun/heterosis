@@ -27,13 +27,10 @@ __global__ void updateM(Chain* a){
   ++a->m;
 }
 
-void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
-  FILE *fp;
+__host__ void printHyper(Chain *host_a, Chain *dev_a, Config *cfg){
   char file[BUF];
-  int n, g, G = cfg->G;
+  FILE *fp;
   num_t tmp, *tmpv;
-  
-  /* hyperparameters */
   
   if(cfg->hyper){
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
@@ -121,17 +118,17 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
       fprintf(fp, NUM_TF, tmp); fprintf(fp, " ");
     }
 
-    fprintf(fp, "\n");
-    
+    fprintf(fp, "\n");   
     fclose(fp);
   }
-  
-  /* heterosis and differential expression probabilities */
-  
-  updateProbs<<<G_GRID, G_BLOCK>>>(dev_a, cfg->heterosis);
-  
-  /* parameters */ 
-  
+}
+
+
+__host__ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
+  char file[BUF];
+  FILE *fp;
+  num_t tmp, *tmpv;
+
   if(cfg->parms){
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
@@ -181,13 +178,16 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
       }
       
     fprintf(fp, "\n"); 
-       
+        
     fclose(fp);
     free(tmpv);
   }
-  
-  /* time spent in each sampler */
-  
+} 
+
+__host__ void printTime(Chain *host_a, Chain *dev_a, Config *cfg){
+  char file[BUF];
+  FILE *fp;
+
   if(cfg->time){
   
     sprintf(file, "../out/time/chain%d.txt", cfg->chainNum);
@@ -219,6 +219,16 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
 
     fclose(fp);  
   }
+}
+
+__host__ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
+
+  if(cfg->probs) 
+    updateProbs<<<G_GRID, G_BLOCK>>>(dev_a, cfg->heterosis);
+  
+  printHyper(host_a, dev_a, cfg);
+  printParms(host_a, dev_a, cfg);
+  printTime(host_a, dev_a, cfg);
   
   if(cfg->dic)
     updateDICprep(dev_a, cfg);

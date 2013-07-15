@@ -5,6 +5,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+oneIteration(Chain *host_a, Chain *dev_a, Config *cfg){
+  ++cfg->chainNum;
+
+  if(cfg->verbose)
+    printf("  Chain %d\n", i);
+      
+  runChain(host_a, dev_a, cfg);
+  summarizeChain(host_a, dev_a, cfg);
+  resetChain(host_a, dev_a, cfg);
+}
+
 void mcmc(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
@@ -20,18 +31,8 @@ void mcmc(int argc, char **argv){
   if(cfg->verbose)
     printf("Running %d chain(s).\n", cfg->chains);
   
-  for(i = 0; i < cfg->chains; ++i){
-  
-    if(cfg->verbose)
-      printf("  Chain %d\n", i);
-
-    cfg->chainNum = i;
-    
-    runChain(host_a, dev_a, cfg);
-    summarizeChain(host_a, dev_a, cfg);
-
-    resetChain(host_a, dev_a, cfg);
-  }
+  for(i = 0; i < cfg->chains; ++i)
+    oneIteration(a, cfg);
   
   freeChain(host_a, cfg, 0);
   cudaFree(dev_a);

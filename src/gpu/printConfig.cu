@@ -13,13 +13,13 @@ void printConfig(Config *cfg){
   printf("dataFile = %s\n", cfg->dataFile);
   printf("groupFile = %s\n", cfg->groupFile);
 
+  printf("probs = %d\n", cfg->probs);
   printf("rates = %d\n", cfg->rates);
   printf("hyper = %d\n", cfg->hyper);
   printf("parms = %d\n", cfg->parms);
   printf("time = %d\n", cfg->time);
   printf("verbose = %d\n", cfg->verbose);
-  printf("dic = %d\n", cfg->dic);
-  printf("gelman = %d\n\n", cfg->gelman);
+  printf("dic = %d\n\n", cfg->dic);
  
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);

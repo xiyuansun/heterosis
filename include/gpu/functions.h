@@ -132,6 +132,7 @@ __host__ void samplePiDel(Chain*, Chain*, Config*);
 
 __host__ void runChain(Chain*, Chain*, Config*);
 __host__ void resetChain(Chain*, Chain*, Config*);
+__host__ void oneIteration(Chain*, Chain*, Config*);
 __host__ void mcmc(int, char**);
 
 __global__ void updateDICprep_kernel1(Chain*);
@@ -142,7 +143,13 @@ __global__ void dic(Chain*);
 __host__ void printHeaders(Chain*, Chain*, Config*);
 __global__ void updateProbs(Chain*, int);
 __global__ void updateM(Chain*);
+__host__ void printHyper(Chain*, Chain*, Config*);
+__host__ void printParms(Chain*, Chain*, Config*);
 __host__ void interimResults(Chain*, Chain*, Config*);
+
+__host__ void printProbs(Chain*, Chain*, Config*);
+__host__ void printRates(Chain*, Chain*, Config*);
+__host__ void printDIC(Chain*, Chain*, Config*);
 __host__ void summarizeChain(Chain*, Chain*, Config*);
 
 __host__ int getNumFiles(char*);
