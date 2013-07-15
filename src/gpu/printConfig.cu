@@ -25,13 +25,13 @@ void printConfig(Config *cfg){
   printf("joint = %d\n", cfg->joint);
   printf("seed = %d\n\n", cfg->seed);
   printf("heterosis = %d\n\n", cfg->heterosis);
- */ 
+  
   printf("M = %d\n", cfg->M);
   printf("N = %d\n", cfg->N);
   printf("G = %d\n\n", cfg->G);
   
   printf("sigC0 = "); printf(NUM_TF, cfg->sigC0); printf("\n");
-  printf("d0 = "); printf(NUM_TF, cfg->d0); printf("\n");
+  printf("d0 = "); printf(NUM_TF, cfg->d0); printf("\n");*/
   printf("aTau = "); printf(NUM_TF, cfg->aTau); printf("\n");
   printf("aAlp = "); printf(NUM_TF, cfg->aAlp); printf("\n");
   printf("aDel = "); printf(NUM_TF, cfg->aDel); printf("\n");
