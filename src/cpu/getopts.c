@@ -18,7 +18,7 @@ void getopts(Config *cfg, int argc, char **argv){
     {"joint", no_argument, 0, 'j'}, 
     {"hyper", no_argument, 0, 'h'},
     {"probs", no_argument, 0, 'p'},
-    {"parms", no_argument, 0, 'P'},
+    {"parms", no_argument, 0, 'P'}, 
     {"rates", no_argument, 0, 'r'},  
     {"verbose", no_argument, 0, 'v'},
     {"dic", no_argument, 0, 'E'},
