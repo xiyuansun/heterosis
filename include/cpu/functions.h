@@ -152,11 +152,6 @@ void printProbs(Chain*, Config*);
 void printRates(Chain*, Config*);
 void printDIC(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
-
-int getNumFiles(char*);
-void extractOneParm(num_t**, char*, FILE*, char*, int, int, int, int);
-num_t gelmanFactor(num_t**, int, int);
-void oneDir(char*, FILE*, int);
 void gelmanFactors(Config*);
 
 #endif /* FUNCTIONS_H */
