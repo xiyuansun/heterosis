@@ -5,6 +5,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+void oneIteration(Chain *a, Config *cfg){
+  ++cfg->chainNum;
+
+  if(cfg->verbose)
+    printf("\n  Chain %d\n", cfg->chainNum);
+        
+  runChain(a, cfg);
+  summarizeChain(a, cfg);
+  resetChain(a, cfg);
+}
+
 void mcmc(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
@@ -18,18 +29,8 @@ void mcmc(int argc, char **argv){
   if(cfg->verbose)
     printf("Running %d chain(s).\n", cfg->chains);
   
-  for(i = 0; i < cfg->chains; ++i){
-
-    if(cfg->verbose)
-      printf("\n  Chain %d\n", i);
- 
-    cfg->chainNum = i;
-    
-    runChain(a, cfg);
-    summarizeChain(a, cfg);
-
-    resetChain(a, cfg);
-  }
+  for(i = 0; i < cfg->chains; ++i)
+    oneIteration(a, cfg);
   
   freeChain(a, cfg);
   

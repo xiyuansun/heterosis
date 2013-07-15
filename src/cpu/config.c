@@ -10,7 +10,7 @@
 Config *config(int argc, char **argv){
 
   Config *cfg = (Config*) malloc(sizeof(Config));
-  cfg->chainNum = 1;
+  cfg->chainNum = 0;
   
   /* default filenames */        
 

@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 void printProbs(Chain *a, Config *cfg){
   int g, G = cfg->G,  niter = cfg->M - cfg->burnin;
   char file[BUF];

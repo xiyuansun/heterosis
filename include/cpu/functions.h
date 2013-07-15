@@ -134,6 +134,7 @@ void samplePiDel(Chain*, Config*);
 
 void runChain(Chain*, Config*);
 void resetChain(Chain*, Config*);
+void oneIteration(Chain*, Config*);
 void mcmc(int, char**);
 
 num_t logLik(count_t*, int*, int, int, num_t*, num_t*, num_t*, num_t*, num_t*);
@@ -141,7 +142,15 @@ void updateDICprep(Chain*);
 void dic(Chain*);
 
 void printHeaders(Chain*, Config*);
+void printHyper(Chain*, Config*);
+void printParms(Chain*, Config*);
+void updateProbs(Chain*, Config*);
+void printTime(Chain*, Config*);
 void intermResults(Chain*, Config*);
+
+void printProbs(Chain*, Config*);
+void printRates(Chain*, Config*);
+void printDIC(Chain*, Config*);
 void summarizeChain(Chain*, Config*);
 
 int getNumFiles(char*);
