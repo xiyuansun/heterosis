@@ -16,7 +16,7 @@ __device__ num_t lPhi(Chain *a, int g, num_t arg){ /* device */
         a->eps[iG(n, g)] + tmp);
   }
  
-  ret = s - pow((float) (arg - a->thePhi), 2) / (2 * pow((float) a->sigPhi, 2));
+  ret = s - pow((num_t) (arg - a->thePhi), 2) / (2 * pow((num_t) a->sigPhi, 2));
   return ret;
 }
 
