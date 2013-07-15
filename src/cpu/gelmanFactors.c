@@ -105,6 +105,8 @@ void oneDir(char *dir, FILE *outfp, int burnin){
  
   rewind(fp);
   fscanf(fp, "%s ", parmName);
+  
+  printf("hi\n");
 
   while(!sscanf(parmName, "%f", &fac)){
     
