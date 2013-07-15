@@ -20,9 +20,9 @@ void mcmc(int argc, char **argv){
   if(cfg->verbose)
     printf("Running %d chain(s).\n", cfg->chains);
   
-  for(i = 0; i < cfg->chains; ++i){
+  printConfig(cfg);
   
-  printChain(host_a, dev_a, cfg);
+  for(i = 0; i < cfg->chains; ++i){
   
     if(cfg->verbose)
       printf("  Chain %d\n", i);
