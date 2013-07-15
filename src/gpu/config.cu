@@ -20,7 +20,8 @@ Config *config(int argc, char **argv){
   strcpy(cfg->groupFile, "../data/group.txt");
   strcpy(cfg->outDir, "../out");
   getcwd(cfg->cwd, BUF);  
-   
+  
+  cfg->probs = 0; 
   cfg->rates = 0;
   cfg->hyper = 0;
   cfg->parms = 0;

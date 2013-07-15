@@ -9,11 +9,11 @@ void printConfig(Config *cfg){
   printf("chainNum = %d\n", cfg->chainNum);
   printf("m = %d\n", cfg->m);
   printf("chains = %d\n\n", cfg->chains);
-  /*
+  
   printf("dataFile = %s\n", cfg->dataFile);
   printf("groupFile = %s\n", cfg->groupFile);
   printf("outDir = %s\n", cfg->outDir);
-  printf("cwd = %s\n\n", cfg->cwd); */
+  printf("cwd = %s\n\n", cfg->cwd); 
 
   printf("probs = %d\n", cfg->probs);
   printf("rates = %d\n", cfg->rates);
