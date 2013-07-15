@@ -115,7 +115,7 @@ void oneDir(char *dir, FILE *outfp, int burnin){
     fscanf(fp, "%s ", parmName);
   }
 
-  for(i = 0; i < J; ++i)
+  for(i = 0; i < I; ++i)
     free(x[i]);
   free(x);
     

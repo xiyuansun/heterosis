@@ -115,17 +115,11 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
     fscanf(fp, "%s ", parmName);
   }
 
-        printf("hi\n");
-
-  for(i = 0; i < J; ++i)
+  for(i = 0; i < I; ++i)
     free(x[i]);
   free(x);
-  
-          printf("hi\n");
     
   fclose(fp);
-  
-          printf("hi\n");
 }
 
 __host__ void gelmanFactors(Config *cfg){
