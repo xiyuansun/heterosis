@@ -7,7 +7,7 @@
 
 __host__ void printProbs(Chain *host_a, Chain *dev_a, Config *cfg){
 
-  int g, i, G = cfg->G,  niter = cfg->M - cfg->burnin, *dex, *hph, *lph, *mph;
+  int g, G = cfg->G,  niter = cfg->M - cfg->burnin, *dex, *hph, *lph, *mph;
   FILE *fp;
   char file[BUF];
 
