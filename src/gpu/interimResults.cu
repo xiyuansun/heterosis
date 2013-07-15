@@ -145,8 +145,8 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
     
     CUDA_CALL(cudaMemcpy(tmpv, host_a->c, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(n = 0; n < cfg->N; ++n){
-      fprintf(fp, NUM_TF, tmpv[n]);
-      fprintf(fp, " ");
+    //  fprintf(fp, NUM_TF, tmpv[n]);
+      // fprintf(fp, " ");
     }
 
     CUDA_CALL(cudaMemcpy(tmpv, host_a->phi, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));    
