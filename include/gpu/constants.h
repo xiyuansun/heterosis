@@ -21,7 +21,7 @@
 #define MILLISECS 1.0 /* number of milliseconds in a unit of time in output */
 
 typedef int count_t;
-typedef double num_t;
+typedef float num_t;
 #define NUM_TF "%0.3f"
 
 #endif /* CONSTANTS_H */
