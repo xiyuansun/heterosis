@@ -10,7 +10,7 @@ void mcmc(int argc, char **argv){
   Config *cfg = config(argc, argv); 
   Chain *host_a = NULL, *dev_a = NULL;
 
-  newChain(&host_a, &dev_a, cfg);  
+  /*newChain(&host_a, &dev_a, cfg);  
   
   if(host_a == NULL){
     free(cfg);
@@ -27,10 +27,10 @@ void mcmc(int argc, char **argv){
 
     cfg->chainNum = i;
     
-   // runChain(host_a, dev_a, cfg);
-   // summarizeChain(host_a, dev_a, cfg);
+    runChain(host_a, dev_a, cfg);
+    summarizeChain(host_a, dev_a, cfg);
 
-//    resetChain(host_a, dev_a, cfg);
+    resetChain(host_a, dev_a, cfg);
   }
   
   freeChain(host_a, cfg, 0);
@@ -41,6 +41,6 @@ void mcmc(int argc, char **argv){
   
   if(cfg->verbose)
     printf("Done.\n");
-
+*/
   free(cfg);
 }
