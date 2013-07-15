@@ -112,12 +112,7 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
     fac = gelmanFactor(x, I, J);
     
     fprintf(outfp, "%s %0.3f\n", parmName, fac); 
-    
-        printf("%d\n", parmNum);
-    
     fscanf(fp, "%s ", parmName);
-    
-    printf("ho\n", parmNum);
   }
 
   for(i = 0; i < J; ++i)

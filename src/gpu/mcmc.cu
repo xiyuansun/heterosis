@@ -39,6 +39,9 @@ void mcmc(int argc, char **argv){
   if(cfg->gelman)
     gelmanFactors(cfg);
   
+      
+        printf("%d\n", parmNum);
+  
   if(cfg->verbose)
     printf("Done.\n");
 
