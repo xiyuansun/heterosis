@@ -101,6 +101,11 @@ Config *config(int argc, char **argv){
   if(cfg->time)
     system("mkdir -p ../out/time/");
   
+  if((cfg->chains < 2) && cfg->gelman){
+    printf("ERROR: must have at least 2 chains for Gelman factors.\n");
+    cfg->gelman = 0;
+  }
+  
   if(cfg->dic || cfg->gelman){
     system("mkdir -p ../out/diagnostics/");
     system("rm -f ../out/diagnostics/dic.txt");
