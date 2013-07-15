@@ -28,9 +28,10 @@ __global__ void updateM(Chain* a){
 }
 
 __host__ void printHyper(Chain *host_a, Chain *dev_a, Config *cfg){
+  
+  int n, g, G = cfg->G;
   char file[BUF];
   FILE *fp;
-  num_t tmp, *tmpv;
   
   if(cfg->hyper){
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
