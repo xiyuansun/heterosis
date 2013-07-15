@@ -9,7 +9,7 @@ __host__ void oneIteration(Chain *host_a, Chain *dev_a, Config *cfg){
   ++cfg->chainNum;
 
   if(cfg->verbose)
-    printf("  Chain %d of %d.\n", cfg->chainNum, cfg->chains);
+    printf("\n  Chain %d of %d.\n", cfg->chainNum, cfg->chains);
     
   runChain(host_a, dev_a, cfg);
   summarizeChain(host_a, dev_a, cfg);
