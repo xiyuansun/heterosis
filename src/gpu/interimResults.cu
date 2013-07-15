@@ -124,7 +124,6 @@ __host__ void printHyper(Chain *host_a, Chain *dev_a, Config *cfg){
   }
 }
 
-
 __host__ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
 
   int n, g, G = cfg->G;
