@@ -25,6 +25,7 @@ __host__ void extractOneParm(num_t **x, char *dir, FILE *outfp, char *parmName,
   
   for(j = 0; j < J; ++j){
     sprintf(cmd, "cut -d \' \' -f %d %schain%d.txt", parmNum, dir, j);
+    /* sprintf(cmd, "../sh/merge-cols.sh %s %d", dir, j); */ /* <-- much slower */
     
     fp = popen(cmd, "r");
     
@@ -125,29 +126,36 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
 __host__ void gelmanFactors(Config *cfg){
   char file[BUF];
   FILE *fp;
+  int use_R = 1;
 
   if(cfg->gelman){
   
     if(cfg->verbose)
       printf("Calculating Gelman potential scale reduction factors.\n");
   
-    strcpy(file, "../out/diagnostics/gelman-factors.txt");
-    fp = fopen(file, "w");
+    if(use_R){
+      system("R CMD BATCH ../R/gelman-factors.r");
+      
+    } else {
     
-    if(fp == NULL){
-      printf("ERROR: could not create Gelman factors file, \"%s\".\n", file);
-      fclose(fp);
-      exit(EXIT_FAILURE);
+	  strcpy(file, "../out/diagnostics/gelman-factors.txt");
+	  fp = fopen(file, "w");
+	
+	  if(fp == NULL){
+		printf("ERROR: could not create Gelman factors file, \"%s\".\n", file);
+		fclose(fp);
+		exit(EXIT_FAILURE);
+	  }
+	
+	  fprintf(fp, "parameter gelman-factor\n");
+	
+	  if(cfg->hyper)
+		oneDir("../out/hyper/", fp, cfg->burnin);
+	  
+	  if(cfg->parms)
+		oneDir("../out/parms/", fp, cfg->burnin);
+	   
+	  fclose(fp);
     }
-    
-    fprintf(fp, "parameter gelman-factor\n");
-    
-	if(cfg->hyper)
-  	  oneDir("../out/hyper/", fp, cfg->burnin);
-  	  
-  	if(cfg->parms)
-      oneDir("../out/parms/", fp, cfg->burnin);
-       
-    fclose(fp);
   }  
 }

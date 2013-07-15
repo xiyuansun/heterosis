@@ -1,4 +1,4 @@
-oneParm = function(dir, parmName, parmNum, outCon, nfiles){
+oneParm = function(dir, parmName, parmNum, outFile, nfiles){
   library(coda, quietly = T)
 
   l = mcmc.list()
@@ -10,7 +10,7 @@ oneParm = function(dir, parmName, parmNum, outCon, nfiles){
   }
 
   gelman = paste(round(unlist(gelman.diag(l, autoburnin = F, multivariate = F)),3), collapse = " ")
-  write(paste(parmName, gelman, collapse = " "), outCon, append = T, sep = " ")
+  write(paste(parmName, gelman, collapse = " "), outFile, append = T, sep = " ")
 }
 
 readHeader = function(dir){
@@ -20,41 +20,29 @@ readHeader = function(dir){
   strsplit(h, split = " ")[[1]]
 }
 
-getOutCon = function(outFile){
-  if(!file.exists(outFile))
-    file.create(outFile)
-
-  outCon = file(outFile, "w")
-}
-
-oneDir = function(dir, outCon){
+oneDir = function(dir, outFile){
   if(substr(dir, nchar(dir), nchar(dir)) != "/")
     dir = paste(dir, "/", sep = "")
 
   h = readHeader(dir)
-
-  con = pipe("ls | wc -l")
-  nfiles = scan(con, quiet = T)
-  close(con)
+  nfiles = length(list.files(dir)) 
 
   if(!nfiles)
     return
 
   for(i in 1:length(h))
-    oneParm(dir, h[i], i, outCon, nfiles)
+    oneParm(dir, h[i], i, outFile, nfiles)
 }
 
 gelmanFactors = function(){
   outFile = "../out/diagnostics/gelman-factors.txt"  
-
-  outCon = getOutCon(outFile)
-  write("parameter gelman-point-est 95%-upper-bd", outCon, append = T, sep = " ")
+  write("parameter gelman-point-est 95%-upper-bd", outFile, append = T, sep = " ")
 
   dirs = paste("../out/", c("hyper/", "parms/"), sep = "")
 
   for(dir in dirs)
     if(file.exists(dir))
-      oneDir(dir, outCon)
-
-  close(outCon)
+      oneDir(dir, outFile)
 }
+
+gelmanFactors()
