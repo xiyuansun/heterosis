@@ -7,13 +7,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-void intermResults(Chain *a, Config *cfg){
+void printHyper(Chain *a, Config *cfg){
   FILE *fp;
   char file[BUF];
-  int n, g, G = cfg->G;
-  
-  /* hyperparameters */
-  
+
   if(cfg->hyper){
     sprintf(file, "../out/hyper/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
@@ -93,9 +90,13 @@ void intermResults(Chain *a, Config *cfg){
     
     fclose(fp);
   }
-  
-  /* parameters */
-  
+}
+
+void printParms(Chain *a, Config *cfg){
+  FILE *fp;
+  char file[BUF];
+  int n, g, G = cfg->G;
+
   if(cfg->parms){
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
@@ -139,6 +140,10 @@ void intermResults(Chain *a, Config *cfg){
     fprintf(fp, "\n");    
     fclose(fp);
   }
+}
+
+void updateProbs(Chain *a, Config *cfg){
+  int g, G = cfg->G;
   
   if(a->m > cfg->burnin){
     for(g = 0; g < G; ++g){
@@ -151,9 +156,12 @@ void intermResults(Chain *a, Config *cfg){
       }
     }
   }
-  
-  /* time spent in each sampler */
-  
+}
+
+void printTime(Chain *a, Config *cfg){
+  FILE *fp;
+  char file[BUF];
+
   if(cfg->time){
   
     sprintf(file, "../out/time/chain%d.txt", cfg->chainNum);
@@ -185,7 +193,15 @@ void intermResults(Chain *a, Config *cfg){
 
     fclose(fp);  
   }
-  
+}
+
+void intermResults(Chain *a, Config *cfg){
+
+  printHyper(a, cfg);
+  printParms(a, cfg);
+  updateProbs(a, cfg);
+  printTime(a, cfg);
+
   if(cfg->dic)
     updateDICprep(a);
   

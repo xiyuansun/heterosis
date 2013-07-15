@@ -6,14 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void summarizeChain(Chain *a, Config *cfg){
-  int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin;
-  num_t accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
+
+void printProbs(Chain *a, Config *cfg){
+  int g, G = cfg->G,  niter = cfg->M - cfg->burnin;
   char file[BUF];
   FILE *fp;
 
-  /* differential expression and heterosis probabilities */
-  
   if(cfg->probs){
   
 	if(cfg->verbose){
@@ -46,9 +44,14 @@ void summarizeChain(Chain *a, Config *cfg){
   
 	fclose(fp);
   }
-  
-  /* acceptance rates of metropolis steps */
-  
+}
+
+void printRates(Chain *a, Config *cfg){
+  int n, g, i, N = cfg->N, G = cfg->G,  niter = cfg->M - cfg->burnin;
+  num_t accD, *accC, *accPhi, *accAlp, *accDel, *accEps; 
+  char file[BUF];
+  FILE *fp;
+
   if(cfg->rates){
   
     if(cfg->verbose)
@@ -119,9 +122,12 @@ void summarizeChain(Chain *a, Config *cfg){
     
     fclose(fp);
   }
-    
-  /* DIC */ 
-  
+}
+
+void printDIC(Chain *a, Config *cfg){
+  char file[BUF];
+  FILE *fp;
+
   if(cfg->dic){
      
     fp = fopen("../out/diagnostics/dic.txt", "a");
@@ -136,4 +142,11 @@ void summarizeChain(Chain *a, Config *cfg){
 	fprintf(fp, "\n");
 	fclose(fp);
   }
+}
+
+void summarizeChain(Chain *a, Config *cfg){
+
+  printProbs(a, cfg);
+  printRates(a, cfg);
+  printDIC(a, cfg); 
 }
