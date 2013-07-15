@@ -28,7 +28,7 @@ num_t logLik(count_t *y, int *group, int N, int G,
 	  }
 	
       llam = c[n] + eps[iG(n, g)] + mu;
-      ret += y[iG(n, g)] * llam - exp(llam) - lfact(y[iG(n, g)]);
+      ret += y[iG(n, g)] * llam - exp(llam); /* TOO SLOW... - lfact(y[iG(n, g)]); */
     }
   }
 
