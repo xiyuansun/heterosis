@@ -1,8 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include <cuda.h>
-#include <curand_kernel.h>
+#define USE_R 1
 
 #define BUF 256
 #define MAXROW 16384

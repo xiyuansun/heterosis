@@ -126,14 +126,13 @@ __host__ void oneDir(char *dir, FILE *outfp, int burnin){
 __host__ void gelmanFactors(Config *cfg){
   char file[BUF];
   FILE *fp;
-  int use_R = 1;
 
   if(cfg->gelman){
   
     if(cfg->verbose)
       printf("Calculating Gelman potential scale reduction factors.\n");
   
-    if(use_R){
+    if(USE_R){
       system("R CMD BATCH ../R/gelman-factors.r");
       
     } else {
