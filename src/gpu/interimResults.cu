@@ -130,7 +130,7 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
   
   updateProbs<<<G_GRID, G_BLOCK>>>(dev_a, cfg->heterosis);
   
-  /* parameters */
+  /* parameters */ 
   
   if(cfg->parms){
     sprintf(file, "../out/parms/chain%d.txt", cfg->chainNum);
