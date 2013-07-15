@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 __global__ void updateDICprep_kernel1(Chain *a){ /* kernel<<<1, 1>>> */
-  int n, g, N = a->N, G = a->G, m = a->m - a->burnin;
+  int n, N = a->N, m = a->m - a->burnin;
   num_t s1, s2, ll = logLik(a->y, a->grp, a->N, a->G, a->c, a->phi, a->alp, a->del, a->eps);
   
   if(m < 0){
