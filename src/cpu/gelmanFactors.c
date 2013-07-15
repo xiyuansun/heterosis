@@ -95,13 +95,13 @@ void oneDir(char *dir, FILE *outfp, int burnin){
   sprintf(filename, "%schain0.txt", dir);
   fp = fopen(filename, "r");
   
-printf("hi\n");
+  if(fp == NULL){
+    printf("ERROR: could not open file, %s\n");
+    exit(EXIT_FAILURE);
+  }
   
-  while(fgets(row, MAXROW, fp) != NULL){
+  while(fgets(row, MAXROW, fp) != NULL)
     ++nRows;
-    printf("%d %s\n", nRows, row);
-}  
-
     
   I = nRows - burnin - 1;  
   x = malloc(I * sizeof(num_t*));
