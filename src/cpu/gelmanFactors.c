@@ -95,6 +95,8 @@ void oneDir(char *dir, FILE *outfp, int burnin){
   sprintf(filename, "%schain0.txt", dir);
   fp = fopen(filename, "r");
   
+    printf("hi\n");
+  
   while(fgets(row, MAXROW, fp) != NULL)
     ++nRows;
     
@@ -105,8 +107,6 @@ void oneDir(char *dir, FILE *outfp, int burnin){
  
   rewind(fp);
   fscanf(fp, "%s ", parmName);
-  
-  printf("hi\n");
 
   while(!sscanf(parmName, "%f", &fac)){
     
