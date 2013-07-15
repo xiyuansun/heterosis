@@ -28,6 +28,9 @@ void mcmc(int argc, char **argv){
     exit(EXIT_FAILURE);
   }
   
+  
+  printConfig(cfg);
+  
   if(cfg->verbose)
     printf("Running %d chain(s).\n", cfg->chains);
   
