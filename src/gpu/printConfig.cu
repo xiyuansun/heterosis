@@ -31,9 +31,9 @@ void printConfig(Config *cfg){
   printf("G = %d\n\n", cfg->G);
   
   printf("sigC0 = "); printf(NUM_TF, cfg->sigC0); printf("\n");
-  printf("d0 = "); printf(NUM_TF, cfg->d0); printf("\n");*/
+  printf("d0 = "); printf(NUM_TF, cfg->d0); printf("\n");
   printf("aTau = "); printf(NUM_TF, cfg->aTau); printf("\n");
-  printf("aAlp = "); printf(NUM_TF, cfg->aAlp); printf("\n");
+  printf("aAlp = "); printf(NUM_TF, cfg->aAlp); printf("\n"); */
   printf("aDel = "); printf(NUM_TF, cfg->aDel); printf("\n");
   printf("bTau = "); printf(NUM_TF, cfg->bTau); printf("\n");
   printf("bAlp = "); printf(NUM_TF, cfg->bAlp); printf("\n");
