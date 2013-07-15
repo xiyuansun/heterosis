@@ -81,32 +81,32 @@ __host__ void allocChainDevice(Chain **host_a, Chain **dev_a, Config *cfg){
 
   /* curand states */
   
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->N * cfg->G * sizeof(curandState_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->states), cfg->N * cfg->G * sizeof(curandState_t)));
   
   /* data */   
   
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->y), cfg->N * cfg->G * sizeof(count_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->yMeanG), cfg->N * sizeof(num_t)));
-//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->grp), cfg->N * sizeof(int)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->y), cfg->N * cfg->G * sizeof(count_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->yMeanG), cfg->N * sizeof(num_t)));
+  CUDA_CALL(cudaMalloc((void**) &((*host_a)->grp), cfg->N * sizeof(int)));
 
   /* parameters */
 
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->c), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->eps), cfg->N * cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->eta), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->phi), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->alp), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->del), cfg->G * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->c), cfg->N * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->eps), cfg->N * cfg->G * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->eta), cfg->G * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->phi), cfg->G * sizeof(num_t)));
+ // CUDA_CALL(cudaMalloc((void**) &((*host_a)->alp), cfg->G * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->del), cfg->G * sizeof(num_t)));
   
   /* temporary and return values */
 
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->tmp1), cfg->G * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->tmp2), cfg->G * sizeof(num_t)));
+ // CUDA_CALL(cudaMalloc((void**) &((*host_a)->tmp1), cfg->G * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->tmp2), cfg->G * sizeof(num_t)));
 
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->Old), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->New), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->lOld), cfg->N * sizeof(num_t)));
-  CUDA_CALL(cudaMalloc((void**) &((*host_a)->lNew), cfg->N * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->Old), cfg->N * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->New), cfg->N * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->lOld), cfg->N * sizeof(num_t)));
+//  CUDA_CALL(cudaMalloc((void**) &((*host_a)->lNew), cfg->N * sizeof(num_t)));
 
   /* tuning parameters for Metropolis steps */
   
