@@ -163,21 +163,21 @@ void interimResults(Chain *host_a, Chain *dev_a, Config *cfg){
     
     CUDA_CALL(cudaMemcpy(tmpv, host_a->del, cfg->N * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, tmpv[g]);
-      fprintf(fp, " ");
+  //    fprintf(fp, NUM_TF, tmpv[g]);
+   //   fprintf(fp, " ");
     }
     
     CUDA_CALL(cudaMemcpy(tmpv, host_a->eta, cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(g = 0; g < cfg->G; ++g){
-      fprintf(fp, NUM_TF, tmpv[g]);
-      fprintf(fp, " ");
+   //   fprintf(fp, NUM_TF, tmpv[g]);
+    //  fprintf(fp, " ");
     }    
     
     CUDA_CALL(cudaMemcpy(tmpv, host_a->eps, cfg->N * cfg->G * sizeof(num_t), cudaMemcpyDeviceToHost));
     for(n = 0; n < cfg->N; ++n)
       for(g = 0; g < cfg->G; ++g){
-        fprintf(fp, NUM_TF, tmpv[iG(n, g)]);
-        fprintf(fp, " ");
+    //    fprintf(fp, NUM_TF, tmpv[iG(n, g)]);
+    //    fprintf(fp, " ");
       }
       
     fprintf(fp, "\n"); 
