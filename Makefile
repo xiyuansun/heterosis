@@ -9,7 +9,6 @@ LDFLAGS= -lm
 BINDIR=bin/
 OBJDIR=obj/
 SRCDIR=src/
-OUTDIR=out/
 
 CPUBIN=$(BINDIR)mcmc
 GPUBIN=$(BINDIR)gpu-mcmc
@@ -72,4 +71,3 @@ dirs:
 clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(BINDIR)
-	rm -rf $(OUTDIR)
