@@ -10,16 +10,14 @@ __global__ void updateDICprep_kernel1(Chain *a){ /* kernel<<<1, 1>>> */
   int n, N = a->N, m = a->m - a->burnin;
   num_t s1, s2, ll = logLik(a->y, a->grp, a->N, a->G, a->c, a->phi, a->alp, a->del, a->eps);
   
-  if(m < 0){
-    return;
-  } else if(!m){
+  if(!m){
   
     a->meanLogLik = ll;
     
     for(n = 0; n < N; ++n)
       a->meanC[n] = a->c[n];
       
-  } else {
+  } else if(m > 0) {
     s1 = ((m - 1)/((num_t) m));
 	s2 = (1/((num_t) m));
 	
@@ -36,9 +34,7 @@ __global__ void updateDICprep_kernel2(Chain *a){ /* kernel<<<G, 1>>> */
   num_t s1, s2, ll = logLik(a->y, a->grp, a->N, a->G, a->c, a->phi, a->alp, a->del, a->eps);
   
   if(g < G){
-	if(m < 0){
-	  return;
-	} else if(!m){
+	if(!m){
    
 	  a->meanPhi[g] = a->phi[g];
 	  a->meanAlp[g] = a->alp[g];
@@ -47,7 +43,7 @@ __global__ void updateDICprep_kernel2(Chain *a){ /* kernel<<<G, 1>>> */
 	  for(n = 0; n < N; ++n)
 		a->meanEps[iG(n, g)] = a->eps[iG(n, g)];
 
-	} else {
+	} else if(m > 0) {
 	  s1 = ((m - 1)/((num_t) m));
 	  s2 = (1/((num_t) m));
    
@@ -62,8 +58,6 @@ __global__ void updateDICprep_kernel2(Chain *a){ /* kernel<<<G, 1>>> */
 }
 
 __host__ void updateDICprep(Chain *a, Config *cfg){
-printf("%d %d\n", G_GRID, G_BLOCK);
-
   updateDICprep_kernel1<<<1, 1>>>(a);
   updateDICprep_kernel2<<<G_GRID, G_BLOCK>>>(a);
 }
