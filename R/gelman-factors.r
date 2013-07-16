@@ -34,24 +34,35 @@ oneDir = function(dir, outFile){
     oneParm(dir, h[i], i, outFile, nfiles)
 }
 
-gelmanFactors = function(outFile = "../out/diagnostics/gelman-factors.txt"){
+gelmanFactors = function(mainDir){
 
-
-  if(!file.exists("../out/")){
-    print("ERROR: no mcmc output to work with.")
+  if(!file.exists(mainDir)){
+    print(paste("ERROR: could not open directory, ", mainDir, ".", sep =""))
     return(NULL);
   }
 
-  if(!file.exists("../out/diagnostics"))
-    dir.create("../out/diagnostics")
-    
+  setwd(mainDir)
+
+  if(!file.exists("diagnostics"))
+    dir.create("diagnostics")
+
+  outFile = "diagnostics/gelman-factors.txt"    
   write("parameter gelman-point-est 95%-upper-bd", outFile, append = T, sep = " ")
 
-  dirs = paste("../out/", c("hyper/", "parms/"), sep = "")
+  dirs = c("hyper/", "parms/")
 
+  found = 0;
   for(dir in dirs)
-    if(file.exists(dir))
+    if(file.exists(dir)){
+      print(paste("In ", mainDir, ", computing Gelman factors on parameters in ", 
+                  dir, ".", sep = ""))
+      found = found + 1
       oneDir(dir, outFile)
+    }
+
+  if(!found)
+    print("Warning: parameters found.")
 }
 
-gelmanFactors()
+options <- commandArgs(trailingOnly = TRUE)
+gelmanFactors(options[1])
