@@ -9,9 +9,7 @@ void oneIteration(Chain *a, Config *cfg){
   ++cfg->chainNum;
 
   if(cfg->verbose)
-    printf("\n  Chain %d of %d.\n", cfg->chainNum, cfg->chains);
-        
-  printChain(a);        
+    printf("\n  Chain %d of %d.\n", cfg->chainNum, cfg->chains);       
         
   runChain(a, cfg);
   summarizeChain(a, cfg);
@@ -21,8 +19,6 @@ void oneIteration(Chain *a, Config *cfg){
 void mcmc(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
-
-printConfig(cfg);
 
   Chain *a = newChain(cfg);
   
