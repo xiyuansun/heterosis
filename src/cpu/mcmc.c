@@ -11,6 +11,8 @@ void oneIteration(Chain *a, Config *cfg){
   if(cfg->verbose)
     printf("\n  Chain %d of %d.\n", cfg->chainNum, cfg->chains);
         
+  printChain(a);        
+        
   runChain(a, cfg);
   summarizeChain(a, cfg);
   resetChain(a, cfg);
@@ -19,7 +21,12 @@ void oneIteration(Chain *a, Config *cfg){
 void mcmc(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
+
+printConfig(cfg);
+
   Chain *a = newChain(cfg);
+  
+  printChain(a);
   
   if(a == NULL){
     free(cfg);
