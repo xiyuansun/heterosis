@@ -139,7 +139,30 @@ This writeup explains a fully Bayesian Markov chain Monte Carlo method for model
 \item Mid parent heterosis: the expression level of the gene in the offspring is significantly different from the average of the parental expression levels.
 \end{enumerate}
 
-We let $y_{g,n}$ be the expression level of gene $g$  ($g = 1, \ldots, G$) in sample $n$ ($n = 1, \ldots, N$). The samples come from one of three groups: group 1, the first parent, group 2, the offspring, and group 3, the second parent.
+Let $y_{g,n}$ be the expression level of gene $g$  ($g = 1, \ldots, G$) in sample $n$ ($n = 1, \ldots, N$). The samples come from one of three groups: group 1, the first parent, group 2, the offspring, and group 3, the second parent. Hence, we define:
+
+\begin{itemize}
+\item $\mu_{g1}$: mean expression level of gene $g$ in the first parent
+\item $\mu_{g2}$: mean expression level of gene $g$ in the offspring
+\item $\mu_{g3}$: mean expression level of gene $g$ in the second parent
+\end{itemize}
+
+In the model below, there are three quantities of primary interest:
+
+\begin{itemize}
+\item $\phi_g = \frac{\mu_{g1} + \mu_{g3}}{2}$, the parental mean expression level of gene $g$.
+\item $\alpha_g = \frac{\mu_{g1} - \mu_{g3}}{2}$, half the parental difference in expression levels of gene $g$.
+\item $\delta_g = \mu_{g2} - \phi_g$, the overexpression of gene $g$ in the offspring relative to the parental mean.
+\end{itemize}
+
+With MCMC samples of these quantities, we can calculate empirical estimates of the following probabilities of interest:
+
+\begin{itemize}
+\item $P(\alpha_g \ne 0 \mid \vc{y})$, the probability of differential expression.
+\item $P(\delta_g > |\alpha_g| \ \mid \ \vc{y}) $, the probability of high parent heterosis.
+\item $P(\delta_g < -|\alpha_g| \ \mid \ \vc{y})$, the probability of low parent heterosis.
+\item $P(\delta_g \ne 0 \mid \vc{y})$, the probability of mid parent heterosis.
+\end{itemize}
 
 \section{The Model} \label{sec:model}
 
