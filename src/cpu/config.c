@@ -18,7 +18,7 @@ Config *config(int argc, char **argv){
 
   strcpy(cfg->dataFile, "../data/data.txt"); 
   strcpy(cfg->groupFile, "../data/group.txt");
-  strcpy(cfg->outDir, "../out");
+  strcpy(cfg->outDir, "out");
   getcwd(cfg->cwd, BUF);  
    
   cfg->probs = 0; 

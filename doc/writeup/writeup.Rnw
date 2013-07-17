@@ -190,29 +190,31 @@ Then:
 
 \begin{align*}
 p(c_n \mid \cdots) &\propto \exp \left (c_n G\ov{y}_{.n}  -\exp(c_n) \sum_{g = 1}^G \exp( \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \frac{c_n^2}{2 \sigma_c^2} \right ) \\
-p \left ( \left . \frac{1}{\sigma_c^2}  \ \right \rvert  \ \cdots \right) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_c^2} \right  |\text{shape} = \frac{N - 1}{2}, \ \text{rate} =\frac{1}{2} {\sum_{n = 1}^N c_n^2} \right )  I \left (\frac{1}{\sigma_c^2} > \frac{1}{\sigma_{c0}^2} \right ) \\
 p (\e_{g, n} \mid \cdots) &\propto \exp \left (y_{g, n} \e_{g, n} - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))  - \frac{\e_{g, n}^2}{2 \eta_g^2} \right) \\
+p \left ( \left . \frac{1}{\sigma_c^2}  \ \right \rvert  \ \cdots \right) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_c^2} \right  |\text{shape} = \frac{N - 1}{2}, \ \text{rate} =\frac{1}{2} {\sum_{n = 1}^N c_n^2} \right )  I \left (\frac{1}{\sigma_c^2} > \frac{1}{\sigma_{c0}^2} \right ) \\
 p \left ( \left . \frac{1}{\eta_g^2} \ \right \rvert \  \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\eta_g^2} \ \right \rvert  \ \text{shape} = \frac{N + d}{2}, \  \text{rate} = \frac{1}{2} \left ( d \cdot \tau^2 + \sum_{n  =1}^N \e_{g, n}^2 \right ) \right ) \\
 p(d \mid \cdots) &\propto \Gamma \left( d/2 \right )^{-G} \left ( \frac{d \cdot \tau^2}{2}\right ) ^ { G d  /2 } \left ( \prod_{g = 1}^G { \eta_g^2} \right )^{ -(d/2 + 1)} \exp \left (- \frac{d \cdot \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \eta_g^2} \right ) I(0 < d < d_0) \\
 p(\tau^2 \mid \cdots) &= \text{Gamma} \left ( \tau^2 \ \left \lvert \ \text{shape} =  a_\tau + \frac{Gd}{2} \right ., \ \text{rate} =  b_\tau + \frac{d}{2} \sum_{g = 1}^G \frac{1}{\eta_g^2} \right ) \\
 p(\phi_g \mid \cdots) & \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \\
-p(\theta_\phi \mid \cdots) &= \text{N} \left (\theta_\phi \ \left \lvert  \ \frac{ \gamma_\phi^2 \sum_{g = 1}^G \phi_g}{G \gamma_\phi^2 + \sigma_\phi^2} \right ., \ \frac{\gamma_\phi^2 \sigma_\phi^2}{G\gamma_\phi^2 + \sigma_\phi^2} \right ) \\
-p \left ( \left . \frac{1}{\sigma_\phi^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\phi^2} \ \right \rvert \ \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2  \right )   \text{I} \left (\frac{1}{\sigma_\phi^2} >\frac{1}{ \sigma_{\phi 0}^2} \right ) \\
-\end{align*}
-\begin{align*}
 p(\alpha_g \mid \cdots) &\propto \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
 &\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
-p(\theta_\alpha \mid \cdots) &= N \left (\theta_\alpha \ \left \lvert \ \frac{\gamma_\alpha^2 \sum_{\alpha_g \ne 0} \alpha_g}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ., \ \frac{\gamma_\alpha^2 \sigma_\alpha^2}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ) \\
-p \left ( \left . \frac{1}{\sigma_\alpha^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\alpha^2} \ \right \rvert  \ \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right )  \text{I} \left (\frac{1}{\sigma_\alpha^2} >\frac{1}{ \sigma_{\alpha 0}^2} \right )\\
-p(\pi_\alpha \mid \cdots) &= \text{Beta}(\pi_\alpha \mid G - G_\alpha + \alpha_\tau, \ G_\alpha + b_\tau) \\
 p(\delta_g \mid \cdots) &\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
-&\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
-p(\theta_\delta \mid \cdots) &= N \left ( \theta_\delta \ \left \lvert \ \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right . , \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right ) \\
-p \left ( \left . \frac{1}{\sigma_\delta^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\delta^2} \ \right \rvert \ \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )  \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ \sigma_{\delta 0}^2} \right ) \\
-p(\pi_\delta \mid \cdots) &= \text{Beta}(\pi_\delta \mid G - G_\delta + \delta_\tau, \ G_\delta + b_\tau) \\
+&\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) 
+\end{align*}
+\begin{align*}
 p(\phi_g, \alpha_g, \delta_g \mid \cdots)  &\propto  \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right . \\
 & \qquad \qquad \left . - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right . \\
 & \qquad \qquad \left . - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right )
+\end{align*}
+\begin{align*}
+p(\theta_\phi \mid \cdots) &= \text{N} \left (\theta_\phi \ \left \lvert  \ \frac{ \gamma_\phi^2 \sum_{g = 1}^G \phi_g}{G \gamma_\phi^2 + \sigma_\phi^2} \right ., \ \frac{\gamma_\phi^2 \sigma_\phi^2}{G\gamma_\phi^2 + \sigma_\phi^2} \right ) \\
+p(\theta_\alpha \mid \cdots) &= N \left (\theta_\alpha \ \left \lvert \ \frac{\gamma_\alpha^2 \sum_{\alpha_g \ne 0} \alpha_g}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ., \ \frac{\gamma_\alpha^2 \sigma_\alpha^2}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ) \\
+p(\theta_\delta \mid \cdots) &= N \left ( \theta_\delta \ \left \lvert \ \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right . , \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right ) \\
+p \left ( \left . \frac{1}{\sigma_\phi^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\phi^2} \ \right \rvert \ \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2  \right )   \text{I} \left (\frac{1}{\sigma_\phi^2} >\frac{1}{ \sigma_{\phi 0}^2} \right ) \\
+p \left ( \left . \frac{1}{\sigma_\alpha^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\alpha^2} \ \right \rvert  \ \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right )  \text{I} \left (\frac{1}{\sigma_\alpha^2} >\frac{1}{ \sigma_{\alpha 0}^2} \right )\\
+p \left ( \left . \frac{1}{\sigma_\delta^2}  \ \right \rvert \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\sigma_\delta^2} \ \right \rvert \ \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )  \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ \sigma_{\delta 0}^2} \right ) \\
+p(\pi_\alpha \mid \cdots) &= \text{Beta}(\pi_\alpha \mid G - G_\alpha + \alpha_\tau, \ G_\alpha + b_\tau) \\
+p(\pi_\delta \mid \cdots) &= \text{Beta}(\pi_\delta \mid G - G_\delta + \delta_\tau, \ G_\delta + b_\tau) \\
 \end{align*}
 
 
@@ -277,10 +279,86 @@ Hence, each of the following sets of parameters can be jointly sampled:
 In order, these are the 8 steps of the Gibbs sampler. Alternatively, one could sample each triplet $(\phi_g, \alpha_g, \delta_g)$ jointly in a single Metropolis step using $p(\phi_g, \alpha_g, \delta_g \cdots)$.
 
 
+\section{Diagnostics}
+
+
+\subsection{Gelman Factors}
+
+The potential scale reduction factor introduced in the textbook by Gelman \cite{gelman} monitors the lack of convergence of a single variable in an MCMC. Let $\psi_{ij}$ be the $i'th$ MCMC draw of a single variable in chain $j$. Then, the potential scale reduction factor, $\wh{R}$, compares the within-chain variance, $W$, to the between-chain variance, $B$. Suppose there are J chains, each with I iterations. Then, 
+
+\begin{align*}
+\wh{R} &= \sqrt{1 - \frac{1}{I} \left (\frac{B}{W} - 1 \right )} \\
+B &= \frac{I}{J-1} \sum_{j = 1}^J (\ov{\psi}_{.j} - \ov{\psi}_{..})^2, \quad &&\ov{\psi}_{.j} = \frac{1}{I} \sum_{i = 1}^I \psi_{ij}, \quad \ov{\psi}_{..} \sum_{j = 1}^J \ov{\psi}_{.j} \\
+W &= \frac{1}{J} \sum_{j = 1}^J s^2_j, && s_j^2 = \frac{1}{I - 1} \sum_{i = 1}^I (\psi_{ij} - \ov{\psi}_{.j})^2\\
+\end{align*}
+
+$\wh{R} \rt 1$ as $I \rt \infty$. An $\wh{R}$ value far above 1 indicates a lack of convergence, but an $\wh{R}$ value near 1 does not imply convergence. \q
+
+The Gelman factor used in this analysis is not actually the one given above, but a degrees-of-freedom-adjusted version implemented in the {\tt gleman.diag()} function in the {\tt coda} package in R:
+
+\begin{align*}
+\wh{R} = \sqrt{\frac{d + 3}{d + 1} \frac{\wh{V}}{W}}
+\end{align*}
+
+where
+
+\begin{align*}
+d = 2 \frac{\wh{V}^2}{\text{Var}(\wh{V})}, \qquad \wh{V} &= \wh{\sigma}^2 + \frac{B}{IJ}, \qquad \wh{\sigma}^2 = \left (1 - \frac{1}{I} \right ) W + \frac{B}{I}
+\end{align*}
 
 
 
+\subsection{Deviance Information Criterion}
 
+The deviance information criterion (DIC) is a model selection heuristic for hierarchical models much like the Akaike information criterion, AIC, and the Bayesian information criterion, BIC. As with AIC and BIC, given a set of models for $\vc{y}$, the one with the minimum DIC is preferred. DIC is based on the deviance, 
+
+\begin{align*}
+D(\vc{y}, \vc{\psi}) = -2 \log p(\vc{y} \mid \vc{\psi})
+\end{align*}
+where $\vc{y}$ is the data and $\vc{\psi}$ is the collection of model parameters. DIC itself is
+
+\begin{align*}
+\text{DIC} = 2 E(D(\vc{y}, \vc{\psi}) \mid \vc{y}) - D(\vc{y}, \wh{\vc{\psi}})
+\end{align*}
+
+where $\wh{\vc{\psi}}$ is a suitable point estimate of $\vc{\psi}$. If $\vc{\psi}_i$ is the collection of parameter estimates of iteration $i$ of the chain and $\ov{\vc{\psi}}$ is the collection of within-chain parameter means, then we can estimate DIC by
+
+\begin{align*}
+\wh{\text{DIC}} &=  \sum_{i = 1}^I [2 D(\vc{y} \mid \vc{\psi}_i)] - D(\vc{y}, \wh{\vc{\psi}}) \\
+&= -4 \sum_{i = 1}^I \log p(\vc{y} \mid \vc{\psi}_i) + 2 \log p(\vc{y} \mid \ov{\vc{\psi}})
+\end{align*}
+
+All that remains is to find $\log p(\vc{y} \mid \vc{\psi})$ for a given set of parameters, $\vc{\psi}$. Let $\lambda_{g, n} = \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))$, where 
+
+\begin{align*}
+\mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+\phi_g - \alpha_g & \text{library $n$ is in treatment group 1} \\
+\phi_g + \delta_g & \text{library $n$ is in treatment group 2} \\
+\phi_g + \alpha_g & \text{library $n$ is in treatment group 3}
+\end{cases}
+\end{align*}
+
+\begin{align*}
+\log p(\vc{y} \mid \vc{\psi}) &= \log \prod_{n = 1}^N \prod_{g = 1}^G \text{Poisson}( y_{g, n} \mid \lambda_{g, n}) \\
+&= \sum_{n, g} \log \text{Poisson}( y_{g, n} \mid \lambda_{g, n}) \\
+&= \sum_{n, g} \log \left (\frac{\exp(-\lambda_{g, n}) \lambda_{g, n}^{y_{g, n}}}{y_{g, n}!} \right) \\
+&= \sum_{n, g}( -\lambda_{g, n} + y_{g, n} \log \lambda_{g, n} - \log (y_{g, n}!))
+\end{align*}
+
+Given the size of the data, calculating $ \sum_{n, g} - \log (y_{g, n}!)$ is intractable. Hence, in practice, we use
+
+\begin{align*}
+\text{DIC} = -4 \sum_{i = 1}^I L(\vc{y} \mid \vc{\psi}_i) + 2 L(\vc{y} \mid \ov{\vc{\psi}})
+\end{align*}
+
+where 
+
+\begin{align*}
+L(\vc{y}, \vc{\psi}) = \sum_{n, g}( -\lambda_{g, n} + y_{g, n} \log \lambda_{g, n}).
+\end{align*}
+
+This approach is reasonable because removing the $-\log (y_{g, n}!)$ term inside the sum merely offsets the DIC values of all the models under comparison by the same constant.
+ 
 \appendix
 
 \section{Derivations of the Full Conditionals}
@@ -299,29 +377,29 @@ Recall:
 
 \begin{align*}
 p(c_n \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot  \text{N}(c_n \mid 0, \sigma_c^2) \\
-p \left (\sigma_c \mid \cdots \right ) &= \left [ \prod_{n = 1}^N \text{N}(c_n \mid 0, \sigma_c^2) \right ] \cdot \text{U}(\sigma_c \mid 0, \sigma_{c0}) \\
 p(\e_{g, n} \mid \cdots) &\propto \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \cdot \text{N}(\e_{g, n} \mid 0, \eta_g^2) \\
+p \left (\sigma_c \mid \cdots \right ) &= \left [ \prod_{n = 1}^N \text{N}(c_n \mid 0, \sigma_c^2) \right ] \cdot \text{U}(\sigma_c \mid 0, \sigma_{c0}) \\
 p(\eta_g^2 \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \eta_g^2) \right ] \cdot \text{Inv-Gamma} \left ( \eta_g^2 \mid \text{shape} = \frac{d}{2}, \text{rate} = \frac{d \cdot \tau^2}{2} \right ) \\ 
 p(d \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \eta_g^2 \mid \text{shape} = \frac{d}{2}, \text{rate} = \frac{d \cdot \tau^2}{2} \right ) \right ] \cdot \text{U}(d \mid 0, d_0) \\ 
 p(\tau^2 \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \eta_g^2 \mid \text{shape} = \frac{d}{2}, \text{rate} = \frac{d \cdot \tau^2}{2} \right ) \right ] \cdot \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
 p(\phi_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
-p(\theta_\phi \mid \cdots ) & \propto \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ]  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
-p(\sigma_\phi \mid \cdots ) &\propto \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ] \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
+p(\alpha_g \mid \cdots) &\propto \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \\
+& \quad \times \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}
 \end{align*}
 
 \begin{align*}
-p(\alpha_g \mid \cdots) &\propto \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \\
-& \quad \times \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
-p(\theta_\alpha \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
-p(\sigma_\alpha \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ]  \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0})    \\
-p(\pi_\alpha \mid \cdots) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
 p(\delta_g \mid \cdots) &\propto \left [ \prod_{k(n) = 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \delta_g, \delta_g))) \right ] \\
-&\quad \times \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
-p(\theta_\delta \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ] \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2)   \\
-p(\sigma_\delta \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ]  \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0})    \\
-p(\pi_\delta \mid \cdots) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ] \cdot \text{Beta}(\pi_\delta \mid a_\delta, b_\delta)  \\
 p(\phi_g, \alpha_g, \delta_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
-& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}
+& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
+&\quad \times \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
+p(\theta_\phi \mid \cdots ) & \propto \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ]  \cdot \text{N}(\theta_\phi \mid 0, \gamma_{\phi}^2) \\
+p(\theta_\alpha \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)   \\
+p(\theta_\delta \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ] \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2)   \\
+p(\sigma_\phi \mid \cdots ) &\propto \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ] \cdot \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
+p(\sigma_\alpha \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ]  \cdot \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0})    \\
+p(\sigma_\delta \mid \cdots ) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ]  \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0})    \\
+p(\pi_\alpha \mid \cdots) &\propto \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \right ] \cdot \text{Beta}(\pi_\alpha \mid a_\alpha, b_\alpha)  \\
+p(\pi_\delta \mid \cdots) &\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ] \cdot \text{Beta}(\pi_\delta \mid a_\delta, b_\delta) 
 \end{align*}
 
 
@@ -348,7 +426,15 @@ p(c_n \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid
 &\propto\exp \left (c_n G\ov{y}_{.n}  -\exp(c_n) \sum_{g = 1}^G \exp( \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))- \frac{c_n^2}{2 \sigma_c^2} \right ) \\
 \end{align*}
 
-
+\subsection{ $p(\e_{g, n} \mid \cdots)$ Metropolis}
+ 
+ \begin{align*}
+p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \cdot \text{N}(\e_{g, n} \mid 0, \eta_g^2) \\
+&\propto \lambda_{g, n}^{y_{g, n}} \exp(- \lambda_{g,n}) \exp \left ( - \frac{\e_{g, n}^2}{2 \eta_g^2} \right ) \\
+&= \exp \left (y_{g, n} \log \lambda_{g, n}- \lambda_{g,n}  - \frac{\e_{g, n}^2}{2 \eta_g^2} \right) \\
+&= \exp \left (y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))- \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))  - \frac{\e_{g, n}^2}{2 \eta_g^2} \right) \\
+&= \exp \left (y_{g, n} \e_{g, n} - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))  - \frac{\e_{g, n}^2}{2 \eta_g^2} \right)
+\end{align*}
 
 \subsection {$p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right ) $ Truncated Gamma}
 
@@ -366,38 +452,6 @@ which is the kernel of a truncated inverse gamma distribution. Hence:
 p \left ( \frac{1}{\sigma_c^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac{1}{\sigma_c^2} \mid \text{shape} = \frac{N - 1}{2}, \ \text{rate} =\frac{1}{2} {\sum_{n = 1}^N c_n^2} \right )  I \left (\frac{1}{\sigma_c^2} > \frac{1}{\sigma_{c0}^2} \right ) \\
 \end{align*}
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-\subsection{ $p(\e_{g, n} \mid \cdots)$ Metropolis}
- 
- \begin{align*}
-p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \cdot \text{N}(\e_{g, n} \mid 0, \eta_g^2) \\
-&\propto \lambda_{g, n}^{y_{g, n}} \exp(- \lambda_{g,n}) \exp \left ( - \frac{\e_{g, n}^2}{2 \eta_g^2} \right ) \\
-&= \exp \left (y_{g, n} \log \lambda_{g, n}- \lambda_{g,n}  - \frac{\e_{g, n}^2}{2 \eta_g^2} \right) \\
-&= \exp \left (y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))- \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))  - \frac{\e_{g, n}^2}{2 \eta_g^2} \right) \\
-&= \exp \left (y_{g, n} \e_{g, n} - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))  - \frac{\e_{g, n}^2}{2 \eta_g^2} \right)
-\end{align*}
-
-
-
-
-
-
-
-
-
-
 \subsection{$p \left (\frac{1}{\eta_g^2} \mid \cdots \right )$ Gamma}
 
 \begin{align*}
@@ -413,22 +467,6 @@ which is the kernel of an inverse gamma distribution. Hence:
 p \left ( \frac{1}{\eta_g^2} \mid \cdots \right ) = \text{Gamma} \left (\frac{1}{\eta_g^2} \mid \text{shape} = \frac{N + d}{2}, \  \text{rate} = \frac{1}{2} \left ( d \cdot \tau^2 + \sum_{n  =1}^N \e_{g, n}^2 \right ) \right )
 \end{align*}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \subsection{$p(d \mid \cdots)$: Metropolis}
 
 \begin{align*}
@@ -436,15 +474,6 @@ p(d \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \eta_g^2 \m
 & \propto \prod_{g = 1}^G \left [  \Gamma \left( d/2 \right )^{-1} \left ( \frac{d \cdot \tau^2}{2}\right ) ^ {d  /2 } \left ( { \eta_g^2} \right )^{ -(d/2 + 1)} \exp \left (- \frac{1}{ \eta_g^2}\frac{d \cdot \tau^2}{2} \right ) \right ] I(0 < d < d_0) \\
 & \propto \Gamma \left( d/2 \right )^{-G} \left ( \frac{d \cdot \tau^2}{2}\right ) ^ { G d  /2 } \left ( \prod_{g = 1}^G { \eta_g^2} \right )^{ -(d/2 + 1)} \exp \left (- \frac{d \cdot \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \eta_g^2} \right ) I(0 < d < d_0) \\
 \end{align*}
-
-
-
-
-
-
-
-
-
 
 \subsection{$p(\tau^2 \mid \cdots)$: Gamma}
 
@@ -461,15 +490,6 @@ Hence:
 p(\tau^2 \mid \cdots) = \text{Gamma} \left ( \tau^2 \mid \text{shape} =  a_\tau + \frac{Gd}{2}, \ \text{rate} =  b_\tau + \frac{d}{2} \sum_{g = 1}^G \frac{1}{\eta_g^2} \right ) 
 \end{align*}
 
-
-
-
-
-
-
-
-
-
 \subsection{$p(\phi_g \mid \cdots)$: Metropolis}
 
 \begin{align*}
@@ -480,15 +500,43 @@ p(\phi_g \mid \cdots) &= \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \l
 & \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) 
 \end{align*}
 
+\subsection{$p (\alpha_g \mid \cdots) $: Metropolis}
 
+\begin{align*}
+p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
+&\propto \left [ \prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right )^{I(\alpha_g)}\pi_\alpha^{1 - I(\alpha_g)}(1 - \pi_\alpha)^{I(\alpha_g)} \\
+&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g)\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + (1 - I(\alpha_g)) \log \pi_\alpha + I(\alpha_g) \log(1 - \pi_\alpha) \right ) \\
+&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
+&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+&\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
+&\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+&\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
+\end{align*}
 
+\subsection{$p (\delta_g \mid \cdots)$: Metropolis}
 
+\begin{align*}
+p(\delta_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
+&\propto \left [ \prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right )^{I(\delta_g)}\pi_\delta^{1 - I(\delta_g)}(1 - \pi_\delta)^{I(\delta_g)} \\
+&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\delta_g)\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + (1 - I(\delta_g)) \log \pi_\delta + I(\delta_g) \log(1 - \pi_\delta) \right ) \\
+&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
+&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+&\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
+&\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
+&\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
+\end{align*}
 
+\subsection{$p(\phi_g, \alpha_g, \delta_g \mid \cdots)$: Metropolis}
 
-
-
-
-
+\begin{align*}
+p(\phi_g, \alpha_g, \delta_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
+& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
+& \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \\
+& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
+& \propto  \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right . \\
+& \qquad \qquad \left . - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right . \\
+& \qquad \qquad \left . - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right )
+\end{align*}
 
 \subsection{$p(\theta_\phi \mid \cdots )$: Normal}
 
@@ -510,12 +558,33 @@ Hence:
 p(\theta_\phi \mid \cdots) &= \text{N} \left ( \theta_\phi \ \left | \ \frac{ \gamma_\phi^2 \sum_{g = 1}^G \phi_g}{G \gamma_\phi^2 + \sigma_\phi^2}, \ \frac{\gamma_\phi^2 \sigma_\phi^2}{G\gamma_\phi^2 + \sigma_\phi^2} \right . \right )
 \end{align*}
 
+\subsection{$p \left (\theta_\alpha \mid \cdots \right )$: Normal}
 
+\begin{align*}
+p(\theta_\alpha \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)} [(1- \pi_\alpha) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}  \right ]  \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2) \\
+& \propto \left [ \prod_{\alpha_g \ne 0} \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]  \right ]  \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)
+\end{align*}
 
+From algebra similar to the derivation of $p(\theta_\phi \mid \cdots)$,
 
+\begin{align*}
+p(\theta_\alpha \mid \cdots) &= N \left ( \theta_\alpha \ \left | \ \frac{\gamma_\alpha^2 \sum_{\alpha_g \ne 0} \alpha_g}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2}, \right . \ \frac{\gamma_\alpha^2 \sigma_\alpha^2}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ) 
+\end{align*}
 
+\subsection{$p(\theta_\delta \mid \cdots )$: Normal}
 
+\begin{align*}
+p(\theta_\delta \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)} [(1- \pi_\delta) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}  \right ]  \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2) \\
+& \propto \left [ \prod_{\delta_g \ne 0} \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]  \right ]  \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2)
+\end{align*}
 
+From algebra similar to the derivation of $p(\theta_\phi \mid \cdots)$, 
+
+\begin{align*}
+p(\theta_\delta \mid \cdots) &= N \left ( \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\delta \gamma_\delta^2 + \sigma_\delta^2}, \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right ) 
+\end{align*}
+
+where $G_\delta$ is the number of genes for which $\delta_g \ne 0$.
 
 \subsection{$p\left ( \frac{1}{\sigma_\phi^2} \mid \ldots \right )$: Truncated Gamma}
 
@@ -534,73 +603,6 @@ which is the kernel of a truncated inverse gamma distribution. Hence:
 p \left ( \left . \frac{1}{\sigma_\phi^2} \  \right | \  \cdots \right ) &= \text{Gamma} \left ( \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2  \right )   \text{I} \left (\frac{1}{\sigma_\phi^2} >\frac{1}{ \sigma_{\phi 0}^2} \right )
 \end{align*}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% alpha_g's
-
-\subsection{$p (\alpha_g \mid \cdots) $: Metropolis}
-
-
-
-\begin{align*}
-p(\alpha_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}\\
-&\propto \left [ \prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right )^{I(\alpha_g)}\pi_\alpha^{1 - I(\alpha_g)}(1 - \pi_\alpha)^{I(\alpha_g)} \\
-&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g)\frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + (1 - I(\alpha_g)) \log \pi_\alpha + I(\alpha_g) \log(1 - \pi_\alpha) \right ) \\
-&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
-&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
-&\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
-&\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
-&\left .  \qquad - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right ) \\
-\end{align*}
-
-
-
-
-
-
-
-\subsection{$p \left (\theta_\alpha \mid \cdots \right )$: Normal}
-
-\begin{align*}
-p(\theta_\alpha \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\alpha^{1-I(\alpha_g)} [(1- \pi_\alpha) \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}  \right ]  \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2) \\
-& \propto \left [ \prod_{\alpha_g \ne 0} \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]  \right ]  \cdot \text{N}(\theta_\alpha \mid 0, \gamma_\alpha^2)
-\end{align*}
-
-From algebra similar to the derivation of $p(\theta_\phi \mid \cdots)$, we get:
-
-\begin{align*}
-p(\theta_\alpha \mid \cdots) &= N \left ( \theta_\alpha \ \left | \ \frac{\gamma_\alpha^2 \sum_{\alpha_g \ne 0} \alpha_g}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2}, \right . \ \frac{\gamma_\alpha^2 \sigma_\alpha^2}{G_\alpha \gamma_\alpha^2 + \sigma_\alpha^2} \right ) 
-\end{align*}
-
-
-
-
-
-
-
-
 \subsection{$p \left (\frac{1}{\sigma_\alpha^2} \mid \cdots \right )$: Truncated Gamma}
 
 \begin{align*}
@@ -617,6 +619,28 @@ which is the kernel of a truncated inverse gamma distribution. Hence:
 \begin{align*}
 p \left ( \frac{1}{\sigma_\alpha^2} \mid \cdots \right ) = \text{Gamma} \left (\frac{1}{\sigma_\alpha^2} \mid \text{shape} = \frac{G_\alpha - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\alpha_g \ne 0} (\alpha_g - \theta_\alpha)^2 \right ) \text{I} \left (\frac{1}{\sigma_\alpha^2} >\frac{1}{ \sigma_{\alpha 0}^2} \right )
 \end{align*}
+
+\subsection{$p \left (\frac{1}{\sigma_\delta^2} \mid \cdots  \right )$: Truncated Gamma}
+
+\begin{align*}
+p(\sigma_\delta^2 \mid \cdots ) & = p(\sigma_\delta \mid \cdots) \frac{1}{2} (\sigma_\delta^2)^{-1/2} \qquad \text{(transformation in Section \ref{subsec:sd})} \\
+&\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ]  \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0})  (\sigma_\delta^2)^{-1/2} \\
+&\propto \prod_{\delta_g \ne 0} N(\delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 )  (\sigma_\delta^2)^{-1/2} \\
+&\propto \prod_{\delta_g \ne 0} (\sigma_\delta^2)^{-1/2} \exp \left ( -\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2}\right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 )  (\sigma_\delta^2)^{-1/2} \\
+&= (\sigma_\delta^2)^{-G_\delta/2} \exp \left ( -\frac{1}{\theta_\delta^2} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 )  (\sigma_\delta^2)^{-1/2} \\
+&= (\sigma_\delta^2)^{-(G_\delta/2 -1 /2 + 1)} \exp \left ( -\frac{1}{\theta_\delta^2} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 ) \\
+\end{align*}
+
+which is the kernel of a truncated inverse gamma distribution. Hence:
+
+\begin{align*}
+p\left ( \frac{1}{\sigma_\delta^2} \mid \cdots \right ) = \text{Gamma} \left (\frac{1}{\sigma_\delta^2} \mid \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )  \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ \sigma_{\delta 0}^2} \right )
+\end{align*}
+
+
+
+
+
 
 
 
@@ -655,39 +679,6 @@ p(\pi_\alpha \mid \cdots) = \text{Beta}(G - G_\alpha + a_\tau, \ G_\alpha + b_\t
 % delta_g's 
 
 
-\subsection{$p (\delta_g \mid \cdots)$: Metropolis}
-
-\begin{align*}
-p(\delta_g \mid \cdots) &= \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}\\
-&\propto \left [ \prod_{k(n) \ne 2} \lambda_{g, n}^{y_{g, n}} \exp (- \lambda_{g, n}) \right ] \exp \left ( -\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} \right )^{I(\delta_g)}\pi_\delta^{1 - I(\delta_g)}(1 - \pi_\delta)^{I(\delta_g)} \\
-&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\delta_g)\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + (1 - I(\delta_g)) \log \pi_\delta + I(\delta_g) \log(1 - \pi_\delta) \right ) \\
-&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \log \lambda_{g, n} - \lambda_{g, n} \right ] - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
-&=  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
-&\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
-&\propto  \exp \left ( \sum_{k(n) \ne 2} \left [ y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] \right . \\
-&\left .  \qquad - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right ) \\
-\end{align*}
-
-
-
-
-
-
-
-\subsection{$p(\theta_\delta \mid \cdots )$: Normal}
-
-\begin{align*}
-p(\theta_\delta \mid \cdots ) &= \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)} [(1- \pi_\delta) \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)}  \right ]  \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2) \\
-& \propto \left [ \prod_{\delta_g \ne 0} \text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]  \right ]  \cdot \text{N}(\theta_\delta \mid 0, \gamma_\delta^2)
-\end{align*}
-
-From algebra similar to the derivation of $p(\theta_\phi \mid \cdots)$, we get:
-
-\begin{align*}
-p(\theta_\delta \mid \cdots) &= N \left ( \frac{\gamma_\delta^2 \sum_{\delta_g \ne 0} \delta_g}{G_\delta \gamma_\delta^2 + \sigma_\delta^2}, \ \frac{\gamma_\delta^2 \sigma_\delta^2}{G_\delta \gamma_\delta^2 + \sigma_\delta^2} \right ) 
-\end{align*}
-
-where $G_\delta$ is the number of genes for which $\delta_g \ne 0$.
 
 
 
@@ -697,22 +688,16 @@ where $G_\delta$ is the number of genes for which $\delta_g \ne 0$.
 
 
 
-\subsection{$p \left (\frac{1}{\sigma_\delta^2} \mid \cdots  \right )$: Truncated Gamma}
 
-\begin{align*}
-p(\sigma_\delta^2 \mid \cdots ) & = p(\sigma_\delta \mid \cdots) \frac{1}{2} (\sigma_\delta^2)^{-1/2} \qquad \text{(transformation in Section \ref{subsec:sd})} \\
-&\propto \left [ \prod_{g = 1}^G  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \right ]  \cdot \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0})  (\sigma_\delta^2)^{-1/2} \\
-&\propto \prod_{\delta_g \ne 0} N(\delta_g \mid \theta_\delta, \sigma_\delta^2) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 )  (\sigma_\delta^2)^{-1/2} \\
-&\propto \prod_{\delta_g \ne 0} (\sigma_\delta^2)^{-1/2} \exp \left ( -\frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2}\right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 )  (\sigma_\delta^2)^{-1/2} \\
-&= (\sigma_\delta^2)^{-G_\delta/2} \exp \left ( -\frac{1}{\theta_\delta^2} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 )  (\sigma_\delta^2)^{-1/2} \\
-&= (\sigma_\delta^2)^{-(G_\delta/2 -1 /2 + 1)} \exp \left ( -\frac{1}{\theta_\delta^2} \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right ) \cdot I(0 < \sigma_\delta^2 < \sigma_{\delta 0}^2 ) \\
-\end{align*}
 
-which is the kernel of a truncated inverse gamma distribution. Hence:
 
-\begin{align*}
-p\left ( \frac{1}{\sigma_\delta^2} \mid \cdots \right ) = \text{Gamma} \left (\frac{1}{\sigma_\delta^2} \mid \text{shape} = \frac{G_\delta - 1}{2}, \ \text{rate} = \frac{1}{2} \sum_{\delta_g \ne 0} (\delta_g - \theta_\delta)^2 \right )  \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ \sigma_{\delta 0}^2} \right )
-\end{align*}
+
+
+
+
+
+
+
 
 
 
@@ -736,24 +721,6 @@ p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + a_\tau, \ G_\delta + b_\t
 
 
 
-
-
-
-
-
-% joint \phi_g, \alpha_g, \delta_g
-
-\subsection{$p(\phi_g, \alpha_g, \delta_g \mid \cdots)$: Metropolis}
-
-\begin{align*}
-p(\phi_g, \alpha_g, \delta_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
-& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
-& \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right ) \\
-& \quad \times  \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \times  \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
-& \propto  \exp \left (\sum_{n = 1}^N \left [y_{g, n} \mu(n, \phi_g, \alpha_g, \delta_g)  - \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right . \\
-& \qquad \qquad \left . - I(\alpha_g) \left ( \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} + \log( 1 - \pi_\alpha) \right ) + (1 - I(\alpha_g)) \log \pi_\alpha  \right . \\
-& \qquad \qquad \left . - I(\delta_g) \left ( \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2} + \log( 1 - \pi_\delta) \right ) + (1 - I(\delta_g)) \log \pi_\delta  \right )
-\end{align*}
 
 
 
