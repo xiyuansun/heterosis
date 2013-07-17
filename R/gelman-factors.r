@@ -46,22 +46,27 @@ gelmanFactors = function(mainDir){
   if(!file.exists("diagnostics"))
     dir.create("diagnostics")
 
-  outFile = "diagnostics/gelman-factors.txt"    
-  write("parameter gelman-point-est 95%-upper-bd", outFile, sep = " ")
-
   dirs = c("hyper/", "parms/")
 
   found = 0;
   for(dir in dirs)
+    if(file.exists(dir))
+      found = found + 1
+
+  if(!found){
+    print("ERROR: no parameters found.")
+    return(NULL)
+  }
+
+  outFile = "diagnostics/gelman-factors.txt"    
+  write("parameter gelman-point-est 95%-upper-bd", outFile, sep = " ")
+
+  for(dir in dirs)
     if(file.exists(dir)){
       print(paste("In ", mainDir, ", computing Gelman factors on parameters in ", 
                   dir, ".", sep = ""))
-      found = found + 1
       oneDir(dir, outFile)
     }
-
-  if(!found)
-    print("ERROR: no parameters found.")
 }
 
 options <- commandArgs(trailingOnly = TRUE)
