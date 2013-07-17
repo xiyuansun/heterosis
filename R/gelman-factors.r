@@ -38,7 +38,7 @@ gelmanFactors = function(mainDir){
 
   if(!file.exists(mainDir)){
     print(paste("ERROR: could not open directory, ", mainDir, ".", sep =""))
-    return(NULL);
+    return();
   }
 
   setwd(mainDir)
