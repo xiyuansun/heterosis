@@ -63,10 +63,13 @@ gelmanFactors = function(mainDir){
 
   for(dir in dirs)
     if(file.exists(dir)){
-      print(paste("In ", mainDir, ", computing Gelman factors on parameters in ", 
+      print(paste("In output directory, ", mainDir, ", computing Gelman factors on parameters in ", 
                   dir, ".", sep = ""))
       oneDir(dir, outFile)
     }
+
+  print(paste("Please find gelman factors in diagnostics/gelman-factors.txt within ", 
+              mainDir, ".", sep = ""))
 }
 
 options <- commandArgs(trailingOnly = TRUE)
