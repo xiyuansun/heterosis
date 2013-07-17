@@ -57,7 +57,7 @@ gelmanFactors = function(mainDir){
     print("ERROR: no parameters found.")
     return()
   }
-
+ 
   outFile = "diagnostics/gelman-factors.txt"    
   write("parameter gelman-point-est 95%-upper-bd", outFile, sep = " ")
 
