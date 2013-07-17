@@ -38,7 +38,7 @@ void mcmc(int argc, char **argv){
   cudaFree(dev_a);
   
   if(cfg->verbose)
-    printf("Done. MCMC output written to %s.\n", cfg->outDir);
+    printf("Done. MCMC output written to directory: %s.\n", cfg->outDir);
 
   free(cfg);
 } 
