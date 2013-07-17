@@ -55,7 +55,7 @@ gelmanFactors = function(mainDir){
 
   if(!found){
     print("ERROR: no parameters found.")
-    return(NULL)
+    return()
   }
 
   outFile = "diagnostics/gelman-factors.txt"    
