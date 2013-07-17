@@ -47,7 +47,7 @@ gelmanFactors = function(mainDir){
     dir.create("diagnostics")
 
   outFile = "diagnostics/gelman-factors.txt"    
-  write("parameter gelman-point-est 95%-upper-bd", outFile, append = T, sep = " ")
+  write("parameter gelman-point-est 95%-upper-bd", outFile, sep = " ")
 
   dirs = c("hyper/", "parms/")
 
