@@ -2,7 +2,11 @@
 
 if [  $# -eq 0 ]
 then
-  echo ERROR: must specify directory containing mcmc output.
+  if [ -d out ]
+    Rscript ../R/gelman-factors.r out
+  else
+    echo ERROR: must specify directory containing mcmc output.
+  fi
 elif [ -d $1 ]
 then
   Rscript ../R/gelman-factors.r $1
