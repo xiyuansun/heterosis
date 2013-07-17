@@ -3,6 +3,7 @@
 if [  $# -eq 0 ]
 then
   if [ -d out ]
+  then
     Rscript ../R/gelman-factors.r out
   else
     echo ERROR: must specify directory containing mcmc output.
