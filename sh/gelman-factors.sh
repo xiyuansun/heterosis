@@ -7,7 +7,7 @@ then
     Rscript ../R/gelman-factors.r out
   else
     echo ERROR: must specify directory containing mcmc output.
-    echo        Default output directory, out/, not found.
+    echo Default output directory, out/, not found.
   fi
 elif [ -d $1 ]
 then
