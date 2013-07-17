@@ -195,7 +195,7 @@ void getopts(Config *cfg, int argc, char **argv){
       cfg->constPiDel = 1;
     
     } else { /* error */
-      printf("Argument error. See usage.\n");
+      printf("Argument error. See doc/README.txt.\n");
       free(cfg);
       exit(EXIT_FAILURE);
     
