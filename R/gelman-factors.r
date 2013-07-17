@@ -69,7 +69,7 @@ gelmanFactors = function(mainDir){
     }
 
   print(paste("Please find Gelman factors in diagnostics/gelman-factors.txt within ", 
-              gmainDir, ".", sep = ""))
+              mainDir, ".", sep = ""))
 }
 
 options <- commandArgs(trailingOnly = TRUE)
