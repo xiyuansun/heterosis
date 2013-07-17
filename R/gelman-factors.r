@@ -61,7 +61,7 @@ gelmanFactors = function(mainDir){
     }
 
   if(!found)
-    print("Warning: parameters found.")
+    print("ERROR: no parameters found.")
 }
 
 options <- commandArgs(trailingOnly = TRUE)
