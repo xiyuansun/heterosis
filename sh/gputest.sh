@@ -1,4 +1,5 @@
-git pull origin master
 make -C .. gpu
 
-valgrind ../bin/gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt -M 10 -c 3 -b 4 -p -P -r -t -s 100 -h -r --dic -v
+cuda-memcheck ../bin/gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt -M 20 -c 3 -h -p -P  -r -t --dic
+
+valgrind ../bin/gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt -M 20 -c 3 -h -p -P  -r -t --dic
