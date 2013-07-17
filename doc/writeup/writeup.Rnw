@@ -129,20 +129,19 @@ Iowa State University \\ $\quad$ \\
 
 \begin{flushleft}
 
+\section{Introduction} \label{sec:intro}
+
+This writeup explains a fully Bayesian Markov chain Monte Carlo method for modeling RNA-seq data. The hierarchical model featured focuses on heterosis, or hybrid vigor, a phenomenon that concerns two parental genetic lines and an offspring line. For each gene in an RNA-seq dataset, we consider three types of heterosis at the level of gene expression:
+
+\begin{enumerate}
+\item High parent heterosis: the gene is significantly more expressed in the offspring than in either of the parent lines.
+\item Low parent heterosis: the gene is significantly less expressed in the offspring than in either of the parent lines.
+\item Mid parent heterosis: the expression level of the gene in the offspring is significantly different from the average of the parental expression levels.
+\end{enumerate}
+
+We let $y_{g,n}$ be the expression level of gene $g$  ($g = 1, \ldots, G$) in sample $n$ ($n = 1, \ldots, N$). The samples come from one of three groups: group 1, the first parent, group 2, the offspring, and group 3, the second parent.
+
 \section{The Model} \label{sec:model}
-
-Let $y_{g,n}$ be the expression level of gene $g$  ($g = 1, \ldots, G$) in library $n$ ($n = 1, \ldots, N$). Let $\mu(n, \phi_g, \alpha_g, \delta_g)$ be the function given by:
-
-
-\begin{align*}
-\mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
-\phi_g - \alpha_g & \text{ library $n$ is in treatment group 1} \\
-\phi_g + \delta_g & \text{ library $n$ is in treatment group 2} \\
-\phi_g + \alpha_g & \text{ library $n$ is in treatment group 3} \\
-\end{cases}
-\end{align*}
-
-Then:
 
 \begin{align*}
 &y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
@@ -169,6 +168,15 @@ where:
 \item $I(x) = 0$ if $x = 0$ and 1 otherwise. 
 \item Conditional independence is implied unless otherwise specified.
 \item The parameters to the left of the ``$\sim$" are implicitly conditioned on the parameters to the right.
+\item  $\mu(n, \phi_g, \alpha_g, \delta_g)$ is the function given by:
+\begin{align*}
+\mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+\phi_g - \alpha_g & \text{ library $n$ is in treatment group 1 (parent 1)} \\
+\phi_g + \delta_g & \text{ library $n$ is in treatment group 2 (offspring)} \\
+\phi_g + \alpha_g & \text{ library $n$ is in treatment group 3 (parent 2)} \\
+\end{cases}
+\end{align*}
+
 \end{itemize}
 
 
