@@ -35,7 +35,7 @@ Config *config(int argc, char **argv){
   cfg->M = 10;
   cfg->N = 0;
   cfg->G = 0;
-  cfg->burnin = cfg->M / 2;
+  cfg->burnin = -1;
   cfg->joint = 0;
   cfg->seed = 0;
   cfg->heterosis = 1;
@@ -104,7 +104,10 @@ Config *config(int argc, char **argv){
   cfg->piDel = -1;
 
   getopts(cfg, argc, argv);
-  srand(cfg->seed);   
+  srand(cfg->seed);  
+  
+  if(cfg->burnin == -1)
+    cfg->burnin = cfg->M / 2; 
    
   if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic){
     sprintf(cmd, "mkdir -p %s", cfg->outDir);

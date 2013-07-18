@@ -20,6 +20,11 @@ void mcmc(int argc, char **argv){
   int i;
   Config *cfg = config(argc, argv); 
   Chain *a = newChain(cfg);
+
+
+printConfig(cfg);
+
+
   
   if(a == NULL){
     free(cfg);
