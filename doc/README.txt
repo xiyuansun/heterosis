@@ -169,7 +169,7 @@ July 2013
   CUDA C version requirements:
   - A Compute Unified Device Architecture (CUDA) graphics 
 	device with compute capability 2.0 or higher.
-  - CUDA Production Release version 4.2 or above.
+  - CUDA Production Release version 5.0 or above.
 
   gelman-factors.sh and gelman-factors.r requriements:
   - The R language version 2.15.3.
