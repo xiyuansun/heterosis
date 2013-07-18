@@ -289,21 +289,159 @@ for details.
 
 
 ========= OPTIONS =======================
-   
 
+Technically, no options are required for execution. However, if none
+of the options, --dic, --hyper, --parms, --probs, --rates, --time, 
+is set, then the program will not produce output even though
+each of these six options is not required individually.
+
+--data [DATA_FILE]   (equivalent: -i [DATA_FILE], -I [DATA_FILE])
+
+  Specifies the RNA-seq data file, [DATA_FILE], to run through 
+  the main program. Must be a flat file with no header and no row names. 
+  The sole content is a G X N matrix of integers, where G is the number 
+  of genes and N is the number of samples. Entry (g, n) is the expression 
+  of gene g in sample n. Entries within a row are delimited by spaces 
+  and rows are delimited by the line feed character. 
+  See data/test/smallData.txt for an example of an input data file with 
+  8 genes and 4 samples. If this option is unset, the data file defaults
+  to data/data.txt.
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+--group [GROUP_FILE]    (equivalent: -g [GROUP_FILE], -G [GROUP_FILE])
+
+  Specifies the group file, [GROUP_FILE] that corresponds to 
+  the RNA-seq data file. The group file contains a single row that 
+  specifies the assignment of RNA-seq samples to experimental groups. 
+  For example, the example group file, data/test/smallGroup.txt
+  (corresponding to data/test/smallData.txt) contains
+  
+  1 2 3 3
+  
+  Hence, in data/test/smallData.txt, the first sample (column) corresponds
+  to group 1 (parent 1) the second sample corresponds to group 2 (offspring)
+  and samples 3 and 4 correspond to group 3 (parent 3). To model heterosis,
+  GROUP_FILE must specify exactly 3 treatment groups. If only 2 groups are 
+  specified - for example,
+  
+  1 2 2 1
+  
+  then the program does not consider heterosis and only models
+  differential expression between the two groups given. If this option is not set,
+  then the program defaults to data/group.txt.
+  
+--chains [NUM_CHAINS]    (equivalent: -c [NUM_CHAINS], -C [NUM_CHAINS])
+
+  Number of MCMC chains to run. Defaults to 2. Note: for Gelman factors to be
+  computed using sh/gelman-factors.sh, R/gelman-factors.r, or some other tool,
+  there must be at least 2 chains.
+  
+--iter [NUM_ITERATIONS]    (equivalent: -m [NUM_ITERATIONS], -M [NUM_ITERATIONS])
+
+  Length of each chain (number of MCMC iterations). If unset, defaults to 10.
+
+--burnin [BURNIN]    (equivalent: -b [BURNIN], -B [BURNIN])
+
+  Specify the number of iterations to ignore (in addition to initial parameters)
+  when calculating gene-specific differential expression and heterosis probabilities, 
+  acceptance rates for Metropolis steps, and the deviance information criterion 
+  (DIC). If unset, defaults to half the chain length (number of iterations).
+
+--seed [SEED]    (equivalent: -s [SEED], -S [SEED])
+
+  Set the seed for random number generation. If unset, defaults to 0.
+
+--joint    (equivalent: -j, -J)
+
+  If set, each (phi_g, alpha_g, delta_g) triplet will be sampled jointly in a
+  single Metropolis step. If unset, the phi_g's, alpha_g's, and delta_g's will
+  all be sampled in individual Metropolis steps. See doc/writeup/writeup.Rnw
+  for details about the model.
+  
+--verbose    (equivalent: -v, -V)
+
+  If set, the progress of the MCMC will be printed to stdout. If unset, nothing
+  except error and warning messages will print to stdout. 
+
+--out [OUTPUT_DIR]    (equivalent: -o [OUTPUT_DIR], -O [OUTPUT_DIR])
+
+  Specifies the output directory, [OUTPUT_DIR]. All the program's output will
+  be written to directories and files inside [OUTPUT_DIR]. If this directory 
+  does not already exist, the program will create it. However, [OUTPUT_DIR]
+  will not be created if there is no output to produce: i.e., if none of the 
+  options, --dic, --hyper, --parms, --probs, --rates, --time, is set. 
+  If --out is not set, [OUTPUT_DIR] defaults to out/.
+  
+--dic
+
+  If set, the program will output one estimate of the model's deviance information
+  criterion (DIC) to [OUT_DIR]/diagnostics/dic.txt. Note: this will slow both 
+  programs down and take away most of the performance advantage of the 
+  GPU-accelerated version for all the iterations after burn-in.
 
 
+--hyper    (equivalent: -h, -H)
+
+  If set, the program will output the hyperparamters, including initial values,
+ for each chain to chain-specific flat files in [OUT_DIR]/hyper/.
+
+--parms    (equivalent: -P)
+
+  If set, the program will output the non-hyper-paramters, including initial
+  values, for each chain to chain-specific flat files in [OUT_DIR]/parms/. 
+  Note: this will slow both programs down and take away most of the
+  performance advantage of the GPU-accelerated version.
+
+--probs    (equivalent: -p)
+
+  If set, the program will calculate the gene-specific probabilities of 
+  differential expression, high parent heterosis, low parent heterosis, 
+  and mid parent heterosis to chain-specific flat files in [OUT_DIR]/probs/.
+
+--rates    (equivalent: -r, -R)
+
+  If set, the program will print the acceptance rates of Metropolis steps 
+  to chain-specific flat files in [OUT_DIR]/rates/.
+
+--time    (equivalent: -t, -T)
+
+  If set, the program will print out the time (in milliseconds) that it 
+  takes to sample each parameter for each iteration in each chain. 
+  chain-specific flat files will be written to [OUT_DIR]/time/.
+  
+
+The following options set initial constants. 
+See doc/writeup/writeup.Rnw for details on the model.
+
+--sigma-c0 [VAL]        (default: 10)
+--d0 [VAL]              (default: 1000)
+--a-tau [VAL]           (default: 100)
+--a-alpha [VAL]         (default: 1)
+--a-delta [VAL]         (default: 1)
+--b-tau [VAL]           (default: 100)
+--b-alpha [VAL]         (default: 1)
+--b-delta [VAL]         (default: 1)
+--gamma-phi [VAL]       (default: 2)
+--gamma-alpha [VAL]     (default: 2)
+--gamma-delta [VAL]     (default: 2)
+--sigma-phi0 [VAL]      (default: 2)
+--sigma-alpha0 [VAL]    (default: 2)
+--sigma-delta0 [VAL]    (default: 2)
 
 
+The following options set hyperparameters. The hyperparameters
+set here will remain constant throughout the MCMC. The others 
+will be sampled from their prior distributions initially
+and then sampled from their full conditional distributions
+in Gibbs steps in the MCMC.
 
- 
+--sigma-c [VAL]    
+--d [VAL]               (equivalent: -d)    
+--tau [VAL]    
+--theta-phi [VAL]    
+--theta-alpha [VAL]    
+--theta-delta [VAL]    
+--sigma-phi [VAL]    
+--sigma-alpha [VAL]    
+--sigma-delta [VAL]    
+--pi-alpha [VAL]    
+--pi-delta [VAL]       
