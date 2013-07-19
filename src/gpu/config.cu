@@ -110,8 +110,7 @@ Config *config(int argc, char **argv){
     cfg->burnin = cfg->M / 2; 
    
   if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic){
-    sprintf(cmd, "mkdir -p %s", cfg->outDir);
-    system(cmd);
+    mkdir(cfg->outDir, 0777);
     chdir(cfg->outDir); 
   }
   
