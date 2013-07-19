@@ -4,6 +4,8 @@
 #include <functions.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 void oneIteration(Chain *a, Config *cfg){
   ++cfg->chainNum;

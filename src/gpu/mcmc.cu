@@ -4,6 +4,8 @@
 #include <functions.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 __host__ void oneIteration(Chain *host_a, Chain *dev_a, Config *cfg){
   ++cfg->chainNum;
