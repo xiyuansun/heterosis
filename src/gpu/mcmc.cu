@@ -40,5 +40,6 @@ void mcmc(int argc, char **argv){
   if(cfg->verbose)
     printf("Done. MCMC output written to directory: %s.\n", cfg->outDir);
 
+  chdir(cfg->cwd); 
   free(cfg);
 } 

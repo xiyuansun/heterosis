@@ -146,7 +146,7 @@ void printHeaders(Chain *a, Config *cfg){
       return;
     }
        
-    fprintf(fp, "d c phi alp del meanEps\n");
+    fprintf(fp, "d c phi alpha delta mean-epsilon\n");
     fclose(fp);
   }
   
