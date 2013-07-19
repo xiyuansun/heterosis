@@ -10,16 +10,16 @@ num_t rgamma(num_t shape, num_t rate, num_t lb){
         haznaz, lam, ret, tmp1, tmp2, n, nmax = 100;
 
   if(shape <= 0){
-    printf("Error: bad shape: ");
-    printf(NUM_TF, shape);
-    printf("\n");
+    fprintf(stderr, "Error: bad shape: ");
+    fprintf(stderr, NUM_TF, shape);
+    fprintf(stderr, "\n");
     return(-1);
   }
   
   if(rate <= 0){
-    printf("Error: bad rate: ");
-    printf(NUM_TF, rate);
-    printf("\n");
+    fprintf(stderr, "Error: bad rate: ");
+    fprintf(stderr, NUM_TF, rate);
+    fprintf(stderr, "\n");
     return(-1);
   }
 

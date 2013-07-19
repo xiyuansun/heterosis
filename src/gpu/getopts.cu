@@ -195,7 +195,7 @@ void getopts(Config *cfg, int argc, char **argv){
       cfg->constPiDel = 1;
     
     } else { /* error */
-      printf("See README.txt in the doc/ directory.\n");
+      fprintf(stderr, "See README.txt in the doc/ directory.\n");
       free(cfg);
       exit(EXIT_FAILURE);
     

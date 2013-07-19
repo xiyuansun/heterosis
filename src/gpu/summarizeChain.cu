@@ -25,7 +25,7 @@ __host__ void printProbs(Chain *host_a, Chain *dev_a, Config *cfg){
 	fp = fopen(file, "a");
   
 	if(fp == NULL){
-	  printf("ERROR: unable to create file, %s\n", file);
+	  fprintf(stderr, "ERROR: unable to create file, %s\n", file);
 	  return;
 	}
   
@@ -75,7 +75,7 @@ __host__ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "a"); 
     
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
       return;
     }
        
@@ -164,7 +164,7 @@ __host__ void printDIC(Chain *host_a, Chain *dev_a, Config *cfg){
 	fp = fopen("dic.txt", "a");
   
 	if(fp == NULL){
-	  printf("ERROR: unable to create file, dic.txt.\n");
+	  fprintf(stderr, "ERROR: unable to create file, dic.txt.\n");
 	  return;
 	}
   

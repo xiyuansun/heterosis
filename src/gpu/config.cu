@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 Config *config(int argc, char **argv){
-
+  int stat = 0;
   Config *cfg = (Config*) malloc(sizeof(Config));
   
   /* default filenames */        
@@ -109,7 +109,15 @@ Config *config(int argc, char **argv){
     cfg->burnin = cfg->M / 2; 
    
   if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic){
-    mkdir(cfg->outDir, 0777);
+    stat = mkdir(cfg->outDir, 0777);
+    
+    if(stat == -1){
+      fprintf(stderr, "Error: unable to create output directory, %s.\n", cfg->outDir);
+      fprintf(stderr, "Some possible reasons:\n  1) %s may already exist.\n", cfg->outDir);
+      fprintf(stderr, "  2) You may not have permission to create %s.\n", cfg->outDir);
+      exit(EXIT_FAILURE);
+    }
+    
     chdir(cfg->outDir); 
   }
   

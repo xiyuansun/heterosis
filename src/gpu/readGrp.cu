@@ -8,14 +8,14 @@ int *readGrp(Config *cfg){
   FILE *fp;
 
   if(cfg->N < 2){
-    printf("ERROR: bad experimental design.\n");
+    fprintf(stderr, "ERROR: bad experimental design.\n");
     exit(EXIT_FAILURE);
   }
   
   fp = fopen(cfg->groupFile, "r");
   
   if(fp == NULL){
-    printf("ERROR: group file \"%s\" not found.\n", cfg->groupFile);
+    fprintf(stderr, "ERROR: group file \"%s\" not found.\n", cfg->groupFile);
     return NULL;
   }
   
@@ -53,7 +53,7 @@ int *readGrp(Config *cfg){
     cfg->heterosis = 1;
     
   } else {  
-    printf("ERROR: bad experimental design.");
+    fprintf(stderr, "ERROR: bad experimental design.");
     fclose(fp);
     free(grp);
     free(unique);

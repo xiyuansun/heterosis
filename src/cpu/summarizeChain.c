@@ -26,7 +26,7 @@ void printProbs(Chain *a, Config *cfg){
 	fp = fopen(file, "a");
   
 	if(fp == NULL){
-	  printf("ERROR: unable to create file, %s\n", file);
+	  fprintf(stderr, "ERROR: unable to create file, %s\n", file);
 	  return;
 	}
   
@@ -60,7 +60,7 @@ void printRates(Chain *a, Config *cfg){
     fp = fopen(file, "a"); 
     
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
       return;
     }
         

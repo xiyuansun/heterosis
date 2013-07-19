@@ -38,7 +38,7 @@ __host__ void printHyper(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "a");
     
     if(fp == NULL){
-      printf("ERROR: unable to open file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to open file, %s\n", file);
       return;
     }
     
@@ -136,7 +136,7 @@ __host__ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "a");
     
     if(fp == NULL){
-      printf("ERROR: unable to open file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to open file, %s\n", file);
       return;
     }
     
@@ -196,7 +196,7 @@ __host__ void printTime(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "a"); 
   
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
       return;
     }
     

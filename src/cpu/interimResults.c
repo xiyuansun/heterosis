@@ -16,7 +16,7 @@ void printHyper(Chain *a, Config *cfg){
     fp = fopen(file, "a");
     
     if(fp == NULL){
-      printf("ERROR: unable to open file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to open file, %s\n", file);
       return;
     }
     
@@ -102,7 +102,7 @@ void printParms(Chain *a, Config *cfg){
     fp = fopen(file, "a");
     
     if(fp == NULL){
-      printf("ERROR: unable to open file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to open file, %s\n", file);
       return;
     }
     
@@ -168,7 +168,7 @@ void printTime(Chain *a, Config *cfg){
     fp = fopen(file, "a"); 
   
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
       return;
     }
     

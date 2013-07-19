@@ -21,7 +21,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
 	fp = fopen(file, "w");
   
 	if(fp == NULL){
-	  printf("ERROR: unable to create file, %s\n", file);
+	  fprintf(stderr, "ERROR: unable to create file, %s\n", file);
 	  return;
 	}  
   
@@ -40,7 +40,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "w");
     
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
       return;
     }
     
@@ -92,7 +92,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "w");
     
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
       return;
     }
   
@@ -173,7 +173,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "w"); 
     
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
       return;
     }
        
@@ -189,7 +189,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "w"); 
   
     if(fp == NULL){
-      printf("ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
       return;
     }
     
