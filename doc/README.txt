@@ -15,7 +15,7 @@ July 2013
 
 ========= ABOUT =========================
 
-  This readme explains the software that fits the model given in 
+  This guide explains the software that fits the model given in 
   doc/writeup/writeup.Rnw (which may be compiled with knitR to produce a 
   more easily readable pdf, doc/writeup/writeup.pdf). This package, at 
   minimum, should include the following directories and files.
@@ -156,10 +156,9 @@ July 2013
   Gelman potential scale reduction factors on output.
 
   General requirements:
-  - A Linux/Unix or Mac operating system. Windows systems 
-	must run this program from within a Linux/Unix-style 
-	command line interface such as Cygwin (cygwin.com) or 
-	MinGW (mingw.org/).
+  - A command line interface from which to launch the main 
+    program. On Mac and Linux, use Terminal. Windows users 
+    may consider Cygwin (cygwin.com) or MinGW (mingw.org/).
   - GNU Bash version 4.1.2 or higher.
   - The GNU C library version 2.12 or higher.
 
@@ -171,7 +170,7 @@ July 2013
 	device with compute capability 2.0 or higher.
   - CUDA Production Release version 5.0 or above.
 
-  gelman-factors.sh and gelman-factors.r requriements:
+  gelman-factors.sh and gelman-factors.r requirements:
   - The R language version 2.15.3.
   - The coda package in R, available for download from within R at 
 	http://cran.us.r-project.org/.
@@ -375,39 +374,40 @@ July 2013
   --dic
 
     If set, the program will output one estimate of the model's deviance information
-    criterion (DIC) to [OUT_DIR]/diagnostics/dic.txt. Note: this will slow both 
+    criterion (DIC) to dic.txt inside [OUTPUT_DIR]. Note: this will slow both 
     programs down and take away most of the performance advantage of the 
     GPU-accelerated version for all the iterations after burn-in.
 
 
   --hyper    (equivalent: -h, -H)
 
-    If set, the program will output the hyperparamters, including initial values,
-    for each chain to chain-specific flat files in [OUT_DIR]/hyper/.
+    If set, the program will output the hyperparameters, including initial values,
+    for each chain: hyper-chain1.txt, hyper-chain2.txt, etc. inside [OUTPUT_DIR]. 
 
   --parms    (equivalent: -P)
 
-    If set, the program will output the non-hyper-paramters, including initial
-    values, for each chain to chain-specific flat files in [OUT_DIR]/parms/. 
+    If set, the program will output the non-hyper parameters, including initial values,
+    for each chain: parms-chain1.txt, parms-chain2.txt, etc. inside [OUTPUT_DIR]. 
     Note: this will slow both programs down and take away most of the
     performance advantage of the GPU-accelerated version.
 
   --probs    (equivalent: -p)
 
-    If set, the program will calculate the gene-specific probabilities of 
+    If set, the program will output the gene-specific probabilities of 
     differential expression, high parent heterosis, low parent heterosis, 
-    and mid parent heterosis to chain-specific flat files in [OUT_DIR]/probs/.
+    and mid parent heterosis for each chain: probs-chain1.txt, probs-chain2.txt,
+    etc. inside [OUTPUT_DIR].
 
   --rates    (equivalent: -r, -R)
 
     If set, the program will print the acceptance rates of Metropolis steps 
-    to chain-specific flat files in [OUT_DIR]/rates/.
+    for each chain: rates-chain1.txt, rates-chain2.txt, etc. inside [OUTPUT_DIR].
 
   --time    (equivalent: -t, -T)
 
     If set, the program will print out the time (in milliseconds) that it 
-    takes to sample each parameter for each iteration in each chain. 
-    chain-specific flat files will be written to [OUT_DIR]/time/.
+    takes to sample each parameter for each iteration in each chain:
+    time-chain1.txt, time-chain2.txt, etc. inside [OUTPUT_DIR].
   
 
   The following options set initial constants. 
