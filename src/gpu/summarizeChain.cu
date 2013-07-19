@@ -21,7 +21,7 @@ __host__ void printProbs(Chain *host_a, Chain *dev_a, Config *cfg){
 	  printf("probabilities.\n");
 	}
   
-	sprintf(file, "probs/chain%d.txt", cfg->chainNum);
+	sprintf(file, "probs-chain%d.txt", cfg->chainNum);
 	fp = fopen(file, "a");
   
 	if(fp == NULL){
@@ -71,7 +71,7 @@ __host__ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
     if(cfg->verbose)
       printf("  Printing acceptance rates of metropolis steps.\n");
   
-    sprintf(file, "rates/chain%d.txt", cfg->chainNum);
+    sprintf(file, "rates-chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a"); 
     
     if(fp == NULL){
@@ -161,10 +161,10 @@ __host__ void printDIC(Chain *host_a, Chain *dev_a, Config *cfg){
   
   if(cfg->dic){
   
-	fp = fopen("diagnostics/dic.txt", "a");
+	fp = fopen("dic.txt", "a");
   
 	if(fp == NULL){
-	  printf("ERROR: unable to create file, diagnostics/dic.txt.\n");
+	  printf("ERROR: unable to create file, dic.txt.\n");
 	  return;
 	}
   

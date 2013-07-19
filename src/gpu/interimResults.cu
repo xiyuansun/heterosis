@@ -34,7 +34,7 @@ __host__ void printHyper(Chain *host_a, Chain *dev_a, Config *cfg){
   num_t tmp;
   
   if(cfg->hyper){
-    sprintf(file, "hyper/chain%d.txt", cfg->chainNum);
+    sprintf(file, "hyper-chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
     
     if(fp == NULL){
@@ -132,7 +132,7 @@ __host__ void printParms(Chain *host_a, Chain *dev_a, Config *cfg){
   num_t *tmpv;
 
   if(cfg->parms){
-    sprintf(file, "parms/chain%d.txt", cfg->chainNum);
+    sprintf(file, "parms-chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
     
     if(fp == NULL){
@@ -192,7 +192,7 @@ __host__ void printTime(Chain *host_a, Chain *dev_a, Config *cfg){
 
   if(cfg->time){
   
-    sprintf(file, "time/chain%d.txt", cfg->chainNum);
+    sprintf(file, "time-chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a"); 
   
     if(fp == NULL){

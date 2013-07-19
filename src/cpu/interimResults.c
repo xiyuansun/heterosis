@@ -12,7 +12,7 @@ void printHyper(Chain *a, Config *cfg){
   char file[BUF];
 
   if(cfg->hyper){
-    sprintf(file, "hyper/chain%d.txt", cfg->chainNum);
+    sprintf(file, "hyper-chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
     
     if(fp == NULL){
@@ -98,7 +98,7 @@ void printParms(Chain *a, Config *cfg){
   int n, g, G = cfg->G;
 
   if(cfg->parms){
-    sprintf(file, "parms/chain%d.txt", cfg->chainNum);
+    sprintf(file, "parms-chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a");
     
     if(fp == NULL){
@@ -164,7 +164,7 @@ void printTime(Chain *a, Config *cfg){
 
   if(cfg->time){
   
-    sprintf(file, "time/chain%d.txt", cfg->chainNum);
+    sprintf(file, "time-chain%d.txt", cfg->chainNum);
     fp = fopen(file, "a"); 
   
     if(fp == NULL){

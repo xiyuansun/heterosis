@@ -114,24 +114,6 @@ Config *config(int argc, char **argv){
     system(cmd);
     chdir(cfg->outDir); 
   }
-   
-  if(cfg->probs)
-    system("mkdir -p probs");
-  
-  if(cfg->rates)
-    system("mkdir -p rates");
-  
-  if(cfg->hyper)
-    system("mkdir -p hyper");
-  
-  if(cfg->parms)
-    system("mkdir -p parms");
-  
-  if(cfg->time)
-    system("mkdir -p time");
-  
-  if(cfg->dic)
-    system("mkdir -p diagnostics");
-  
+    
   return cfg;
 }
