@@ -1,9 +1,9 @@
-oneParm = function(dir, parmName, parmNum, outFile, nfiles){
+oneParm = function(kind, parmName, parmNum, outFile, nfiles){
   library(coda, quietly = T)
 
   l = mcmc.list()
   for(i in 1:nfiles){
-    cmd = paste("cut -d ' ' -f", parmNum, " ", dir, "chain", i, ".txt", sep="")
+    cmd = paste("cut -d ' ' -f", parmNum, " ", kind, "chain", i, ".txt", sep="")
     con = pipe(cmd)
     l[[i]] = mcmc(as.numeric(scan(con, what = character(), quiet = T)[-1]))
     close(con)
@@ -13,28 +13,32 @@ oneParm = function(dir, parmName, parmNum, outFile, nfiles){
   write(paste(parmName, gelman, collapse = " "), outFile, append = T, sep = " ")
 }
 
-readHeader = function(dir){
-  con = file(paste(dir, "chain1.txt", sep = ""), "r") 
+readHeader = function(kind){
+  con = file(paste(kind, "chain1.txt", sep = ""), "r") 
   h = readLines(con, 1)
   close(con)
   strsplit(h, split = " ")[[1]]
 }
 
-oneDir = function(dir, outFile){
-  if(substr(dir, nchar(dir), nchar(dir)) != "/")
-    dir = paste(dir, "/", sep = "")
+oneKind = function(kind, outFile, mainDir){
 
-  h = readHeader(dir)
-  nfiles = length(list.files(dir)) 
+  h = readHeader(kind)
+
+  nfiles = 0
+  files = list.files()
+
+  for(file in files)
+     nfiles = nfiles + length(grep(kind, file))
 
   if(!nfiles)
-    return
+    return()
 
   for(i in 1:length(h))
-    oneParm(dir, h[i], i, outFile, nfiles)
+    oneParm(kind, h[i], i, outFile, nfiles)
 }
 
 gelmanFactors = function(mainDir){
+  cwd = getwd()
 
   if(!file.exists(mainDir)){
     print(paste("ERROR: could not open directory, ", mainDir, ".", sep =""))
@@ -46,11 +50,11 @@ gelmanFactors = function(mainDir){
   if(!file.exists("diagnostics"))
     dir.create("diagnostics")
 
-  dirs = c("hyper/", "parms/")
+  kinds = c("hyper-", "parms-")
 
   found = 0;
-  for(dir in dirs)
-    if(file.exists(dir))
+  for(kind in kinds)
+    if(file.exists(paste(kind, "chain1.txt", sep = "")))
       found = found + 1
 
   if(!found){
@@ -58,18 +62,23 @@ gelmanFactors = function(mainDir){
     return()
   }
  
-  outFile = "diagnostics/gelman-factors.txt"    
+  outFile = "gelman-factors.txt"    
   write("parameter gelman-point-est 95%-upper-bd", outFile, sep = " ")
 
-  for(dir in dirs)
-    if(file.exists(dir)){
-      print(paste("In output directory, ", mainDir, ", computing Gelman factors on parameters in ", 
-                  dir, ".", sep = ""))
-      oneDir(dir, outFile)
+  for(kind in kinds)
+    if(file.exists(paste(kind, "chain1.txt", sep = ""))){
+      if(kind == "hyper-"){
+        print(paste("Computing Gelman factors on hyperparameters."))
+      } else {
+        print(paste("Computing Gelman factors on non-hyper parameters."))
+      }
+
+      oneKind(kind, outFile, mainDir)
     }
 
-  print(paste("Please find Gelman factors in diagnostics/gelman-factors.txt within ", 
+  print(paste("Please find Gelman factors in gelman-factors.txt within ", 
               mainDir, ".", sep = ""))
+  setwd(cwd)
 }
 
 options <- commandArgs(trailingOnly = TRUE)
