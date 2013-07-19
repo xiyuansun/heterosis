@@ -360,7 +360,7 @@ July 2013
   --verbose    (equivalent: -v, -V)
 
     If set, the progress of the MCMC will be printed to stdout. If unset, nothing
-    except error and warning messages will print to stdout. 
+    will be printed to stdout.
 
   --out [OUTPUT_DIR]    (equivalent: -o [OUTPUT_DIR], -O [OUTPUT_DIR])
 
