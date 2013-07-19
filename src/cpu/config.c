@@ -11,7 +11,6 @@
 
 Config *config(int argc, char **argv){
 
-  char cmd[BUF];
   Config *cfg = (Config*) malloc(sizeof(Config));
   
   /* default filenames */        
