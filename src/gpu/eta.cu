@@ -22,7 +22,7 @@ __global__ void sampleEta_kernel2(Chain *a){ /* kernel <<<G, 1>>> */
   
     rate = (rate + a->d * a->tau * a->tau) / 2; 
 
-    if(shape >= 1 && rate > 0){
+    if(shape > 0 && rate > 0){
       a->eta[g] = 1/sqrt(rgammaDevice(a, g, shape, rate, 0));
     } else {
       a->eta[g] = a->eta[g];

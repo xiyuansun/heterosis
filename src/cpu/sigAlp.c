@@ -45,7 +45,7 @@ void sampleSigAlp_kernel4(Chain *a){ /* parallel pairwise sum in Thrust */
   num_t rate = a->s1 / 2;
   num_t lb = 1/pow(a->sigAlp0, 2);
 
-  if(shape >= 1 && rate > 0){
+  if(shape > 0 && rate > 0){
     a->sigAlp = 1/sqrt(rgamma(shape, rate, lb));
   } 
 }

@@ -28,7 +28,7 @@ void sampleSigPhi_kernel3(Chain *a){ /* kernel <<<1, 1>>> */
   num_t shape = (a->G - 1) / 2;
   num_t lb = 1/pow(a->sigPhi0, 2);
 
-  if(shape >= 1 && rate > 0){
+  if(shape > 0 && rate > 0){
     a->sigPhi = 1/sqrt(rgamma(shape, rate, lb));
   } else {
     a->sigPhi = a->sigPhi;

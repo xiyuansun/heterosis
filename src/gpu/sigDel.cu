@@ -27,7 +27,7 @@ __global__ void sampleSigDel_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t rate = a->s1 / 2;
   num_t lb = 1/pow((float) a->sigDel0, 2);
 
-  if(shape >= 1 && rate > 0){
+  if(shape > 0 && rate > 0){
     a->sigDel = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));
   } else {
     a->sigDel = a->sigDel;

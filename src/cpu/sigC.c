@@ -27,7 +27,7 @@ void sampleSigC(Chain *a, Config *cfg){ /* kernel <<<1, 1>>> */
   rate = rate / 2;
   lb = 1 / pow(a->sigC0, 2); 
 
-  if(shape >= 1 && rate > 0){
+  if(shape > 0 && rate > 0){
     a->sigC = 1/sqrt(rgamma(shape, rate, lb));
   } 
 

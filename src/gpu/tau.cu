@@ -18,7 +18,7 @@ __global__ void sampleTau_kernel2(Chain *a){ /* kernel<<<1, 1>>> */
   num_t rate = a->s1 * a->d / 2 + a->bTau;
   num_t shape = a->aTau + a->G * a->d / 2;
 
-  if(shape >= 1 && rate > 0){
+  if(shape > 0 && rate > 0){
     a->tau = 1/sqrt(rgammaDevice(a, 1, shape, rate, 0));
   } 
 }

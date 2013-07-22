@@ -18,7 +18,7 @@ __global__ void sampleSigC_kernel(Chain *a){ /* kernel <<<1, 1>>> */
   rate = rate / 2;
   lb = 1 / pow((float) a->sigC0, 2); 
 
-  if(shape >= 1 && rate > 0){
+  if(shape > 0 && rate > 0){
     a->sigC = 1/sqrt(rgammaDevice(a, 1, shape, rate, lb));
   } 
 }
