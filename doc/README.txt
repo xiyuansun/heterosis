@@ -467,10 +467,12 @@ For a test with minimal output, you may instead run
   $ ./mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out cpu-output
   $ ./gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out gpu-output
 
-To compute Gelman diagnostics on the output in the newly created cpu-ouput/ folder, change from the bin/ directory to the sh/ directory.
+To compute Gelman diagnostics on the output in the newly created cpu-ouput/ directory, change from the bin/ directory to the sh/ directory.
 
   $ cd ../sh
 
 Then, run
 
   $ ./gelman-factors.sh ../bin/cpu-output
+
+
