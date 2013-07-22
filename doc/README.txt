@@ -445,4 +445,32 @@ July 2013
   --sigma-alpha [VAL]    
   --sigma-delta [VAL]    
   --pi-alpha [VAL]    
-  --pi-delta [VAL]       
+  --pi-delta [VAL]  
+
+
+========= TESTING =======================    
+
+To test the code, a small test dataset, data/test/smallData.txt, is provided. Its group file, data/test/smallGroup.txt, is also included. The user may run either the cpu or the gpu version on this test data to verify that the software runs properly. After compilation, change to the bin/ directory with your Linux-style command line interface.
+
+  $ cd bin/
+
+Then, run the cpu version,
+
+  $ ./mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --iter 20 --chains 3 --hyper --parms --probs --rates --time --dic --verbose --out cpu-output 
+
+or the gpu version,
+
+  $ ./gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --iter 20 --chains 3 --hyper --parms --probs --rates --time --dic --verbose --out gpu-output
+
+For a test with minimal output, you may instead run
+
+  $ ./mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out cpu-output
+  $ ./gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out gpu-output
+
+To compute Gelman diagnostics on the output in the newly created cpu-ouput/ folder, change from the bin/ directory to the sh/ directory.
+
+  $ cd ../sh
+
+Then, run
+
+  $ ./gelman-factors.sh ../bin/cpu-output
