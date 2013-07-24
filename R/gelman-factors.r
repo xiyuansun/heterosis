@@ -1,3 +1,13 @@
+checkVersion = function(){
+  v = R.Version()
+  major = as.numeric(v$major)
+  minor = as.numeric(v$minor)
+
+  if(major <= 2 && minor < 15)
+    stop(paste("R version 2.15.0 or later is required. This is ", 
+               v$version.string, ".", sep=""))
+}
+
 oneParm = function(kind, parmName, parmNum, outFile, nfiles){
   library(coda, quietly = T)
 
@@ -38,6 +48,8 @@ oneKind = function(kind, outFile, mainDir){
 }
 
 gelmanFactors = function(mainDir = "out", parms = F){
+
+  checkVersion()
   cwd = getwd()
 
   if(!file.exists(mainDir))
