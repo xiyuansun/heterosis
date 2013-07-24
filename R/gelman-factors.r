@@ -37,30 +37,26 @@ oneKind = function(kind, outFile, mainDir){
     oneParm(kind, h[i], i, outFile, nfiles)
 }
 
-gelmanFactors = function(mainDir){
+gelmanFactors = function(mainDir = "out", parms = F){
   cwd = getwd()
 
-  if(!file.exists(mainDir)){
-    print(paste("ERROR: could not open directory, ", mainDir, ".", sep =""))
-    return();
-  }
+  if(!file.exists(mainDir))
+    stop(paste("Could not open directory, ", mainDir, ".", sep =""))
 
   setwd(mainDir)
 
-  if(!file.exists("diagnostics"))
-    dir.create("diagnostics")
+  kinds = c("hyper-")
 
-  kinds = c("hyper-", "parms-")
+  if(parms)
+    kinds = c(kinds, "parms-")
 
   found = 0;
   for(kind in kinds)
     if(file.exists(paste(kind, "chain1.txt", sep = "")))
       found = found + 1
 
-  if(!found){
-    print("ERROR: no parameters found.")
-    return()
-  }
+  if(!found)
+    stop("No parameters found.")
  
   outFile = "gelman-factors.txt"    
   write("parameter gelman-point-est 95%-upper-bd", outFile, sep = " ")
@@ -81,5 +77,5 @@ gelmanFactors = function(mainDir){
   setwd(cwd)
 }
 
-options <- commandArgs(trailingOnly = TRUE)
-gelmanFactors(options[1])
+#options <- commandArgs(trailingOnly = TRUE)
+#gelmanFactors(options[1])
