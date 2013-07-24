@@ -50,9 +50,6 @@ July 2013
   R/
     gelman-factors.r
 
-  sh/
-    gelman-factors.sh
-
   src/
     cpu/
       allocChain.c
@@ -151,9 +148,8 @@ July 2013
   This package contains two versions: a standard C version
   and a CUDA C, GPU-accelerated version that takes advantage 
   of opportunities to parallelize the MCMC across genes. In
-  addition, a GNU Bash script, sh/gelman-factors.sh, and an 
-  R script R/gelman-factors.c, are included for computing 
-  Gelman potential scale reduction factors on output.
+  addition, an R script R/gelman-factors.r, is included for 
+  computing Gelman potential scale reduction factors on output.
 
   General requirements:
   - A command line interface from which to launch the main 
@@ -170,8 +166,8 @@ July 2013
 	device with compute capability 2.0 or higher.
   - CUDA Production Release version 5.0 or above.
 
-  gelman-factors.sh and gelman-factors.r requirements:
-  - The R language version 2.15.3.
+  gelman-factors.r requirements:
+  - The R language version 2.15.0.
   - The coda package in R, available for download from within R at 
 	http://cran.us.r-project.org/.
 
@@ -277,15 +273,29 @@ July 2013
   $ ./gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper
 
   To compute Gelman factors on the output of either mcmc or gpu-mcmc, 
-  change the current working directory to the sh/ directory and run
+  change the current working directory to the sh/ directory open R 
+  (version 2.15.0 or later)
 
-  $ ./gelman-factors.sh [OUTPUT_DIR]
+  $ R
+  ...
+  > 
+
+  load the R script, gelman-factors.r
+
+  > source("R/gelman-factors.r")  
+
+  and then run
+
+  > gelmanFactors([OUTPUT_DIR], [PARMS])
 
   where [OUTPUT_DIR] is the root directory of the output of the main program.
-  [OUTPUT_DIR] defaults to out/ within the current working directory. 
+  [OUTPUT_DIR] defaults to out/ within the current working directory. Set [PARMS]
+  to True to compute Gelman factors on all the parameters and to False to compute
+  Gelman factors on the hyperparameters only. [PARMS] defaults to False because
+  computing Gelman factors on all the parameters is extremely time-consuming.
   Note: in order to compute the Gelman factors on the output, you must use
-  the --hyper or --parms options when you run mcmc or gpu-mcmc. See OPTIONS
-  for details.
+  the --hyper or --parms options when you run mcmc or gpu-mcmc. Otherwise,
+  there will be no output for gelmanFactors() to use. See OPTIONS for details.
 
 
 ========= OPTIONS =======================
