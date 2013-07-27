@@ -1,2 +1,1 @@
 1) make into R package
-2) different priors for phi, alpha, and delta
