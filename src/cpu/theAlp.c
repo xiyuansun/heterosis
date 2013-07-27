@@ -62,10 +62,12 @@ void sampleTheAlp(Chain *a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("theAlp ");
 
-  sampleTheAlp_kernel1(a);
-  sampleTheAlp_kernel2(a);
-  sampleTheAlp_kernel3(a);
-  sampleTheAlp_kernel4(a);
-
+  if(!cfg->alpPrior){
+	sampleTheAlp_kernel1(a);
+	sampleTheAlp_kernel2(a);
+	sampleTheAlp_kernel3(a);
+	sampleTheAlp_kernel4(a);
+  }
+  
   cfg->timeTheAlp = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

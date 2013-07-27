@@ -60,10 +60,12 @@ void sampleSigAlp(Chain *a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("sigAlp ");
 
-  sampleSigAlp_kernel1(a);
-  sampleSigAlp_kernel2(a);
-  sampleSigAlp_kernel3(a);
-  sampleSigAlp_kernel4(a); 
-
+  if(!cfg->alpPrior){
+	sampleSigAlp_kernel1(a);
+	sampleSigAlp_kernel2(a);
+	sampleSigAlp_kernel3(a);
+	sampleSigAlp_kernel4(a); 
+  }
+  
   cfg->timeSigAlp = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

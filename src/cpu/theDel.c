@@ -62,10 +62,12 @@ void sampleTheDel(Chain *a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("theDel ");
 
-  sampleTheDel_kernel1(a);
-  sampleTheDel_kernel2(a);
-  sampleTheDel_kernel3(a);
-  sampleTheDel_kernel4(a);
+  if(!cfg->delPrior){
+	sampleTheDel_kernel1(a);
+	sampleTheDel_kernel2(a);
+	sampleTheDel_kernel3(a);
+	sampleTheDel_kernel4(a);
+  }
   
   cfg->timeTheDel = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

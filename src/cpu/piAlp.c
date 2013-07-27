@@ -42,9 +42,11 @@ void samplePiAlp(Chain *a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("piAlp ");
 
-  samplePiAlp_kernel1(a);
-  samplePiAlp_kernel2(a);  
-  samplePiAlp_kernel3(a);
-
+  if(!cfg->alpPrior){
+	samplePiAlp_kernel1(a);
+	samplePiAlp_kernel2(a);  
+	samplePiAlp_kernel3(a);
+  }
+  
   cfg->timePiAlp = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

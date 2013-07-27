@@ -36,8 +36,10 @@ void sampleThePhi(Chain *a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("thePhi ");
 
-  sampleThePhi_kernel1(a);
-  sampleThePhi_kernel2(a);
+  if(!cfg->phiPrior){
+	sampleThePhi_kernel1(a);
+	sampleThePhi_kernel2(a);
+  }
   
   cfg->timeThePhi = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

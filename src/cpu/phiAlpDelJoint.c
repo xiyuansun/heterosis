@@ -18,27 +18,38 @@ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, num_t argDel)
   }
 
   /* phi part */
-  ret = s - pow(argPhi - a->thePhi, 2) / (2 * pow(a->sigPhi, 2));
-
+  
+  if(!a->phiPrior){
+    ret = s - pow(argPhi - a->thePhi, 2) / (2 * pow(a->sigPhi, 2));
+  }
+  
   /* alpha part */
-  if(argAlp * argAlp > 1e-6){
-    tmp = -pow(argAlp - a->theAlp, 2) / (2 * pow(a->sigAlp, 2)) -
-                log(1 - a->piAlp);
-  } else {
-    tmp = log(a->piAlp);
+  
+  if(!a->alpPrior){
+	if(argAlp * argAlp > 1e-6){
+	  tmp = -pow(argAlp - a->theAlp, 2) / (2 * pow(a->sigAlp, 2)) -
+				  log(1 - a->piAlp);
+	} else {
+	  tmp = log(a->piAlp);
+	}
+  
+    ret += tmp;
   }
-
-  ret = ret + tmp;
-
+  
   /* delta part */
-  if(argDel * argDel > 1e-6){
-    tmp = -pow(argDel - a->theDel, 2) / (2 * pow(a->sigDel, 2)) -
-                log(1 - a->piDel);
-  } else {
-    tmp = log(a->piDel);
+  
+  if(!a->delPrior){
+	if(argDel * argDel > 1e-6){
+	  tmp = -pow(argDel - a->theDel, 2) / (2 * pow(a->sigDel, 2)) -
+				  log(1 - a->piDel);
+	} else {
+	  tmp = log(a->piDel);
+	}
+  
+	ret += tmp;
   }
-
-  return ret + tmp;
+  
+  return ret;
 }
 
 void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */

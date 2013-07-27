@@ -42,9 +42,11 @@ void samplePiDel(Chain *a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("piDel ");
 
-  samplePiDel_kernel1(a);
-  samplePiDel_kernel2(a);
-  samplePiDel_kernel3(a);
+  if(!cfg->delPrior){
+	samplePiDel_kernel1(a);
+	samplePiDel_kernel2(a);
+	samplePiDel_kernel3(a);
+  }
 
   cfg->timePiDel = ((num_t) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

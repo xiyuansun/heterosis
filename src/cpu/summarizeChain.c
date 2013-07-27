@@ -85,7 +85,8 @@ void printRates(Chain *a, Config *cfg){
       accEps[g] = 0;
       for(n = 0; n < cfg->N; ++n)
         accEps[g] += a->accEps[iG(n, g)];
-      accEps[g] /= (num_t) niter;
+
+      accEps[g] /= (num_t) (niter * cfg->N);
     }  
     
     for(i = 0; i < MAX_NG; ++i){

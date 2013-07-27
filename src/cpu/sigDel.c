@@ -62,10 +62,12 @@ void sampleSigDel(Chain *a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("sigDel ");
 
-  sampleSigDel_kernel1(a);
-  sampleSigDel_kernel2(a);
-  sampleSigDel_kernel3(a);
-  sampleSigDel_kernel4(a);
-
+  if(!cfg->delPrior){
+	sampleSigDel_kernel1(a);
+	sampleSigDel_kernel2(a);
+	sampleSigDel_kernel3(a);
+	sampleSigDel_kernel4(a);
+  }
+  
   cfg->timeSigDel = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

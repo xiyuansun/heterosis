@@ -59,7 +59,10 @@ void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
     old = a->del[g];
     nw = delProp(a, g);
     
-    dl = lDel(a, g, nw) - lDel(a, g, old);
+    if(!a->delPrior){
+      dl = lDel(a, g, nw) - lDel(a, g, old);
+    }
+    
     lp = 0 < dl? 0 : dl;
     lu = log(runiform(0, 1));
     

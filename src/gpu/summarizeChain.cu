@@ -110,7 +110,9 @@ __host__ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
       
       accEps[g] = 0;
       for(n = 0; n < cfg->N; ++n)
-        accEps[g] += nAccEps[iG(n, g)] / (num_t) niter;
+        accEps[g] += nAccEps[iG(n, g)];
+     
+       accEps[g] /= (num_t) (niter * cfg->N);
     }  
     
     for(i = 0; i < MAX_NG; ++i){

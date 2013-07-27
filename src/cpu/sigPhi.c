@@ -45,9 +45,11 @@ void sampleSigPhi(Chain *a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("sigPhi ");
 
-  sampleSigPhi_kernel1(a);
-  sampleSigPhi_kernel2(a);
-  sampleSigPhi_kernel3(a);
+  if(!cfg->phiPrior){
+	sampleSigPhi_kernel1(a);
+	sampleSigPhi_kernel2(a);
+	sampleSigPhi_kernel3(a);
+  }
 
   cfg->timeSigPhi = ((double) clock() - start) / (SECONDS * CLOCKS_PER_SEC);
 }

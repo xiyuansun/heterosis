@@ -62,7 +62,10 @@ void sampleAlp_kernel(Chain *a){ /* kernel <<<G, 1>>> */
     old = a->alp[g];
     nw = alpProp(a, g);
     
-    dl = lAlp(a, g, nw) - lAlp(a, g, old);
+    if(!a->alpPrior){
+      dl = lAlp(a, g, nw) - lAlp(a, g, old);
+    }
+
     lp = 0 < dl ? 0 : dl;
     lu = log(runiform(0, 1));
     
