@@ -418,6 +418,27 @@ July 2013
     takes to sample each parameter for each iteration in each chain:
     time-chain1.txt, time-chain2.txt, etc. inside [OUTPUT_DIR].
   
+  --phi-prior [CHOICE]
+
+    Use this option to choose the default prior for the phi_g's. 
+    The following options are currently available:
+
+    --phi-prior 0: default choice, documented in section 2 of doc/writeup.pdf.
+
+  --alpha-prior [CHOICE]
+
+    Use this option to choose the default prior for the alpha_g's. 
+    The following options are currently available:
+
+    --alpha-prior 0: default choice, documented in section 2 of doc/writeup.pdf.
+
+  --delta-prior [CHOICE]
+
+    Use this option to choose the default prior for the delta_g's. 
+    The following options are currently available:
+
+    --delta-prior 0: default choice, documented in section 2 of doc/writeup.pdf.
+
   --debug [DEBUG_LEVEL]
 
     Use this option to print out internal data structures during runtime.
