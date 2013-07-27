@@ -12,6 +12,7 @@
 
 Config *config(int argc, char **argv){
   int stat = 0;
+  FILE *fp;  
   Config *cfg = (Config*) malloc(sizeof(Config));
   
   /* default filenames */        
