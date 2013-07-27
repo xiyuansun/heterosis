@@ -1,6 +1,7 @@
 #include <Chain.h>
 #include <Config.h>
 #include <constants.h>
+#include <errno.h>
 #include <functions.h>
 #include <math.h>
 #include <stdio.h>
@@ -11,6 +12,7 @@
 
 Config *config(int argc, char **argv){
   int stat = 0;
+  FILE *fp;
   Config *cfg = (Config*) malloc(sizeof(Config));
   
   /* default filenames */        
@@ -118,14 +120,20 @@ Config *config(int argc, char **argv){
   if(cfg->probs || cfg->rates || cfg->hyper || cfg->parms || cfg->time || cfg->dic){
     stat = mkdir(cfg->outDir, 0777);
     
-    if(stat == -1){
+    if(stat == -1 && errno != EEXIST){
       fprintf(stderr, "Error: unable to create output directory, %s.\n", cfg->outDir);
-      fprintf(stderr, "Some possible reasons:\n  1) %s may already exist.\n", cfg->outDir);
-      fprintf(stderr, "  2) You may not have permission to create %s.\n", cfg->outDir);
+      fprintf(stderr, "Possible reason: you may not have permission.");
       exit(EXIT_FAILURE);
     }
     
     chdir(cfg->outDir); 
+    
+    /* DIC */
+  
+	if(cfg->dic){
+	  fp = fopen("dic.txt", "w");
+	  fclose(fp);
+	} 
   }
     
   return cfg;

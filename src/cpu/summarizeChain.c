@@ -26,7 +26,7 @@ void printProbs(Chain *a, Config *cfg){
 	fp = fopen(file, "a");
   
 	if(fp == NULL){
-	  fprintf(stderr, "ERROR: unable to create file, %s\n", file);
+	  fprintf(stderr, "ERROR: unable to append to file, %s\n", file);
 	  return;
 	}
   
@@ -60,7 +60,7 @@ void printRates(Chain *a, Config *cfg){
     fp = fopen(file, "a"); 
     
     if(fp == NULL){
-      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to append to file, %s\n", file);
       return;
     }
         
@@ -132,7 +132,7 @@ void printDIC(Chain *a, Config *cfg){
     fp = fopen("dic.txt", "a");
   
 	if(fp == NULL){
-	  printf("ERROR: unable to create file, dic.txt\n");
+	  printf("ERROR: unable to append to file, dic.txt\n");
 	  return;
 	} 
   
