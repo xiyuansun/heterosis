@@ -21,6 +21,12 @@ typedef struct {
   
   curandState_t *states;
   
+  /* choices of priors */
+  
+  int phiPrior;
+  int alpPrior;
+  int delPrior;  
+  
   /* initialization constants */
   
   num_t sigC0;

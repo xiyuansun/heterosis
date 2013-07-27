@@ -33,6 +33,12 @@ typedef struct {
   int M; /* length of chain (not including initial values) */
   int N; /* number of libraries (samples) */
   int G; /* number of genes */
+
+  /* choices of priors */
+  
+  int phiPrior;
+  int alpPrior;
+  int delPrior;  
     
   /* initialization constants */
   

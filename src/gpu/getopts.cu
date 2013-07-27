@@ -50,6 +50,9 @@ void getopts(Config *cfg, int argc, char **argv){
     {"sigma-delta", required_argument, 0, '5'}, 
     {"pi-alpha", required_argument, 0, '6'},
     {"pi-delta", required_argument, 0, '7'},
+    {"phi-prior", required_argument, 0, 'F'},
+    {"alpha-prior", required_argument, 0, 'a'},
+    {"delta-prior", required_argument, 0, 'K'},
     {"debug", required_argument, 0, 'Y'},                                        
     {0, 0, 0, 0}
   };
@@ -58,7 +61,7 @@ void getopts(Config *cfg, int argc, char **argv){
   
     option_index = 0;
     c = getopt_long(argc, argv, 
-        "A:b:B:c:C:d:D:e:Ef:g:G:hHi:I:jJk:l:m:M:n:o:O:pPq:rRs:S:tTu:vVw:x:X:y:Y:z:Z:1:2:3:4:5:6:7:8:9:0:",
+        "a:A:b:B:c:C:d:D:e:Ef:F:g:G:hHi:I:jJk:K:l:m:M:n:o:O:pPq:rRs:S:tTu:vVw:x:X:y:Y:z:Z:1:2:3:4:5:6:7:8:9:0:",
         long_options, &option_index);
     
     if(c == -1)
@@ -194,6 +197,15 @@ void getopts(Config *cfg, int argc, char **argv){
     } else if(c == '7') { /* pi-delta */
       cfg->piDel = atof(optarg);
       cfg->constPiDel = 1;
+    
+    } else if(c == 'F') { /* phi-prior */
+      cfg->phiPrior = atoi(optarg);
+    
+    } else if(c == 'a') { /* alpha-prior */
+      cfg->alpPrior = atoi(optarg);
+    
+    } else if(c == 'K') { /* delta-prior */
+      cfg->delPrior = atoi(optarg);
     
     } else if(c == 'Y') { /* debug */
       cfg->debug = atoi(optarg);
