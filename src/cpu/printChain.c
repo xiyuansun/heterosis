@@ -11,8 +11,12 @@ void printChain(Chain *a){
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
-  printf("G = %d\n\n", a->G);  
-  printf("burnin = %d\n", a->burnin);
+  printf("G = %d\n", a->G);  
+  printf("burnin = %d\n\n", a->burnin);
+
+  printf("phiPrior = %d\n", a->phiPrior);
+  printf("alpPrior = %d\n", a->alpPrior);
+  printf("delPrior = %d\n\n", a->delPrior);  
 
   pi2(a->y, a->N, a->G, "y = \n");
   pf1(a->yMeanG, a->N, "yMeanG =\n");

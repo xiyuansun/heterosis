@@ -189,6 +189,12 @@ Chain *newChain(Config *cfg){ /* host */
     a->yMeanG[n] = tmp / cfg->G;
   }
     
+  /* choices of priors */
+  
+  a->phiPrior = cfg->phiPrior;
+  a->alpPrior = cfg->alpPrior;  
+  a->delPrior = cfg->delPrior;  
+    
   /* initialization constants */
   
   a->sigC0   = cfg->sigC0;

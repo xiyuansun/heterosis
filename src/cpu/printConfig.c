@@ -34,6 +34,10 @@ void printConfig(Config *cfg){
   printf("N = %d\n", cfg->N);
   printf("G = %d\n\n", cfg->G);
   
+  printf("phiPrior = %d\n", cfg->phiPrior);
+  printf("alpPrior = %d\n", cfg->alpPrior);
+  printf("delPrior = %d\n\n", cfg->delPrior);    
+  
   printf("sigC0 = "); printf(NUM_TF, cfg->sigC0); printf("\n");
   printf("d0 = "); printf(NUM_TF, cfg->d0); printf("\n");
   printf("aTau = "); printf(NUM_TF, cfg->aTau); printf("\n");

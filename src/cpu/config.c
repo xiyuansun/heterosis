@@ -40,6 +40,12 @@ Config *config(int argc, char **argv){
   cfg->heterosis = 1;
   cfg->debug = 0;
 
+  /* default choices of priors */
+  
+  cfg->phiPrior = 0;
+  cfg->alpPrior = 0;  
+  cfg->delPrior = 0;
+
   /* default initialization constants */
 
   cfg->sigC0 = 10;

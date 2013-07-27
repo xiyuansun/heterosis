@@ -34,6 +34,12 @@ typedef struct {
   int N; /* number of libraries (samples) */
   int G; /* number of genes */
     
+  /* choices of priors */
+  
+  int phiPrior;
+  int alpPrior;
+  int delPrior;  
+    
   /* initialization constants */
   
   num_t sigC0;

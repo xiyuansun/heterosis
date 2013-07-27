@@ -15,6 +15,12 @@ typedef struct {
   int G; /* number of genes */
   int burnin; 
   
+  /* choices of priors */
+  
+  int phiPrior;
+  int alpPrior;
+  int delPrior;  
+  
   /* initialization constants */
   
   num_t sigC0;
