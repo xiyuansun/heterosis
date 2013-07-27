@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-__host__ void oneIteration(Chain *host_a, Chain *dev_a, Config *cfg){
+__host__ void oneChain(Chain *host_a, Chain *dev_a, Config *cfg){
   ++cfg->chainNum;
 
   if(cfg->verbose)
@@ -23,6 +23,9 @@ void mcmc(int argc, char **argv){
   Config *cfg = config(argc, argv); 
   Chain *host_a = NULL, *dev_a = NULL;
 
+  if(cfg->debug)
+    printConfig(cfg);
+
   newChain(&host_a, &dev_a, cfg);  
   
   if(host_a == NULL){
@@ -34,7 +37,7 @@ void mcmc(int argc, char **argv){
     printf("Running %d chain(s).\n", cfg->chains);
   
   for(i = 0; i < cfg->chains; ++i)
-    oneIteration(host_a, dev_a, cfg);
+    oneChain(host_a, dev_a, cfg);
   
   freeChain(host_a, cfg, 0);
   cudaFree(dev_a);

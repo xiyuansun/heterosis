@@ -9,6 +9,11 @@
 void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
   int m;
   
+  if(cfg->debug >= 2){
+    printf("\n\n====\n\n\nChain %d reset:\n\n", cfg->chainNum);
+    printChain(host_a, dev_a, cfg);
+  }
+  
   if(cfg->verbose)
     printf("  Running chain.\n");
   
@@ -39,5 +44,10 @@ void runChain(Chain *host_a, Chain *dev_a, Config *cfg){
     
     if(cfg->verbose)
       printf("\n");
+      
+    if(cfg->debug >= 3){
+      printf("\n\n====\n\n\nChain %d iter %d:\n\n", cfg->chainNum, cfg->m);
+      printChain(host_a, dev_a, cfg);
+    }
   }
 }
