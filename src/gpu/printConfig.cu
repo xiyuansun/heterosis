@@ -26,7 +26,7 @@ void printConfig(Config *cfg){
   printf("burnin = %d\n", cfg->burnin);
   printf("joint = %d\n", cfg->joint);
   printf("seed = %d\n", cfg->seed);
-  printf("heterosis = %d\n\n", cfg->heterosis);
+  printf("heterosis = %d\n", cfg->heterosis);
   printf("debug = %d\n\n", cfg->debug);
   
   printf("M = %d\n", cfg->M);
