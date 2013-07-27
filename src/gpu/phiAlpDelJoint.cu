@@ -18,27 +18,38 @@ __device__ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, nu
   }
 
   /* phi part */
-  ret = s - pow((float) (argPhi - a->thePhi), 2) / (2 * pow((float) a->sigPhi, 2));
-
+  
+  if(!a->phiPrior){
+    ret = s - pow((float) (argPhi - a->thePhi), 2) / (2 * pow((float) a->sigPhi, 2));
+  }
+  
   /* alpha part */
-  if(argAlp * argAlp > 1e-6){
-    tmp = -pow((float) (argAlp - a->theAlp), 2) / (2 * pow((float) a->sigAlp, 2)) -
-                log(1 - a->piAlp);
-  } else {
-    tmp = log(a->piAlp);
+  
+  if(!a->alpPrior){
+	if(argAlp * argAlp > 1e-6){
+	  tmp = -pow((float) (argAlp - a->theAlp), 2) / (2 * pow((float) a->sigAlp, 2)) -
+				  log(1 - a->piAlp);
+	} else {
+	  tmp = log(a->piAlp);
+	}
+
+    ret += tmp;
   }
-
-  ret = ret + tmp;
-
+  
   /* delta part */
-  if(argDel * argDel > 1e-6){
-    tmp = -pow((float) (argDel - a->theDel), 2) / (2 * pow((float) a->sigDel, 2)) -
-                log(1 - a->piDel);
-  } else {
-    tmp = log(a->piDel);
-  }
 
-  return ret + tmp;
+  if(!a->delPrior){
+	if(argDel * argDel > 1e-6){
+	  tmp = -pow((float) (argDel - a->theDel), 2) / (2 * pow((float) a->sigDel, 2)) -
+				  log(1 - a->piDel);
+	} else {
+	  tmp = log(a->piDel);
+	}
+
+	ret += tmp;
+  }
+  
+  return ret;
 }
 
 __global__ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
@@ -49,13 +60,22 @@ __global__ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   if(g < a->G){
 
     oldPhi = a->phi[g];
-    newPhi = rnormalDevice(a, g, oldPhi, a->tunePhi[g]);
+    
+    if(!a->phiPrior){
+      newPhi = rnormalDevice(a, g, oldPhi, a->tunePhi[g]);
+    }
 
     oldAlp = a->alp[g];
-    newAlp = alpProp(a, g);
+    
+    if(!a->alpPrior){
+      newAlp = alpProp(a, g);
+    }
 
     oldDel = a->del[g];
-    newDel = delProp(a, g);
+    
+    if(!a->delPrior){
+      newDel = delProp(a, g);
+    }
 
     dl = lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
        - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel); 

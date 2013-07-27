@@ -60,9 +60,9 @@ void sampleAlp_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   for(g = 0; g < a->G; ++g){ 
 
     old = a->alp[g];
-    nw = alpProp(a, g);
     
     if(!a->alpPrior){
+      nw = alpProp(a, g);
       dl = lAlp(a, g, nw) - lAlp(a, g, old);
     }
 

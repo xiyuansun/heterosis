@@ -34,9 +34,12 @@ __global__ void sampleDel_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   if(g < a->G){ 
 
     old = a->del[g];
-    nw = delProp(a, g);
+
+    if(!a->delPrior){
+	  nw = delProp(a, g);    
+	  dl = lDel(a, g, nw) - lDel(a, g, old);
+    }
     
-    dl = lDel(a, g, nw) - lDel(a, g, old);
     lp = 0 < dl? 0 : dl;
     lu = log(runiformDevice(a, g, 0, 1));
     

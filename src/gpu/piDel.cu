@@ -38,14 +38,16 @@ __host__ void samplePiDel(Chain *host_a, Chain *dev_a, Config *cfg){ /* host */
   if(cfg->verbose)
     printf("piDel ");
 
-  samplePiDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
+  if(!cfg->delPrior){
+	samplePiDel_kernel1<<<G_GRID, G_BLOCK>>>(dev_a);
   
-  thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
-  num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
-  CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
+	thrust::device_ptr<num_t> tmp1(host_a->tmp1);  
+	num_t s1 = thrust::reduce(tmp1, tmp1 + cfg->G);
+	CUDA_CALL(cudaMemcpy(&(dev_a->s1), &s1, sizeof(num_t), cudaMemcpyHostToDevice));
   
-  samplePiDel_kernel2<<<1, 1>>>(dev_a);
-
+	samplePiDel_kernel2<<<1, 1>>>(dev_a);
+  }
+  
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&myTime, start, stop);

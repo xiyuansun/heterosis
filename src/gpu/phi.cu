@@ -27,9 +27,12 @@ __global__ void samplePhi_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   if(g < a->G){ 
 
     old = a->phi[g];
-    nw = rnormalDevice(a, g, old, a->tunePhi[g]);
 
-    dl = lPhi(a, g, nw) - lPhi(a, g, old);
+    if(!a->phiPrior){    
+	  nw = rnormalDevice(a, g, old, a->tunePhi[g]);
+	  dl = lPhi(a, g, nw) - lPhi(a, g, old);
+    }
+    
     lp = 0 < dl ? 0 : dl;
     lu = log(runiformDevice(a, g, 0, 1)); 
     

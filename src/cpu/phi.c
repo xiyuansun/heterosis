@@ -27,9 +27,9 @@ void samplePhi_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   for(g = 0; g < a->G; ++g){ 
 
     old = a->phi[g];
-    nw = rnormal(old, a->tunePhi[g]);
-
+    
     if(!a->phiPrior){
+      nw = rnormal(old, a->tunePhi[g]);
       dl = lPhi(a, g, nw) - lPhi(a, g, old);
     }
     

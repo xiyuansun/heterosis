@@ -60,14 +60,23 @@ void samplePhiAlpDelJoint_kernel(Chain *a){ /* kernel <<<G, 1>>> */
   for(g = 0; g < a->G; ++g){
 
     oldPhi = a->phi[g];
-    newPhi = rnormal(oldPhi, a->tunePhi[g]);
-
+    
+    if(!a->phiPrior){
+      newPhi = rnormal(oldPhi, a->tunePhi[g]);
+    }
+    
     oldAlp = a->alp[g];
-    newAlp = alpProp(a, g);
-
+    
+    if(!a->alpPrior){
+      newAlp = alpProp(a, g);
+    }
+    
     oldDel = a->del[g];
-    newDel = delProp(a, g);
-
+    
+    if(!a->delPrior){
+      newDel = delProp(a, g);
+    }
+    
     dl = lPhiAlpDelJoint(a, g, newPhi, newAlp, newDel) 
        - lPhiAlpDelJoint(a, g, oldPhi, oldAlp, oldDel); 
     lp = 0 < dl ? 0 : dl;
