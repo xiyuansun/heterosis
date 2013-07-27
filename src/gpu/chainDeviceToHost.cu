@@ -28,6 +28,12 @@ __host__ Chain *chainDeviceToHost(Chain *host_a, Chain *dev_a, Config *cfg){
   CUDA_CALL(cudaMemcpy(&(allHost_a->N), &(dev_a->N), sizeof(int), cudaMemcpyDeviceToHost)); 
   CUDA_CALL(cudaMemcpy(&(allHost_a->G), &(dev_a->G), sizeof(int), cudaMemcpyDeviceToHost));
   CUDA_CALL(cudaMemcpy(&(allHost_a->burnin), &(dev_a->burnin), sizeof(int), cudaMemcpyDeviceToHost));
+
+  /* choices of default priors */
+ 
+  CUDA_CALL(cudaMemcpy(&(allHost_a->phiPrior), &(dev_a->phiPrior), sizeof(int), cudaMemcpyDeviceToHost));  
+  CUDA_CALL(cudaMemcpy(&(allHost_a->alpPrior), &(dev_a->alpPrior), sizeof(int), cudaMemcpyDeviceToHost));
+  CUDA_CALL(cudaMemcpy(&(allHost_a->delPrior), &(dev_a->delPrior), sizeof(int), cudaMemcpyDeviceToHost)); 
     
   /* data */
 
