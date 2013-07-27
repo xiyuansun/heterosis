@@ -388,7 +388,6 @@ July 2013
     programs down and take away most of the performance advantage of the 
     GPU-accelerated version for all the iterations after burn-in.
 
-
   --hyper    (equivalent: -h, -H)
 
     If set, the program will output the hyperparameters, including initial values,
@@ -419,6 +418,17 @@ July 2013
     takes to sample each parameter for each iteration in each chain:
     time-chain1.txt, time-chain2.txt, etc. inside [OUTPUT_DIR].
   
+  --debug [DEBUG_LEVEL]
+
+    Use this option to print out internal data structures during runtime.
+    Choose among 3 levels of verbosity:
+
+    1) Set [DEBUG_LEVEL] TO 1 (--debug 1) to print out only the Config object.
+    2) Set [DEBUG_LEVEL] TO 2 (--debug 2) to print out the Config object
+       at the beginning and the Chain object just before each chain is run.
+    3) Set [DEBUG_LEVEL] TO 3 (--debug 3) to print out the Config object
+       at the beginning and the Chain object just before each chain is run
+       and again after each iteration of the current chain.
 
   The following options set initial constants. 
   See doc/writeup/writeup.Rnw for details on the model.
