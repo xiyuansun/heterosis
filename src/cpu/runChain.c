@@ -10,12 +10,18 @@
 void runChain(Chain *a, Config *cfg){
   int m;
   
+  if(cfg->debug >= 2){
+    printf("\n\n====\n\n\nChain %d reset:\n\n", cfg->chainNum);
+    printChain(a);
+  }
+  
   if(cfg->verbose)
     printf("  Running chain.\n");
   
   printHeaders(a, cfg);
   
   for(m = 0; m < a->M; ++m){
+    cfg->m = m;
     
     if(cfg->verbose)
       printf("    iter %d | ", m + 1);
@@ -40,5 +46,10 @@ void runChain(Chain *a, Config *cfg){
     
     if(cfg->verbose)
       printf("\n");
+      
+    if(cfg->debug >= 3){
+      printf("\n\n====\n\n\nChain %d iter %d:\n\n", cfg->chainNum, cfg->m);
+      printChain(a);
+    }
   }
 }

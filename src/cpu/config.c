@@ -38,6 +38,7 @@ Config *config(int argc, char **argv){
   cfg->joint = 0;
   cfg->seed = 0;
   cfg->heterosis = 1;
+  cfg->debug = 0;
 
   /* default initialization constants */
 

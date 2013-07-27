@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-void oneIteration(Chain *a, Config *cfg){
+void oneChain(Chain *a, Config *cfg){
   ++cfg->chainNum;
 
   if(cfg->verbose)
@@ -23,6 +23,9 @@ void mcmc(int argc, char **argv){
   Config *cfg = config(argc, argv); 
   Chain *a = newChain(cfg);
 
+  if(cfg->debug)
+    printConfig(cfg);
+
   if(a == NULL){
     free(cfg);
     exit(EXIT_FAILURE);
@@ -32,7 +35,7 @@ void mcmc(int argc, char **argv){
     printf("Running %d chain(s).\n", cfg->chains);
   
   for(i = 0; i < cfg->chains; ++i)
-    oneIteration(a, cfg);
+    oneChain(a, cfg);
   
   freeChain(a, cfg);
   
