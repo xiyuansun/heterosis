@@ -11,14 +11,14 @@ void lD_kernel1(Chain *a){ /* kernel <<<G, 1>>> */
   int g;
 
   for(g = 0; g < a->G; ++g){ 
-    a->tmp1[g] = 2 * log(a->eta[g]);
-    a->tmp2[g] = 1/(a->eta[g] * a->eta[g]);
+    a->tmp1[g] = 2.0 * log(a->eta[g]);
+    a->tmp2[g] = 1.0/(a->eta[g] * a->eta[g]);
   }
 }
 
 void lD_kernel2(Chain *a){ /* kernel: pairwise sum in Thrust */
   int g;
-  a->s1 = 0;
+  a->s1 = 0.0;
 
   for(g = 0; g < a->G; ++g) /* PARALLELIZE */
     a->s1 += a->tmp1[g];
@@ -26,7 +26,7 @@ void lD_kernel2(Chain *a){ /* kernel: pairwise sum in Thrust */
 
 void lD_kernel3(Chain *a){ /* kernel: pairwise sum in Thrust */
   int g;
-  a->s2 = 0;
+  a->s2 = 0.0;
 
   for(g = 0; g < a->G; ++g) /* PARALLELIZE */
     a->s2 += a->tmp2[g];
@@ -41,9 +41,9 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
     arg = a->Old[0];
   }
 
-  tmp = arg * a->tau * a->tau / 2;
-  ret = -a->G * lgamma(arg/2) + (a->G * arg / 2) * log(tmp);
-  ret -= (arg/2 + 1) * a->s1 - tmp * a->s2;
+  tmp = arg * a->tau * a->tau / 2.0;
+  ret = -((num_t) a->G) * lgamma(arg/2.0) + (((num_t) a->G) * arg / 2.0) * log(tmp);
+  ret -= (arg/2.0 + 1.0) * a->s1 + tmp * a->s2;
   
   if(arg < 1e-6 || arg > a->d0)
     ret = NUM_TMIN;
