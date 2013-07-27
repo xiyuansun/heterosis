@@ -6,6 +6,8 @@
 
 void printConfig(Config *cfg){
 
+  printf("Chain object:\n\n");
+
   printf("chains = %d\n\n", cfg->chains);
   printf("chainNum = %d\n", cfg->chainNum);
   printf("m = %d\n", cfg->m);

@@ -9,6 +9,8 @@ void printChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
   Chain *a = chainDeviceToHost(host_a, dev_a, cfg);
 
+  printf("Chain object:\n\n");
+
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
   printf("N = %d\n", a->N);
