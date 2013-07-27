@@ -196,7 +196,7 @@ __host__ void printTime(Chain *host_a, Chain *dev_a, Config *cfg){
     fp = fopen(file, "a"); 
   
     if(fp == NULL){
-      fprintf(stderr, "ERROR: unable to create file, %s\n", file);
+      fprintf(stderr, "ERROR: unable to append to file, %s\n", file);
       return;
     }
     
