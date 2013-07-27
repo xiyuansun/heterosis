@@ -1,3 +1,2 @@
-1) why is d drifting? 
+1) make into R package
 2) different priors for phi, alpha, and delta
-3) make into R package
