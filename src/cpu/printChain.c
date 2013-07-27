@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 void printChain(Chain *a){
-  printf("Chain object:\n\n");
+  printf("Chain object:\n\n"); 
 
   printf("m = %d\n", a->m);
   printf("M = %d\n", a->M);
