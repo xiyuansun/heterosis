@@ -13,8 +13,9 @@ cp data/test/smallGroup.txt $d/data/test
 cp DESCRIPTION $d
 cp -r include $d
 cp -r inst $d
+cp Makefile_CPU $d
+cp Makefile_GPU $d
 cp NAMESPACE $d
-cp R/build.r $d/R
 cp R/gelman-factors.r $d/R
 cp README_STANDALONE $d
 cp -r src $d

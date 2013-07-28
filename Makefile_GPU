@@ -10,6 +10,9 @@ BINDIR=bin/
 OBJDIR=obj/
 SRCDIR=src/
 
+CPUSRCDIR=$(SRCDIR)/cpu
+GPUSRCDIR=$(SRCDIR)/gpu
+
 CPUBIN=$(BINDIR)mcmc
 GPUBIN=$(BINDIR)gpu-mcmc
 
@@ -42,7 +45,7 @@ cpu: $(CPUBIN)
 $(CPUBIN): $(CCOBJ) 
 	$(CC) $(CCOBJ) $(LDFLAGS) -o $(CPUBIN) 
 
-$(CCOBJDIR)%.o: $(SRCDIR)%.c cpudirs
+$(CCOBJDIR)%.o: $(CPUSRCDIR)%.c cpudirs
 	$(CC) $(CCFLAGS) $< -o $@ 
 
 gpu: $(GPUBIN)
@@ -50,7 +53,7 @@ gpu: $(GPUBIN)
 $(GPUBIN): $(NVCCOBJ) 
 	$(NVCC) $(NVCCOBJ) $(LDFLAGS) -o $(GPUBIN) 
 
-$(NVCCOBJDIR)%.o: $(SRCDIR)%.cu gpudirs
+$(NVCCOBJDIR)%.o: $(GPUSRCDIR)%.cu gpudirs
 	$(NVCC) $(NVCCFLAGS) $< -o $@ 
 
 .INTERMEDIATE: cpudirs gpudirs dirs
