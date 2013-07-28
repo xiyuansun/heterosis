@@ -1,11 +1,13 @@
 CC=nvcc
-CCFLAGS=-c -Iinclude/gpu -arch=sm_20 --compiler-options -shared --compiler-options -fPIC
-LDFLAGS= -lm -lcurand
+CCFLAGS=-c -I../include/gpu -arch=sm_20 --compiler-options -shared --compiler-options -fPIC
+LDFLAGS= -lm
+SOFLAGS= -lm -lcurand -lstdc++
 
-SRCDIR=src/gpu/
-OBJDIR=obj/
-BINDIR=bin/
+SRCDIR=gpu/
+OBJDIR=../obj/
+BINDIR=../bin/
 BIN=$(BINDIR)heterosis-mcmc
+SO=heterosis.so
 
 DEP=getopts readGrp readData config  
 DEP+=printArrays printConfig printChain printHeaders
@@ -25,8 +27,11 @@ OBJ=$(foreach name, $(DEP), $(OBJDIR)$(name).o)
 
 all: $(BIN)
 
-$(BIN): $(OBJ) 
+$(BIN): $(OBJ) $(SO)
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
+
+$(SO): $(OBJ)
+	$(CC) $(OBJ) $(SOFLAGS) -o $(SO) 
 
 $(OBJDIR)%.o: $(SRCDIR)%.cu dirs
 	$(CC) $(CCFLAGS) $< -o $@ 
@@ -40,3 +45,4 @@ dirs:
 clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(BINDIR)
+	rm $(SO)

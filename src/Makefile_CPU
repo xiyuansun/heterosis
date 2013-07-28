@@ -3,8 +3,8 @@ CCFLAGS=-c -Wall -pedantic -I../include/cpu -shared -fPIC
 LDFLAGS=-lm
 SOFLAGS=-lm -shared
 
-OBJDIR=../obj/
 SRCDIR=cpu/
+OBJDIR=../obj/
 BINDIR=../bin/
 BIN=$(BINDIR)heterosis-mcmc
 SO=heterosis.so
