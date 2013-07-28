@@ -1,2 +1,3 @@
 OBJECTS = ../obj/*.o 
+SHLIB_LD = nvcc
 PKG_LIBS = -lm -lstdc++ -lcudart
