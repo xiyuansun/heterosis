@@ -1,1 +1,2 @@
 OBJECTS = ../obj/*.o 
+PKG_LIBS = -lm
