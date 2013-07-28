@@ -1,0 +1,1 @@
+OBJECTS = ../obj/cpu/*.o ../obj/gpu/*.o
