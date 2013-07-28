@@ -3,14 +3,14 @@
 if [ `which nvcc` ] 
 then
   echo "NVIDIA compiler found. Making CPU and GPU versions."
-  cp src/Makefile_GPU src/Makefile
+  cp Makefile_GPU Makefile
   cp src/Makevars_GPU src/Makevars
   make -C src
 elif [ `which gcc` ]
 then
   echo "No NVIDIA compiler found. No GPU version will be made."
   echo "gcc found. Making CPU version."
-  cp src/Makefile_CPU src/Makefile
+  cp Makefile_CPU Makefile
   cp src/Makevars_CPU src/Makevars
   make -C src
 else 
