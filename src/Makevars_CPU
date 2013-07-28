@@ -1,1 +1,1 @@
-OBJECTS = ../obj/cpu/*.o
+OBJECTS = ../obj/cpu/alp.o
