@@ -4,7 +4,7 @@ LDFLAGS= -lm
 
 BINDIR=bin/
 OBJDIR=obj/
-SRCDIR=src/cpu
+SRCDIR=src/cpu/
 
 CPUBIN=$(BINDIR)mcmc
 CCOBJDIR=$(OBJDIR)cpu/
