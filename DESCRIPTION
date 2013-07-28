@@ -1,0 +1,10 @@
+Package: heterosis
+Title: A Markov chain Monte Carlo method for detecting gene-specific hybrid vigor from RNA sequencing data.
+Description: Please see inst/doc/method/method.pdf inside the package files for a complete description.
+URL: https://github.com/wlandau/heterosis
+Version: 0.0.0
+Author: Will Landau <will.landau@gmail.com>
+Maintainer: Will Landau <will.landau@gmail.com>
+Depends: R (>= 2.15.0)
+Imports: coda
+License: GPL-2.1
