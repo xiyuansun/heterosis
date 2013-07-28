@@ -30,7 +30,7 @@ $(BIN): $(OBJ)
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
 
 $(OBJ): $(SRC) dirs
-	$(NVCC) $(NVCCFLAGS) $< -o $@ 
+	$(CC) $(CCFLAGS) $< -o $@ 
 
 .INTERMEDIATE: dirs
 
