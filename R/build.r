@@ -1,2 +1,2 @@
-print(getwd())
-#system("../make")
+HETEROSIS_ROOT = getwd()
+system("make")

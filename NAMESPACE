@@ -1,1 +1,1 @@
-export(gelmanFactors)
+export(gelmanFactors, HETEROSIS_ROOT)
