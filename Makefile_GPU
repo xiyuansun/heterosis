@@ -2,7 +2,7 @@ CC=nvcc
 CCFLAGS=-c -Iinclude/gpu -arch=sm_20
 LDFLAGS= -lm
 
-SRCDIR=src/
+SRCDIR=src/gpu/
 OBJDIR=obj/
 BINDIR=bin/
 BIN=$(BINDIR)gpu-mcmc
