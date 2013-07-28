@@ -1,1 +1,1 @@
-export(gelmanFactors, gpu_heterosis_mcmc, heterosis_mcmc)
+export(gelmanFactors, heterosis_mcmc)
