@@ -1,2 +1,2 @@
 OBJECTS = ../obj/*.o 
-PKG_LIBS = -lm -lcurand
+PKG_LIBS = -lm -lstdc++ 
