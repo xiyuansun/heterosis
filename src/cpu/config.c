@@ -123,7 +123,6 @@ Config *config(int argc, char **argv){
     if(stat == -1 && errno != EEXIST){
       fprintf(stderr, "Error: unable to create output directory, %s.\n", cfg->outDir);
       fprintf(stderr, "Possible reason: you may not have permission.\n");
-      exit(EXIT_FAILURE);
     }
     
     chdir(cfg->outDir); 

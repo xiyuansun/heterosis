@@ -9,7 +9,6 @@ int *readGrp(Config *cfg){
 
   if(cfg->N < 2){
     fprintf(stderr, "ERROR: bad experimental design.\n");
-    exit(EXIT_FAILURE);
   }
   
   fp = fopen(cfg->groupFile, "r");
@@ -57,7 +56,6 @@ int *readGrp(Config *cfg){
     fclose(fp);
     free(grp);
     free(unique);
-    exit(EXIT_FAILURE);
   }
   
   fclose(fp);

@@ -18,8 +18,8 @@ void oneChain(Chain *a, Config *cfg){
   resetChain(a, cfg);
 }
 
-void mcmc(int argc, char **argv){
-  int i;
+void mcmc(int *pargc, char **argv){
+  int i, argc = *pargc;
   Config *cfg = config(argc, argv); 
   Chain *a = newChain(cfg);
 
@@ -28,7 +28,6 @@ void mcmc(int argc, char **argv){
 
   if(a == NULL){
     free(cfg);
-    exit(EXIT_FAILURE);
   }
   
   if(cfg->verbose)
