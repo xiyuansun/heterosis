@@ -1,2 +1,6 @@
-system("../make")
-__HETEROSIS_ROOT__ = getwd()
+frame_files = lapply(sys.frames(), function(x) x$ofile)
+frame_files = Filter(Negate(is.null), frame_files)
+__HETEROSIS_ROOT__ = dirname(frame_files[[length(frame_files)]])
+print(__HETEROSIS_ROOT__)
+#system("../make")
+#__HETEROSIS_ROOT__ = getwd()
