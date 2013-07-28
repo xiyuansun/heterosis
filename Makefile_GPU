@@ -5,7 +5,7 @@ LDFLAGS= -lm
 SRCDIR=src/gpu/
 OBJDIR=obj/
 BINDIR=bin/
-BIN=$(BINDIR)gpu-mcmc
+BIN=$(BINDIR)heterosis-mcmc
 
 DEP=getopts readGrp readData config  
 DEP+=printArrays printConfig printChain printHeaders

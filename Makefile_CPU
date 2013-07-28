@@ -5,7 +5,7 @@ LDFLAGS= -lm
 OBJDIR=obj/
 SRCDIR=src/cpu/
 BINDIR=bin/
-BIN=$(BINDIR)mcmc
+BIN=$(BINDIR)heterosis-mcmc
 
 DEP=getopts readGrp readData config  
 DEP+=printArrays printConfig printChain printHeaders

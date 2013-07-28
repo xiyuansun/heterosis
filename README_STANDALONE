@@ -182,37 +182,24 @@ July 2013
 
   Open a Linux/Unix-based command line interface program (Terminal
   on Mac and Linux). Be sure that your current working directory
-  is the root directory of this package. First, create the main
-  makefile from one of the given makefiles:
+  is the root directory of this package. Enter the following:
 
   $ ./configure
+  $ make
 
-  This command chooses the appropriate makefile for your system. If
-  you have nvcc, the NVIDIA CUDA C compiler required for the gpu version
-  of this program, then configure will choose Makefile_GPU, which compiles
-  both the cpu and gpu versions. If configure does not find nvcc, then
-  it will choose Makefile_CPU, and only the cpu version will be made. If
-  configure finds neither gcc nor nvcc, then neither version of the program
-  can be built. You must obtain at least gcc, the GNU Compiler Collection.
-
-  To build the program, type
-
-  $ make 
-
-  You may not need to type in make if you have the version 
-  of this software bundle that is meant to also be an R package.
-  If you have nvcc, 'make' will create files and directories:
+  The following files and directories will be created:
 
   bin/
-    gpu-mcmc
+    heterosis-mcmc
   
   obj/
     allocChain.o
     alp.o
     ...
 
-  If you do not have nvcc, then mcmc will be made instead of gpu-mcmc.
-  Unlike gpu-mcmc, mcmc is not GPU-accelerated. See USAGE below for usage details.
+  The main program is heterosis-mcmc. If you have the NVIDIA CUDA C compiler, 
+  then heterosis-mcmc will be GPU-accelerated. Otherwise, heterosis-mcmc
+  will be the regular C version, which is not GPU-accelerated.
 
   Before using the gelmanFactors() function in R/functions.r to compute 
   Gelman factors on the output of the main program, you must install 
@@ -250,23 +237,14 @@ July 2013
 
   $ cd bin/
 
-  and run the regular C version with
+  and run with
 
-  $ ./mcmc [OPTION1] [OPTION2] ...
+  $ ./heterosis-mcmc [OPTION1] [OPTION2] ...
 
-  The usage of the GPU-accelerated version is analogous.
-
-  $ cd bin/
-  $ ./gpu-mcmc [OPTION1] [OPTION2] ...
-
-  For either version, type any of the options in OPTIONS
+  Type any of the options in OPTIONS
   in place of [OPTION1] [OPTION2] ... For example,
 
-  $ ./mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper
-
-  or
-
-  $ ./gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper
+  $ ./heterosis-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper
 
   To compute Gelman factors on the output of either mcmc or gpu-mcmc, 
   change the current working directory to the sh/ directory open R 
@@ -491,18 +469,13 @@ To test the code, a small test dataset, data/test/smallData.txt, is provided. It
 
   $ cd bin/
 
-Then, run the cpu version,
+Then, run the program with
 
-  $ ./mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --iter 20 --chains 3 --hyper --parms --probs --rates --time --dic --verbose --out cpu-output 
-
-or the gpu version,
-
-  $ ./gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --iter 20 --chains 3 --hyper --parms --probs --rates --time --dic --verbose --out gpu-output
+  $ ./heterosis-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --iter 20 --chains 3 --hyper --parms --probs --rates --time --dic --verbose --out cpu-output 
 
 For a test with minimal output, you may instead run
 
-  $ ./mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out cpu-output
-  $ ./gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out gpu-output
+  $ ./heterosis-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out cpu-output
 
 To compute Gelman diagnostics on the output in the newly created cpu-ouput/ directory, change from the bin/ directory to the R/ directory.
 
@@ -511,5 +484,3 @@ To compute Gelman diagnostics on the output in the newly created cpu-ouput/ dire
 Then, run
 
   $ Rscript -e 'source("functions.r"); gelmanFactors("../cpu-output")'
-
-
