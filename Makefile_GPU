@@ -1,6 +1,6 @@
 CC=nvcc
 CCFLAGS=-c -Iinclude/gpu -arch=sm_20 --compiler-options -shared --compiler-options -fPIC
-LDFLAGS= -lm
+LDFLAGS= -lm -lcurand
 
 SRCDIR=src/gpu/
 OBJDIR=obj/
