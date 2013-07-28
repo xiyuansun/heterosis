@@ -53,98 +53,99 @@ July 2013
   Makefile_GPU
 
   R/
-    build.r
-    gelman-factors.r
+    functions.r
 
   src/
-    allocChain.c
-    alp.c
-    c.c
-    config.c
-    d.c
-    del.c
-    dic.c
-    eps.c
-    eta.c
-    freeChain.c
-    getopts.c
-    interimResults.c
-    logLik.c
-    main.c
-    mcmc.c
-    mu.c
-    newChain.c
-    phi.c
-    phiAlpDel.c
-    phiAlpDelJoint.c
-    piAlp.c
-    piDel.c
-    printArrays.c
-    printChain.c
-    printConfig.c
-    printHeaders.c
-    rbeta.c
-    readData.c
-    readGrp.c
-    resetChain.c
-    rgamma.c
-    rnormal.c
-    runChain.c
-    runiform.c
-    sigAlp.c
-    sigC.c
-    sigDel.c
-    sigPhi.c
-    summarizeChain.c
-    tau.c
-    theAlp.c
-    theDel.c
-    thePhi.c
-    updateDICprep.c
+    cpu/
+      allocChain.c
+      alp.c
+      c.c
+      config.c
+      d.c
+      del.c
+      dic.c
+      eps.c
+      eta.c
+      freeChain.c
+      getopts.c
+      interimResults.c
+      logLik.c
+      main.c
+      mcmc.c
+      mu.c
+      newChain.c
+      phi.c
+      phiAlpDel.c
+      phiAlpDelJoint.c
+      piAlp.c
+      piDel.c
+      printArrays.c
+      printChain.c
+      printConfig.c
+      printHeaders.c
+      rbeta.c
+      readData.c
+      readGrp.c
+      resetChain.c
+      rgamma.c
+      rnormal.c
+      runChain.c
+      runiform.c
+      sigAlp.c
+      sigC.c
+      sigDel.c
+      sigPhi.c
+      summarizeChain.c
+      tau.c
+      theAlp.c
+      theDel.c
+      thePhi.c
+      updateDICprep.c
 
-    allocChain.cu
-    alp.cu
-    c.cu
-    chainDeviceToHost.cu
-    config.cu
-    d.cu
-    del.cu
-    dic.cu
-    eps.cu
-    eta.cu
-    freeChain.cu
-    getopts.cu
-    interimResults.cu
-    main.cu
-    mcmc.cu
-    newChain.cu
-    phi.cu
-    phiAlpDel.cu
-    phiAlpDelJoint.cu
-    piAlp.cu
-    piDel.cu
-    printArrays.cu
-    printChain.cu
-    printConfig.cu
-    printHeaders.cu
-    rbeta.cu
-    readData.cu
-    readGrp.cu
-    resetChain.cu
-    rgamma.cu
-    rnormal.cu
-    runChain.cu
-    runiform.cu
-    sigAlp.cu
-    sigC.cu
-    sigDel.cu
-    sigPhi.cu
-    summarizeChain.cu
-    tau.cu
-    theAlp.cu
-    theDel.cu
-    thePhi.cu
-    updateDICprep.cu
+    gpu/
+      allocChain.cu
+      alp.cu
+      c.cu
+      chainDeviceToHost.cu
+      config.cu
+      d.cu
+      del.cu
+      dic.cu
+      eps.cu
+      eta.cu
+      freeChain.cu
+      getopts.cu
+      interimResults.cu
+      main.cu
+      mcmc.cu
+      newChain.cu
+      phi.cu
+      phiAlpDel.cu
+      phiAlpDelJoint.cu
+      piAlp.cu
+      piDel.cu
+      printArrays.cu
+      printChain.cu
+      printConfig.cu
+      printHeaders.cu
+      rbeta.cu
+      readData.cu
+      readGrp.cu
+      resetChain.cu
+      rgamma.cu
+      rnormal.cu
+      runChain.cu
+      runiform.cu
+      sigAlp.cu
+      sigC.cu
+      sigDel.cu
+      sigPhi.cu
+      summarizeChain.cu
+      tau.cu
+      theAlp.cu
+      theDel.cu
+      thePhi.cu
+      updateDICprep.cu
     
 
 ========= REQUIREMENTS ==================
@@ -152,8 +153,9 @@ July 2013
   This package contains two versions: a standard C version
   and a CUDA C, GPU-accelerated version that takes advantage 
   of opportunities to parallelize the MCMC across genes. In
-  addition, an R script R/gelman-factors.r, is included for 
-  computing Gelman potential scale reduction factors on output.
+  addition, an R script R/functions.r, is included. It contains
+  an R function, gelmanFactors(), for computing Gelman potential 
+  scale reduction factors on output.
 
   General requirements:
   - A command line interface from which to launch the main 
@@ -170,7 +172,7 @@ July 2013
 	device with compute capability 2.0 or higher.
   - CUDA Production Release version 5.0 or above.
 
-  gelman-factors.r requirements:
+  gelmanFactors() requirements:
   - The R language version 2.15.0.
   - The coda package in R, available for download from within R at 
 	http://cran.us.r-project.org/.
@@ -197,31 +199,22 @@ July 2013
 
   $ make 
 
+  You may not need to type in make if you have the version 
+  of this software bundle that is meant to also be an R package.
   If you have nvcc, 'make' will create files and directories:
 
   bin/
-    mcmc
     gpu-mcmc
   
   obj/
-    cpu/
-      allocChain.o
-      alp.o
-      ...
+    allocChain.o
+    alp.o
+    ...
 
-    gpu/
-      allocChain.o
-      alp.o
-      …
+  If you do not have nvcc, then mcmc will be made instead of gpu-mcmc.
+  Unlike gpu-mcmc, mcmc is not GPU-accelerated. See USAGE below for usage details.
 
-  If you do not have nvcc, then gpu-mcmc and obj/gpu/ and its contents
-  will not be created.
-
-  The binary, mcmc, is the regular C version of the program.
-  The binary, gpu-mcmc, is the GPU-accelerated version of the 
-  main program. See USAGE below for usage details.
-
-  Before using gelman-factors.sh and gelman-factors.r to compute 
+  Before using the gelmanFactors() function in R/functions.r to compute 
   Gelman factors on the output of the main program, you must install 
   R version 2.15.3 or higher and the coda package. Download and 
   install R from http://cran.us.r-project.org/. Then, to download 
@@ -242,7 +235,7 @@ July 2013
 
   > help(package = coda)
 
-  To read about the Gelman diagnostics function that gelman-factors.r 
+  To read about the Gelman diagnostics function that gelmanFactors() 
   uses, type
 
   > ?gelman.diag
@@ -283,9 +276,9 @@ July 2013
   ...
   > 
 
-  load the R script, gelman-factors.r
+  load the R script, functions.r
 
-  > source("R/gelman-factors.r")  
+  > source("R/functions.r")  
 
   and then run
 
@@ -345,7 +338,7 @@ July 2013
   --chains [NUM_CHAINS]    (equivalent: -c [NUM_CHAINS], -C [NUM_CHAINS])
 
     Number of MCMC chains to run. Defaults to 2. Note: for Gelman factors to be
-    computed using sh/gelman-factors.sh, R/gelman-factors.r, or some other tool,
+    computed using the gelmanFactors() function in R/functions.r, or some other tool,
     there must be at least 2 chains.
   
   --iter [NUM_ITERATIONS]    (equivalent: -m [NUM_ITERATIONS], -M [NUM_ITERATIONS])
@@ -511,12 +504,12 @@ For a test with minimal output, you may instead run
   $ ./mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out cpu-output
   $ ./gpu-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out gpu-output
 
-To compute Gelman diagnostics on the output in the newly created cpu-ouput/ directory, change from the bin/ directory to the sh/ directory.
+To compute Gelman diagnostics on the output in the newly created cpu-ouput/ directory, change from the bin/ directory to the R/ directory.
 
-  $ cd ../sh
+  $ cd ../R
 
 Then, run
 
-  $ ./gelman-factors.sh ../bin/cpu-output
+  $ Rscript -e 'source("functions.r"); gelmanFactors("../cpu-output")'
 
 
