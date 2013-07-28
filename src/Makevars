@@ -1,2 +1,2 @@
 OBJECTS = ../obj/*.o
-PKG_LIBS = -fPIC
+PKG_LIBS = --enable-shared
