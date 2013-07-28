@@ -17,7 +17,7 @@ void printHyper(Chain *a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to open file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
     
     if(cfg->constSigC){
@@ -103,7 +103,7 @@ void printParms(Chain *a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to open file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
     
     for(n = 0; n < cfg->N; ++n){
@@ -169,7 +169,7 @@ void printTime(Chain *a, Config *cfg){
   
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
     
     fprintf(fp, NUM_TF, cfg->timeC); fprintf(fp, " ");

@@ -26,7 +26,7 @@ __host__ void printProbs(Chain *host_a, Chain *dev_a, Config *cfg){
   
 	if(fp == NULL){
 	  fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-	  return;
+	  exit(EXIT_FAILURE);
 	}
   
 	dex = (int*) malloc(cfg->G * sizeof(int));
@@ -76,7 +76,7 @@ __host__ void printRates(Chain *host_a, Chain *dev_a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
        
     nAccC = (int*) malloc(cfg->N * sizeof(int));
@@ -167,7 +167,7 @@ __host__ void printDIC(Chain *host_a, Chain *dev_a, Config *cfg){
   
 	if(fp == NULL){
 	  fprintf(stderr, "ERROR: unable to create file, dic.txt.\n");
-	  return;
+	  exit(EXIT_FAILURE);
 	}
   
 	dic<<<1, 1>>>(dev_a);

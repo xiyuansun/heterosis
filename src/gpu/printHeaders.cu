@@ -22,7 +22,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   
 	if(fp == NULL){
 	  fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-	  return;
+	  exit(EXIT_FAILURE);
 	}  
   
 	fprintf(fp, "diff-expression ");
@@ -41,7 +41,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
     
     fprintf(fp, "sigma-c d tau theta-phi theta-alpha theta-delta ");
@@ -93,7 +93,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
   
     /* print header */
@@ -174,7 +174,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
        
     fprintf(fp, "d c phi alpha delta mean-epsilon\n");
@@ -190,7 +190,7 @@ void printHeaders(Chain *host_a, Chain *dev_a, Config *cfg){
   
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
     
     fprintf(fp, "c tau pi-alpha pi-delta d theta-phi theta-alpha theta-delta sigma-c ");

@@ -39,7 +39,7 @@ __host__ void printHyper(Chain *host_a, Chain *dev_a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to open file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
     
     if(cfg->constSigC){

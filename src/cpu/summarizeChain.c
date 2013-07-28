@@ -27,7 +27,7 @@ void printProbs(Chain *a, Config *cfg){
   
 	if(fp == NULL){
 	  fprintf(stderr, "ERROR: unable to append to file, %s\n", file);
-	  return;
+	  exit(EXIT_FAILURE);
 	}
   
 	for(g = 0; g < G; ++g){
@@ -61,7 +61,7 @@ void printRates(Chain *a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to append to file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
         
     accC = (num_t*) malloc(cfg->N * sizeof(num_t));
@@ -134,7 +134,7 @@ void printDIC(Chain *a, Config *cfg){
   
 	if(fp == NULL){
 	  printf("ERROR: unable to append to file, dic.txt\n");
-	  return;
+	  exit(EXIT_FAILURE);
 	} 
   
 	dic(a);

@@ -213,7 +213,8 @@ void getopts(Config *cfg, int argc, char **argv){
     } else { /* error */
       perror("See README.txt in the doc/ directory.\n");
       free(cfg);
-    
+      exit(EXIT_FAILURE);
+      
     }
   }
 }

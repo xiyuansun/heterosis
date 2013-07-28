@@ -13,14 +13,14 @@ num_t rgamma(num_t shape, num_t rate, num_t lb){
     fprintf(stderr, "Error: bad shape: ");
     fprintf(stderr, NUM_TF, shape);
     fprintf(stderr, "\n");
-    return(-1);
+    exit(EXIT_FAILURE);
   }
   
   if(rate <= 0){
     fprintf(stderr, "Error: bad rate: ");
     fprintf(stderr, NUM_TF, rate);
     fprintf(stderr, "\n");
-    return(-1);
+    exit(EXIT_FAILURE);
   }
 
   if((shape >= 1) && (shape - 1 < lb * rate)){ /* Chung (1998) */

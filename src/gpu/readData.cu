@@ -13,7 +13,7 @@ count_t *readData(Config *cfg){
   
   if(fp == NULL){
     fprintf(stderr, "ERROR: data file \"%s\" not found.\n", cfg->dataFile);
-    return NULL;
+    exit(EXIT_FAILURE);
   }
 
   if(!cfg->G || !cfg->N){

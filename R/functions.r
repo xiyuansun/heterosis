@@ -1,9 +1,11 @@
 heterosis_mcmc = function(){
-  library.dynam("heterosis.so", "heterosis")
+  library.dynam("heterosis", "heterosis", lib.loc = NULL)
+  library.dynam.unload("heterosis", paste(.libPaths(), "/heterosis", sep=""))
 }
 
-gpu_heterosis_mcmc = function(){
-  library.dynam("gpu_heterosis.so", "heterosis")
+heterosis_mcmc = function(){
+  library.dynam("gpu_heterosis", "heterosis", lib.loc = NULL)
+  library.dynam.unload("gpu_heterosis", paste(.libPaths(), "/heterosis", sep=""))
 }
 
 checkVersion = function(){

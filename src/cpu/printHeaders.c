@@ -25,7 +25,7 @@ void printHeaders(Chain *a, Config *cfg){
   
 	if(fp == NULL){
 	  fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-	  return;
+	  exit(EXIT_FAILURE);
 	}  
   
 	fprintf(fp, "diff-expression high-parent-heterosis low-parent-heterosis mid-parent-heterosis\n");
@@ -40,7 +40,7 @@ void printHeaders(Chain *a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
     
     fprintf(fp, "sigma-c d tau theta-phi theta-alpha theta-delta ");
@@ -71,7 +71,7 @@ void printHeaders(Chain *a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
   
     /* print header */
@@ -143,7 +143,7 @@ void printHeaders(Chain *a, Config *cfg){
     
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
        
     fprintf(fp, "d c phi alpha delta mean-epsilon\n");
@@ -159,7 +159,7 @@ void printHeaders(Chain *a, Config *cfg){
   
     if(fp == NULL){
       fprintf(stderr, "ERROR: unable to create file, %s\n", file);
-      return;
+      exit(EXIT_FAILURE);
     }
     
     fprintf(fp, "c tau pi-alpha pi-delta d theta-phi theta-alpha theta-delta sigma-c ");
