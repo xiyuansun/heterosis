@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ `which nvcc` ] 
+then
+  cp Makefile_GPU Makefile
+  echo "NVIDIA compiler found. Type make to build CPU and GPU versions."
+else
+  cp Makefile_CPU Makefile
+  echo "No NVIDIA compiler found. No GPU version will be made."
+  echo "Type \"make\" to build the CPU version."
+fi
+  
