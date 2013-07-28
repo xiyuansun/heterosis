@@ -1,0 +1,24 @@
+#!/bin/bash
+
+d=heterosis_0.0.0
+
+mkdir -p $d
+mkdir -p $d/data/
+mkdir -p $d/data/test
+mkdir -p $d/R
+
+cp configure $d
+cp data/test/smallData.txt $d/data/test
+cp data/test/smallGroup.txt $d/data/test
+cp DESCRIPTION $d
+cp -r include $d
+cp -r inst $d
+cp Makefile_CPU $d
+cp Makefile_GPU $d
+cp NAMESPACE $d
+cp R/build.r $d/R
+cp R/gelman-factors.r $d/R
+cp -r src $d
+
+tar -czf $d.tar.gz $d
+rm -rf $d

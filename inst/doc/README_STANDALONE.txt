@@ -21,6 +21,8 @@ July 2013
   a more easily readable pdf, inst/doc/method/method.pdf). At minimum,
   you should have the following directories and files.
 
+  configure
+
   data/
     test/
       smallData.txt
@@ -51,6 +53,7 @@ July 2013
   Makefile_GPU
 
   R/
+    build.r
     gelman-factors.r
 
   src/
