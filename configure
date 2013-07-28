@@ -3,16 +3,14 @@
 if [ `which nvcc` ] 
 then
   echo "NVIDIA compiler found. Making GPU version."
-  cp Makefile_GPU Makefile
-  cp src/Makevars_GPU src/Makevars
-  make
+  cp src/Makefile_GPU src/Makefile
+  make -C src
 elif [ `which gcc` ]
 then
   echo "No NVIDIA compiler found. No GPU version will be made."
   echo "gcc found. Making CPU version."
-  cp Makefile_CPU Makefile
-  cp src/Makevars_CPU src/Makevars
-  make
+  cp src/Makefile_CPU src/Makefile
+  make -C src
 else 
   echo "ERROR: gcc not found. nvcc not found."
   echo "Program cannot be built."

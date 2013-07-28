@@ -1,11 +1,13 @@
 CC=gcc
-CCFLAGS=-c -Wall -pedantic -Iinclude/cpu -shared -fPIC
-LDFLAGS= -lm
+CCFLAGS=-c -Wall -pedantic -I../include/cpu -shared -fPIC
+LDFLAGS=-lm
+SOFLAGS=-lm -shared
 
-OBJDIR=obj/
-SRCDIR=src/cpu/
-BINDIR=bin/
+OBJDIR=../obj/
+SRCDIR=cpu/
+BINDIR=../bin/
 BIN=$(BINDIR)heterosis-mcmc
+SO=heterosis.so
 
 DEP=getopts readGrp readData config  
 DEP+=printArrays printConfig printChain printHeaders
@@ -23,10 +25,13 @@ DEP+=mu logLik
 
 OBJ=$(foreach name, $(DEP), $(OBJDIR)$(name).o)
 
-all: $(BIN)
+all: $(BIN) $(SO)
 	
 $(BIN): $(OBJ) 
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
+
+$(SO): $(OBJ)
+	$(CC) $(OBJ) $(SOFLAGS) -o $(SO) 
 
 $(OBJDIR)%.o: $(SRCDIR)%.c dirs
 	$(CC) $(CCFLAGS) $< -o $@ 
@@ -40,3 +45,4 @@ dirs:
 clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(BINDIR)
+	rm $(SO)
