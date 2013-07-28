@@ -16,8 +16,7 @@ cp -r inst $d
 cp MAKEFILE_CPU $d
 cp MAKEFILE_GPU $d
 cp NAMESPACE $d
-cp R/gelman-factors.r $d/R
-cp R/heterosis_mcmc.r $d/R
+cp R/functions.r $d/R
 cp README_STANDALONE $d
 cp -r src $d
 
