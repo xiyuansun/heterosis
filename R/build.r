@@ -1,2 +1,2 @@
-HETEROSIS_ROOT = getwd()
+write(getwd(), "ROOT")
 system("make")
