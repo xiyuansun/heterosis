@@ -2,10 +2,6 @@ heterosis_mcmc = function(){
   library.dynam("heterosis", "heterosis", lib.loc = NULL)
 }
 
-heterosis_mcmc = function(){
-  library.dynam("heterosis", "heterosis", lib.loc = NULL)
-}
-
 checkVersion = function(){
   v = R.Version()
   major = as.numeric(v$major)

@@ -2,14 +2,12 @@ CC=gcc
 CCFLAGS=-c -Wall -pedantic -Iinclude/cpu
 LDFLAGS= -lm
 
-BINDIR=bin/
 OBJDIR=obj/
 SRCDIR=src/cpu/
+BINDIR=bin/
+BIN=$(BINDIR)mcmc
 
-CPUBIN=$(BINDIR)mcmc
-CCOBJDIR=$(OBJDIR)cpu/
-
-DEP+=getopts readGrp readData config  
+DEP=getopts readGrp readData config  
 DEP+=printArrays printConfig printChain printHeaders
 DEP+=allocChain newChain runChain resetChain freeChain
 DEP+=runiform rnormal rgamma rbeta
@@ -23,22 +21,17 @@ DEP+=updateDICprep dic
 DEP+=mcmc main
 DEP+=mu logLik
 
-CCOBJ=$(foreach name, $(DEP), $(CCOBJDIR)$(name).o)
+OBJ=$(foreach name, $(DEP), $(OBJDIR)$(name).o)
 
-all: cpu
-
-cpu: $(CPUBIN)
+all: $(BIN)
 	
-$(CPUBIN): $(CCOBJ) 
-	$(CC) $(CCOBJ) $(LDFLAGS) -o $(CPUBIN) 
+$(BIN): $(OBJ) 
+	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
 
-$(CCOBJDIR)%.o: $(SRCDIR)%.c cpudirs
+$(OBJDIR)%.o: $(SRCDIR)%.c dirs
 	$(CC) $(CCFLAGS) $< -o $@ 
 
-.INTERMEDIATE: cpudirs dirs
-
-cpudirs: dirs
-	mkdir -p $(CCOBJDIR)
+.INTERMEDIATE: dirs
 
 dirs:
 	mkdir -p $(BINDIR)
