@@ -214,7 +214,7 @@ __host__ void getopts(Config *cfg, int argc, char **argv){
       perror("See README.txt in the doc/ directory.\n");
       free(cfg);
       exit(EXIT_FAILURE);
-    
+      
     }
   }
 }
