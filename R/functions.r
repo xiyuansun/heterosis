@@ -1,5 +1,8 @@
 heterosis_mcmc = function(){
   library.dynam("heterosis", "heterosis", lib.loc = NULL)
+
+  
+
   library.dynam.unload("heterosis", paste(.libPaths(), "/heterosis", sep=""))
 }
 
