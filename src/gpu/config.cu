@@ -111,7 +111,7 @@ Config *config(int argc, char **argv){
   cfg->piAlp = -1;
   cfg->piDel = -1;
 
-  getopts(cfg, argc, argv);
+  getmyopts(cfg, argc, argv);
   srand(cfg->seed);  
   
   if(cfg->burnin == -1)
