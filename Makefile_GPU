@@ -22,14 +22,13 @@ DEP+=mcmc main
 DEP+=chainDeviceToHost
 
 OBJ=$(foreach name, $(DEP), $(OBJDIR)$(name).o)
-SRC=$(foreach name, $(DEP), $(SRCDIR)$(name).cu)
 
 all: $(BIN)
 
 $(BIN): $(OBJ) 
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
 
-$(OBJ): $(SRC) dirs
+$(OBJDIR)%.o: $(SRCDIR)%.cu dirs
 	$(CC) $(CCFLAGS) $< -o $@ 
 
 .INTERMEDIATE: dirs
