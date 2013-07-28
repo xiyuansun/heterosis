@@ -4,9 +4,13 @@ if [ `which nvcc` ]
 then
   cp Makefile_GPU Makefile
   echo "NVIDIA compiler found. Type make to build CPU and GPU versions."
-else
+elif [ `which gcc` ]
+then
   cp Makefile_CPU Makefile
   echo "No NVIDIA compiler found. No GPU version will be made."
-  echo "Type \"make\" to build the CPU version."
+  echo "gcc found. Type \"make\" to build the CPU version."
+else 
+  echo "ERROR: gcc not found. nvcc not found."
+  echo "Program cannot be built."
 fi
   
