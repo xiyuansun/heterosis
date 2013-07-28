@@ -18,8 +18,8 @@ __host__ void oneChain(Chain *host_a, Chain *dev_a, Config *cfg){
   resetChain(host_a, dev_a, cfg);
 }
 
-void mcmc(int argc, char **argv){
-  int i;
+void mcmc(int *pargc, char **argv){
+  int i, argc = *pargc;
   Config *cfg = config(argc, argv); 
   Chain *host_a = NULL, *dev_a = NULL;
 

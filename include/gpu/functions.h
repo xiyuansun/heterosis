@@ -133,7 +133,7 @@ __host__ void samplePiDel(Chain*, Chain*, Config*);
 __host__ void runChain(Chain*, Chain*, Config*);
 __host__ void resetChain(Chain*, Chain*, Config*);
 __host__ void oneChain(Chain*, Chain*, Config*);
-__host__ void mcmc(int, char**);
+__host__ void mcmc(int*, char**);
 
 __global__ void updateDICprep_kernel1(Chain*);
 __global__ void updateDICprep_kernel2(Chain*);

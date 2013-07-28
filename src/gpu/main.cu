@@ -6,6 +6,6 @@
 #include <stdio.h>
 
 int main(int argc, char **argv){
-  mcmc(argc, argv);
+  mcmc(&argc, argv);
   return EXIT_SUCCESS;
 }
