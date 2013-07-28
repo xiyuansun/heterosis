@@ -182,38 +182,24 @@ July 2013
   is the root directory of this package. First, create the main
   makefile from one of the given makefiles:
 
-  $ cp Makefile_CPU Makefile
+  $ ./configure
 
-  or,
+  This command chooses the appropriate makefile for your system. If
+  you have nvcc, the NVIDIA CUDA C compiler required for the gpu version
+  of this program, then configure will choose Makefile_GPU, which compiles
+  both the cpu and gpu versions. If configure does not find nvcc, then
+  it will choose Makefile_CPU, and only the cpu version will be made. If
+  configure finds neither gcc nor nvcc, then neither version of the program
+  can be built. You must obtain at least gcc, the GNU Compiler Collection.
 
-  $ cp Makefile_GPU Makefile
+  To build the program, type
 
-  Next, compile the regular C version with
+  $ make 
 
-  $ make cpu
-
-  This command creates the following files and directories:
+  If you have nvcc, 'make' will create files and directories:
 
   bin/
     mcmc
-  
-  obj/
-    cpu/
-      allocChain.o
-      alp.o
-      ...
-
-  The binary, mcmc, is the main program. See USAGE below for 
-  usage details.
-
-  If you have the required CUDA tools listed in REQUIREMENTS, 
-  you can compile the gpu version with
-
-  $ make gpu
-
-  This command creates the following files and directories:
-
-  bin/
     gpu-mcmc
   
   obj/
@@ -222,6 +208,15 @@ July 2013
       alp.o
       ...
 
+    gpu/
+      allocChain.o
+      alp.o
+      …
+
+  If you do not have nvcc, then gpu-mcmc and obj/gpu/ and its contents
+  will not be created.
+
+  The binary, mcmc, is the regular C version of the program.
   The binary, gpu-mcmc, is the GPU-accelerated version of the 
   main program. See USAGE below for usage details.
 
