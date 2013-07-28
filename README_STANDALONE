@@ -49,13 +49,13 @@ July 2013
       constants.h
       functions.h
 
-  Makefile_CPU
-  Makefile_GPU
-
   R/
     functions.r
 
   src/
+    Makefile_CPU
+    Makefile_GPU
+
     cpu/
       allocChain.c
       alp.c
@@ -192,6 +192,9 @@ July 2013
   bin/
     heterosis-mcmc
   
+  src/
+    heterosis.so
+
   obj/
     allocChain.o
     alp.o
