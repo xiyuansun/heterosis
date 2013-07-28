@@ -18,6 +18,7 @@ cp Makefile_GPU $d
 cp NAMESPACE $d
 cp R/build.r $d/R
 cp R/gelman-factors.r $d/R
+cp README_STANDALONE
 cp -r src $d
 
 tar -czf $d.tar.gz $d
