@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void getopts(Config *cfg, int argc, char **argv){
+__host__ void getopts(Config *cfg, int argc, char **argv){
   int c, option_index;
   
   struct option long_options[] = {
