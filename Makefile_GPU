@@ -22,7 +22,7 @@ DEP+=mcmc main
 DEP+=chainDeviceToHost
 
 OBJ=$(foreach name, $(DEP), $(OBJDIR)$(name).o)
-SRC=$(foreach name, $(DEP), $(OBJDIR)$(name).cu)
+SRC=$(foreach name, $(DEP), $(SRCDIR)$(name).cu)
 
 all: $(BIN)
 
