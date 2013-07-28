@@ -47,7 +47,8 @@ July 2013
       constants.h
       functions.h
 
-  Makefile
+  Makefile_CPU
+  Makefile_GPU
 
   R/
     gelman-factors.r
@@ -178,16 +179,20 @@ July 2013
 
   Open a Linux/Unix-based command line interface program (Terminal
   on Mac and Linux). Be sure that your current working directory
-  is the root directory of this package. Compile the regular C 
-  version with
+  is the root directory of this package. First, create the main
+  makefile from one of the given makefiles:
 
-  $ make
+  $ cp Makefile_CPU Makefile
 
-  or equivalently,
+  or,
+
+  $ cp Makefile_GPU Makefile
+
+  Next, compile the regular C version with
 
   $ make cpu
 
-  Either command creates the following files and directories:
+  This command creates the following files and directories:
 
   bin/
     mcmc
