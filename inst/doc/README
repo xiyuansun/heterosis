@@ -15,8 +15,17 @@ July 2013
 
 ========= ABOUT =========================
 
-  This guide explains the C/CUDA C standalone program 
-  behind the R package, heterosis. This program fits the model given in 
+  This guide mostly explains the C / CUDA C standalone program 
+  behind the R package, heterosis. 
+
+  There is also a small section at the very end of this README file
+  on the R package itself. I do not devote much documentation to the R
+  package because this program was not designed to be an R package. It was 
+  originally intended to be just the linux / mac standalone binary compiled 
+  from C / CUDA C, which I recommend using instead. If you must, though, 
+  please refer to the last section: THE R PACKAGE VERSION.
+
+  The standalone program fits the model given in 
   inst/doc/method/method.Rnw (which may be compiled with knitR to produce 
   a more easily readable pdf, inst/doc/method/method.pdf). At minimum,
   you should have the following directories and files.
@@ -31,6 +40,9 @@ July 2013
     test/
       smallData.txt
       smallGroup.txt
+
+  DESCRIPTION
+  heterosis_0.0.0.tar.gz
 
   inst/
     doc/
@@ -52,6 +64,8 @@ July 2013
       Config.h
       constants.h
       functions.h
+
+  NAMESPACE
 
   R/
     functions.r
@@ -194,7 +208,7 @@ July 2013
   The following files and directories will be created:
 
   bin/
-    heterosis-mcmc
+    heterosis
   
   src/
     heterosis.so
@@ -204,8 +218,8 @@ July 2013
     alp.o
     ...
 
-  The main program is heterosis-mcmc. If you have the NVIDIA CUDA C compiler, 
-  then heterosis-mcmc will be GPU-accelerated. Otherwise, heterosis-mcmc
+  The main program is heterosis. If you have the NVIDIA CUDA C compiler, 
+  then heterosis will be GPU-accelerated. Otherwise, heterosis
   will be the regular C version, which is not GPU-accelerated.
 
   Before using the gelmanFactors() function in R/functions.r to compute 
@@ -246,12 +260,12 @@ July 2013
 
   and run with
 
-  $ ./heterosis-mcmc [OPTION1] [OPTION2] ...
+  $ ./heterosis [OPTION1] [OPTION2] ...
 
   Type any of the options in OPTIONS
   in place of [OPTION1] [OPTION2] ... For example,
 
-  $ ./heterosis-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper
+  $ ./heterosis --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper
 
   To compute Gelman factors on the output of either mcmc or gpu-mcmc, 
   change the current working directory to the sh/ directory open R 
@@ -472,17 +486,20 @@ July 2013
 
 ========= TESTING =======================    
 
-To test the code, a small test dataset, data/test/smallData.txt, is provided. Its group file, data/test/smallGroup.txt, is also included. The user may run either the cpu or the gpu version on this test data to verify that the software runs properly. After compilation, change to the bin/ directory with your Linux-style command line interface.
+  To test the code, a small test dataset, data/test/smallData.txt, is provided. Its group file, 
+  data/test/smallGroup.txt, is also included. The user may run either the cpu or the gpu version 
+  on this test data to verify that the software runs properly. After compilation, change to the 
+  bin/ directory with your Linux-style command line interface.
 
   $ cd bin/
 
 Then, run the program with
 
-  $ ./heterosis-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --iter 20 --chains 3 --hyper --parms --probs --rates --time --dic --verbose --out cpu-output 
+  $ ./heterosis --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --iter 20 --chains 3 --hyper --parms --probs --rates --time --dic --verbose --out cpu-output 
 
 For a test with minimal output, you may instead run
 
-  $ ./heterosis-mcmc --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out cpu-output
+  $ ./heterosis --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt --hyper --out cpu-output
 
 To compute Gelman diagnostics on the output in the newly created cpu-ouput/ directory, change from the bin/ directory to the R/ directory.
 
@@ -491,3 +508,39 @@ To compute Gelman diagnostics on the output in the newly created cpu-ouput/ dire
 Then, run
 
   $ Rscript -e 'source("functions.r"); gelmanFactors("../cpu-output")'
+
+
+========= THE R PACKAGE VERSION ========= 
+
+  As mentioned in the ABOUT section, this software was originally intended to exist as a 
+  standalone linux / mac binary compiled from C / CUDA C. However, after completing the 
+  the standalone version, I forcibly retrofitted an R package-style wrapper around it. 
+  The package source exists in heterosis_0.0.0.tar.gz, which can be generated in the command
+  line with:
+
+  $ ./bundle
+
+  After downloading the tar ball, you can install it from within R with
+
+  > install.packages("heterosis_0.0.0.tar.gz", type = "source")
+
+  An alternative to downloading the source and installing it manually is the install_github()
+  function in the devtools library:
+
+  > library(devtools)
+  > install_github("heterosis", "wlandau")
+
+  However, this approach is not recommended. The .git directory in the repository, which
+  is unnecessary for the package, is 10 MB, while the tar ball in the package is only 
+  around 400 KB.
+  
+  After installation, you may load the package into your current R session with
+
+  > library(heterosis)
+
+  After loading the library, you may wish to test the package with
+
+  > test_heterosis_mcmc()
+  
+  If your system has the NVIDIA CUDA C compiler, the package will be GPU-accelerated. Otherwise,
+  the regular C version of the standalone binary will be the engine of the R package.

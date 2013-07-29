@@ -8,8 +8,9 @@ OBJDIR=../obj/
 BINDIR=../bin/
 RBINDIR=../inst/bin/
 
-BIN=$(BINDIR)heterosis-mcmc
-RBIN=$(RBINDIR)heterosis-mcmc
+BINNAME=heterosis
+BIN=$(BINDIR)$(BINNAME)
+RBIN=$(RBINDIR)$(BINNAME)
 SO=heterosis.so
 
 DEP=getopts readGrp readData config  
