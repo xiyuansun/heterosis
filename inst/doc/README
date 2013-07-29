@@ -65,6 +65,7 @@ July 2013
       constants.h
       functions.h
 
+  Makefile
   NAMESPACE
 
   R/
@@ -200,27 +201,37 @@ July 2013
 
   Open a Linux/Unix-based command line interface program (Terminal
   on Mac and Linux). Be sure that your current working directory
-  is the root directory of this package. Enter the following:
+  is the root directory of this package. First create the appropriate
+  Makefile with
 
   $ ./configure
+
+  The configure script takes either src/Makefile_CPU or src/Makefile_GPU
+  (depending on whether your system supports GPU computing with CUDA)
+  and copies it to src/Makefile, which the Makefile at the root of the.
+  package needs. This ensures that the main program will be GPU-accelerated 
+  if you have CUDA and not GPU-accelerated if you do not have CUDA. 
+
+  Next, type:
+
   $ make
 
-  The following files and directories will be created:
+  which creates the following files and directories:
 
   bin/
     heterosis
   
-  src/
-    heterosis.so
+  inst/
+    bin/
+      heterosis
 
   obj/
     allocChain.o
     alp.o
     ...
 
-  The main program is heterosis. If you have the NVIDIA CUDA C compiler, 
-  then heterosis will be GPU-accelerated. Otherwise, heterosis
-  will be the regular C version, which is not GPU-accelerated.
+  The main program is called heterosis, and it is sent to both the
+  bin/ and inst/bin/ directories. 
 
   Before using the gelmanFactors() function in R/functions.r to compute 
   Gelman factors on the output of the main program, you must install 
@@ -553,3 +564,7 @@ Then, run
 
   If your system has the NVIDIA CUDA C compiler, the package will be GPU-accelerated. Otherwise,
   the regular C version of the standalone binary will be the engine of the R package.
+
+  Note: this R package was only tested on linux and mac. There is no guarantee that it will
+  work on Windows. If you must run it through Windows, I recommend opening R through
+  Cygwin or MinGW.

@@ -11,7 +11,6 @@ RBINDIR=../inst/bin/
 BINNAME=heterosis
 BIN=$(BINDIR)$(BINNAME)
 RBIN=$(RBINDIR)$(BINNAME)
-SO=heterosis.so
 
 DEP=getopts readGrp readData config  
 DEP+=printArrays printConfig printChain printHeaders
@@ -31,12 +30,9 @@ OBJ=$(foreach name, $(DEP), $(OBJDIR)$(name).o)
 
 all: $(BIN)
 
-$(BIN): $(OBJ) $(SO)
+$(BIN): $(OBJ)
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
 	cp $(BIN) $(RBIN)
-
-$(SO): $(OBJ)
-	$(CC) $(OBJ) $(SOFLAGS) -o $(SO) 
 
 $(OBJDIR)%.o: $(SRCDIR)%.cu dirs
 	$(CC) $(CCFLAGS) $< -o $@ 
@@ -52,4 +48,3 @@ clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(BINDIR)
 	rm -rf $(RBINDIR)
-	rm $(SO)

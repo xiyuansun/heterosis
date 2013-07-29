@@ -43,4 +43,4 @@ void mcmc(int *pargc, char **argv){
 
   chdir(cfg->cwd);     
   free(cfg);
-} 
+}

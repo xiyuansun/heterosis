@@ -11,7 +11,7 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
                           sigmaPhi = NULL, sigmaAlpha = NULL, sigmaDelta = NULL,
                           piAlpha = NULL, piDelta = NULL){
  
-  argv = "./heterosis"
+  argv = paste(.libPaths(), "/heterosis/bin/heterosis", collapse="")
 
   if (is.character(data)){
     
@@ -76,14 +76,7 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
   if(!is.null(piDelta))    argv = c(argv, "--pi-delta", paste(piDelta))
 
   argc = length(argv)
-  
-  library.dynam("heterosis", "heterosis", lib.loc = NULL)
 
-# SEGFAULTS:
-# .Call("mcmc", as.integer(argc), as.character(argv), PACKAGE = "heterosis")
-
-# THIS ONE AVOIDS ALL THE PROBLEMS OF CALLING C FROM R:
-  argv[1] = paste(.libPaths(), "/heterosis/bin/heterosis", sep="")
   cmd = paste(argv, collapse=" ")  
   system(cmd)
 
