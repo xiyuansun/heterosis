@@ -79,7 +79,8 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
   
   library.dynam("heterosis", "heterosis", lib.loc = NULL)
 
-  .C("mcmc", as.integer(argc), as.character(argv))
+  .Call(PACKAGE = "heterosis", .NAME = "mcmc", as.integer(argc), as.character(argv))
+  return(out)
 }
 
 test_heterosis_mcmc = function(){
