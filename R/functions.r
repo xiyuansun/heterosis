@@ -83,9 +83,9 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
 }
 
 test_heterosis_mcmc = function(){
-  load(exampleData)
-  load(exampleGroup)
-  gpu_mcmc(data = exampleData, group = exampleGroup, hyper = T, dic = T, )
+  data(exampleData)
+  data(exampleGroup)
+  heterosis_mcmc(data = exampleData, group = exampleGroup, hyper = T, dic = T, )
   gelmanFactors("out")
 }
 
