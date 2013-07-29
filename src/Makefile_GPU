@@ -6,7 +6,10 @@ SOFLAGS= -lm -lcurand -lstdc++ -shared
 SRCDIR=gpu/
 OBJDIR=../obj/
 BINDIR=../bin/
+RBINDIR=../inst/bin/
+
 BIN=$(BINDIR)heterosis-mcmc
+RBIN=$(RBINDIR)heterosis-mcmc
 SO=heterosis.so
 
 DEP=getopts readGrp readData config  
@@ -29,7 +32,7 @@ all: $(BIN)
 
 $(BIN): $(OBJ) $(SO)
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
-	cp $(BIN) ../inst/doc/heterosis-mcmc
+	cp $(BIN) $(RBIN)
 
 $(SO): $(OBJ)
 	$(CC) $(OBJ) $(SOFLAGS) -o $(SO) 
@@ -42,8 +45,10 @@ $(OBJDIR)%.o: $(SRCDIR)%.cu dirs
 dirs:
 	mkdir -p $(BINDIR)
 	mkdir -p $(OBJDIR)
+	mkdir -p $(RBINDIR)
 
 clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(BINDIR)
+	rm -rf $(RBINDIR)
 	rm $(SO)
