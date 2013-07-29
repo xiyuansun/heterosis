@@ -20,7 +20,7 @@ __host__ void oneChain(Chain *host_a, Chain *dev_a, Config *cfg){
 
 extern "C" {
 
-void mcmc(int *pargc, char **argv){
+__host__ void mcmc(int *pargc, char **argv){
   int i, argc = *pargc;
   Config *cfg = config(argc, argv); 
   Chain *host_a = NULL, *dev_a = NULL;
