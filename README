@@ -21,6 +21,7 @@ July 2013
   a more easily readable pdf, inst/doc/method/method.pdf). At minimum,
   you should have the following directories and files.
 
+  bundle
   configure
 
   data/
