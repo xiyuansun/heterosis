@@ -45,7 +45,7 @@ $(OBJDIR)%.o: $(SRCDIR)%.c dirs
 dirs:
 	mkdir -p $(OBJDIR)
 	mkdir -p $(BINDIR)
-	mkdor -p $(RBINDIR)
+	mkdir -p $(RBINDIR)
 
 clean:
 	rm -rf $(OBJDIR)
