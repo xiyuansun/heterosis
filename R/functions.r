@@ -83,7 +83,7 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
 # .Call("mcmc", as.integer(argc), as.character(argv), PACKAGE = "heterosis")
 
 # THIS ONE AVOIDS ALL THE PROBLEMS OF CALLING C FROM R:
-  argv[1] = paste(.libPaths(), "/heterosis/doc/heterosis-mcmc", sep="")
+  argv[1] = paste(.libPaths(), "/heterosis/bin/heterosis-mcmc", sep="")
   cmd = paste(argv, collapse=" ")  
   system(cmd)
 
