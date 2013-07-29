@@ -24,6 +24,9 @@ July 2013
   configure
 
   data/
+    exampleData.rda
+    exampleGroup.rda
+
     test/
       smallData.txt
       smallGroup.txt
