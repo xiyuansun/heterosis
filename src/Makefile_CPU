@@ -6,7 +6,10 @@ SOFLAGS=-lm -shared
 SRCDIR=cpu/
 OBJDIR=../obj/
 BINDIR=../bin/
+RBINDIR=../inst/bin/
+
 BIN=$(BINDIR)heterosis-mcmc
+RBIN=$(RBINDIR)heterosis-mcmc
 SO=heterosis.so
 
 DEP=getopts readGrp readData config  
@@ -25,11 +28,11 @@ DEP+=mu logLik
 
 OBJ=$(foreach name, $(DEP), $(OBJDIR)$(name).o)
 
-all: $(BIN) $(SO)
+all: $(BIN) $(RBIN) $(SO)
 	
 $(BIN): $(OBJ) 
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
-	cp $(BIN) ../inst/doc/heterosis-mcmc
+	cp $(BIN) $(RBIN)
 
 $(SO): $(OBJ)
 	$(CC) $(OBJ) $(SOFLAGS) -o $(SO) 
@@ -40,10 +43,12 @@ $(OBJDIR)%.o: $(SRCDIR)%.c dirs
 .INTERMEDIATE: dirs
 
 dirs:
-	mkdir -p $(BINDIR)
 	mkdir -p $(OBJDIR)
+	mkdir -p $(BINDIR)
+	mkdor -p $(RBINDIR)
 
 clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(BINDIR)
-	rm $(SO)
+	rm -rf $(RBINDIR)
+	rm -f  $(SO)
