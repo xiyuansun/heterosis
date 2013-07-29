@@ -550,6 +550,6 @@ Then, run
 
   The arguments to heterosis_mcmc() are nearly identical to those of the standalone program
   and have completely analogous meanings.
-  
+
   If your system has the NVIDIA CUDA C compiler, the package will be GPU-accelerated. Otherwise,
   the regular C version of the standalone binary will be the engine of the R package.
