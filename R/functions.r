@@ -11,7 +11,7 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
                           sigmaPhi = NULL, sigmaAlpha = NULL, sigmaDelta = NULL,
                           piAlpha = NULL, piDelta = NULL){
  
-  argv = c("./heterosis-mcmc")
+  argv = "./heterosis-mcmc"
 
   if (is.character(data)){
     
