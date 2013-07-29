@@ -1,5 +1,84 @@
-heterosis_mcmc = function(){
-  library.dynam("heterosis", "heterosis", lib.loc = NULL)
+heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
+                          chains = 2, iter = 10, burnin = iter/2,
+                          phiPrior = 0, alphaPrior = 0, deltaPrior = 0,
+                          seed = FALSE, joint = FALSE, verbose = FALSE, dic = FALSE,
+                          hyper = FALSE, parms = FALSE, probs = FALSE, rates = FALSE,
+                          time = FALSE, debug = FALSE, sigmaC0 = 10, d0 = 1000, aTau = 100,
+                          aAlpha = 1, aDelta = 1, bTau = 100, bAlpha = 1, bDelta = 1,
+                          gammaPhi = 2, gammaAlpha = 2, gammaDelta = 2, sigmaPhi0 = 2,
+                          sigmaAlpha0 = 2, sigmaDelta0 = 2, sigmaC = NULL, d = NULL,
+                          tau = NULL, thetaPhi = NULL, thetaAlpha = NULL, thetaDelta = NULL,
+                          sigmaPhi = NULL, sigmaAlpha = NULL, sigmaDelta = NULL,
+                          piAlpha = NULL, piDelta = NULL){
+
+#  library.dynam("heterosis", "heterosis", lib.loc = NULL)
+ 
+  argv = c("./heterosis-mcmc")
+
+  if (is.character(data)){
+    
+    if(file.exists(data)){
+      argv = c(argv, "--data", data)
+    } else {
+      stop(paste("Data file", data, "does not exist."))
+    }
+
+  } else if(is.matrix(data) || is.array(data) || is.data.frame(data)){
+    write.table(data, "data.txt", row.names = F, col.names = F)
+    argv = c(argv, "--data", "data.txt")
+  } else {
+    stop("bad data argument.")
+  }
+
+  if (is.character(group)){
+    
+    if(file.exists(group)){
+      argv = c(argv, "--group", group)
+    } else {
+      stop(paste("Group file", group, "does not exist."))
+    }
+
+  } else if(is.numeric(group)){
+    write(group, "group.txt")
+    argv = c(argv, "--group", "group.txt")
+  } else {
+    stop("bad group argument.")
+  }
+
+  if(joint)   argv = c(argv, "--joint")
+  if(verbose) argv = c(argv, "--verbose")
+  if(dic)     argv = c(argv, "--dic")
+  if(hyper)   argv = c(argv, "--hyper")
+  if(parms)   argv = c(argv, "--parms")
+  if(probs)   argv = c(argv, "--probs")
+  if(rates)   argv = c(argv, "--rates")
+  if(time)    argv = c(argv, "--time")
+  if(debug)   argv = c(argv, "--debug")
+
+  argv = c(argv, "--out", out, "--chains", paste(chains), "--iter", paste(iter), 
+           "--burnin", paste(burnin), "--seed", paste(seed), 
+           "--phi-prior", paste(phiPrior), "--alpha-prior", paste(alphaPrior), 
+           "--delta-prior", paste(deltaPrior), "--sigma-c0", paste(sigmaC0),
+           "--d0", paste(d0), "--a-tau", paste(aTau), "--a-alpha", paste(aAlpha), 
+           "--a-delta", paste(aDelta), "--b-tau", paste(bTau), "--b-alpha", paste(bAlpha), 
+           "--b-delta", paste(bDelta), "--gamma-phi", paste(gammaPhi), "--gamma-alpha",
+           paste(gammaAlpha), "--gamma-delta", paste(gammaDelta), "--sigma-phi0",
+           paste(sigmaPhi0), "--sigma-alpha0", paste(sigmaAlpha0), "--sigma-delta0",
+           paste(sigmaDelta0))
+ 
+  if(!is.null(sigmaC))     argv = c(argv, "--sigma-c", paste(sigmaC))
+  if(!is.null(d))          argv = c(argv, "--d", paste(d))
+  if(!is.null(thetaPhi))   argv = c(argv, "--theta-phi", paste(thetaPhi))
+  if(!is.null(thetaAlpha)) argv = c(argv, "--theta-alpha", paste(thetaAlpha))
+  if(!is.null(thetaDelta)) argv = c(argv, "--theta-delta", paste(thetaDelta))
+  if(!is.null(sigmaPhi))   argv = c(argv, "--sigma-phi", paste(sigmaPhi))
+  if(!is.null(sigmaAlpha)) argv = c(argv, "--sigma-alpha", paste(sigmaAlpha))
+  if(!is.null(sigmaDelta)) argv = c(argv, "--sigma-delta", paste(sigmaDelta))
+  if(!is.null(piAlpha))    argv = c(argv, "--pi-alpha", paste(piAlpha))
+  if(!is.null(piDelta))    argv = c(argv, "--pi-delta", paste(piDelta))
+
+  argc = length(argv)
+  return(argv)
 }
 
 checkVersion = function(){

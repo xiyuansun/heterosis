@@ -10,6 +10,8 @@ mkdir -p $d/R
 cp configure $d
 cp data/test/smallData.txt $d/data/test
 cp data/test/smallGroup.txt $d/data/test
+cp data/exampleData.rda $d/data/exampleData.rda
+cp data/exampleGroup.rda $d/data/exampleGroup.rda
 cp DESCRIPTION $d
 cp -r include $d
 cp -r inst $d
