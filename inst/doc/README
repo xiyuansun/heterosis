@@ -541,6 +541,15 @@ Then, run
   After loading the library, you may wish to test the package with
 
   > test_heterosis_mcmc()
+
+  The main function in the package is heterosis_mcmc(), which returns a directory to the 
+  output files that can be then passed into gelmanFactors(). You may wish to inspect the 
+  code with
+
+  > heterosis_mcmc
+
+  The arguments to heterosis_mcmc() are nearly identical to those of the standalone program
+  and have completely analogous meanings.
   
   If your system has the NVIDIA CUDA C compiler, the package will be GPU-accelerated. Otherwise,
   the regular C version of the standalone binary will be the engine of the R package.
