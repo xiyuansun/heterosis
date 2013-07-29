@@ -1,0 +1,5 @@
+library(heterosis)
+load(exampleData)
+load(exampleGroup)
+gpu_mcmc(data = exampleData, group = exampleGroup, hyper = T, dic = T, )
+gelmanFactors("out")

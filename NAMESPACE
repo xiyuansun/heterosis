@@ -1,1 +1,1 @@
-export(gelmanFactors, heterosis_mcmc)
+export(gelmanFactors, heterosis_mcmc, test_heterosis_mcmc)
