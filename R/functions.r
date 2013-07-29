@@ -79,7 +79,7 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
   
   library.dynam("heterosis", "heterosis", lib.loc = NULL)
 
-  .Call(PACKAGE = "heterosis", .NAME = "mcmc", as.integer(argc), as.character(argv))
+  .C("mcmc", as.integer(argc), as.character(argv))
   return(out)
 }
 
