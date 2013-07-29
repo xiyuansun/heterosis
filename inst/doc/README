@@ -16,7 +16,7 @@ July 2013
 ========= ABOUT =========================
 
   This guide mostly explains the C / CUDA C standalone program 
-  behind the R package, heterosis. 
+  behind the R package, heterosis.
 
   There is also a small section at the very end of this README file
   on the R package itself. I do not devote much documentation to the R
