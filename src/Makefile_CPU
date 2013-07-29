@@ -1,7 +1,6 @@
 CC=gcc
-CCFLAGS=-c -Wall -pedantic -I../include/cpu -shared -fPIC
+CCFLAGS=-c -Wall -pedantic -I../include/cpu
 LDFLAGS=-lm
-SOFLAGS=-lm -shared
 
 SRCDIR=cpu/
 OBJDIR=../obj/
