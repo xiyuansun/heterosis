@@ -29,6 +29,7 @@ all: $(BIN)
 
 $(BIN): $(OBJ) $(SO)
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN) 
+	cp $(BIN) ../inst/doc/heterosis-mcmc
 
 $(SO): $(OBJ)
 	$(CC) $(OBJ) $(SOFLAGS) -o $(SO) 

@@ -79,14 +79,27 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
   
   library.dynam("heterosis", "heterosis", lib.loc = NULL)
 
-  .C("mcmc", as.integer(argc), as.character(argv))
+# SEGFAULTS:
+# .Call("mcmc", as.integer(argc), as.character(argv), PACKAGE = "heterosis")
+
+# THIS ONE AVOIDS ALL THE PROBLEMS OF CALLING C FROM R:
+  argv[1] = paste(.libPaths(), "/heterosis/doc/heterosis-mcmc", sep="")
+  cmd = paste(argv, collapse=" ")  
+  system(cmd)
+
+  if(is.matrix(data) || is.array(data) || is.data.frame(data))
+    file.remove("data.txt")
+
+  if(is.numeric(group))
+    file.remove("group.txt")
+
   return(out)
 }
 
 test_heterosis_mcmc = function(){
   data(exampleData)
   data(exampleGroup)
-  heterosis_mcmc(data = exampleData, group = exampleGroup, hyper = T, dic = T, )
+  heterosis_mcmc(data = exampleData, group = exampleGroup, hyper = T, dic = T)
   gelmanFactors("out")
 }
 
