@@ -18,6 +18,8 @@ __host__ void oneChain(Chain *host_a, Chain *dev_a, Config *cfg){
   resetChain(host_a, dev_a, cfg);
 }
 
+extern "C" {
+
 void mcmc(int *pargc, char **argv){
   int i, argc = *pargc;
   Config *cfg = config(argc, argv); 
@@ -48,3 +50,5 @@ void mcmc(int *pargc, char **argv){
   chdir(cfg->cwd); 
   free(cfg);
 } 
+
+}
