@@ -19,7 +19,6 @@ cp NAMESPACE $d
 cp R/functions.r $d/R
 cp README_STANDALONE $d
 cp -r src $d
-cp -r tests $d
 
 tar -czf $d.tar.gz $d
 rm -rf $d
