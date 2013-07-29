@@ -10,8 +10,6 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
                           tau = NULL, thetaPhi = NULL, thetaAlpha = NULL, thetaDelta = NULL,
                           sigmaPhi = NULL, sigmaAlpha = NULL, sigmaDelta = NULL,
                           piAlpha = NULL, piDelta = NULL){
-
-#  library.dynam("heterosis", "heterosis", lib.loc = NULL)
  
   argv = c("./heterosis-mcmc")
 
@@ -78,7 +76,17 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
   if(!is.null(piDelta))    argv = c(argv, "--pi-delta", paste(piDelta))
 
   argc = length(argv)
-  return(argv)
+  
+  library.dynam("heterosis", "heterosis", lib.loc = NULL)
+
+  .C("mcmc", as.integer(argc), as.character(argv))
+}
+
+test_heterosis_mcmc = function(){
+  load(exampleData)
+  load(exampleGroup)
+  gpu_mcmc(data = exampleData, group = exampleGroup, hyper = T, dic = T, )
+  gelmanFactors("out")
 }
 
 checkVersion = function(){
