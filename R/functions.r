@@ -11,7 +11,7 @@ heterosis_mcmc = function(data = "data.txt", group = "group.txt", out = "out",
                           sigmaPhi = NULL, sigmaAlpha = NULL, sigmaDelta = NULL,
                           piAlpha = NULL, piDelta = NULL){
  
-  argv = paste(.libPaths(), "/heterosis/bin/heterosis", collapse="")
+  argv = paste(.libPaths(), "/heterosis/bin/heterosis", sep="")
 
   if (is.character(data)){
     
@@ -182,7 +182,7 @@ gelmanFactors = function(mainDir = "out", parms = F){
       oneKind(kind, outFile, mainDir)
     }
 
-  print(paste("Please find Gelman factors in gelman-factors.txt within ", 
+  print(paste("Please find Gelman factors in gelman-factors.txt in the directory, ", 
               mainDir, ".", sep = ""))
   setwd(cwd)
 }
