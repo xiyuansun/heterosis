@@ -17,7 +17,7 @@ cp -r include $d
 cp -r inst $d
 cp NAMESPACE $d
 cp R/functions.r $d/R
-cp README_STANDALONE $d
+cp README $d
 cp -r src $d
 
 tar -czf $d.tar.gz $d
