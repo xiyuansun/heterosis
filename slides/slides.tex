@@ -1,4 +1,5 @@
-\documentclass{beamer}
+%\documentclass{beamer}
+\documentclass[handout]{beamer}
 \usetheme{Marburg}
 \useoutertheme{infolines}
 \newcommand{\answers}{1}
@@ -72,7 +73,7 @@
  %For caption-free listings, comment out the 3 lines above
  \lstset{frame = single}
 
-\title{A Bayesian model for hybrid vigor}
+\title{GPU-parallel Gibbs sampling of a Bayesian model for hybrid vigor in gene expression}
 \author{Will Landau}
 \date{\today}
 \institute{Iowa State University}
@@ -423,7 +424,15 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \begin{frame}
 \frametitle{Sources}
 \begin{enumerate}[1. ]
-\item Some source
+\item A. Gelman, J. B. Carlin, H. S. Stern, and D. S. Rubin. Bayesian Data Analysis. Chapman \& Hall/CRC, 2 edition, 2004.
+\item Prof. Jarad Niemi's STAT 544 lecture notes.
+\item J. Sanders and E. Kandrot. \emph{CUDA by Example.} Addison-Wesley, 2010.
+\item \url{http://www.astrochem.org/sci/Nucleobases.php}
+\item \url{http://www.biologycorner.com/bio1/DNA.html}
+\item \url{http://www.qualitysilks.com/images/products/artificial-corn-stalk.jpg}
+\item \url{http://en.wikipedia.org/wiki/dna}
+\item \url{http://en.wikipedia.org/wiki/rna}
+\item \url{http://en.wikipedia.org/wiki/HSP60}
 \end{enumerate}
 \end{frame}
 
