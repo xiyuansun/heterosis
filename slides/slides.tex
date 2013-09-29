@@ -1,5 +1,5 @@
-\documentclass{beamer}
-%\documentclass[handout]{beamer}
+%\documentclass{beamer}
+\documentclass[handout]{beamer}
 \usetheme{Marburg}
 \useoutertheme{infolines}
 \newcommand{\answers}{1}
@@ -395,106 +395,8 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \pause \item $\e_{g, n}$'s 
 \pause \item $\eta_{g}$'s 
 \end{itemize}
-\pause \item Use parallel reductions to calculate sufficient statistics for:
-\begin{itemize}
-\pause \item $c_n$'s
-\pause \item $\tau$, $d$
-\pause \item $\theta_\phi$, $\theta_\alpha$, $\theta_\delta$
-\pause \item $\sigma_\phi$, $\sigma_\alpha$, $\sigma_\delta$,  $\sigma_c$ 
-\pause \item $\pi_\alpha$, $\pi_\delta$
-\end{itemize}
 \end{itemize}
 \end{frame}
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-
-\begin{itemize}
-\item Let's take the pairwise sum of the vector,
-
-\begin{align*}
-(5, 2, -3, 1, 1, 8, 2, 6)
-\end{align*}
-
-using 1 block of 4 threads.
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.15]{../../fig/psum1.pdf}
-\end{frame}
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.15]{../../fig/psum2.pdf}
-\end{frame}
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.15]{../../fig/psum3.pdf}
-\end{frame}
-{}
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.25]{../../fig/psum4.pdf}
-\end{frame}
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.25]{../../fig/psum5.pdf}
-\end{frame}
-
-\begin{frame}
-\frametitle{Synchronizing threads}
-\begin{itemize}
-\item {\bf Synchronization}: waiting for all parallel tasks to reach a checkpoint before allowing any of then to continue.
-\begin{itemize}
-\pause \item Threads from the same block can be synchronized easily.
-\pause \item In general, do not try to synchronize threads from different blocks. It's possible, but extremely inefficient.
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.25]{../../fig/psum6.pdf}
-\end{frame}
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.25]{../../fig/psum7.pdf}
-\end{frame}
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.25]{../../fig/psum8.pdf}
-\end{frame}
-
-\begin{frame}
-\frametitle{Pairwise summation: an example reduction}
-\includegraphics[scale=.25]{../../fig/psum9.pdf}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Reductions and scans}
-
-\begin{itemize}
-\item Reductions
-\begin{itemize}
-\pause \item Pairwise sum and pairwise multiplication are examples of reductions.
-\pause \item {\bf Reduction}: an algorithm that applies some binary operation on a vector to produce a scalar.
-\end{itemize}
-\pause \item Scans
-\begin{itemize}
-\pause \item {\bf Scan (prefix sum)}: an operation on a vector that produces a sequence of partial reductions.
-\pause \item Example: computing the sequence of partial sums in pairwise fashion.
-\end{itemize}
-\end{itemize}
-\end{frame}
-
 
 
 \begin{frame}
@@ -515,6 +417,98 @@ using 1 block of 4 threads.
 &\uncover<6->{\left . \left . \frac{}{}- \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right )}
 \end{align*}
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Tons of opportunity for GPU parallelism across genes!}
+\begin{align*}
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
+\end{align*}
+
+\begin{itemize}
+\pause \item Use {\color{blue} \bf parallel reductions} to calculate sufficient statistics for:
+\begin{itemize}
+\pause \item $c_n$'s
+\pause \item $\tau$, $d$
+\pause \item $\theta_\phi$, $\theta_\alpha$, $\theta_\delta$
+\pause \item $\sigma_\phi$, $\sigma_\alpha$, $\sigma_\delta$,  $\sigma_c$ 
+\pause \item $\pi_\alpha$, $\pi_\delta$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+
+\begin{itemize}
+\item Let's take the pairwise sum of the vector,
+
+\begin{align*}
+(5, 2, -3, 1, 1, 8, 2, 6)
+\end{align*}
+
+using 1 block of 4 threads.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.15]{fig/psum1.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.15]{fig/psum2.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.15]{fig/psum3.pdf}
+\end{frame}
+{}
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{fig/psum4.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{fig/psum5.pdf}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{fig/psum6.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{fig/psum7.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{fig/psum8.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{fig/psum9.pdf}
+\end{frame}
+
+
+
 
 
 
