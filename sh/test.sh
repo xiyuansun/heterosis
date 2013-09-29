@@ -1,1 +1,1 @@
-../bin/heterosis --data ../data/test/smallData.txt --group ../data/test/smallGroup.txt -M 3 -c 2 -h -p -P  -r -t --dic -j -v -j
+../bin/heterosis --data ../data/test/largeData.txt --group ../data/test/largeGroup.txt --iter 10000 --chains 2 --verbose --hyper --probs
