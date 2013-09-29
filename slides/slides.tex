@@ -301,7 +301,7 @@
 &\uncover<2->{\only<2>{\color{blue}} \scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
 \phi_g - \alpha_g & \text{ sample $n$ from parent 1} \\
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
-\phi_g + \alpha_g & \text{ sample $n$ parent 3} \\
+\phi_g + \alpha_g & \text{ sample $n$ from parent 3} \\
 \end{cases}} \\ 
 &{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\
 & \qquad \uncover<3->{\only<3>{\color{blue}}\phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2)} \\
@@ -321,6 +321,8 @@
 
 
 \section{The Gibbs sampler}
+
+\subsection{Gibbs steps}
 
 \begin{frame}
 \frametitle{Partition parameters by conditional independence.}
@@ -355,6 +357,27 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \item and then repeat.
 \end{itemize}
 \end{frame}
+
+\subsection{Estimated heterosis probabilities}
+
+\begin{frame}
+\frametitle{Estimated heterosis probabilities} \small
+\begin{align*}
+& \scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+\phi_g - \alpha_g & \text{ sample $n$ from parent 1} \\
+\phi_g + \delta_g & \text{ sample $n$ from child} \\
+\phi_g + \alpha_g & \text{ sample $n$ from parent 3} \\
+\end{cases} \\ \\
+&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\ 
+\uncover<2->{\intertext{Consider one chain with $M$ iterations.}}
+&\uncover<3->{P(\text{high-parent heterosis in gene } g) \approx \frac{1}{M} \sum_{i = 1}^M} I(\delta_g^{(i)} > |\alpha_g^{(i)}|) \\
+&\uncover<4->{P(\text{low-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M} I(\delta_g^{(i)} < -|\alpha_g^{(i)}|) \\
+&\uncover<5->{P(\text{mid-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M} I(\delta_g^{(i)} \ne 0)
+\end{align*}
+\end{frame}
+
+
+\subsection{GPU parallelism}
 
 \begin{frame}
 \frametitle{Tons of opportunity for GPU parallelism across genes!}
