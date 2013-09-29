@@ -1,5 +1,5 @@
-%\documentclass{beamer}
-\documentclass[handout]{beamer}
+\documentclass{beamer}
+%\documentclass[handout]{beamer}
 \usetheme{Marburg}
 \useoutertheme{infolines}
 \newcommand{\answers}{1}
@@ -371,9 +371,9 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \end{cases} \\ \\
 &{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\ 
 \uncover<2->{\intertext{Consider one chain with $M$ iterations.}}
-&\uncover<3->{P(\text{high-parent heterosis in gene } g) \approx \frac{1}{M} \sum_{i = 1}^M} I(\delta_g^{(i)} > |\alpha_g^{(i)}|) \\
-&\uncover<4->{P(\text{low-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M} I(\delta_g^{(i)} < -|\alpha_g^{(i)}|) \\
-&\uncover<5->{P(\text{mid-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M} I(\delta_g^{(i)} \ne 0)
+&\uncover<3->{P(\text{high-parent heterosis in gene } g) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} > |\alpha_g^{(i)}|)} \\
+&\uncover<4->{P(\text{low-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} < -|\alpha_g^{(i)}|)} \\
+&\uncover<5->{P(\text{mid-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} \ne 0)}
 \end{align*}
 \end{frame}
 
@@ -403,10 +403,173 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \pause \item $\sigma_\phi$, $\sigma_\alpha$, $\sigma_\delta$,  $\sigma_c$ 
 \pause \item $\pi_\alpha$, $\pi_\delta$
 \end{itemize}
+\end{itemize}
+\end{frame}
 
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+
+\begin{itemize}
+\item Let's take the pairwise sum of the vector,
+
+\begin{align*}
+(5, 2, -3, 1, 1, 8, 2, 6)
+\end{align*}
+
+using 1 block of 4 threads.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.15]{../../fig/psum1.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.15]{../../fig/psum2.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.15]{../../fig/psum3.pdf}
+\end{frame}
+{}
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{../../fig/psum4.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{../../fig/psum5.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Synchronizing threads}
+\begin{itemize}
+\item {\bf Synchronization}: waiting for all parallel tasks to reach a checkpoint before allowing any of then to continue.
+\begin{itemize}
+\pause \item Threads from the same block can be synchronized easily.
+\pause \item In general, do not try to synchronize threads from different blocks. It's possible, but extremely inefficient.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{../../fig/psum6.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{../../fig/psum7.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{../../fig/psum8.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pairwise summation: an example reduction}
+\includegraphics[scale=.25]{../../fig/psum9.pdf}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Reductions and scans}
+
+\begin{itemize}
+\item Reductions
+\begin{itemize}
+\pause \item Pairwise sum and pairwise multiplication are examples of reductions.
+\pause \item {\bf Reduction}: an algorithm that applies some binary operation on a vector to produce a scalar.
+\end{itemize}
+\pause \item Scans
+\begin{itemize}
+\pause \item {\bf Scan (prefix sum)}: an operation on a vector that produces a sequence of partial reductions.
+\pause \item Example: computing the sequence of partial sums in pairwise fashion.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Example: $\phi_g$'s} \small
+\begin{align*}
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \qquad \uncover<2->{\phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2)} \\
+& \qquad \qquad \uncover<3->{\theta_\phi \stackrel{\text{}}{\sim} \text{N}(\theta_\phi \mid 0, \gamma_{\phi }^2)} \\
+& \qquad \qquad \uncover<4->{\sigma_\phi \stackrel{\text{}}{\sim} \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0})} \\
+\end{align*}
+
+\begin{itemize}
+\uncover<5->{\item Using parallel random walk Metropolis steps, sample the $\phi_g$'s from their full conditional distributions,}
+\end{itemize}
+
+\begin{align*}
+\uncover<6->{p(\phi_g \mid} & \uncover<6->{ \cdots) \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) \right . \right .}  \\
+&\uncover<6->{\left . \left . \frac{}{}- \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right )}
+\end{align*}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Example: $\tau^2$} \scriptsize
+\begin{align*}
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \qquad \uncover<2->{ \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2)} \\
+& \qquad \qquad \uncover<3->{\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
+& \qquad \qquad \qquad \uncover<4->{d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0)} \\
+& \qquad \qquad \qquad \uncover<5->{\tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau)} \\
+\uncover<6->{p(\tau^2 & \mid \cdots)}  \\
+&\uncover<6->{= \text{Gamma} \left ( \tau^2 \ \left \lvert \ \text{shape} =  a_\tau + \frac{Gd}{2} \right ., \ \text{rate} =  b_\tau + \frac{d}{2} {\color{blue} \sum_{g = 1}^G \frac{1}{\eta_g^2}} \right ) }
+\end{align*}
+
+\begin{itemize}
+\uncover<7->{\item Using a parallel reduction (NVIDIA's CUDA C/C++ {\tt Thrust} library), calculate the sufficient statistic:}
+\begin{align*}
+\uncover<8->{\color{blue}\sum_{g = 1}^G \frac{1}{\eta_g^2}}
+\end{align*}
+\uncover<9->{\item Use an efficient rejection sampler to sample $\tau^2$.}
 \end{itemize}
 
 \end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Example: $d$} \tiny
+\begin{align*}
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \qquad \uncover<2->{ \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2)} \\
+& \qquad \qquad \uncover<3->{\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
+& \qquad \qquad \qquad \uncover<4->{d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0)} \\
+& \qquad \qquad \qquad \uncover<5->{\tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau)} \\
+&\uncover<6->{p(d \mid \cdots) \propto \Gamma \left( d/2 \right )^{-G} \left ( \frac{d \cdot \tau^2}{2}\right ) ^ { G d  /2 } \left ({\color{blue} \prod_{g = 1}^G { \eta_g^2} } \right )^{ -(d/2 + 1)} \exp \left (- \frac{d \cdot \tau^2}{2} {\color{blue} \sum_{g = 1}^G \frac{1}{ \eta_g^2} }\right ) I(0 < d < d_0) }
+\end{align*}
+
+
+
+\small
+\begin{itemize}
+\uncover<7->{\item Using parallel reductions (NVIDIA's CUDA C/C++ {\tt Thrust} library), calculate the sufficient statistics:}
+\begin{align*}
+\uncover<8->{\color{blue}\prod_{g = 1}^G \eta_g^2 \qquad \qquad \sum_{g = 1}^G \frac{1}{\eta_g^2} } 
+\end{align*}
+\uncover<9->{\item Use a random-walk metropolis step to sample $d$.}
+\end{itemize}
+\end{frame}
+
+
+
+
 
 
 \section{The software}
