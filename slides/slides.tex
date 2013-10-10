@@ -284,6 +284,11 @@
 \frametitle{The model}
 
 \begin{align*}
+& \scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+\phi_g - \alpha_g & \text{ sample $n$ from parent 1} \\
+\phi_g + \delta_g & \text{ sample $n$ from child} \\
+\phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
+\end{cases} \\ 
 &y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
 &\qquad \uncover<2->{\only<2>{\color{blue}}c_n \stackrel{\text{ind}}{\sim} \text{N}(c_n \mid 0, \sigma_c^2)} \\
 & \qquad \qquad \uncover<4->{\only<4>{\color{blue}}\sigma_c \stackrel{\text{}}{\sim} \text{U}(\sigma_c \mid 0, \sigma_{c0})} \\
@@ -299,11 +304,11 @@
 \frametitle{The model} \tiny
 
 \begin{align*}
-&\uncover<2->{\only<2>{\color{blue}} \scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+&\scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
 \phi_g - \alpha_g & \text{ sample $n$ from parent 1} \\
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
-\phi_g + \alpha_g & \text{ sample $n$ from parent 3} \\
-\end{cases}} \\ 
+\phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
+\end{cases} \\ 
 &{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\
 & \qquad \uncover<3->{\only<3>{\color{blue}}\phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2)} \\
 & \qquad \qquad \uncover<6->{\only<6>{\color{blue}}\theta_\phi \stackrel{\text{}}{\sim} \text{N}(\theta_\phi \mid 0, \gamma_{\phi }^2)} \\
@@ -367,13 +372,13 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 & \scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
 \phi_g - \alpha_g & \text{ sample $n$ from parent 1} \\
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
-\phi_g + \alpha_g & \text{ sample $n$ from parent 3} \\
+\phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
 \end{cases} \\ \\
 &{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\ 
 \uncover<2->{\intertext{Consider one chain with $M$ iterations.}}
 &\uncover<3->{P(\text{high-parent heterosis in gene } g) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} > |\alpha_g^{(i)}|)} \\
 &\uncover<4->{P(\text{low-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} < -|\alpha_g^{(i)}|)} \\
-&\uncover<5->{P(\text{mid-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} \ne 0)}
+&\uncover<5->{P(\text{mid-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(0<|\delta_g^{(i)}| < |\alpha_g^{(i)}|)}
 \end{align*}
 \end{frame}
 
