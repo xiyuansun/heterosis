@@ -75,7 +75,7 @@
 
 \title{GPU-parallel Gibbs sampling of a hierarchical model of hybrid vigor in RNA-seq experiments}
 \author{Will Landau}
-\date{\today}
+\date{October 10, 2013}
 \institute{Iowa State University}
 
 \begin{document}
@@ -289,13 +289,13 @@
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
 \phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
 \end{cases} \\ 
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-&\qquad \uncover<2->{\only<2>{\color{blue}}c_n \stackrel{\text{ind}}{\sim} \text{N}(c_n \mid 0, \sigma_c^2)} \\
-& \qquad \qquad \uncover<4->{\only<4>{\color{blue}}\sigma_c \stackrel{\text{}}{\sim} \text{U}(\sigma_c \mid 0, \sigma_{c0})} \\
-& \qquad \uncover<3->{\only<3>{\color{blue}}\e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2)} \\
-& \qquad \qquad \uncover<5->{\only<5>{\color{blue}}\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
-& \qquad \qquad \qquad \uncover<6->{\only<6>{\color{blue}} d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0)} \\
-& \qquad \qquad \qquad \uncover<7->{\only<7>{\color{blue}} \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau)} \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+&\qquad \uncover<2->{\only<2>{\color{blue}}c_n \stackrel{\text{ind}}{\sim} \text{N}(0, \sigma_c^2)} \\
+& \qquad \qquad \uncover<4->{\only<4>{\color{blue}}\sigma_c \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{c0})} \\
+& \qquad \uncover<3->{\only<3>{\color{blue}}\e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(0, \eta_g^2)} \\
+& \qquad \qquad \uncover<5->{\only<5>{\color{blue}}\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\left . \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
+& \qquad \qquad \qquad \uncover<6->{\only<6>{\color{blue}} d \stackrel{\text{}}{\sim} \text{U}(0, d_0)} \\
+& \qquad \qquad \qquad \uncover<7->{\only<7>{\color{blue}} \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\text{shape} = a_\tau, \\text{rate} = b_\tau)} \\
 \end{align*}
 \end{frame}
 
@@ -309,18 +309,18 @@
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
 \phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
 \end{cases} \\ 
-&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\
-& \qquad \uncover<3->{\only<3>{\color{blue}}\phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2)} \\
-& \qquad \qquad \uncover<6->{\only<6>{\color{blue}}\theta_\phi \stackrel{\text{}}{\sim} \text{N}(\theta_\phi \mid 0, \gamma_{\phi }^2)} \\
-& \qquad \qquad \uncover<9->{\only<9>{\color{blue}}\sigma_\phi \stackrel{\text{}}{\sim} \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0})} \\
-& \qquad \uncover<4->{\only<4>{\color{blue}}\alpha_g \stackrel{\text{ind}}{\sim} \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}} \\
-& \qquad \qquad \uncover<7->{\only<7>{\color{blue}}\theta_\alpha \stackrel{\text{}}{\sim} \text{N}(\theta_\alpha \mid 0, \gamma_{\alpha}^2)} \\
-& \qquad \qquad \uncover<10->{\only<10>{\color{blue}}\sigma_\alpha \stackrel{\text{}}{\sim} \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0})} \\
-& \qquad \qquad \uncover<12->{\only<12>{\color{blue}}\pi_\alpha \stackrel{\text{}}{\sim} \text{Beta}(\pi_\alpha \mid a_{\alpha}, b_{\alpha})} \\
-& \qquad \uncover<5->{\only<5>{\color{blue}}\delta_g \stackrel{\text{ind}}{\sim} \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
-& \qquad \qquad \uncover<8->{\only<8>{\color{blue}}\theta_\delta \stackrel{\text{}}{\sim} \text{N}(\theta_\delta \mid 0, \gamma_{\delta}^2)}} \\
-& \qquad \qquad \uncover<11->{\only<11>{\color{blue}}\sigma_\delta \stackrel{\text{}}{\sim} \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0})} \\
-& \qquad \qquad \uncover<13->{\only<13>{\color{blue}}\pi_\delta \stackrel{\text{}}{\sim} \text{Beta}(\pi_\delta \mid a_{\delta}, b_{\delta})} \\
+&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\
+& \qquad \uncover<3->{\only<3>{\color{blue}}\phi_g \stackrel{\text{ind}}{\sim} \text{N}( \theta_\phi, \sigma_\phi^2)} \\
+& \qquad \qquad \uncover<6->{\only<6>{\color{blue}}\theta_\phi \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\phi }^2)} \\
+& \qquad \qquad \uncover<9->{\only<9>{\color{blue}}\sigma_\phi \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\phi 0})} \\
+& \qquad \uncover<4->{\only<4>{\color{blue}}\alpha_g \stackrel{\text{ind}}{\sim} \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}( \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}} \\
+& \qquad \qquad \uncover<7->{\only<7>{\color{blue}}\theta_\alpha \stackrel{\text{}}{\sim} \text{N}(0, \ \gamma_{\alpha}^2)} \\
+& \qquad \qquad \uncover<10->{\only<10>{\color{blue}}\sigma_\alpha \stackrel{\text{}}{\sim} \text{U}( 0, \ \sigma_{\alpha 0})} \\
+& \qquad \qquad \uncover<12->{\only<12>{\color{blue}}\pi_\alpha \stackrel{\text{}}{\sim} \text{Beta}( a_{\alpha}, \ b_{\alpha})} \\
+& \qquad \uncover<5->{\only<5>{\color{blue}}\delta_g \stackrel{\text{ind}}{\sim} \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}( \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
+& \qquad \qquad \uncover<8->{\only<8>{\color{blue}}\theta_\delta \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\delta}^2)}} \\
+& \qquad \qquad \uncover<11->{\only<11>{\color{blue}}\sigma_\delta \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\delta 0})} \\
+& \qquad \qquad \uncover<13->{\only<13>{\color{blue}}\pi_\delta \stackrel{\text{}}{\sim} \text{Beta}( a_{\delta}, b_{\delta})} \\
 \end{align*}
 
 \end{frame}
@@ -341,7 +341,7 @@
 \frametitle{Use these partitions as Gibbs steps.} \small
 
 \begin{align*}
-y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
 \end{align*}
 
 \begin{itemize}
@@ -374,11 +374,11 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
 \phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
 \end{cases} \\ \\
-&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\ 
+&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\ 
 \uncover<2->{\intertext{Consider one chain with $M$ iterations.}}
 &\uncover<3->{P(\text{high-parent heterosis in gene } g) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} > |\alpha_g^{(i)}|)} \\
 &\uncover<4->{P(\text{low-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} < -|\alpha_g^{(i)}|)} \\
-&\uncover<5->{P(\text{mid-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(0<|\delta_g^{(i)}| < |\alpha_g^{(i)}|)}
+&\uncover<5->{P(\text{mid-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(|\delta_g^{(i)}| < |\alpha_g^{(i)}|)}
 \end{align*}
 \end{frame}
 
@@ -388,7 +388,7 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \begin{frame}
 \frametitle{Tons of opportunity for GPU parallelism across genes!}
 \begin{align*}
-y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
 \end{align*}
 
 \begin{itemize}
@@ -407,10 +407,10 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \begin{frame}
 \frametitle{Example: $\phi_g$'s} \small
 \begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-& \qquad \uncover<2->{\phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2)} \\
-& \qquad \qquad \uncover<3->{\theta_\phi \stackrel{\text{}}{\sim} \text{N}(\theta_\phi \mid 0, \gamma_{\phi }^2)} \\
-& \qquad \qquad \uncover<4->{\sigma_\phi \stackrel{\text{}}{\sim} \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0})} \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \qquad \uncover<2->{\phi_g \stackrel{\text{ind}}{\sim} \text{N}( \theta_\phi, \sigma_\phi^2)} \\
+& \qquad \qquad \uncover<3->{\theta_\phi \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\phi }^2)} \\
+& \qquad \qquad \uncover<4->{\sigma_\phi \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\phi 0})} \\
 \end{align*}
 
 \begin{itemize}
@@ -427,7 +427,7 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{
 \begin{frame}
 \frametitle{Tons of opportunity for GPU parallelism across genes!}
 \begin{align*}
-y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
 \end{align*}
 
 \begin{itemize}
@@ -521,13 +521,13 @@ using 1 block of 4 threads.
 \begin{frame}
 \frametitle{Example: $\tau^2$} \scriptsize
 \begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-& \qquad \uncover<2->{ \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2)} \\
-& \qquad \qquad \uncover<3->{\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
-& \qquad \qquad \qquad \uncover<4->{d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0)} \\
-& \qquad \qquad \qquad \uncover<5->{\tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau)} \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \qquad \uncover<2->{ \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}( 0, \eta_g^2)} \\
+& \qquad \qquad \uncover<3->{\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\left . \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
+& \qquad \qquad \qquad \uncover<4->{d \stackrel{\text{}}{\sim} \text{U}( 0, d_0)} \\
+& \qquad \qquad \qquad \uncover<5->{\tau^2 \stackrel{\text{}}{\sim} \text{Gamma}( \text{shape} = a_\tau, \text{rate} = b_\tau)} \\
 \uncover<6->{p(\tau^2 & \mid \cdots)}  \\
-&\uncover<6->{= \text{Gamma} \left ( \tau^2 \ \left \lvert \ \text{shape} =  a_\tau + \frac{Gd}{2} \right ., \ \text{rate} =  b_\tau + \frac{d}{2} {\color{blue} \sum_{g = 1}^G \frac{1}{\eta_g^2}} \right ) }
+&\uncover<6->{= \text{Gamma} \left ( \left . \text{shape} =  a_\tau + \frac{Gd}{2} \right ., \ \text{rate} =  b_\tau + \frac{d}{2} {\color{blue} \sum_{g = 1}^G \frac{1}{\eta_g^2}} \right ) }
 \end{align*}
 
 \begin{itemize}
@@ -546,11 +546,11 @@ using 1 block of 4 threads.
 \begin{frame}
 \frametitle{Example: $d$} \tiny
 \begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-& \qquad \uncover<2->{ \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2)} \\
-& \qquad \qquad \uncover<3->{\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
-& \qquad \qquad \qquad \uncover<4->{d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0)} \\
-& \qquad \qquad \qquad \uncover<5->{\tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau)} \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \qquad \uncover<2->{ \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}( 0, \eta_g^2)} \\
+& \qquad \qquad \uncover<3->{\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\left . \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
+& \qquad \qquad \qquad \uncover<4->{d \stackrel{\text{}}{\sim} \text{U}( 0, d_0)} \\
+& \qquad \qquad \qquad \uncover<5->{\tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau)} \\
 &\uncover<6->{p(d \mid \cdots) \propto \Gamma \left( d/2 \right )^{-G} \left ( \frac{d \cdot \tau^2}{2}\right ) ^ { G d  /2 } \left ({\color{blue} \prod_{g = 1}^G { \eta_g^2} } \right )^{ -(d/2 + 1)} \exp \left (- \frac{d \cdot \tau^2}{2} {\color{blue} \sum_{g = 1}^G \frac{1}{ \eta_g^2} }\right ) I(0 < d < d_0) }
 \end{align*}
 
