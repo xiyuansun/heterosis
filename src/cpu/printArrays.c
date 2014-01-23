@@ -71,4 +71,3 @@ void pf3(num_t *v, int l1, int l2, int l3, const char* m){
     printf("\n"); 
   }
 }
-

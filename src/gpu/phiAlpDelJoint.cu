@@ -16,11 +16,12 @@ __device__ num_t lPhiAlpDelJoint(Chain *a, int g, num_t argPhi, num_t argAlp, nu
     s += a->y[iG(n, g)] * tmp - exp(a->c[n] + 
          a->eps[iG(n, g)] + tmp);
   }
+  ret = s;
 
   /* phi part */
   
   if(!a->phiPrior){
-    ret = s - pow((float) (argPhi - a->thePhi), 2) / (2 * pow((float) a->sigPhi, 2));
+    ret -= pow((float) (argPhi - a->thePhi), 2) / (2 * pow((float) a->sigPhi, 2));
   }
   
   /* alpha part */

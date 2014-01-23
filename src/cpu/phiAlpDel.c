@@ -15,4 +15,4 @@ void samplePhiAlpDel(Chain *a, Config *cfg){ /* host */
     if(cfg->heterosis)
       sampleDel(a, cfg);
   }
-} 
+}

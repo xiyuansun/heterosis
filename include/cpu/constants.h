@@ -13,5 +13,4 @@ typedef int count_t;
 typedef float num_t;
 #define NUM_TF "%0.3f"
 
-
 #endif /* CONSTANTS_H */

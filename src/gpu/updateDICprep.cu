@@ -64,4 +64,3 @@ __host__ void updateDICprep(Chain *a, Config *cfg){
     updateDICprep_kernel2<<<G_GRID, G_BLOCK>>>(a);
   }
 }
-
