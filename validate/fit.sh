@@ -1,0 +1,1 @@
+../bin/heterosis -—data data.txt —-group group.txt —-seed 0 —-hyper —-verbose —-parms —-chains 2
