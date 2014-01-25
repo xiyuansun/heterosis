@@ -1,6 +1,6 @@
 ../bin/heterosis --data data.txt --group group.txt \
   --iter 10000 --chains 3 --seed 0 \
-  --hyper --verbose --parms   \
+  --hyper --verbose --parms --rates  \
   --sigma-c0 1 \
   --d0 10 \
   --a-tau 10 \
