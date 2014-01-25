@@ -1,0 +1,1 @@
+ Rscript -e 'source("../R/functions.r"); gelmanFactors("out")'
