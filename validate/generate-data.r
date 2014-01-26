@@ -17,7 +17,7 @@ parms = list(
 
 sigC0 = 2,
 
-d0 = 1000,
+d0 = 100,
 aTau = 2,
 bTau = 2,
 

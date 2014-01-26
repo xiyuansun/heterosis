@@ -6,11 +6,13 @@ hyper3 = read.table("out/hyper-chain3.txt", head = T)
 if(!file.exists("fig"))
   dir.create("fig")
 
-for(n in names(hyper)){
+iters = (length(hyper1[n][[1]]) - 1000):length(hyper1[n][[1]])
+
+for(n in names(hyper1)){
   pdf(paste("fig/", n, ".pdf", sep=""))
-  plot(x = rep(1:length(hyper1[n][[1]]), 3), y = c(hyper1[n][[1]], hyper2[n][[1]], hyper3[n][[1]]), lty = 1, ylab = n, xlab = "iteration", col = "white")
-  lines(x = 1:length(hyper1[n][[1]]), y = hyper1[n][[1]], col = 1)
-  lines(x = 1:length(hyper2[n][[1]]), y = hyper2[n][[1]], col = 2)
-  lines(x = 1:length(hyper3[n][[1]]), y = hyper3[n][[1]], col = 3)
+  plot(x = rep(iters, 3), y = c(hyper1[n][[1]][iters], hyper2[n][[1]][iters], hyper3[n][[1]][iters]), lty = 1, ylab = n, xlab = "iteration", col = "white")
+  lines(x = iters, y = hyper1[n][[1]], col = 1)
+  lines(x = iters, y = hyper2[n][[1]], col = 2)
+  lines(x = iters, y = hyper3[n][[1]], col = 3)
   dev.off()
 }

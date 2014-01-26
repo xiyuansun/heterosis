@@ -172,7 +172,7 @@ With MCMC samples of these quantities, we can calculate empirical estimates of t
 & \qquad \qquad \sigma_c \stackrel{\text{}}{\sim} \text{U}(\sigma_c \mid 0, \sigma_{c0}) \\
 & \qquad \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2) \\
 & \qquad \qquad \eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right) \\
-& \qquad \qquad \qquad d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0) \\
+& \qquad \qquad \qquad d \stackrel{\text{}}{\sim} \text{U}(d \mid 2, d_0) \\
 & \qquad \qquad \qquad \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
 & \qquad \phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 & \qquad \qquad \theta_\phi \stackrel{\text{}}{\sim} \text{N}(\theta_\phi \mid 0, \gamma_{\phi }^2) \\
@@ -265,7 +265,11 @@ p(\pi_\delta \mid \cdots) &= \text{Beta}(\pi_\delta \mid G - G_\delta + \delta_\
 
 \paragraph{} \indent The following raster plot gives us a more complete idea of which parameters can be jointly sampled:
 
-<<echo=F, cache=T>>=
+\begin{center}
+\includegraphics[scale=.5]{depend.png}
+\end{center}
+
+<<echo=F, eval = F>>=
 library(methods)
 library(ggplot2)
 library(reshape2)
@@ -502,7 +506,7 @@ p \left ( \frac{1}{\eta_g^2} \mid \cdots \right ) = \text{Gamma} \left (\frac{1}
 
 \begin{align*}
 p(d \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \eta_g^2 \mid \text{shape} = \frac{d}{2}, \text{rate} = \frac{d \cdot \tau^2}{2} \right ) \right ] \cdot \text{U}(d \mid 0, d_0) \\ 
-& \propto \prod_{g = 1}^G \left [  \Gamma \left( d/2 \right )^{-1} \left ( \frac{d \cdot \tau^2}{2}\right ) ^ {d  /2 } \left ( { \eta_g^2} \right )^{ -(d/2 + 1)} \exp \left (- \frac{1}{ \eta_g^2}\frac{d \cdot \tau^2}{2} \right ) \right ] I(0 < d < d_0) \\
+& \propto \prod_{g = 1}^G \left [  \Gamma \left( d/2 \right )^{-1} \left ( \frac{d \cdot \tau^2}{2}\right ) ^ {d  /2 } \left ( { \eta_g^2} \right )^{ -(d/2 + 1)} \exp \left (- \frac{1}{ \eta_g^2}\frac{d \cdot \tau^2}{2} \right ) \right ] I(2 < d < d_0) \\
 & \propto \Gamma \left( d/2 \right )^{-G} \left ( \frac{d \cdot \tau^2}{2}\right ) ^ { G d  /2 } \left ( \prod_{g = 1}^G { \eta_g^2} \right )^{ -(d/2 + 1)} \exp \left (- \frac{d \cdot \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \eta_g^2} \right ) I(0 < d < d_0) \\
 \end{align*}
 

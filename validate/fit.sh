@@ -1,17 +1,17 @@
 ../bin/heterosis --data data.txt --group group.txt \
-  --iter 10000 --chains 3 --seed 0 \
-  --hyper --verbose --parms --rates  \
-  --sigma-c0 1 \
-  --d0 10 \
-  --a-tau 10 \
+  --iter 200000 --chains 3 --seed 0 \
+  --hyper --verbose --burnin 190000 \
+  --sigma-c0 2 \
+  --d0 100 \
+  --a-tau 2 \
   --a-alpha 0.5 \
   --a-delta 0.5 \
-  --b-tau 10 \
+  --b-tau 2 \
   --b-alpha 0.5 \
   --b-delta 0.5 \
-  --gamma-phi 1 \
-  --gamma-alpha 1 \
-  --gamma-delta 1 \
-  --sigma-phi0 1 \
-  --sigma-alpha0 1 \
-  --sigma-delta0 1 \
+  --gamma-phi 2\
+  --gamma-alpha 2 \
+  --gamma-delta 2 \
+  --sigma-phi0 2 \
+  --sigma-alpha0 2 \
+  --sigma-delta0 2 \
