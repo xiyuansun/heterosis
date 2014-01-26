@@ -1,6 +1,6 @@
 ../bin/heterosis --data data.txt --group group.txt \
-  --iter 200000 --chains 3 --seed 0 \
-  --hyper --verbose --burnin 190000 \
+  --iter 2000000 --chains 3 --seed 0 \
+  --hyper --verbose --burnin 1950000 \
   --sigma-c0 2 \
   --d0 100 \
   --a-tau 2 \
@@ -15,3 +15,5 @@
   --sigma-phi0 2 \
   --sigma-alpha0 2 \
   --sigma-delta0 2 \
+./gelman.diag.sh
+R CMD BATCH compareParms.r
