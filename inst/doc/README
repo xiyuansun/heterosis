@@ -460,7 +460,7 @@ July 2013
   The following options set initial constants. 
   See inst/doc/method/method.Rnw for details on the model.
 
-  --sigma-c0 [VAL]        (default: 2)
+  --sigma-c0 [VAL]        (default: 2) 
   --d0 [VAL]              (default: 100)
   --a-tau [VAL]           (default: 2)
   --a-alpha [VAL]         (default: 1/2)
