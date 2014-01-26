@@ -51,7 +51,7 @@ Config *config(int argc, char **argv){
   /* default initialization constants */
 
   cfg->sigC0 = 2;
-  cfg->d0 = 1000;
+  cfg->d0 = 100;
   cfg->aTau = 2;
   cfg->aAlp = 0.5;
   cfg->aDel = 0.5;

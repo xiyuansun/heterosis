@@ -460,14 +460,14 @@ July 2013
   The following options set initial constants. 
   See inst/doc/method/method.Rnw for details on the model.
 
-  --sigma-c0 [VAL]        (default: 10) # change to 2
-  --d0 [VAL]              (default: 1000)
-  --a-tau [VAL]           (default: 100) # change to 2
-  --a-alpha [VAL]         (default: 1) # change to 1/2
-  --a-delta [VAL]         (default: 1) # change to 1/2
-  --b-tau [VAL]           (default: 100) # change to 2
-  --b-alpha [VAL]         (default: 1) # change to 1/2
-  --b-delta [VAL]         (default: 1) # change to 1/2
+  --sigma-c0 [VAL]        (default: 2)
+  --d0 [VAL]              (default: 100)
+  --a-tau [VAL]           (default: 2)
+  --a-alpha [VAL]         (default: 1/2)
+  --a-delta [VAL]         (default: 1/2)
+  --b-tau [VAL]           (default: 2)
+  --b-alpha [VAL]         (default: 1/2)
+  --b-delta [VAL]         (default: 1/2)
   --gamma-phi [VAL]       (default: 2)
   --gamma-alpha [VAL]     (default: 2)
   --gamma-delta [VAL]     (default: 2)
