@@ -50,14 +50,14 @@ Config *config(int argc, char **argv){
 
   /* default initialization constants */
 
-  cfg->sigC0 = 10;
+  cfg->sigC0 = 2;
   cfg->d0 = 1000;
-  cfg->aTau = 100;
-  cfg->aAlp = 1;
-  cfg->aDel = 1;
-  cfg->bTau = 100;
-  cfg->bAlp = 1;
-  cfg->bDel = 1;
+  cfg->aTau = 2;
+  cfg->aAlp = 0.5;
+  cfg->aDel = 0.5;
+  cfg->bTau = 2;
+  cfg->bAlp = 0.5;
+  cfg->bDel = 0.5;
   cfg->gamPhi = 2;
   cfg->gamAlp = 2;
   cfg->gamDel = 2;

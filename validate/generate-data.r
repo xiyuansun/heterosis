@@ -17,9 +17,9 @@ parms = list(
 
 sigC0 = 2,
 
-d0 = 10,
-aTau = 10,
-bTau = 10,
+d0 = 1000,
+aTau = 2,
+bTau = 2,
 
 aAlp = 1/2,
 aDel = 1/2,
@@ -27,13 +27,13 @@ aDel = 1/2,
 bAlp = 1/2,
 bDel = 1/2,
 
-gamPhi = 1,
-gamAlp = 1,
-gamDel = 1,
+gamPhi = 2,
+gamAlp = 2,
+gamDel = 2,
 
-sigPhi0 = 1,
-sigAlp0 = 1,
-sigDel0 = 1
+sigPhi0 = 2,
+sigAlp0 = 2,
+sigDel0 = 2
 )
 
 parms$G = 100 # number of genes
@@ -45,7 +45,7 @@ parms$N = length(parms$group)
 parms$sigC = runif(1, 0, parms$sigC0)
 parms$c = rnorm(parms$N, 0, parms$sigC)
 
-parms$d = runif(1, 0, parms$d0)
+parms$d = runif(1, 2, parms$d0)
 parms$tau = sqrt(rgamma(1, shape = parms$aTau, rate = parms$bTau))
 parms$eta = 1/sqrt(rgamma(parms$G, shape = parms$d/2, rate = parms$d * parms$tau^2/2))
 parms$eps = matrix(nrow = parms$G, ncol =parms$ N)
