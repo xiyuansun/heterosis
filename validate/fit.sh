@@ -1,5 +1,5 @@
 ../bin/heterosis --data data.txt --group group.txt \
-  --iter 5000 --chains 3 --seed 518 --hyper --verbose --parms \
+  --iter 10000 --chains 3 --seed 518 --hyper --verbose --parms \
   --sigma-c0 5 \
   --d0 10 \
   --a-tau 2 \
@@ -22,9 +22,10 @@
   --sigma-delta 1.008 \
   --pi-alpha 0.175 \
   --pi-delta 0.3937 \
-
+   --sigma-phi0 5
+   
 # --theta-phi 0.6846 \
-# --sigma-phi0 5 \
+#
 
   
 ./gelman-diag.sh
