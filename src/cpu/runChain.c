@@ -30,17 +30,17 @@ void runChain(Chain *a, Config *cfg){
     sampleTau(a, cfg);
     samplePiAlp(a, cfg);
     samplePiDel(a, cfg);
-    sampleD(a, cfg); */
+    sampleD(a, cfg); 
     sampleThePhi(a, cfg);
- /*   sampleTheAlp(a, cfg);
+    sampleTheAlp(a, cfg);
     sampleTheDel(a, cfg);
-    sampleSigC(a, cfg);
+    sampleSigC(a, cfg); */
     sampleSigPhi(a, cfg);
-    sampleSigAlp(a, cfg);
+ /*   sampleSigAlp(a, cfg);
     sampleSigDel(a, cfg);
     sampleEta(a, cfg);
     sampleEps(a, cfg);
-    samplePhiAlpDel(a, cfg); */
+    samplePhiAlpDel(a, cfg); */ 
     
     intermResults(a, cfg);
     

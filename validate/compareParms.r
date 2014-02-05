@@ -14,7 +14,15 @@ for(i in dim(hyper2)[2]:1)
 for(i in dim(hyper3)[2]:1)
   if(any(hyper3[,i] == "."))
     hyper3 = hyper3[,-i]
-  
+ 
+if(is.null(dim(hyper1)))
+  hyper1 = data.frame(parm = hyper1)
+
+if(is.null(dim(hyper1)))
+  hyper2 = data.frame(parm = hyper2)
+
+if(is.null(dim(hyper1)))
+  hyper3 = data.frame(parm = hyper3)
 
 if(!file.exists("fig"))
   dir.create("fig")
@@ -25,9 +33,9 @@ iters = 1:length(hyper1[1][[1]])
 for(n in names(hyper1)){
   pdf(paste("fig/", n, ".pdf", sep=""))
   plot(x = rep(iters, 3), y = c(hyper1[n][[1]][iters], hyper2[n][[1]][iters], hyper3[n][[1]][iters]), lty = 1, ylab = n, xlab = "iteration", col = "white")
-  lines(x = iters, y = hyper1[n][[1]][iters], col = 1)
-  lines(x = iters, y = hyper2[n][[1]][iters], col = 2)
-  lines(x = iters, y = hyper3[n][[1]][iters], col = 3)
+  points(x = iters, y = hyper1[n][[1]][iters], col = 1)
+  points(x = iters, y = hyper2[n][[1]][iters], col = 2)
+  points(x = iters, y = hyper3[n][[1]][iters], col = 3)
   dev.off()
 }
 

@@ -1,7 +1,6 @@
 %\documentclass{beamer}
 \documentclass[handout]{beamer}
-\usetheme{Marburg}
-\useoutertheme{infolines}
+\usetheme{Frankfurt}
 \newcommand{\answers}{1}
 
 \usepackage{amsmath}
@@ -80,6 +79,7 @@
 
 \begin{document}
 
+\setcounter{subsection}{1}
 \begin{frame}
 \titlepage
  \end{frame}
@@ -279,6 +279,7 @@
 
 
 \section{The model}
+\setcounter{subsection}{1}
 
 \begin{frame}
 \frametitle{The model}
@@ -295,7 +296,7 @@
 & \qquad \uncover<3->{\only<3>{\color{blue}}\e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(0, \eta_g^2)} \\
 & \qquad \qquad \uncover<5->{\only<5>{\color{blue}}\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\left . \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
 & \qquad \qquad \qquad \uncover<6->{\only<6>{\color{blue}} d \stackrel{\text{}}{\sim} \text{U}(0, d_0)} \\
-& \qquad \qquad \qquad \uncover<7->{\only<7>{\color{blue}} \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\text{shape} = a_\tau, \\text{rate} = b_\tau)} \\
+& \qquad \qquad \qquad \uncover<7->{\only<7>{\color{blue}} \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau)} \\
 \end{align*}
 \end{frame}
 
@@ -573,11 +574,13 @@ using 1 block of 4 threads.
 
 \section{The software}
 
+\setcounter{subsection}{1}
+
+
 \begin{frame}
 \frametitle{The software}
 \begin{itemize}
-\item Ordinary C and GPU-accelerated versions, along with an R package wrapper, are available for download at \url{https://github.com/wlandau/heterosis}.
-\pause \item Time for a demo$\ldots$
+\item In progress...
 \end{itemize}
 
 \end{frame}
