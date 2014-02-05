@@ -22,7 +22,7 @@ __global__ void sampleThePhi_kernel2(Chain *a){ /* kernel <<<1, 1>>> */
   num_t den = (a->G * gs + ss);
 
   num_t m = gs * a->s1 / den;
-  num_t s = gs * ss / den;
+  num_t s = sqrt(gs * ss / den);
 
   a->thePhi = rnormalDevice(a, 1, m, s);
 }

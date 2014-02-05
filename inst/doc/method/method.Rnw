@@ -172,7 +172,7 @@ With MCMC samples of these quantities, we can calculate empirical estimates of t
 & \qquad \qquad \sigma_c \stackrel{\text{}}{\sim} \text{U}(\sigma_c \mid 0, \sigma_{c0}) \\
 & \qquad \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2) \\
 & \qquad \qquad \eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right) \\
-& \qquad \qquad \qquad d \stackrel{\text{}}{\sim} \text{U}(d \mid 2, d_0) \\
+& \qquad \qquad \qquad d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0) \\
 & \qquad \qquad \qquad \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
 & \qquad \phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 & \qquad \qquad \theta_\phi \stackrel{\text{}}{\sim} \text{N}(\theta_\phi \mid 0, \gamma_{\phi }^2) \\

@@ -45,7 +45,7 @@ void lD_kernel4(Chain *a, int newArg){ /* kernel <<<1, 1>>> */
   ret = -((num_t) a->G) * lgamma(arg/2.0) + (((num_t) a->G) * arg / 2.0) * log(tmp);
   ret -= (arg/2.0 + 1.0) * a->s1 + tmp * a->s2;
   
-  if(arg < 2.0 || arg > a->d0)
+  if(arg < 0.0 || arg > a->d0)
     ret = NUM_TMIN;
 
   if(newArg){
