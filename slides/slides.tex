@@ -317,11 +317,11 @@
 & \qquad \uncover<3->{\only<3>{\color{blue}}\phi_g \stackrel{\text{ind}}{\sim} \text{N}( \theta_\phi, \sigma_\phi^2)} \\
 & \qquad \qquad \uncover<6->{\only<6>{\color{blue}}\theta_\phi \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\phi }^2)} \\
 & \qquad \qquad \uncover<9->{\only<9>{\color{blue}}\sigma_\phi \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\phi 0})} \\
-& \qquad \uncover<4->{\only<4>{\color{blue}}\alpha_g \stackrel{\text{ind}}{\sim} \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}( \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)}} \\
+& \qquad \uncover<4->{\only<4>{\color{blue}} \alpha_g \stackrel{\text{ind}}{\sim} (1-I(\alpha_g)) \cdot \pi_\alpha + I(\alpha_g) \cdot (1- \pi_\alpha) \cdot \text{N}(\alpha_g \mid  \theta_\alpha, \sigma_\alpha^2)} \\
 & \qquad \qquad \uncover<7->{\only<7>{\color{blue}}\theta_\alpha \stackrel{\text{}}{\sim} \text{N}(0, \ \gamma_{\alpha}^2)} \\
 & \qquad \qquad \uncover<10->{\only<10>{\color{blue}}\sigma_\alpha \stackrel{\text{}}{\sim} \text{U}( 0, \ \sigma_{\alpha 0})} \\
 & \qquad \qquad \uncover<12->{\only<12>{\color{blue}}\pi_\alpha \stackrel{\text{}}{\sim} \text{Beta}( a_{\alpha}, \ b_{\alpha})} \\
-& \qquad \uncover<5->{\only<5>{\color{blue}}\delta_g \stackrel{\text{ind}}{\sim} \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}( \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\
+& \qquad \uncover<5->{\only<5>{\color{blue}}\delta_g \stackrel{\text{ind}}{\sim} (1-I(\delta_g)) \cdot \pi_\delta + I(\delta_g) \cdot (1- \pi_\delta) \cdot \text{N}(\delta_g \mid  \theta_\delta, \sigma_\delta^2) \\
 & \qquad \qquad \uncover<8->{\only<8>{\color{blue}}\theta_\delta \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\delta}^2)}} \\
 & \qquad \qquad \uncover<11->{\only<11>{\color{blue}}\sigma_\delta \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\delta 0})} \\
 & \qquad \qquad \uncover<13->{\only<13>{\color{blue}}\pi_\delta \stackrel{\text{}}{\sim} \text{Beta}( a_{\delta}, b_{\delta})} \\

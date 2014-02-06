@@ -167,23 +167,23 @@ With MCMC samples of these quantities, we can calculate empirical estimates of t
 \section{The Model} \label{sec:model}
 
 \begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-&\qquad c_n \stackrel{\text{ind}}{\sim} \text{N}(c_n \mid 0, \sigma_c^2) \\
-& \qquad \qquad \sigma_c \stackrel{\text{}}{\sim} \text{U}(\sigma_c \mid 0, \sigma_{c0}) \\
-& \qquad \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(\e_{g, n} \mid 0, \eta_g^2) \\
-& \qquad \qquad \eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\eta_g^2 \ \left | \ \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right) \\
-& \qquad \qquad \qquad d \stackrel{\text{}}{\sim} \text{U}(d \mid 0, d_0) \\
-& \qquad \qquad \qquad \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\tau^2 \mid \text{shape} = a_\tau, \text{rate} = b_\tau) \\
-& \qquad \phi_g \stackrel{\text{ind}}{\sim} \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
-& \qquad \qquad \theta_\phi \stackrel{\text{}}{\sim} \text{N}(\theta_\phi \mid 0, \gamma_{\phi }^2) \\
-& \qquad \qquad \sigma_\phi \stackrel{\text{}}{\sim} \text{U}(\sigma_\phi \mid 0, \sigma_{\phi 0}) \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+&\qquad c_n \stackrel{\text{ind}}{\sim} \text{N}(0, \sigma_c^2) \\
+& \qquad \qquad \sigma_c \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{c0}) \\
+& \qquad \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(0, \eta_g^2) \\
+& \qquad \qquad \eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\text{shape} = \frac{d}{2}, \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right) \\
+& \qquad \qquad \qquad d \stackrel{\text{}}{\sim} \text{U}(0, d_0) \\
+& \qquad \qquad \qquad \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\text{shape} = a_\tau, \text{rate} = b_\tau) \\
+& \qquad \phi_g \stackrel{\text{ind}}{\sim} \text{N}(\theta_\phi, \sigma_\phi^2) \\
+& \qquad \qquad \theta_\phi \stackrel{\text{}}{\sim} \text{N}(0, \gamma_{\phi }^2) \\
+& \qquad \qquad \sigma_\phi \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{\phi 0}) \\
 & \qquad \alpha_g \stackrel{\text{ind}}{\sim} \pi_\alpha^{1-I(\alpha_g)}[(1- \pi_\alpha)\text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)]^{I(\alpha_g)} \\
-& \qquad \qquad \theta_\alpha \stackrel{\text{}}{\sim} \text{N}(\theta_\alpha \mid 0, \gamma_{\alpha}^2) \\
-& \qquad \qquad \sigma_\alpha \stackrel{\text{}}{\sim} \text{U}(\sigma_\alpha \mid 0, \sigma_{\alpha 0}) \\
-& \qquad \qquad \pi_\alpha \stackrel{\text{}}{\sim} \text{Beta}(\pi_\alpha \mid a_{\alpha}, b_{\alpha}) \\
-& \qquad \delta_g \stackrel{\text{ind}}{\sim} \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\& \qquad \qquad \theta_\delta \stackrel{\text{}}{\sim} \text{N}(\theta_\delta \mid 0, \gamma_{\delta}^2) \\
-& \qquad \qquad \sigma_\delta \stackrel{\text{}}{\sim} \text{U}(\sigma_\delta \mid 0, \sigma_{\delta 0}) \\
-& \qquad \qquad \pi_\delta \stackrel{\text{}}{\sim} \text{Beta}(\pi_\delta \mid a_{\delta}, b_{\delta}) \\
+& \qquad \qquad \theta_\alpha \stackrel{\text{}}{\sim} \text{N}(0, \gamma_{\alpha}^2) \\
+& \qquad \qquad \sigma_\alpha \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{\alpha 0}) \\
+& \qquad \qquad \pi_\alpha \stackrel{\text{}}{\sim} \text{Beta}(a_{\alpha}, b_{\alpha}) \\
+& \qquad \delta_g \stackrel{\text{ind}}{\sim} \pi_\delta^{1-I(\delta_g)}[(1- \pi_\delta)\text{N}(\delta_g \mid \theta_\delta, \sigma_\delta^2)]^{I(\delta_g)} \\& \qquad \qquad \theta_\delta \stackrel{\text{}}{\sim} \text{N}(0, \gamma_{\delta}^2) \\
+& \qquad \qquad \sigma_\delta \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{\delta 0}) \\
+& \qquad \qquad \pi_\delta \stackrel{\text{}}{\sim} \text{Beta}(a_{\delta}, b_{\delta}) \\
 \end{align*}
 
 where:
