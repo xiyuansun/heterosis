@@ -23,7 +23,7 @@
   --pi-alpha 0.175 \
   --pi-delta 0.3937 \
   --theta-phi 0.6846 \
-# --sigma-phi 1.025 \
+  --sigma-phi 1.025 \
 
   
 ./gelman-diag.sh

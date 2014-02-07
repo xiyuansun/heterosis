@@ -34,13 +34,13 @@ void runChain(Chain *a, Config *cfg){
     sampleThePhi(a, cfg);
     sampleTheAlp(a, cfg);
     sampleTheDel(a, cfg);
-    sampleSigC(a, cfg); */
+    sampleSigC(a, cfg); 
     sampleSigPhi(a, cfg);
- /*   sampleSigAlp(a, cfg);
+    sampleSigAlp(a, cfg);
     sampleSigDel(a, cfg);
     sampleEta(a, cfg);
-    sampleEps(a, cfg);
-    samplePhiAlpDel(a, cfg); */ 
+    sampleEps(a, cfg); */
+    samplePhiAlpDel(a, cfg);  
     
     intermResults(a, cfg);
     
