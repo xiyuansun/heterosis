@@ -3,6 +3,7 @@
 
 #define BUF 256
 #define MAXROW 16384
+#define EPS 0.001
 #define NUM_TMIN (-1.0/0.0)
 #define M_PI 3.1415926535897932384626433832795028841971693993751058
 #define MAX_NG ((N > G) ? N : G)
