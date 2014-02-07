@@ -387,84 +387,99 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n
 \end{frame}
 
 
-\subsection{GPU parallelism}
+\section{Acceleration with GPUs}
 
-\begin{frame}
-\frametitle{Tons of opportunity for GPU parallelism across genes!}
-\begin{align*}
-y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
-\end{align*}
+\subsection{An aside on GPUs}
 
-\begin{itemize}
-\item Sample in parallel:
-\begin{itemize}
-\pause \item $\phi_g$'s
-\pause \item $\alpha_g$'s
-\pause \item $\delta_g$'s
-\pause \item $\e_{g, n}$'s 
-\pause \item $\eta_{g}$'s 
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-
-% INSERT CUDA SLIDES HERE
-
-
-\begin{frame}
-\frametitle{Example: $\phi_g$'s} \small
-\begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-& \qquad \uncover<2->{\phi_g \stackrel{\text{ind}}{\sim} \text{N}( \theta_\phi, \sigma_\phi^2)} \\
-& \qquad \qquad \uncover<3->{\theta_\phi \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\phi }^2)} \\
-& \qquad \qquad \uncover<4->{\sigma_\phi \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\phi 0})} \\
-\end{align*}
+\begin{frame}[fragile]
+\frametitle{The single instruction, multiple data (SIMD) paradigm}
 
 \begin{itemize}
-\uncover<5->{\item Using parallel random walk Metropolis steps, sample the $\phi_g$'s from their full conditional distributions,}
-\end{itemize}
+\pause \item SIMD: apply the same command to multiple places in a dataset. 
 
-\begin{align*}
-\uncover<6->{p(\phi_g \mid} & \uncover<6->{ \cdots) \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) \right . \right .}  \\
-&\uncover<6->{\left . \left . \frac{}{}- \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right )}
-\end{align*}
-\end{frame}
+\pause \begin{lstlisting}
+for(i = 0; i < 1e6; ++i)
+  a[i] = b[i] + c[i];
+\end{lstlisting}
 
 
-\begin{frame}
-\frametitle{Tons of opportunity for GPU parallelism across genes!}
-\begin{align*}
-y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
-\end{align*}
+\pause \item On CPUs, the iterations of the loop run sequentially.
 
-\begin{itemize}
-\pause \item Use {\color{blue} \bf parallel reductions} to calculate sufficient statistics for:
-\begin{itemize}
-\pause \item $c_n$'s
-\pause \item $\tau$, $d$
-\pause \item $\theta_\phi$, $\theta_\alpha$, $\theta_\delta$
-\pause \item $\sigma_\phi$, $\sigma_\alpha$, $\sigma_\delta$,  $\sigma_c$ 
-\pause \item $\pi_\alpha$, $\pi_\delta$
-\end{itemize}
+\pause \item With GPUs, we can easily run all 1,000,000 iterations simultaneously.
+
+\pause \begin{lstlisting}
+i = threadIdx.x;
+a[i] = b[i] + c[i];
+\end{lstlisting}
+
+\pause \item We can similarly \emph{parallelize} a lot more than just loops.
 \end{itemize}
 \end{frame}
 
 
+\begin{frame}
+\frametitle{CPU / GPU cooperation}
 
+\begin{itemize}
+\item The CPU (``host") is in charge.
+\uncover<2->{\item The CPU sends computationally intensive instruction sets to the GPU (``device") just like a human uses a pocket calculator.}
+\end{itemize}
 
-
-
-
-
-
+\begin{center}
+\includegraphics[scale=.8]{fig/communication.png}
+\end{center}
+\end{frame}
 
 
 \begin{frame}
-\frametitle{Pairwise summation: an example reduction}
+\frametitle{How GPU parallelism works}
+\begin{enumerate}
+\item The CPU sends a command called a {\bf kernel} to a GPU.
+\pause \item The GPU executes several duplicate realizations of this command, called {\bf threads}.
+\begin{itemize}
+\pause \item These threads are grouped into bunches called {\bf blocks}.
+\pause \item The sum total of all threads in a kernel is called a {\bf grid}.
+\end{itemize}
+\end{enumerate}
 
 \begin{itemize}
-\item Let's take the pairwise sum of the vector,
+\item Toy example:
+\begin{itemize}
+\item CPU says: ``Hey, GPU. Sum pairs of adjacent numbers. Use the array, (1, 2, 3, 4, 5, 6, 7, 8)."
+\pause \item GPU thinks: ``Sum pairs of adjacent numbers" is a kernel.
+\pause \item The GPU spawns 2 blocks, each with 2 threads:
+\end{itemize}
+\end{itemize}
+
+\pause \begin{center}
+\begin{tabular}{c|cc|cc}
+Block  & \multicolumn{2}{c|}{0} &  \multicolumn{2}{c}{1} \\ \hline
+Thread & 0 & 1 & 0 & 1  \\ \hline
+Action & 1 + 2 & 3 + 4 & 5 + 6 & 7 + 8 \\
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+\pause \item I could have also used 1 block with 4 threads and given the threads different pairs of numbers.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[scale=.7]{fig/gridBlocksThreads.jpg}
+\end{center}
+\end{frame}
+
+
+\subsection{Parallel reductions}
+
+\begin{frame}
+\frametitle{Parallel reductions}
+
+\begin{itemize}
+\item A {\bf reduction} is an operation on a vector that produces a scalar. 
+\pause \item Repeatedly apply a binary operator to pairs of elements in the vector to get the scalar.
+\pause \item Let's take the pairwise sum of the vector,
 
 \begin{align*}
 (5, 2, -3, 1, 1, 8, 2, 6)
@@ -519,6 +534,97 @@ using 1 block of 4 threads.
 \frametitle{Pairwise summation: an example reduction}
 \includegraphics[scale=.25]{fig/psum9.pdf}
 \end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{GPU parallelism in the model}
+
+
+\begin{frame}
+\frametitle{Tons of opportunity for GPU parallelism across genes!}
+\begin{align*}
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
+\end{align*}
+
+\begin{itemize}
+\item Sample collections of conditionally independent parameters in parallel:
+\begin{itemize}
+\pause \item $\phi_g$'s
+\pause \item $\alpha_g$'s
+\pause \item $\delta_g$'s
+\pause \item $\e_{g, n}$'s 
+\pause \item $\eta_{g}$'s 
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Example: $\phi_g$'s} \small
+\begin{align*}
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+& \qquad \uncover<2->{\phi_g \stackrel{\text{ind}}{\sim} \text{N}( \theta_\phi, \sigma_\phi^2)} \\
+& \qquad \qquad \uncover<3->{\theta_\phi \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\phi }^2)} \\
+& \qquad \qquad \uncover<4->{\sigma_\phi \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\phi 0})} \\
+\end{align*}
+
+\begin{itemize}
+\uncover<5->{\item Using parallel random walk Metropolis steps, sample the $\phi_g$'s from their full conditional distributions,}
+\end{itemize}
+
+\begin{align*}
+\uncover<6->{p(\phi_g \mid} & \uncover<6->{ \cdots) \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) \right . \right .}  \\
+&\uncover<6->{\left . \left . \frac{}{}- \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right )}
+\end{align*}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Tons of opportunity for GPU parallelism across genes!}
+\begin{align*}
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
+\end{align*}
+
+\begin{itemize}
+\pause \item Use {\color{blue} \bf parallel reductions} to calculate sufficient statistics for:
+\begin{itemize}
+\pause \item $c_n$'s
+\pause \item $\tau$, $d$
+\pause \item $\theta_\phi$, $\theta_\alpha$, $\theta_\delta$
+\pause \item $\sigma_\phi$, $\sigma_\alpha$, $\sigma_\delta$,  $\sigma_c$ 
+\pause \item $\pi_\alpha$, $\pi_\delta$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -588,15 +694,6 @@ using 1 block of 4 threads.
 \frametitle{The software}
 \begin{itemize}
 \item In progress...
-\end{itemize}
-
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Thanks for coming.}
-\begin{itemize}
-\item Slides and video will be available at \url{http://will-landau.com/research.html}.
 \end{itemize}
 \end{frame}
 

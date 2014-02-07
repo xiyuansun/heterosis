@@ -1,5 +1,5 @@
 ../bin/heterosis --data data.txt --group group.txt \
-  --iter 10000 --chains 3 --seed 50 --hyper --verbose \
+  --iter 10000 --chains 3 --seed 50 --verbose --hyper --parms \
   --sigma-c0 5 \
   --d0 10 \
   --a-tau 2 \
