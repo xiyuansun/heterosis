@@ -1,5 +1,5 @@
 ../bin/heterosis --data data.txt --group group.txt \
-  --iter 10000 --chains 3 --seed 50 --verbose --hyper --parms \
+  --iter 10000 --chains 3 --seed 2 --verbose --hyper --parms \
   --sigma-c0 5 \
   --d0 10 \
   --a-tau 2 \
@@ -22,9 +22,8 @@
   --sigma-delta 1.008 \
   --pi-alpha 0.175 \
   --pi-delta 0.3937 \
-  --theta-phi 0.6846 \
   --sigma-phi 1.025 \
-
+  --theta-phi 0.6846 \
   
 ./gelman-diag.sh
 R CMD BATCH compareParms.r
