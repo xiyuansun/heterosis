@@ -43,8 +43,8 @@ void runChain(Chain *a, Config *cfg){
     sampleSigC(a, cfg);
         */
      
-    sampleC(a, cfg);    
-    /*samplePhiAlpDel(a, cfg);  */
+    /*sampleC(a, cfg);    */
+    samplePhiAlpDel(a, cfg);  
     
     intermResults(a, cfg);
     

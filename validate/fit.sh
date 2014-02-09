@@ -28,4 +28,6 @@
 ./gelman-diag.sh
 # R CMD BATCH compareParms.r 
 # R CMD BATCH phi-alp-del.r 
-R CMD BATCH c.r
+# R CMD BATCH c.r
+# R CMD BATCH phi.r
+R CMD BATCH alp.r
