@@ -1,5 +1,5 @@
 ../bin/heterosis --data data.txt --group group.txt \
-  --iter 10000 --chains 3 --seed 2 --verbose --hyper --parms \
+  --iter 5000 --chains 3 --seed 2 --verbose --hyper --parms \
   --sigma-c0 5 \
   --d0 10 \
   --a-tau 2 \
@@ -27,3 +27,4 @@
   
 ./gelman-diag.sh
 R CMD BATCH compareParms.r
+R CMD BATCH phi-alp-del.r
