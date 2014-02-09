@@ -44,7 +44,7 @@ void runChain(Chain *a, Config *cfg){
         */
      
     sampleC(a, cfg);    
-    samplePhiAlpDel(a, cfg);  
+    /*samplePhiAlpDel(a, cfg);  */
     
     intermResults(a, cfg);
     

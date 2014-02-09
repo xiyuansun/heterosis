@@ -26,5 +26,6 @@
   --theta-phi 0.6846 \
   
 ./gelman-diag.sh
-R CMD BATCH compareParms.r
-R CMD BATCH phi-alp-del.r
+# R CMD BATCH compareParms.r 
+# R CMD BATCH phi-alp-del.r 
+R CMD BATCH c.r

@@ -70,7 +70,7 @@ void sampleC_kernel2(Chain *a){ /* kernel <<<1, N>>> */
     if(lu < lp){ /* accept */
       a->c[n] = a->New[n];
       a->tuneC[n] *= 1.1; /* Increase the proposal variance to avoid  
-                                       gettiG stuck in a mode */
+                                       getting  stuck in a mode */
                                        
       if(a->m > a->burnin)                                 
         ++a->accC[n];
