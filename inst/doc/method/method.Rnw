@@ -798,9 +798,94 @@ p &= \min \left ( 1,  \ \frac{p(\theta^* \mid \cdots) q(\theta^{(i)})}{p(\theta^
 We set $\theta^{(i + 1)} = \theta^*$ with probability $p$ and $\theta^{(i + 1)} = \theta^{(i)}$ with probability $1-p$. \q
 
 
+In this approach, all that remains is to find $\wh{\theta}$. 
+
+
+\subsection{Calculating $\wh{c}_n$}
+
+Let $g(c_n)$ be the kernel of the log full conditional density of $c_n$. Then,
+
+\begin{align*}
+g(c_n) &= c_n G \ov{y}_{.n} - \exp(c_n) \sum_{g = 1}^G \exp(\e_{g, n} + \mu(g, n)) - \frac{c_n^2}{2 \sigma_c^2}
+\end{align*}
+
+Differentiating,
+
+\begin{align*}
+g'(c_n) &= G \ov{y}_{.n} - \exp(c_n) \sum_{g = 1}^G \exp(\e_{g, n} + \mu(g, n)) - \frac{c_n}{\sigma_c^2}
+\end{align*}
+
+We let $\wh{c}_n$ be the root of this derivative.
+
+\begin{align*}
+0 &= G \ov{y}_{.n} - \exp(\wh{c}_n) \sum_{g = 1}^G \exp(\e_{g, n} + \mu(g, n)) - \frac{\wh{c}_n}{\sigma_c^2}
+\end{align*}
+
+Using a quadratic approximation to the exponential function,
+
+\begin{align*}
+0 &= G \ov{y}_{.n} - \left (1 + \wh{c}_n + \frac{\wh{c}_n^2}{2} \right ) \underbrace{ \sum_{g = 1}^G \exp(\e_{g, n} + \mu(g, n))}_S - \frac{\wh{c}_n}{\sigma_c^2} \\
+&= \left (G \ov{y}_{.n} - S \right ) + \left (-S - \frac{1}{\sigma_c^2} \right ) \wh{c}_n + \left ( \frac{S}{2} \right ) \wh{c}_n^2
+\end{align*}
+
+Using the quadratic formula, we get
+
+\begin{align*}
+\wh{c}_n &= \frac{S + \frac{1}{\sigma_c^2} \pm \sqrt{ \left (S + \frac{1}{\sigma_c^2} \right )^2 - 2 S (G \ov{y}_{.n} -S)}}{S}
+\end{align*}
+
+In practice, I will use the root with the higher value of $g(\wh{c}_n)$.
 
 
 
+\subsection{Calculating $\wh{\e}_{g, n}$}
+
+
+
+Let $g(\e_{g, n})$ be the kernel of the log full conditional density of $\e_{g, n}$.
+
+\begin{align*}
+g(\e_{g, n}) &= y_{g, n} \e_{g, n} - \exp (c_n + \e_{g, n} + \mu(g, n)) - \frac{\e_{g, n}^2}{2 \eta_g^2} \\ 
+&= y_{g, n} \e_{g, n} - \exp (\e_{g,n}) \exp (c_n + \mu(g, n)) - \frac{\e_{g, n}^2}{2 \eta_g^2} \\ 
+\end{align*}
+
+Differentiating with respect to $\e_{g, n}$,
+
+\begin{align*}
+g(\e_{g, n}) &= y_{g, n} -  \exp (\e_{g,n}) \exp (c_n + \mu(g, n)) - \frac{\e_{g, n}}{\eta_g^2}
+\end{align*}
+
+We let $\wh{\e}_{g, n}$ be the root of this derivative.
+
+\begin{align*}
+0 &= y_{g, n} - \exp (\wh{\e}_{g,n}) \exp (c_n + \mu(g, n)) - \frac{\wh{\e}_{g, n}}{\eta_g^2}
+\end{align*}
+
+Taking the quadratic approximation to the exponential,
+
+\begin{align*}
+0 &= y_{g, n} - \left ( 1  + \wh{\e}_{g,n} + \frac{\wh{\e}_{g, n}}{2}\right ) \underbrace{\exp (c_n + \mu(g, n))}_{S} - \frac{\wh{\e}_{g, n}}{\eta_g^2} \\
+&= (y_{g, n} - S) + \left (-S - \frac{1}{\eta_g^2} \right ) \wh{\e}_{g, n} + \left (\frac{
+S}{2} \right ) \wh{\e}_{g, n}^2
+\end{align*}
+
+Using the quadratic formula,
+
+\begin{align*}
+\wh{\e}_{g, n} &= \frac{\left (S + \frac{1}{\eta_g^2} \right )  \pm \sqrt{ \left (S + \frac{1}{\eta_g^2} \right )^2 - 2S(y_{g, n} - S)    }   }{S}
+\end{align*}
+
+In practice, I will use the root with the higher value of $g(\wh{\e}_{g, n})$
+
+\subsection{Calculating $\wh{\phi}_g$}
+
+
+
+Let $g(\phi_g)$ be the kernel of the log  full conditional density of $\phi_g$. Then,
+
+\begin{align*}
+g(\phi_g) &= \sum_{n = 1}^N \left [  y_{g, n} \mu(g, n) - \exp(c_n + \e_{g, n} - \mu(g, n)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 {\sigma_\phi}^2}
+\end{align*}
 
 
 
