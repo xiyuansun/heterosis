@@ -61,9 +61,9 @@ Config *config(int argc, char **argv){
   cfg->gamPhi = 2;
   cfg->gamAlp = 2;
   cfg->gamDel = 2;
-  cfg->sigPhi0 = 2;
-  cfg->sigAlp0 = 2;
-  cfg->sigDel0 = 2;
+  cfg->sigPhi0 = 5;
+  cfg->sigAlp0 = 5;
+  cfg->sigDel0 = 5;
   
   /* default: don't hold hyperparameters constant */
   

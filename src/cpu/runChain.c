@@ -25,26 +25,28 @@ void runChain(Chain *a, Config *cfg){
     
     if(cfg->verbose)
       printf("    iter %d | ", m + 1);
-    /*
 
-    sampleTau(a, cfg);
-    samplePiAlp(a, cfg);
-    samplePiDel(a, cfg);
-    sampleD(a, cfg); 
-    sampleThePhi(a, cfg);
-    sampleTheAlp(a, cfg);
-    sampleTheDel(a, cfg);
-    sampleSigC(a, cfg); 
-    sampleSigPhi(a, cfg);
-    sampleSigAlp(a, cfg);
-    sampleSigDel(a, cfg); 
-    sampleEta(a, cfg); 
-    sampleEps(a, cfg); 
-    sampleSigC(a, cfg);
-        */
-     
-    /*sampleC(a, cfg);    */
+/*    sampleC(a, cfg); */
+    sampleEps(a, cfg);
     samplePhiAlpDel(a, cfg);  
+
+/*    sampleSigC(a, cfg); */
+
+    sampleEta(a, cfg); 
+
+    sampleThePhi(a, cfg);
+    sampleSigPhi(a, cfg);            
+
+    sampleTheAlp(a, cfg);
+    sampleSigAlp(a, cfg);
+    samplePiAlp(a, cfg);
+
+    sampleTheDel(a, cfg);
+    sampleSigDel(a, cfg); 
+    samplePiDel(a, cfg);
+
+    sampleD(a, cfg);         
+    sampleTau(a, cfg);
     
     intermResults(a, cfg);
     

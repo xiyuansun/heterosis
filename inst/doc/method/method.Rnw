@@ -753,6 +753,49 @@ p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + a_\tau, \ G_\delta + b_\t
 
 
 
+\section{Using normal approximations to the full conditional distributions to improve Metropolis proposals}
+
+The full conditional densities of the $c_n$'s, $\e_{g, n}$'s, and $\phi_g$'s are in the form of a Poisson density times a normal density. When sampling from these full conditionals in the Metropolis-Hastings algorithm, we can uses normal approximations to these full conditionals as proposal distributions.  \q
+
+Let $g(\theta) = \log (p(\theta \mid \cdots))$ be the log full conditional density of some parameter, $\theta$. Let $\wh{\theta}$ be some point estimate of $\theta$ (for example, the MLE). Then, a Taylor series approximation gives us
+
+\begin{align*}
+g(\theta) &\approx g(\wh{\theta}) + g'(\wh{\theta})(\theta - \wh{\theta}) + \frac{g''(\wh{\theta})}{2} (\theta - \wh{\theta})^2 \\
+&= g(\wh{\theta}) + g'(\wh{\theta}) \theta - g'(\wh{\theta}) \wh{\theta} + \frac{g''(\wh{\theta})}{2} \theta^2 - g''(\wh{\theta}) \wh{\theta} \theta + \frac{g''(\wh{\theta})}{2} \wh{\theta}^2 \\
+&= \underbrace{\left [ g(\wh{\theta}) - g'(\wh{\theta}) \wh{\theta} + \frac{g''(\wh{\theta})}{2} \wh{\theta}^2 \right ]}_{A} + \underbrace{\left [ g'(\wh{\theta}) - g''(\wh{\theta}) \wh{\theta} \right ]}_{B} + \frac{g''(\wh{\theta})}{2} \theta^2 \\
+&= A \left ( \theta + \frac{B}{2A} \right )^2 + C - \frac{B^2}{4A} 
+\end{align*}
+
+That means
+
+\begin{align*}
+\exp(g(\theta)) &\approx \exp \left [ A \left ( \theta + \frac{B}{2A} \right )^2 + C - \frac{B^2}{4A} \right ] \\
+&\propto \exp \left [ A \left ( \theta + \frac{B}{2A} \right )^2 \right ] \\ 
+&= \exp \left [ \frac{(\theta + \frac{B}{2A})^2}{2(2A) \nv} \right ]  \\
+&\propto N \left ( -\frac{B}{2A}, \ \frac{1}{2A} \right ) \\
+\end{align*}
+
+Now,
+
+\begin{align*}
+-\frac{B}{2A} &= \frac{-g'(\wh{\theta}) + g''(\wh{\theta}) \wh{\theta}}{2g(\wh{\theta}) - 2g'(\wh{\theta}) \wh{\theta} + g''(\wh{\theta}) \wh{\theta}^2} \\
+\frac{1}{2A} &= \frac{1}{2g(\wh{\theta}) - 2g'(\wh{\theta}) \wh{\theta} + g''(\wh{\theta}) \wh{\theta}^2}
+\end{align*}
+
+so that
+
+\begin{align*}
+\exp(g(\theta)) \approx N \left (\frac{-g'(\wh{\theta}) + g''(\wh{\theta}) \wh{\theta}}{2g(\wh{\theta}) - 2g'(\wh{\theta}) \wh{\theta} + g''(\wh{\theta}) \wh{\theta}^2}, \  \frac{1}{2g(\wh{\theta}) - 2g'(\wh{\theta}) \wh{\theta} + g''(\wh{\theta}) \wh{\theta}^2} \right ) 
+\end{align*}
+
+Let $q(\theta)$ be the above normal density and let $\theta^{(i)}$ be the current value of $\theta$ at iteration $i$ of the MCMC. To get $\theta^{(i + 1)}$, we first sample a proposal $\theta^*$ from $q$. Then, we compute the probability,
+
+\begin{align*}
+p &= \min \left ( 1,  \ \frac{p(\theta^* \mid \cdots) q(\theta^{(i)})}{p(\theta^{(i)} \mid \cdots ) q(\theta^*)} \right )
+\end{align*}
+
+
+We set $\theta^{(i + 1)} = \theta^*$ with probability $p$ and $\theta^{(i + 1)} = \theta^{(i)}$ with probability $1-p$. \q
 
 
 
@@ -760,7 +803,44 @@ p(\pi_\delta \mid \cdots) = \text{Beta}(G - G_\delta + a_\tau, \ G_\delta + b_\t
 
 
 
-\section{Derivations of Metropolis proposals for point mass mixtures}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Old work: derivations of Metropolis proposals for point mass mixtures}
 
 
 
@@ -790,54 +870,54 @@ Hence, we let
 \end{align*}
 
 
-% For example, whereas we interpret $\pi_\alpha$ as $P(\alpha = 0)$, a prior probability, we interpret $\pi_\alpha'$ as:
+ For example, whereas we interpret $\pi_\alpha$ as $P(\alpha = 0)$, a prior probability, we interpret $\pi_\alpha'$ as:
 
-%\begin{align*}
-%\pi_\alpha' &= P(\alpha_g = 0 \mid \underline{y}, \ \ldots) \\
-%& = \frac{P(\underline{y} \mid \alpha_g = 0,  \ldots) P(\alpha_g = 0)}{P(\underline{y} \mid \alpha_g = 0, \ \ldots) P(\alpha_g = 0) + P(\underline{y} \mid \alpha_g \ne 0,  \ldots) P(\alpha_g \ne 0)} \\
-%&= \frac{1}{1 + \frac{P(  \underline{y} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P( \underline{y} \ \mid \ \alpha_g = 0, \ \ldots) } \frac{1 - \pi_\alpha}{\pi_\alpha}} \\
-%&= \frac{1}{1 + \frac{1 - \pi_\alpha}{\pi_\alpha} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \alpha_g = 0, \ \ldots) } }
-%\end{align*}
+\begin{align*}
+\pi_\alpha' &= P(\alpha_g = 0 \mid \underline{y}, \ \ldots) \\
+& = \frac{P(\underline{y} \mid \alpha_g = 0,  \ldots) P(\alpha_g = 0)}{P(\underline{y} \mid \alpha_g = 0, \ \ldots) P(\alpha_g = 0) + P(\underline{y} \mid \alpha_g \ne 0,  \ldots) P(\alpha_g \ne 0)} \\
+&= \frac{1}{1 + \frac{P(  \underline{y} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P( \underline{y} \ \mid \ \alpha_g = 0, \ \ldots) } \frac{1 - \pi_\alpha}{\pi_\alpha}} \\
+&= \frac{1}{1 + \frac{1 - \pi_\alpha}{\pi_\alpha} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \alpha_g = 0, \ \ldots) } }
+\end{align*}
 
-%where ``$\ldots$" represents all the model parameters except for the other $\alpha_g$'s. To simplify the likelihood ratio in the denominator, we need $P(y_{g, n} \mid \alpha_g = 0, \ldots)$ and $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$. 
+where ``$\ldots$" represents all the model parameters except for the other $\alpha_g$'s. To simplify the likelihood ratio in the denominator, we need $P(y_{g, n} \mid \alpha_g = 0, \ldots)$ and $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$. 
 
-%\begin{align*}
-%P(y_{g, n} \mid \alpha_g = 0, \ldots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)))  \\
-%&= \frac{1}{y_{g, n}!} \exp(-\exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
-%&=  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
-%\end{align*}
+\begin{align*}
+P(y_{g, n} \mid \alpha_g = 0, \ldots) &= \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)))  \\
+&= \frac{1}{y_{g, n}!} \exp(-\exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
+&=  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)) - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
+\end{align*}
 
-%I break up the calculation of $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ into 2 cases.
+I break up the calculation of $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ into 2 cases.
 
-%\begin{enumerate}
-%\item Assume library $n$ is in treatment group 1.
+\begin{enumerate}
+\item Assume library $n$ is in treatment group 1.
 
-%\begin{align*}
-%P(y_{g, n}& \mid \alpha_g \ne 0, \ldots) \\
-%& = \int_{\alpha_g \ne 0} P(y_{g, n} \mid \alpha_g , \ldots) N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-%&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-%&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(\underbrace{c_n + \e_{g, n} + \phi_g}_{i} - \alpha_g)  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-%&= \int \frac{\exp(-\exp(i - \alpha_g)) (\exp(i - \alpha_g))^{y_{g, n}}}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right) d \alpha_g\\
-%&\approx \int \frac{\exp(-\frac{(i - \alpha_g)^2}{2} - (i - \alpha_g) - 1) (\exp(y_{g, n}(i - \alpha_g)))}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right)d \alpha_g \\
-%&= (2 \pi  (\sigma_\alpha')^2)^{-1/2} / y_{g, n}! \int \exp \left (-\frac{(i - \alpha_g)^2}{2} - i + \alpha_g - 1 + y_{g, n}(i - \alpha_g) - \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2} \right ) d \alpha_g \\
-%&=  (2 \pi  (\sigma_\alpha')^2)^{-1/2} / y_{g, n}! \int \exp \left ( -\frac{\alpha_g^2}{2 (\sigma_\alpha')^2} -\frac{\alpha_g^2}{2} + i \alpha_g + \frac{\theta_\alpha' \alpha_g}{(\sigma_\alpha')^2} - y_{g, n} \alpha_g + \alpha_g  \right . \\
-%& \left . \qquad - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1 \right ) d \alpha_g \\
-%&=  \underbrace{(2 \pi (\sigma_\alpha')^2)^{-1/2} / y_{g, n}!}_{D} \int \exp \left ( \underbrace{\left ( -\frac{1}{2 (\sigma_\alpha')^2} -\frac{1}{2} \right )}_A \alpha_g^2 + \underbrace{\left ( i  + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} - y_{g, n}  + 1 \right )}_B \alpha_g  \right . \\
-%& \left . \qquad \underbrace{ - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1}_C \right ) d \alpha_g \\
-%&= D \int \exp (A \alpha_g^2 + B \alpha_g + C) d \alpha_g \\
-%&= D \int \exp \left( A \left (\alpha_g + \frac{B}{2A} \right )^2 + C - \frac{B^2}{4A} \right ) d \alpha_g \\
-%&= D \exp \left ( C - \frac{B^2}{4A} \right ) \int \underbrace{\exp \left( -\frac{1}{2(1/(-2A))} \left (\alpha_g + \frac{B}{2A} \right )^2  \right ) d \alpha_g}_{\text{kernel of a normal distribution (note: $A < 0$)}} \\
-%&= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (\frac{2 \pi }{ -2A} \right )^{1/2} \\
-%&= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (- \frac{\pi }{ A} \right )^{1/2} \\
-%\end{align*}
+\begin{align*}
+P(y_{g, n}& \mid \alpha_g \ne 0, \ldots) \\
+& = \int_{\alpha_g \ne 0} P(y_{g, n} \mid \alpha_g , \ldots) N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(\underbrace{c_n + \e_{g, n} + \phi_g}_{i} - \alpha_g)  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
+&= \int \frac{\exp(-\exp(i - \alpha_g)) (\exp(i - \alpha_g))^{y_{g, n}}}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right) d \alpha_g\\
+&\approx \int \frac{\exp(-\frac{(i - \alpha_g)^2}{2} - (i - \alpha_g) - 1) (\exp(y_{g, n}(i - \alpha_g)))}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right)d \alpha_g \\
+&= (2 \pi  (\sigma_\alpha')^2)^{-1/2} / y_{g, n}! \int \exp \left (-\frac{(i - \alpha_g)^2}{2} - i + \alpha_g - 1 + y_{g, n}(i - \alpha_g) - \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2} \right ) d \alpha_g \\
+&=  (2 \pi  (\sigma_\alpha')^2)^{-1/2} / y_{g, n}! \int \exp \left ( -\frac{\alpha_g^2}{2 (\sigma_\alpha')^2} -\frac{\alpha_g^2}{2} + i \alpha_g + \frac{\theta_\alpha' \alpha_g}{(\sigma_\alpha')^2} - y_{g, n} \alpha_g + \alpha_g  \right . \\
+& \left . \qquad - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1 \right ) d \alpha_g \\
+&=  \underbrace{(2 \pi (\sigma_\alpha')^2)^{-1/2} / y_{g, n}!}_{D} \int \exp \left ( \underbrace{\left ( -\frac{1}{2 (\sigma_\alpha')^2} -\frac{1}{2} \right )}_A \alpha_g^2 + \underbrace{\left ( i  + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} - y_{g, n}  + 1 \right )}_B \alpha_g  \right . \\
+& \left . \qquad \underbrace{ - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1}_C \right ) d \alpha_g \\
+&= D \int \exp (A \alpha_g^2 + B \alpha_g + C) d \alpha_g \\
+&= D \int \exp \left( A \left (\alpha_g + \frac{B}{2A} \right )^2 + C - \frac{B^2}{4A} \right ) d \alpha_g \\
+&= D \exp \left ( C - \frac{B^2}{4A} \right ) \int \underbrace{\exp \left( -\frac{1}{2(1/(-2A))} \left (\alpha_g + \frac{B}{2A} \right )^2  \right ) d \alpha_g}_{\text{kernel of a normal distribution (note: $A < 0$)}} \\
+&= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (\frac{2 \pi }{ -2A} \right )^{1/2} \\
+&= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (- \frac{\pi }{ A} \right )^{1/2} \\
+\end{align*}
 
-%\item $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ is the same when $n$ is in treatment group 3 except that $B$ changes:
+\item $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ is the same when $n$ is in treatment group 3 except that $B$ changes:
 
-%\begin{align*}
-%B = -i + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} + y_{g, n} - 1
-%\end{align*}
+\begin{align*}
+B = -i + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} + y_{g, n} - 1
+\end{align*}
 
-%\end{enumerate}
+\end{enumerate}
 
 
 \subsection{$\delta_g$}
@@ -857,21 +937,21 @@ where:
 \pi_\delta' &= \pi_\delta
 \end{align*}
 
-%\begin{align*}
-%\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) = 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\ \\
-%& \qquad P(y_{g, n} \mid \delta_g = 0, \ldots ) =  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0)) \\
-%& \qquad   \qquad   \qquad  \qquad - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0))) \\ 
-%& \qquad P(y_{g, n} \mid \delta_g \ne 0, \ldots ) = D \exp \left ( C - \frac{B^2}{4A} \right ) \left ( - \frac{\pi}{A} \right )^{1/2} \\ \\
-%& \qquad \qquad A = - \frac{1}{2 (\sigma_\delta')^2} - \frac{1}{2}\\
-%& \qquad \qquad B = - i + \frac{\theta_\delta'}{(\sigma_\delta')^2} + y_{g, n} - 1 \\
-%& \qquad \qquad C = - \frac{i^2}{2} + i y_{g, n} -i - \frac{(\theta_\delta')^2}{2 (\sigma_\delta')^2} -1 \\
-%& \qquad \qquad D = (2 \pi (\sigma_\delta')^2)^{-1/2} / y_{g, n}! \\ \\
-%& \qquad \qquad \qquad i = c_n + \e_{g, n} + \phi_g \\ \\ 
-%\theta_\delta' &= \frac{\gamma_\delta^{-2} \theta_\delta + \sigma_\delta^{-2}    N_\delta^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{\gamma_\delta^{-2} + \sigma_\delta^{-2}} \\ 
-%(\sigma_\delta')^2 &= (\gamma_\delta^{-2} + \sigma_\delta^{-2})\nv
-%\end{align*}
+\begin{align*}
+\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) = 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\ \\
+& \qquad P(y_{g, n} \mid \delta_g = 0, \ldots ) =  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0)) \\
+& \qquad   \qquad   \qquad  \qquad - \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0))) \\ 
+& \qquad P(y_{g, n} \mid \delta_g \ne 0, \ldots ) = D \exp \left ( C - \frac{B^2}{4A} \right ) \left ( - \frac{\pi}{A} \right )^{1/2} \\ \\
+& \qquad \qquad A = - \frac{1}{2 (\sigma_\delta')^2} - \frac{1}{2}\\
+& \qquad \qquad B = - i + \frac{\theta_\delta'}{(\sigma_\delta')^2} + y_{g, n} - 1 \\
+& \qquad \qquad C = - \frac{i^2}{2} + i y_{g, n} -i - \frac{(\theta_\delta')^2}{2 (\sigma_\delta')^2} -1 \\
+& \qquad \qquad D = (2 \pi (\sigma_\delta')^2)^{-1/2} / y_{g, n}! \\ \\
+& \qquad \qquad \qquad i = c_n + \e_{g, n} + \phi_g \\ \\ 
+\theta_\delta' &= \frac{\gamma_\delta^{-2} \theta_\delta + \sigma_\delta^{-2}    N_\delta^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{\gamma_\delta^{-2} + \sigma_\delta^{-2}} \\ 
+(\sigma_\delta')^2 &= (\gamma_\delta^{-2} + \sigma_\delta^{-2})\nv
+\end{align*}
 
-%where $N_\delta$ is the number of libraries in the second treatment group. 
+where $N_\delta$ is the number of libraries in the second treatment group. 
 
 
 \end{flushleft}

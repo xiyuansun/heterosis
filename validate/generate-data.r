@@ -15,7 +15,7 @@ parms = list(
 
 # initialization constants
 
-sigC0 = 2,
+sigC0 = 1e-9,
 
 d0 = 100,
 aTau = 2,
@@ -28,10 +28,10 @@ bAlp = 1/2,
 bDel = 1/2,
 
 gamPhi = 2,
-gamAlp = 2,
-gamDel = 2,
+gamAlp = 0,
+gamDel = 0,
 
-sigPhi0 = 2,
+sigPhi0 = 4,
 sigAlp0 = 2,
 sigDel0 = 2
 )
