@@ -1,5 +1,5 @@
-%\documentclass{beamer}
-\documentclass[handout]{beamer}
+\documentclass{beamer}
+%\documentclass[handout]{beamer}
 \usetheme{Frankfurt}
 \newcommand{\answers}{1}
 
@@ -288,12 +288,12 @@
 \frametitle{The model}
 
 \begin{align*}
-& \scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+& \scriptsize \mu(g, n) = \begin{cases}
 \phi_g - \alpha_g & \text{ sample $n$ from parent 1} \\
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
 \phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
 \end{cases} \\ 
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(\exp(c_n + \e_{g, n} + \mu(g, n))) \\
 &\qquad \uncover<2->{\only<2>{\color{blue}}c_n \stackrel{\text{ind}}{\sim} \text{N}(0, \sigma_c^2)} \\
 & \qquad \qquad \uncover<4->{\only<4>{\color{blue}}\sigma_c \stackrel{\text{}}{\sim} \text{U}(0, \sigma_{c0})} \\
 & \qquad \uncover<3->{\only<3>{\color{blue}}\e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(0, \eta_g^2)} \\
@@ -308,12 +308,12 @@
 \frametitle{The model} \tiny
 
 \begin{align*}
-&\scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+&\scriptsize \mu(g, n) = \begin{cases}
 \phi_g - \alpha_g & \text{ sample $n$ from parent 1} \\
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
 \phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
 \end{cases} \\ 
-&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(\exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\
+&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}(\exp(c_n + \e_{g, n} + \mu(g, n)))} \\
 & \qquad \uncover<3->{\only<3>{\color{blue}}\phi_g \stackrel{\text{ind}}{\sim} \text{N}( \theta_\phi, \sigma_\phi^2)} \\
 & \qquad \qquad \uncover<6->{\only<6>{\color{blue}}\theta_\phi \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\phi }^2)} \\
 & \qquad \qquad \uncover<9->{\only<9>{\color{blue}}\sigma_\phi \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\phi 0})} \\
@@ -345,7 +345,7 @@
 \frametitle{Use these partitions as Gibbs steps.} \small
 
 \begin{align*}
-y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(g, n)))
 \end{align*}
 
 \begin{itemize}
@@ -373,12 +373,12 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n
 \begin{frame}
 \frametitle{Estimated heterosis probabilities} \small
 \begin{align*}
-& \scriptsize \mu(n, \phi_g, \alpha_g, \delta_g) = \begin{cases}
+& \scriptsize \mu(g, n) = \begin{cases}
 \phi_g - \alpha_g & \text{ sample $n$ from parent 1} \\
 \phi_g + \delta_g & \text{ sample $n$ from child} \\
 \phi_g + \alpha_g & \text{ sample $n$ from parent 2} \\
 \end{cases} \\ \\
-&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))} \\ 
+&{\scriptsize y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(g, n)))} \\ 
 \uncover<2->{\intertext{Consider one chain with $M$ iterations.}}
 &\uncover<3->{P(\text{high-parent heterosis in gene } g) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} > |\alpha_g^{(i)}|)} \\
 &\uncover<4->{P(\text{low-parent heterosis in gene } g \text{ }) \approx \frac{1}{M} \sum_{i = 1}^M I(\delta_g^{(i)} < -|\alpha_g^{(i)}|)} \\
@@ -445,7 +445,7 @@ a[i] = b[i] + c[i];
 \begin{itemize}
 \item Toy example:
 \begin{itemize}
-\item CPU says: ``Hey, GPU. Sum pairs of adjacent numbers. Use the array, (1, 2, 3, 4, 5, 6, 7, 8)."
+\item CPU says: ``Sum pairs of adjacent numbers. Use the array, (1, 2, 3, 4, 5, 6, 7, 8)."
 \pause \item GPU thinks: ``Sum pairs of adjacent numbers" is a kernel.
 \pause \item The GPU spawns 2 blocks, each with 2 threads:
 \end{itemize}
@@ -469,6 +469,113 @@ Action & 1 + 2 & 3 + 4 & 5 + 6 & 7 + 8 \\
 \includegraphics[scale=.7]{fig/gridBlocksThreads.jpg}
 \end{center}
 \end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{GPU parallelism in the model}
+
+
+\begin{frame}
+\frametitle{Tons of opportunity for GPU parallelism across genes!}
+\begin{align*}
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(g, n)))
+\end{align*}
+
+\begin{itemize}
+\item Sample collections of conditionally independent parameters in parallel:
+\begin{itemize}
+\pause \item $\phi_g$'s
+\pause \item $\alpha_g$'s
+\pause \item $\delta_g$'s
+\pause \item $\e_{g, n}$'s 
+\pause \item $\eta_{g}$'s 
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Example: $\phi_g$'s} \small
+\begin{align*}
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(g, n))) \\
+& \qquad \uncover<2->{\phi_g \stackrel{\text{ind}}{\sim} \text{N}( \theta_\phi, \sigma_\phi^2)} \\
+\end{align*}
+
+\begin{itemize}
+\uncover<5->{\item Using parallel random walk Metropolis steps, sample the $\phi_g$'s from their full conditional distributions,}
+\end{itemize}
+
+\begin{align*}
+\uncover<6->{p(\phi_g \mid} & \uncover<6->{ \cdots) \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \cdot \mu(g, n) \right . \right .}  \\
+&\uncover<6->{\left . \left . \frac{}{}- \exp (c_n + \e_{g, n} + \mu(g, n)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right )}
+\end{align*}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Tons of opportunity for GPU parallelism across genes!}
+\begin{align*}
+y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(g, n)))
+\end{align*}
+
+\begin{itemize}
+\pause \item Use {\color{blue} \bf parallel reductions} to calculate ``sufficient statistics" for:
+\begin{itemize}
+\pause \item $c_n$'s
+\pause \item $\tau$, $d$
+\pause \item $\theta_\phi$, $\theta_\alpha$, $\theta_\delta$
+\pause \item $\sigma_\phi$, $\sigma_\alpha$, $\sigma_\delta$,  $\sigma_c$ 
+\pause \item $\pi_\alpha$, $\pi_\delta$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 
 
 \subsection{Parallel reductions}
@@ -551,91 +658,10 @@ using 1 block of 4 threads.
 
 
 
-\subsection{GPU parallelism in the model}
-
-
-\begin{frame}
-\frametitle{Tons of opportunity for GPU parallelism across genes!}
-\begin{align*}
-y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
-\end{align*}
-
-\begin{itemize}
-\item Sample collections of conditionally independent parameters in parallel:
-\begin{itemize}
-\pause \item $\phi_g$'s
-\pause \item $\alpha_g$'s
-\pause \item $\delta_g$'s
-\pause \item $\e_{g, n}$'s 
-\pause \item $\eta_{g}$'s 
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-
-
-
-
-\begin{frame}
-\frametitle{Example: $\phi_g$'s} \small
-\begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
-& \qquad \uncover<2->{\phi_g \stackrel{\text{ind}}{\sim} \text{N}( \theta_\phi, \sigma_\phi^2)} \\
-& \qquad \qquad \uncover<3->{\theta_\phi \stackrel{\text{}}{\sim} \text{N}( 0, \gamma_{\phi }^2)} \\
-& \qquad \qquad \uncover<4->{\sigma_\phi \stackrel{\text{}}{\sim} \text{U}( 0, \sigma_{\phi 0})} \\
-\end{align*}
-
-\begin{itemize}
-\uncover<5->{\item Using parallel random walk Metropolis steps, sample the $\phi_g$'s from their full conditional distributions,}
-\end{itemize}
-
-\begin{align*}
-\uncover<6->{p(\phi_g \mid} & \uncover<6->{ \cdots) \propto \exp \left (\sum_{n = 1}^N \left [y_{g, n} \cdot \mu(n, \phi_g, \alpha_g, \delta_g) \right . \right .}  \\
-&\uncover<6->{\left . \left . \frac{}{}- \exp (c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \right )}
-\end{align*}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Tons of opportunity for GPU parallelism across genes!}
-\begin{align*}
-y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g)))
-\end{align*}
-
-\begin{itemize}
-\pause \item Use {\color{blue} \bf parallel reductions} to calculate sufficient statistics for:
-\begin{itemize}
-\pause \item $c_n$'s
-\pause \item $\tau$, $d$
-\pause \item $\theta_\phi$, $\theta_\alpha$, $\theta_\delta$
-\pause \item $\sigma_\phi$, $\sigma_\alpha$, $\sigma_\delta$,  $\sigma_c$ 
-\pause \item $\pi_\alpha$, $\pi_\delta$
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \begin{frame}
 \frametitle{Example: $\tau^2$} \scriptsize
 \begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(g, n))) \\
 & \qquad \uncover<2->{ \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}( 0, \eta_g^2)} \\
 & \qquad \qquad \uncover<3->{\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\left . \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
 & \qquad \qquad \qquad \uncover<4->{d \stackrel{\text{}}{\sim} \text{U}( 0, d_0)} \\
@@ -645,7 +671,7 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n
 \end{align*}
 
 \begin{itemize}
-\uncover<7->{\item Using a parallel reduction (NVIDIA's CUDA C/C++ {\tt Thrust} library), calculate the sufficient statistic:}
+\uncover<7->{\item Using a parallel reduction (NVIDIA's CUDA C/C++ {\tt Thrust} library), calculate the ``sufficient statistic":}
 \begin{align*}
 \uncover<8->{\color{blue}\sum_{g = 1}^G \frac{1}{\eta_g^2}}
 \end{align*}
@@ -660,7 +686,7 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n
 \begin{frame}
 \frametitle{Example: $d$} \tiny
 \begin{align*}
-&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, \delta_g))) \\
+&y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(g, n))) \\
 & \qquad \uncover<2->{ \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}( 0, \eta_g^2)} \\
 & \qquad \qquad \uncover<3->{\eta_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\left . \text{shape} = \frac{d}{2} \right ., \ \text{rate} =  \frac{d \cdot \tau^2}{2} \right)} \\
 & \qquad \qquad \qquad \uncover<4->{d \stackrel{\text{}}{\sim} \text{U}( 0, d_0)} \\
@@ -672,7 +698,7 @@ y_{g,n} \stackrel{\text{ind}}{\sim} \text{Poisson}( \exp(c_n + \e_{g, n} + \mu(n
 
 \small
 \begin{itemize}
-\uncover<7->{\item Using parallel reductions (NVIDIA's CUDA C/C++ {\tt Thrust} library), calculate the sufficient statistics:}
+\uncover<7->{\item Using parallel reductions (NVIDIA's CUDA C/C++ {\tt Thrust} library), calculate:}
 \begin{align*}
 \uncover<8->{\color{blue}\prod_{g = 1}^G \eta_g^2 \qquad \qquad \sum_{g = 1}^G \frac{1}{\eta_g^2} } 
 \end{align*}
