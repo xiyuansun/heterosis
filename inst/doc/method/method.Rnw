@@ -316,6 +316,29 @@ Hence,
 p(\nu \mid \cdots) \mathop{\propto}^\cdot \text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}{V} \right )
 \end{align*}
 
+Letting $q(\nu)$ be the log density of $\text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}{V} \right )$, we have a Metropolis-Hastings algorithm for sampling $\nu$.
+
+\begin{enumerate}
+\item Sample a proposal $\nu^*$ from a $N \left (\frac{h_2 \wh{\nu} - h_1}{h_2}, \ |h_2| \nv \right )$ distribution.
+\item The acceptance probability is
+
+\begin{align*}
+p &= \min \left \{1, \ \frac{\exp(h(\nu^*))}{\exp(h(\nu^{(i)}))} \frac{\exp(q(\nu^{(i)}))}{\exp(q(\nu^{*}))} \right \}
+\end{align*}
+
+In practice, calculate $p$ on a log scale.
+
+\begin{align*}
+\log p &= \min \left \{0, \ h(\nu^*) - h(\nu^{(i)}) +  q(\nu^{(i)}) - q(\nu^{*}) \right \}
+\end{align*}
+
+\item Sample $u \sim U(0, 1)$
+
+\item If $\log u < \log p$, set $\nu^{(i + 1)} = \nu^{*}$ (accept $\nu^*$).. Otherwise, set $\nu^{(i+1)} = \nu^{(i)}$ (do not except $\nu^*$).
+
+\end{enumerate}
+
+
 
 
 
