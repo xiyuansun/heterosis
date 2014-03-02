@@ -41,7 +41,7 @@
 \fancyfoot{}
 \fancyhead[R]{\thepage}
 \fancyhead[C]{Landau}
-{}
+
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -171,7 +171,7 @@ With MCMC samples of these quantities, for some threshold $\e > 0$, we can calcu
 &\qquad \rho_n \stackrel{\text{ind}}{\sim} \text{N}(0, \sigma_\rho^2) \\
 & \qquad \qquad \sigma_\rho \stackrel{\text{}}{\sim} \text{U}(0, s_\rho) \\
 & \qquad \e_{g, n} \stackrel{\text{ind}}{\sim} \text{N}(0, \gamma_g^2) \\
-& \qquad \qquad \gamma_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\text{shape} = \frac{\nu}{2}, \ \text{scale} =  \frac{\nu \cdot \tau^2}{2} \right) \\
+& \qquad \qquad \gamma_g^2 \stackrel{\text{ind}}{\sim} \text{Inv-Gamma}\left (\text{shape} = \frac{\nu}{2}, \ \text{scale} =  \frac{\nu \tau^2}{2} \right) \\
 & \qquad \qquad \qquad \nu \stackrel{\text{}}{\sim} \text{U}(0, d) \\
 & \qquad \qquad \qquad \tau^2 \stackrel{\text{}}{\sim} \text{Gamma}(\text{shape} = a, \text{rate} = b) \\
 & \qquad \phi_g \stackrel{\text{ind}}{\sim} \text{N}(\theta_\phi, \sigma_\phi^2) \\
@@ -201,18 +201,11 @@ where:
 \end{itemize}
 
 
-\begin{align*}
-\eta(g, n) = \begin{cases}
-\phi_g - \alpha_g & \text{sample } n \text{ from parent 1 genotype} \\
-\phi_g + \delta_g & \text{sample }  n \text{ from hybrid genotype} \\
-\phi_g + \alpha_g &  \text{sample }   n \text{ from parent 2 genotype} 
-\end{cases}
-\end{align*}
 
 
 
 
-\section{Full Conditional Distributions}
+\section{The Full Conditional Distributions}
 
 Define:
 
@@ -226,52 +219,223 @@ Define:
 Then: 
 
 \begin{align*}
-p(\nu \mid \cdots) &\propto \Gamma \left( \nu/2 \right )^{-G} \left ( \frac{\nu \cdot \tau^2}{2}\right ) ^ { G \nu  /2 } \left ( \prod_{g = 1}^G { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{\nu \cdot \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \gamma_g^2} \right ) I(0 < \nu < d) \\
+p(\nu \mid \cdots) &\propto  \exp \left ( - \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )^G \\
+& \qquad \times I(0 < \nu < d) \\
 p(\rho_n \mid \cdots) &\propto\exp \left (\rho_n G\ov{y}_{.n} - \frac{\rho_n^2}{2 \sigma_\rho^2} -\exp(\rho_n) \sum_{g = 1}^G \exp( \e_{g, n} + \eta(g, n)) \right ) \\
+p(\e_{g, n} \mid \cdots) &\propto \exp \left (y_{g, n} \e_{g, n} - \frac{\e_{g, n}^2}{2 \gamma_g^2}  - \exp( \e_{g, n} ) \exp(\rho_n + \eta(g, n))  \right) \\
 p(\phi_g \mid \cdots) &\propto \exp \left ( \phi_g N \ov{y}_{g.}  - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} - \exp(\phi_g) \left [\exp(-\alpha_g) \sum_{k(n) = 1}  \exp (\rho_n + \e_{g, n})   \right . \right . \\
 & \left . \qquad +\exp(\delta_g) \sum_{k(n) = 2}  \exp (\rho_n + \e_{g, n} )   + \left . \exp(\alpha_g) \sum_{k(n) = 3}  \exp (\rho_n + \e_{g, n} )  \right ] \right ) \\
 p(\alpha_g \mid \cdots) &\propto \exp \left (\alpha_g \left (\sum_{k(n) = 3} y_{g, n} - \sum_{k(n) = 1} y_{g, n} \right ) - \frac{(\alpha_g - \theta_\alpha)^2}{2 \sigma_\alpha^2} \right . \\
 & \left .\qquad - \exp(\alpha_g) \exp(\phi_g) \sum_{k(n) = 3} \exp (\rho_n + \e_{g, n}) \right . \\
 & \qquad \left .- \exp(-\alpha_g) \exp(\phi_g) \sum_{k(n) = 1}  \exp (\rho_n + \e_{g, n}) \right ) \\
-p(\delta_g \mid \cdots ) & \propto \exp \left (\delta_g \sum_{k(n) = 2} y_{g, n}  - \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2}  - \exp(\delta_g) \exp(\phi_g) \sum_{k(n) \ne 2} \exp (\rho_n + \e_{g, n})  \right ) \\
-p(\e_{g, n} \mid \cdots) &\propto \exp \left (y_{g, n} \e_{g, n} - \frac{\e_{g, n}^2}{2 \gamma_g^2}  - \exp( \e_{g, n} ) \exp(\rho_n + \eta(g, n))  \right) 
+p(\delta_g \mid \cdots ) & \propto \exp \left (\delta_g \sum_{k(n) = 2} y_{g, n}  - \frac{(\delta_g - \theta_\delta)^2}{2 \sigma_\delta^2}  - \exp(\delta_g) \exp(\phi_g) \sum_{k(n) \ne 2} \exp (\rho_n + \e_{g, n})  \right ) 
 \end{align*}
 \begin{align*}
 p(\theta_\phi \mid \cdots) &= \text{N} \left ( \theta_\phi \ \left | \ \frac{ c_\phi^2 \sum_{g = 1}^G \phi_g}{G c_\phi^2 + \sigma_\phi^2}, \ \frac{c_\phi^2 \sigma_\phi^2}{Gc_\phi^2 + \sigma_\phi^2} \right . \right ) \\
 p(\theta_\alpha \mid \cdots) &= N \left ( \theta_\alpha \ \left | \ \frac{c_\alpha^2 \sum_{g = 1}^G \alpha_g}{G_\alpha c_\alpha^2 + \sigma_\alpha^2}, \right . \ \frac{c_\alpha^2 \sigma_\alpha^2}{G_\alpha c_\alpha^2 + \sigma_\alpha^2} \right ) \\
 p(\theta_\delta \mid \cdots) &= N \left ( \theta_\delta \ \left | \ \frac{c_\delta^2 \sum_{g = 1}^G \delta_g}{G_\delta c_\delta^2 + \sigma_\delta^2}, \right . \ \frac{c_\delta^2 \sigma_\delta^2}{G_\delta c_\delta^2 + \sigma_\delta^2} \right ) \\
+p(\tau^2 \mid \cdots) &= \text{Gamma} \left ( \tau^2 \mid \text{shape} =  a + \frac{G\nu}{2}, \ \text{rate} =  b + \frac{\nu}{2} \sum_{g = 1}^G \frac{1}{\gamma_g^2} \right ) \\
+p \left ( \left . \frac{1}{\gamma_g^2} \ \right | \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\gamma_g^2} \ \right | \ \text{shape} = \frac{N + \nu}{2}, \  \text{rate} = \frac{1}{2} \left (\nu \tau^2 + \sum_{n  =1}^N \e_{g, n}^2 \right ) \right ) \\
+p \left ( \frac{1}{\sigma_\rho^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac{1}{\sigma_\rho^2} \mid \text{shape} = \frac{N - 1}{2}, \ \text{rate} =\frac{1}{2} {\sum_{n = 1}^N \rho_n^2} \right )  I \left (\frac{1}{\sigma_\rho^2} > \frac{1}{s_\rho^2} \right ) \\
 p \left ( \left . \frac{1}{\sigma_\phi^2} \  \right | \  \cdots \right ) &= \text{Gamma} \left ( \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\phi_g - \theta_\phi)^2  \right )   \text{I} \left (\frac{1}{\sigma_\phi^2} >\frac{1}{ s_\phi^2} \right )\\
 p \left ( \left . \frac{1}{\sigma_\alpha^2} \  \right | \  \cdots \right ) &= \text{Gamma} \left ( \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\alpha_g - \theta_\alpha)^2  \right )   \text{I} \left (\frac{1}{\sigma_\alpha^2} >\frac{1}{ s_\alpha^2} \right )\\
 p \left ( \left . \frac{1}{\sigma_\delta^2} \  \right | \  \cdots \right ) &= \text{Gamma} \left ( \text{shape} = \frac{G - 1}{2}, \ \text{rate} =  \frac{1}{2} \sum_{g = 1}^G (\delta_g - \theta_\delta)^2  \right )   \text{I} \left (\frac{1}{\sigma_\delta^2} >\frac{1}{ s_\delta^2} \right )\\
-p \left ( \frac{1}{\sigma_\rho^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac{1}{\sigma_\rho^2} \mid \text{shape} = \frac{N - 1}{2}, \ \text{rate} =\frac{1}{2} {\sum_{n = 1}^N \rho_n^2} \right )  I \left (\frac{1}{\sigma_\rho^2} > \frac{1}{s_\rho^2} \right ) \\
-p(\tau^2 \mid \cdots) &= \text{Gamma} \left ( \tau^2 \mid \text{shape} =  a + \frac{G\nu}{2}, \ \text{rate} =  b + \frac{\nu}{2} \sum_{g = 1}^G \frac{1}{\gamma_g^2} \right ) \\
-p \left ( \left . \frac{1}{\gamma_g^2} \ \right | \ \cdots \right ) &= \text{Gamma} \left ( \left . \frac{1}{\gamma_g^2} \ \right | \ \text{shape} = \frac{N + \nu}{2}, \  \text{rate} = \frac{1}{2} \left (\nu \cdot \tau^2 + \sum_{n  =1}^N \e_{g, n}^2 \right ) \right ) \\
+\end{align*}
+
+\section{A Metropolis-Hastings Algorithm for Sampling $\nu$}
+
+\paragraph{} The full conditional distribution of $\nu$ is of the form,
+
+\begin{align*}
+p(\nu \mid \cdots) &\propto  \exp \left ( - \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )^G \\
+& \qquad \times I(0 < \nu < d) \\
+&= \exp(h(\nu))
+\intertext{where}
+h(\nu) &= G \cdot \left  (- \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) 
+\end{align*}
+
+Now, $\exp(G \nv h(\nu))$ can be well approximated by a gamma distribution. For some positive integer $X$, if I take 
+
+\begin{align*}
+M &= \frac{\sum_{x = 0}^X x \cdot \exp(G \nv h(\nu))}{\sum_{x = 0}^X \exp(G \nv h(\nu))} \\
+V &= \frac{\sum_{x = 0}^X (x - M)^2 \cdot \exp(G \nv h(\nu))}{\sum_{x = 0}^X \exp(G \nv h(\nu))} \\
+\end{align*}
+
+then,
+
+\begin{align*}
+\exp(G \nv h(\nu)) \mathop{\propto}^\cdot \text{Gamma}(\text{shape} = M^2/V, \text{rate} = M/V)
+\end{align*}
+
+%As a demonstration, I simulate 10000 $\gamma_g$'s with $\nu = \tau = 1$. Visually, the agreement between $\exp(G \nv h(\nu))$ and its gamma approximation is excellent.
+
+<<echo = F, eval = F>>=
+d = 100
+tau = 1
+nu = 1
+G = 10000
+gam = 1/sqrt(rgamma(G, shape = nu/2, rate = nu * tau^2/2))
+
+lp = function(nu){
+  - lgamma(nu/2) + nu/2 * log(nu*tau^2/2) - nu* mean(log(gam) + tau^2/2 * 1/gam^2)
+}
+
+p = function(nu){
+  exp(lp(nu))
+}
+
+x = 1:10000/1000
+m = sum(x * p(x))/sum(p(x))
+v = sum((x-m)^2 * p(x))/sum(p(x))
+
+shape = m^2/v
+rate = m/v
+
+f = function(x){dgamma(x, shape = shape, rate = rate) /2}
+curve(f, 0, 10, col = "blue")
+xs = 1:10000/1000
+ys = p(xs)/max(p(xs)) * .15
+lines(x =xs, y = ys)
+legend("topright", fill = c("black", "blue"), legend = c("Const * exp((1/G) * h(nu))", "Gamma approximation"))
+@
+
+The upshot of all this is
+
+\begin{align*}
+p(\nu \mid \cdots) &\propto \exp(h(\nu)) \\
+ &= \exp(G \nv h(\nu))^G\\
+&\approx [\text{Gamma}(M^2/V, M/V)]^G\\
+&\propto \left [\nu^{M^2/V - 1} \exp(M/V \cdot \nu) \right ]^G\\
+&= \nu^{G(M^2/V - 1)} \exp(G M/V \cdot \nu) \\
+&= \nu^{(GM^2/V - G + 1) - 1} \exp(G M/V \cdot \nu) \\
+\end{align*}
+
+Hence,
+
+\begin{align*}
+p(\nu \mid \cdots) \mathop{\propto}^\cdot \text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}{V} \right )
 \end{align*}
 
 
 
-\section{The Gibbs Sampler}
 
-\paragraph{} Using conditional independence, I can construct Gibbs steps within which I sample parameters simultaneously:
 
-\begin{itemize}
-\item $\sigma_\rho$
-\item $\nu$
-\item $\tau^2$
-\item $\theta_\phi$
-\item $\theta_\alpha$
-\item $\theta_\delta$
-\item $\sigma_\phi$
-\item $\sigma_\alpha$
-\item $\sigma_\delta$
-\item $\gamma_1^2, \ldots, \gamma_g^2$
-\item $\phi_1, \ldots, \phi_g$
-\item $\alpha_1, \ldots, \alpha_g$
-\item $\delta_1, \ldots, \delta_g$
-\item $\rho_1, \ldots, \rho_n$
-\end{itemize}
 
-Steps with multiple sampled parameters will sample those parameters in parallel on the GPU.
+
+
+
+
+
+\section{A Metropolis-Hastings Algorithm for Sampling $\rho_n$, $\phi_g$, $\alpha_g$, $\delta_g$, and $\e_{g, n}$}
+
+
+\paragraph{} $\rho_n$, $\phi_g$, $\alpha_g$, $\delta_g$, and $\e_{g, n}$ all have full conditional distributions of the form,
+
+\begin{align*}
+p(\theta \mid \cdots) \propto \exp \left (A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta} \right )
+\end{align*}
+
+where $\theta$ is the parameter of interest, $A, B, C, D$, and $E$ are constants, and $B, D, E \ge 0$. Note that $E$ is guaranteed to be 0 except when $\theta = \alpha_g$ for some $h$. Let $h(\theta)$ be the log kernel of $p(\theta \mid \cdots)$. Then,
+
+\begin{align*}
+h(\theta) = A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta}
+\end{align*}
+
+In addition, let $\wh{\theta}$ be a mode of $h(\theta)$ found via Newton-Raphson. We will need:
+
+\begin{align*}
+h_0 &= h(\wh{\theta}) = A \wh{\theta} - B(\wh{\theta} - C)^2 - D e^{\wh{\theta}} - Ee^{-\wh{\theta}} \\
+h_1 &= h'(\wh{\theta}) = A  - 2 B(\wh{\theta} - C) - D e^{\wh{\theta}} + Ee^{-\wh{\theta}} \\
+h_2 &= h''(\wh{\theta}) = - 2 B - D e^{\wh{\theta}} - Ee^{-\wh{\theta}} \\
+\end{align*}
+
+Now, we can approximate $h(\theta)$ with the quadratic Taylor approximation.
+
+\begin{align*}
+h(\theta) &\approx h_0 + h_1 (\theta - \wh{\theta}) + \frac{h_2}{2} (\theta - \wh{\theta})^2 \\
+&= h_0 + h_1 \theta - h_1 \wh{\theta}  + \frac{h_2}{2} \theta^2  - h_2 \wh{\theta} \theta + \frac{h_2}{2} \wh{\theta}^2 \\
+&= \left (h_0 - h_1 \wh{\theta} + \frac{h_2}{2} \wh{\theta}^2 \right ) + (h_1 - h_2 \wh{\theta}) \theta + \frac{h_2}{2} \theta^2 \\
+&= \left (h_0 - h_1 \wh{\theta} + \frac{h_2}{2} \wh{\theta}^2 \right ) - \frac{(h_1 - h_2 \wh{\theta})^2}{2h_2} + \frac{h_2}{2} \left (\theta - \frac{h_2 \wh{\theta} - h_1}{h_2} \right )^2 \\
+&=  -\frac{1}{2 |h_2| \nv} \left (\theta - \frac{h_2 \wh{\theta} - h_1}{h_2} \right )^2  + \text{ constant}
+\end{align*}
+
+Thus, a reasonable proposal distribution for $\theta$ in the Metropolis algorithm is 
+
+\begin{align*}
+N \left (\frac{h_2 \wh{\theta} - h_1}{h_2}, \ |h_2| \nv \right )
+\end{align*}
+
+Let
+
+\begin{align*}
+q(\theta) = -\frac{1}{2 |h_2| \nv} \left (\theta - \frac{h_2 \wh{\theta} - h_1}{h_2} \right )^2 
+\end{align*}
+
+i.e., the log density of the normal distribution. Let $\theta^{(i)}$ be the current value of $\theta$ at iteration $i$ of the algorithm. To get $\theta^{(i + 1)}$,
+
+\begin{enumerate}
+\item Sample a proposal $\theta^*$ from a $N \left (\frac{h_2 \wh{\theta} - h_1}{h_2}, \ |h_2| \nv \right )$ distribution.
+\item The acceptance probability is
+
+\begin{align*}
+p &= \min \left \{1, \ \frac{\exp(h(\theta^*))}{\exp(h(\theta^{(i)}))} \frac{\exp(q(\theta^{(i)}))}{\exp(q(\theta^{*}))} \right \}
+\end{align*}
+
+In practice, calculate $p$ on a log scale.
+
+\begin{align*}
+\log p &= \min \left \{0, \ h(\theta^*) - h(\theta^{(i)}) +  q(\theta^{(i)}) - q(\theta^{*}) \right \}
+\end{align*}
+
+\item Sample $u \sim U(0, 1)$
+
+\item If $\log u < \log p$, set $\theta^{(i + 1)} = \theta^{*}$ (accept $\theta^*$).. Otherwise, set $\theta^{(i+1)} = \theta^{(i)}$ (do not except $\theta^*$).
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{The Full Metropolis-Within-Gibbs Sampler}
+
+\paragraph{} By inspecting the full conditional distributions, one can see which parameters are conditionally independent. The plot below summarizes this conditional dependence.
+
+
+\begin{center}
+\includegraphics[scale=.4]{dependence}
+\end{center}
+
+Using this information, I can construct Gibbs steps within each of which the sampled parameters are conditionally independent.
+
+\begin{enumerate}
+\item $\rho_n$ ($n = 1, \ldots, N)$
+\item $\gamma_g$ ($g = 1, \ldots, G)$
+\item $\e_{g, n}$ ($g = 1, \ldots, G)$, ($n = 1, \ldots, N)$
+\item $\phi_g$ ($g = 1, \ldots, G)$
+\item $\alpha_g$ ($g = 1, \ldots, G)$
+\item $\delta_g$ ($g = 1, \ldots, G)$
+\item $\nu$, $\theta_\phi$, $\theta_\alpha$, $\theta_\delta$
+\item $\tau$, $\sigma_\rho$, $\sigma_\phi$, $\sigma_\alpha$, $\sigma_\delta$ 
+\end{enumerate}
+
+
+
 
 
 
@@ -371,7 +535,7 @@ Recall:
  Then from the model in Section \ref{sec:model}, we get: 
 
 \begin{align*}
-p(\nu \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \gamma_g^2 \ \left |  \ \text{shape} = \frac{\nu}{2} \right ., \text{scale} = \frac{\nu \cdot \tau^2}{2} \right ) \right ] \cdot \text{U}(\nu \mid 0, d) \\ 
+p(\nu \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \gamma_g^2 \ \left |  \ \text{shape} = \frac{\nu}{2} \right ., \text{scale} = \frac{\nu \tau^2}{2} \right ) \right ] \cdot \text{U}(\nu \mid 0, d) \\ 
 p(\rho_n \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \mid \exp(\rho_n + \e_{g, n} + \eta(g, n))) \right ] \cdot  \text{N}(\rho_n \mid 0, \sigma_\rho^2) \\
 p(\phi_g \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{Poisson}(y_{g, n} \mid \exp(\rho_n + \e_{g, n} + \eta(g, n))) \right ] \cdot \text{N}(\phi_g \mid \theta_\phi, \sigma_\phi^2) \\
 p(\alpha_g \mid \cdots) &\propto \left [ \prod_{k(n) \ne 2} \text{Poisson}(y_{g, n} \mid \exp(\rho_n + \e_{g, n} + \eta(g, n))) \right ] \cdot \text{N}(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \\
@@ -381,8 +545,8 @@ p(\e_{g, n} \mid \cdots) &\propto \text{Poisson}(y_{g, n} \mid \exp(\rho_n + \e_
 
 \begin{align*}
 p \left (\sigma_\rho \mid \cdots \right ) &= \left [ \prod_{n = 1}^N \text{N}(\rho_n \mid 0, \sigma_\rho^2) \right ] \cdot \text{U}(\sigma_\rho \mid 0, s_\rho) \\
-p(\gamma_g^2 \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \gamma_g^2) \right ] \cdot \text{Inv-Gamma} \left ( \gamma_g^2 \ \left |  \ \text{shape} = \frac{\nu}{2} \right . , \text{scale} = \frac{\nu \cdot \tau^2}{2} \right ) \\ 
-p(\tau^2 \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \gamma_g^2 \ \left |  \ \text{shape} = \frac{\nu}{2} \right ., \text{scale} = \frac{\nu \cdot \tau^2}{2} \right ) \right ] \cdot \text{Gamma}(\tau^2 \mid \text{shape} = a, \text{rate} = b) \\
+p(\gamma_g^2 \mid \cdots) &\propto \left [ \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \gamma_g^2) \right ] \cdot \text{Inv-Gamma} \left ( \gamma_g^2 \ \left |  \ \text{shape} = \frac{\nu}{2} \right . , \text{scale} = \frac{\nu \tau^2}{2} \right ) \\ 
+p(\tau^2 \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \gamma_g^2 \ \left |  \ \text{shape} = \frac{\nu}{2} \right ., \text{scale} = \frac{\nu \tau^2}{2} \right ) \right ] \cdot \text{Gamma}(\tau^2 \mid \text{shape} = a, \text{rate} = b) \\
 p(\theta_\phi \mid \cdots ) & \propto \left [ \prod_{g = 1}^G \text{N}( \phi_g \mid \theta_\phi, \sigma_\phi^2) \right ]  \cdot \text{N}(\theta_\phi \mid 0, c_{\phi}^2) \\
 p(\theta_\alpha \mid \cdots ) & \propto \left [ \prod_{g = 1}^G \text{N}( \alpha_g \mid \theta_\alpha, \sigma_\alpha^2) \right ]  \cdot \text{N}(\theta_\alpha \mid 0, c_{\alpha}^2) \\
 p(\theta_\delta \mid \cdots ) & \propto \left [ \prod_{g = 1}^G \text{N}( \delta_g \mid \theta_\delta, \sigma_\delta^2) \right ]  \cdot \text{N}(\theta_\delta \mid 0, c_{\delta}^2) \\
@@ -407,9 +571,18 @@ I use this transformation several times in the next sections.
 \subsection{$p(\nu \mid \cdots)$: Metropolis}
 
 \begin{align*}
-p(\nu \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \gamma_g^2 \mid \text{shape} = \frac{\nu}{2}, \ \text{scale} = \frac{\nu \cdot \tau^2}{2} \right ) \right ] \cdot \text{U}(\nu \mid 0, d) \\ 
-& \propto \prod_{g = 1}^G \left [  \Gamma \left(\nu/2 \right )^{-1} \left ( \frac{\nu \cdot \tau^2}{2}\right ) ^ {\nu/2 } \left ( { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{1}{ \gamma_g^2}\frac{\nu \cdot \tau^2}{2} \right ) \right ] I(0 < \nu < d) \\
-& \propto \Gamma \left( \nu/2 \right )^{-G} \left ( \frac{\nu \cdot \tau^2}{2}\right ) ^ { G \nu  /2 } \left ( \prod_{g = 1}^G { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{\nu \cdot \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \gamma_g^2} \right ) I(0 < \nu < d) \\
+p(\nu \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \gamma_g^2 \mid \text{shape} = \frac{\nu}{2}, \ \text{scale} = \frac{\nu \tau^2}{2} \right ) \right ] \cdot \text{U}(\nu \mid 0, d) \\ 
+&= \prod_{g = 1}^G \left [  \Gamma \left(\nu/2 \right )^{-1} \left ( \frac{\nu \tau^2}{2}\right ) ^ {\nu/2 } \left ( { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{1}{ \gamma_g^2}\frac{\nu \tau^2}{2} \right ) \right ] I(0 < \nu < d) \\
+&= \Gamma \left( \nu/2 \right )^{-G} \left ( \frac{\nu \tau^2}{2}\right ) ^ { G \nu  /2 } \left ( \prod_{g = 1}^G { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{\nu \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \gamma_g^2} \right ) I(0 < \nu < d) \\
+& \propto \Gamma \left( \nu/2 \right )^{-G} \left ( \frac{\nu \tau^2}{2}\right ) ^ { G \nu  /2 } \left ( \prod_{g = 1}^G { \gamma_g^2} \right )^{ -\nu/2} \exp \left (- \frac{\nu \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \gamma_g^2} \right ) I(0 < \nu < d) \\
+&=  \exp \left ( -G \log \Gamma(\nu/2) + \frac{G \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) - \nu \sum_{g = 1}^G \log \gamma_g -\frac{\nu \tau^2}{2} \sum_{g = 1}^G \frac{1}{\gamma_g^2} \right ) \\
+& \qquad \times I(0 < \nu < d) \\
+&=  \exp \left ( -G \log \Gamma(\nu/2) + \frac{G \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) - \nu \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) \\
+& \qquad \times I(0 < \nu < d) \\
+&=  \exp \left ( -G \log \Gamma(\nu/2) + \frac{G \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) - G \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) \\
+& \qquad \times I(0 < \nu < d) \\
+&=  \exp \left ( - \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )^G \\
+& \qquad \times I(0 < \nu < d) \\
 \end{align*}
 
 \subsection{$p(\rho_n \mid \cdots)$: Metropolis}
@@ -429,6 +602,16 @@ p(\rho_n \mid \cdots) &\propto \left [ \prod_{g = 1}^G \text{Poisson}(y_{g, n} \
 
 
 
+\subsection{ $p(\e_{g, n} \mid \cdots)$ Metropolis}
+ 
+ \begin{align*}
+p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \cdot \text{N}(\e_{g, n} \mid 0, \gamma_g^2) \\
+&\propto \lambda_{g, n}^{y_{g, n}} \exp(- \lambda_{g,n}) \exp \left ( - \frac{\e_{g, n}^2}{2 \gamma_g^2} \right ) \\
+&= \exp \left (y_{g, n} \log \lambda_{g, n}- \lambda_{g,n}  - \frac{\e_{g, n}^2}{2 \gamma_g^2} \right) \\
+&= \exp \left (y_{g, n} (\rho_n + \e_{g, n} + \eta(g, n))- \exp(\rho_n + \e_{g, n} + \eta(g, n))  - \frac{\e_{g, n}^2}{2 \gamma_g^2} \right) \\
+&= \exp \left (y_{g, n} \e_{g, n} - \exp(\rho_n + \e_{g, n} + \eta(g, n))  - \frac{\e_{g, n}^2}{2 \gamma_g^2} \right) \\
+&= \exp \left (y_{g, n} \e_{g, n} - \frac{\e_{g, n}^2}{2 \gamma_g^2}  - \exp( \e_{g, n} ) \exp(\rho_n + \eta(g, n))  \right)
+\end{align*}
 
 
 
@@ -551,23 +734,13 @@ p(\delta_g \mid \cdots ) & \propto \exp \left (\delta_g \sum_{k(n) = 2} y_{g, n}
 
 
 
-\subsection{ $p(\e_{g, n} \mid \cdots)$ Metropolis}
- 
- \begin{align*}
-p(\e_{g, n} \mid \cdots) &= \text{Poisson}(y_{g, n} \mid \lambda_{g, n}) \cdot \text{N}(\e_{g, n} \mid 0, \gamma_g^2) \\
-&\propto \lambda_{g, n}^{y_{g, n}} \exp(- \lambda_{g,n}) \exp \left ( - \frac{\e_{g, n}^2}{2 \gamma_g^2} \right ) \\
-&= \exp \left (y_{g, n} \log \lambda_{g, n}- \lambda_{g,n}  - \frac{\e_{g, n}^2}{2 \gamma_g^2} \right) \\
-&= \exp \left (y_{g, n} (\rho_n + \e_{g, n} + \eta(g, n))- \exp(\rho_n + \e_{g, n} + \eta(g, n))  - \frac{\e_{g, n}^2}{2 \gamma_g^2} \right) \\
-&= \exp \left (y_{g, n} \e_{g, n} - \exp(\rho_n + \e_{g, n} + \eta(g, n))  - \frac{\e_{g, n}^2}{2 \gamma_g^2} \right) \\
-&= \exp \left (y_{g, n} \e_{g, n} - \frac{\e_{g, n}^2}{2 \gamma_g^2}  - \exp( \e_{g, n} ) \exp(\rho_n + \eta(g, n))  \right)
-\end{align*}
 
 
 
 
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -619,6 +792,61 @@ p(\theta_\delta \mid \cdots) &= N \left ( \theta_\delta \ \left | \ \frac{c_\del
 
 
 
+%%%%%%%%%%%%%%%%%%
+
+\subsection{$p(\tau^2 \mid \cdots)$: Gamma}
+
+\begin{align*}
+p(\tau^2 \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \gamma_g^2 \mid \text{shape} = \frac{\nu}{2}, \text{scale} = \frac{\nu \tau^2}{2} \right ) \right ] \cdot \text{Gamma}(\tau^2 \mid \text{shape} = a, \text{rate} = b) \\
+&\propto \left [ \Gamma \left(\nu/2 \right )^{-G} \left ( \frac{\nu \tau^2}{2}\right ) ^ { G \nu  /2 } \left ( \prod_{g = 1}^G { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{\nu \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \gamma_g^2} \right ) \right ] \cdot (\tau^2)^{a - 1} \exp \left (- b \tau^2 \right )  \\
+& \propto \left [ \left ( \tau^2 \right ) ^ { G \nu  /2 } \exp \left (- \tau^2 \cdot \frac{\nu}{2} \sum_{g = 1}^G \frac{1}{ \gamma_g^2} \right ) \right ] \cdot (\tau^2)^{a - 1} \exp \left (- b \tau^2 \right )  \\
+&= (\tau^2)^{G\nu/2 + a - 1} \exp \left (- \tau^2 \left (b + \frac{\nu}{2} \sum_{g = 1}^G \frac{1}{\gamma_g^2} \right )  \right ) 
+\end{align*}
+
+Hence:
+
+\begin{align*}
+p(\tau^2 \mid \cdots) = \text{Gamma} \left ( \tau^2 \mid \text{shape} =  a + \frac{G\nu}{2}, \ \text{rate} =  b + \frac{\nu}{2} \sum_{g = 1}^G \frac{1}{\gamma_g^2} \right ) 
+\end{align*}
+
+
+\subsection{$p \left (\frac{1}{\gamma_g^2} \mid \cdots \right )$ Gamma}
+
+\begin{align*}
+p(\gamma_g^2 \mid \cdots) &= \left [ \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \gamma_g^2) \right ] \cdot \text{Inv-Gamma} \left ( \gamma_g^2 \mid \text{shape} = \frac{\nu}{2}, \text{scale} = \frac{\nu \tau^2}{2} \right ) \\ 
+&\propto \left [ \prod_{n = 1}^N (\gamma_g^{2})^{-1/2} \exp \left (- \frac{1}{ \gamma_g^2} \frac{\e_{g, n}^2}{2} \right ) \right ] \cdot \left ( { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{1}{ \gamma_g^2}\frac{\nu \tau^2}{2} \right ) \\
+&=  \left [ (\gamma_g^{2})^{-N/2} \exp \left (-\frac{1}{ \gamma_g^2}  \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2 \right ) \right ] \cdot \left ( { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{1}{ \gamma_g^2}\frac{\nu \tau^2}{2} \right ) \\
+&=  (\gamma_g^{2})^{-((N+ \nu)/2 + 1)} \exp \left (-\frac{1}{ \gamma_g^2}  \frac{1}{2} \left (\nu \tau^2 + \sum_{n = 1}^N \e_{g, n}^2 \right ) \right ) 
+\end{align*}
+
+which is the kernel of an inverse gamma distribution. Hence:
+
+\begin{align*}
+p \left ( \left . \frac{1}{\gamma_g^2} \ \right | \ \cdots \right ) = \text{Gamma} \left ( \left . \frac{1}{\gamma_g^2} \ \right | \ \text{shape} = \frac{N + \nu}{2}, \  \text{rate} = \frac{1}{2} \left (\nu \tau^2 + \sum_{n  =1}^N \e_{g, n}^2 \right ) \right )
+\end{align*}
+
+
+
+\subsection {$p \left ( \frac{1}{\sigma_\rho^2} \mid \cdots \right ) $ Truncated Gamma}
+
+\begin{align*}
+p( \sigma_\rho^2 \mid \cdots) &= p(\sigma_\rho \mid \cdots) \frac{1}{2} (\sigma_\rho^2)^{-1/2} \qquad \text{(transformation in Section \ref{subsec:sd})} \\
+ &\propto \left [ \prod_{n = 1}^N \text{N}(\rho_n \mid 0, \sigma_\rho^2) \right ] \cdot \text{U}(\sigma_\rho \mid 0, s_\rho) \frac{1}{2} (\sigma_\rho^2)^{-1/2} \\
+    &\propto \prod_{n = 1}^N \left [ \frac{1}{\sqrt{\sigma_\rho^2 }}\exp \left (- \frac{\rho_n^2}{2 \sigma_\rho^2} \right ) \right ] \cdot \text{I}(0 < \sigma_\rho < s_\rho) (\sigma_\rho^2)^{-1/2}\\
+    &= (\sigma_\rho^2)^{-N/2} \exp \left ( - \frac{1}{\sigma_\rho^2}\frac{1}{2 } \sum_{n = 1}^N \rho_n^2 \right )\cdot \text{I}(0 < \sigma_\rho < s_\rho) (\sigma_\rho^2)^{-1/2} \\
+&= (\sigma_\rho^2)^{-(N/2 -1/2 + 1)} \exp \left ( - \frac{1}{\sigma_\rho^2}\frac{1}{2 } \sum_{n = 1}^N \rho_n^2 \right )\cdot \text{I}(0 < \sigma_\rho < s_\rho) \\
+ \end{align*}
+ 
+which is the kernel of a truncated inverse gamma distribution. Hence:
+
+\begin{align*}
+p \left ( \frac{1}{\sigma_\rho^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac{1}{\sigma_\rho^2} \mid \text{shape} = \frac{N - 1}{2}, \ \text{rate} =\frac{1}{2} {\sum_{n = 1}^N \rho_n^2} \right )  I \left (\frac{1}{\sigma_\rho^2} > \frac{1}{s_\rho^2} \right ) \\
+\end{align*}
+
+
+
+
+
 \subsection{$p\left ( \frac{1}{\sigma_\phi^2} \mid \ldots \right )$: Truncated Gamma}
 
 \begin{align*}
@@ -654,417 +882,7 @@ p \left ( \left . \frac{1}{\sigma_\delta^2} \  \right | \  \cdots \right ) &= \t
 \end{align*}
 
 
-\subsection {$p \left ( \frac{1}{\sigma_\rho^2} \mid \cdots \right ) $ Truncated Gamma}
 
-\begin{align*}
-p( \sigma_\rho^2 \mid \cdots) &= p(\sigma_\rho \mid \cdots) \frac{1}{2} (\sigma_\rho^2)^{-1/2} \qquad \text{(transformation in Section \ref{subsec:sd})} \\
- &\propto \left [ \prod_{n = 1}^N \text{N}(\rho_n \mid 0, \sigma_\rho^2) \right ] \cdot \text{U}(\sigma_\rho \mid 0, s_\rho) \frac{1}{2} (\sigma_\rho^2)^{-1/2} \\
-    &\propto \prod_{n = 1}^N \left [ \frac{1}{\sqrt{\sigma_\rho^2 }}\exp \left (- \frac{\rho_n^2}{2 \sigma_\rho^2} \right ) \right ] \cdot \text{I}(0 < \sigma_\rho < s_\rho) (\sigma_\rho^2)^{-1/2}\\
-    &= (\sigma_\rho^2)^{-N/2} \exp \left ( - \frac{1}{\sigma_\rho^2}\frac{1}{2 } \sum_{n = 1}^N \rho_n^2 \right )\cdot \text{I}(0 < \sigma_\rho < s_\rho) (\sigma_\rho^2)^{-1/2} \\
-&= (\sigma_\rho^2)^{-(N/2 -1/2 + 1)} \exp \left ( - \frac{1}{\sigma_\rho^2}\frac{1}{2 } \sum_{n = 1}^N \rho_n^2 \right )\cdot \text{I}(0 < \sigma_\rho < s_\rho) \\
- \end{align*}
- 
-which is the kernel of a truncated inverse gamma distribution. Hence:
-
-\begin{align*}
-p \left ( \frac{1}{\sigma_\rho^2} \mid \cdots \right) &= \text{Gamma} \left ( \frac{1}{\sigma_\rho^2} \mid \text{shape} = \frac{N - 1}{2}, \ \text{rate} =\frac{1}{2} {\sum_{n = 1}^N \rho_n^2} \right )  I \left (\frac{1}{\sigma_\rho^2} > \frac{1}{s_\rho^2} \right ) \\
-\end{align*}
-
-\subsection{$p(\tau^2 \mid \cdots)$: Gamma}
-
-\begin{align*}
-p(\tau^2 \mid \cdots) &= \left [ \prod_{g = 1}^G \text{Inv-Gamma} \left ( \gamma_g^2 \mid \text{shape} = \frac{\nu}{2}, \text{scale} = \frac{\nu \cdot \tau^2}{2} \right ) \right ] \cdot \text{Gamma}(\tau^2 \mid \text{shape} = a, \text{rate} = b) \\
-&\propto \left [ \Gamma \left(\nu/2 \right )^{-G} \left ( \frac{\nu \cdot \tau^2}{2}\right ) ^ { G \nu  /2 } \left ( \prod_{g = 1}^G { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{\nu \cdot \tau^2}{2} \sum_{g = 1}^G \frac{1}{ \gamma_g^2} \right ) \right ] \cdot (\tau^2)^{a - 1} \exp \left (- b \tau^2 \right )  \\
-& \propto \left [ \left ( \tau^2 \right ) ^ { G \nu  /2 } \exp \left (- \tau^2 \cdot \frac{\nu}{2} \sum_{g = 1}^G \frac{1}{ \gamma_g^2} \right ) \right ] \cdot (\tau^2)^{a - 1} \exp \left (- b \tau^2 \right )  \\
-&= (\tau^2)^{G\nu/2 + a - 1} \exp \left (- \tau^2 \left (b + \frac{\nu}{2} \sum_{g = 1}^G \frac{1}{\gamma_g^2} \right )  \right ) 
-\end{align*}
-
-Hence:
-
-\begin{align*}
-p(\tau^2 \mid \cdots) = \text{Gamma} \left ( \tau^2 \mid \text{shape} =  a + \frac{G\nu}{2}, \ \text{rate} =  b + \frac{\nu}{2} \sum_{g = 1}^G \frac{1}{\gamma_g^2} \right ) 
-\end{align*}
-
-
-\subsection{$p \left (\frac{1}{\gamma_g^2} \mid \cdots \right )$ Gamma}
-
-\begin{align*}
-p(\gamma_g^2 \mid \cdots) &= \left [ \prod_{n = 1}^N \text{N}(\e_{g, n} \mid 0, \gamma_g^2) \right ] \cdot \text{Inv-Gamma} \left ( \gamma_g^2 \mid \text{shape} = \frac{\nu}{2}, \text{scale} = \frac{\nu \cdot \tau^2}{2} \right ) \\ 
-&\propto \left [ \prod_{n = 1}^N (\gamma_g^{2})^{-1/2} \exp \left (- \frac{1}{ \gamma_g^2} \frac{\e_{g, n}^2}{2} \right ) \right ] \cdot \left ( { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{1}{ \gamma_g^2}\frac{\nu \cdot \tau^2}{2} \right ) \\
-&=  \left [ (\gamma_g^{2})^{-N/2} \exp \left (-\frac{1}{ \gamma_g^2}  \frac{1}{2} \sum_{n = 1}^N \e_{g, n}^2 \right ) \right ] \cdot \left ( { \gamma_g^2} \right )^{ -(\nu/2 + 1)} \exp \left (- \frac{1}{ \gamma_g^2}\frac{\nu \cdot \tau^2}{2} \right ) \\
-&=  (\gamma_g^{2})^{-((N+ \nu)/2 + 1)} \exp \left (-\frac{1}{ \gamma_g^2}  \frac{1}{2} \left (\nu \cdot \tau^2 + \sum_{n = 1}^N \e_{g, n}^2 \right ) \right ) 
-\end{align*}
-
-which is the kernel of an inverse gamma distribution. Hence:
-
-\begin{align*}
-p \left ( \left . \frac{1}{\gamma_g^2} \ \right | \ \cdots \right ) = \text{Gamma} \left ( \left . \frac{1}{\gamma_g^2} \ \right | \ \text{shape} = \frac{N + \nu}{2}, \  \text{rate} = \frac{1}{2} \left (\nu \cdot \tau^2 + \sum_{n  =1}^N \e_{g, n}^2 \right ) \right )
-\end{align*}
-
-
-
-
-
-
-
-\section{Metropolis steps}
-
-
-\subsection{A common proposal for $\rho_n$, $\phi_g$, $\alpha_g$, $\delta_g$, and $\e_{g, n}$}
-
-\paragraph{} The full conditionals of $\rho_n$, $\phi_g$, $\alpha_g$, $\delta_g$, and $\e_{g, n}$ all have the form,
-
-
-\begin{align*}
-\log &p(\theta \mid \cdots) = A \theta + B(\theta - C)^2 + D e^\theta + E e^{-\theta} \\
-&\approx  A \theta + B(\theta - C)^2 + D e^{\wh{\theta}} \left (1 + \theta - \wh{\theta} + \frac{(\theta - \wh{\theta})^2}{2} \right ) + E e^{-\wh{\theta}} \left (1 - \theta + \wh{\theta} + \frac{(\theta - \wh{\theta})^2}{2} \right ) \\
-&=  B C^2   
-+ D e^{\wh{\theta}}
-- D e^{\wh{\theta}} \wh{\theta} 
-+ \frac{1}{2} D e^{\wh{\theta}} \wh{\theta}^2
-+ E e^{-\wh{\theta}} 
-+ E e^{-\wh{\theta}} \wh{\theta} 
-+ \frac{1}{2} E e^{-\wh{\theta}} \wh{\theta}^2 \\
-&\qquad + A \theta
-- 2 B C \theta
-+ D e^{\wh{\theta}} \theta
-- D e^{\wh{\theta}} \wh{\theta} \theta 
-- E e^{-\wh{\theta}} \theta
-- E e^{-\wh{\theta}} \wh{\theta} \theta \\
-&\qquad + B \theta^2
-+ \frac{1}{2} D e^{\wh{\theta}} \theta^2 
-+ \frac{1}{2} E e^{-\wh{\theta}} \theta^2 \\
-&=  \left [ B C^2   
-+ D e^{\wh{\theta}}
-- D e^{\wh{\theta}} \wh{\theta} 
-+ \frac{1}{2} D e^{\wh{\theta}} \wh{\theta}^2
-+ E e^{-\wh{\theta}} 
-+ E e^{-\wh{\theta}} \wh{\theta} 
-+ \frac{1}{2} E e^{-\wh{\theta}} \wh{\theta}^2 \right ] \\
-&\qquad + \left [ A 
-- 2 B C 
-+ D e^{\wh{\theta}} 
-- D e^{\wh{\theta}} \wh{\theta} 
-- E e^{-\wh{\theta}} 
-- E e^{-\wh{\theta}} \wh{\theta}\right ] \theta \\
-&\qquad + \left [ B 
-+ \frac{1}{2} D e^{\wh{\theta}}  
-+ \frac{1}{2} E e^{-\wh{\theta}} \right ] \theta^2 \\
-&=  \left [ B C^2   
-+ D e^{\wh{\theta}} \left ( 1 
-- \wh{\theta} 
-+ \frac{1}{2} \wh{\theta}^2 \right )
-+ E e^{-\wh{\theta}} \left ( 1 
-+ \wh{\theta} 
-+ \frac{1}{2} \wh{\theta}^2 \right )\right ] \\
-&\qquad + \left [ A 
-- 2 B C 
-+ D e^{\wh{\theta}} \left (1 
--  \wh{\theta} \right )
-- E e^{-\wh{\theta}} \left ( 1
-+ E e^{-\wh{\theta}} \wh{\theta} \right ) \right ] \theta \\
-&\qquad + \left [ B 
-+ \frac{1}{2} D e^{\wh{\theta}}  
-+ \frac{1}{2} E e^{-\wh{\theta}} \right ] \theta^2 \\
-\end{align*}
-
-
-
-
-
-
-
-
-
-
-
-
-\subsection{Calculating $\wh{c}_n$}
-
-Let $g(\rho_n)$ be the kernel of the log full conditional density of $\rho_n$. Then,
-
-\begin{align*}
-g(\rho_n) &= \rho_n G \ov{y}_{.n} - \exp(\rho_n) \sum_{g = 1}^G \exp(\e_{g, n} + \eta(g, n)) - \frac{\rho_n^2}{2 \sigma_\rho^2}
-\end{align*}
-
-Differentiating,
-
-\begin{align*}
-g'(\rho_n) &= G \ov{y}_{.n} - \exp(\rho_n) \sum_{g = 1}^G \exp(\e_{g, n} + \eta(g, n)) - \frac{\rho_n}{\sigma_\rho^2}
-\end{align*}
-
-We let $\wh{c}_n$ be the root of this derivative.
-
-\begin{align*}
-0 &= G \ov{y}_{.n} - \exp(\wh{c}_n) \sum_{g = 1}^G \exp(\e_{g, n} + \eta(g, n)) - \frac{\wh{c}_n}{\sigma_\rho^2}
-\end{align*}
-
-Using a quadratic approximation to the exponential function,
-
-\begin{align*}
-0 &= G \ov{y}_{.n} - \left (1 + \wh{c}_n + \frac{\wh{c}_n^2}{2} \right ) \underbrace{ \sum_{g = 1}^G \exp(\e_{g, n} + \eta(g, n))}_S - \frac{\wh{c}_n}{\sigma_\rho^2} \\
-&= \left (G \ov{y}_{.n} - S \right ) + \left (-S - \frac{1}{\sigma_\rho^2} \right ) \wh{c}_n + \left ( \frac{S}{2} \right ) \wh{c}_n^2
-\end{align*}
-
-Using the quadratic formula, we get
-
-\begin{align*}
-\wh{c}_n &= \frac{S + \frac{1}{\sigma_\rho^2} \pm \sqrt{ \left (S + \frac{1}{\sigma_\rho^2} \right )^2 - 2 S (G \ov{y}_{.n} -S)}}{S}
-\end{align*}
-
-In practice, I will use the root with the higher value of $g(\wh{c}_n)$.
-
-
-
-\subsection{Calculating $\wh{\e}_{g, n}$}
-
-
-
-Let $g(\e_{g, n})$ be the kernel of the log full conditional density of $\e_{g, n}$.
-
-\begin{align*}
-g(\e_{g, n}) &= y_{g, n} \e_{g, n} - \exp (\rho_n + \e_{g, n} + \eta(g, n)) - \frac{\e_{g, n}^2}{2 \gamma_g^2} \\ 
-&= y_{g, n} \e_{g, n} - \exp (\e_{g,n}) \exp (\rho_n + \eta(g, n)) - \frac{\e_{g, n}^2}{2 \gamma_g^2} \\ 
-\end{align*}
-
-Differentiating with respect to $\e_{g, n}$,
-
-\begin{align*}
-g(\e_{g, n}) &= y_{g, n} -  \exp (\e_{g,n}) \exp (\rho_n + \eta(g, n)) - \frac{\e_{g, n}}{\gamma_g^2}
-\end{align*}
-
-We let $\wh{\e}_{g, n}$ be the root of this derivative.
-
-\begin{align*}
-0 &= y_{g, n} - \exp (\wh{\e}_{g,n}) \exp (\rho_n + \eta(g, n)) - \frac{\wh{\e}_{g, n}}{\gamma_g^2}
-\end{align*}
-
-Taking the quadratic approximation to the exponential,
-
-\begin{align*}
-0 &= y_{g, n} - \left ( 1  + \wh{\e}_{g,n} + \frac{\wh{\e}_{g, n}}{2}\right ) \underbrace{\exp (\rho_n + \eta(g, n))}_{S} - \frac{\wh{\e}_{g, n}}{\gamma_g^2} \\
-&= (y_{g, n} - S) + \left (-S - \frac{1}{\gamma_g^2} \right ) \wh{\e}_{g, n} + \left (\frac{
-S}{2} \right ) \wh{\e}_{g, n}^2
-\end{align*}
-
-Using the quadratic formula,
-
-\begin{align*}
-\wh{\e}_{g, n} &= \frac{\left (S + \frac{1}{\gamma_g^2} \right )  \pm \sqrt{ \left (S + \frac{1}{\gamma_g^2} \right )^2 - 2S(y_{g, n} - S)    }   }{S}
-\end{align*}
-
-In practice, I will use the root with the higher value of $g(\wh{\e}_{g, n})$.
-
-
-
-
-
-
-
-
-\subsection{Calculating $\wh{\phi}_g$}
-
-
-
-Let $g(\phi_g)$ be the kernel of the log  full conditional density of $\phi_g$. Then,
-
-\begin{align*}
-g(\phi_g) &= \sum_{n = 1}^N \left [  y_{g, n} \eta(g, n) - \exp(\rho_n + \e_{g, n} - \eta(g, n)) \right ] - \frac{(\phi_g - \theta_\phi)^2}{2 {\sigma_\phi}^2} \\
-&=  \sum_{\text{group}(n) = 1} \left [ y_{g, n}(\phi_g - \alpha_g) - \exp(\rho_n + \e_{g, n} - (\phi_g - \alpha_g)) \right ] \\
-& \qquad+  \sum_{\text{group}(n) = 2} \left [ y_{g, n}(\phi_g + \delta_g) - \exp(\rho_n + \e_{g, n} - (\phi_g + \delta_g)) \right ] \\
-&\qquad+  \sum_{\text{group}(n) = 3} \left [ y_{g, n}(\phi_g + \alpha_g) - \exp(\rho_n + \e_{g, n} - (\phi_g + \alpha_g)) \right ] \\
-&\qquad- \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \\ \\
-&=  \sum_{\text{group}(n) = 1} y_{g, n}(\phi_g - \alpha_g) -  \sum_{\text{group}(n) = 1} \exp(\rho_n + \e_{g, n} - (\phi_g - \alpha_g)) \\
-& \qquad+  \sum_{\text{group}(n) = 2}  y_{g, n}(\phi_g + \delta_g) - \sum_{\text{group}(n) = 2}  \exp(\rho_n + \e_{g, n} - (\phi_g + \delta_g)) \\
-&\qquad+  \sum_{\text{group}(n) = 3} y_{g, n}(\phi_g + \alpha_g) -  \sum_{\text{group}(n) = 3} \exp(\rho_n + \e_{g, n} - (\phi_g + \alpha_g))  \\
-&\qquad- \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \\ \\
-&=  \phi_g \sum_{\text{group}(n) = 1} y_{g, n} - \alpha_g \sum_{\text{group}(n) = 1} y_{g, n} -  \exp(-\phi_g) \sum_{\text{group}(n) = 1} \exp(\rho_n + \e_{g, n} + \alpha_g) \\
-&\qquad+  \phi_g \sum_{\text{group}(n) = 2} y_{g, n} + \delta_g \sum_{\text{group}(n) = 2} y_{g, n}  - \exp(-\phi_g) \sum_{\text{group}(n) = 2}  \exp(\rho_n + \e_{g, n} -  \delta_g) \\
-&\qquad+  \phi_g \sum_{\text{group}(n) = 3} y_{g, n} + \alpha_g \sum_{\text{group}(n) = 3} y_{g, n}  -  \exp(-\phi_g)\sum_{\text{group}(n) = 3} \exp(\rho_n + \e_{g, n} - \alpha_g)  \\
-&\qquad- \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2} \\ \\
-&= N \ov{y}_{g.} \phi_g + S_2 - S  \exp(-\phi_g) - \frac{(\phi_g - \theta_\phi)^2}{2 \sigma_\phi^2}
-\end{align*}
-
-where
-
-\begin{align*}
-S_2&= \delta_g  \sum_{\text{group}(n) = 2} y_{g, n} + \alpha_g \left (  \sum_{\text{group}(n) = 3} y_{g, n} - \sum_{\text{group}(n) = 1} y_{g, n}\right ) \\
-S &=\sum_{\text{group}(n) = 1} \exp(\rho_n + \e_{g, n} + \alpha_g) + \sum_{\text{group}(n) = 2} \exp(\rho_n + \e_{g, n} - \delta_g) + \sum_{\text{group}(n) = 3} \exp(\rho_n + \e_{g, n} - \alpha_g) 
-\end{align*}
-
-
-Differentiating $g$, we get
-
-\begin{align*}
-g'(\phi_g) &= N \ov{y}_{g.}  + S \exp(- \phi_g) - \frac{\phi_g - \theta_\phi}{\sigma_\phi}
-\end{align*}
-
-We take $\wh{\phi}_g$ to be the root of this derivative:
-
-\begin{align*}
-0 &= N \ov{y}_{g.}  + S \exp(-  \wh{\phi}_g) - \frac{\wh{\phi}_g - \theta_\phi}{\sigma_\phi}
-\end{align*}
-
-Taking the quadratic Taylor approximation of the exponential function,
-
-\begin{align*}
-0 &= N \ov{y}_{g.}  + S  \left (1 - \wh{\phi}_g - \frac{\wh{\phi}_g^2}{2} \right) - \frac{\wh{\phi}_g - \theta_\phi}{\sigma_\phi} \\
-&= N \ov{y}_{g.} + S + \frac{\theta_\phi}{\sigma_\phi}  + \left (-1 - \frac{1}{\sigma_\phi} \right ) \wh{\phi}_g + \left (- \frac{S}{2}\right ) \wh{\phi}_g^2
-\end{align*}
-
-From the quadratic formula,
-
-\begin{align*}
-\wh{\phi}_g &= \frac{\left (1 + \frac{1}{\sigma_\phi} \right ) \pm \sqrt{\left (1 + \frac{1}{\sigma_\phi} \right )^2 + 2S \left (N \ov{y}_{g.} + S + \frac{\theta_\phi}{\sigma_\phi} \right )}}{-S}
-\end{align*}
-
-
-In practice, I will use the root with the higher value of $g(\wh{\phi}_{g})$.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Old work: derivations of Metropolis proposals for point mass mixtures}
-
-
-
-
-\subsection{$\alpha_g$}
-
-I choose a proposal for $\alpha_g$ with the form,
-
-\begin{align*}
-q(\alpha_g \mid \theta_\alpha', \sigma_\alpha', \pi_\alpha') = I(\alpha_g = 0) \pi_\alpha'  + I(\alpha_g \ne 0) (1 - \pi_\alpha') N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2),
-\end{align*}
-
-which resembles the prior for $\alpha_g$ except that the parameters are updated to reflect the data, $\underline{y}  = (y_{1, 1}, \ldots, y_{G, N})$ (except for $\pi_\alpha'$, for which we simply use $\pi_\alpha$). To find $\theta_\alpha'$ and $\sigma_\alpha'$, we pretend that $\alpha_g$ has a $N(\alpha_g \mid \theta_\alpha, \sigma_\alpha^2)$ conditional likelihood, $\theta_\alpha$ has a $N(\theta_\alpha \mid 0, c_\alpha^2)$ prior, and $\sigma_\alpha$ is fixed. From the rule on pages 46 and 47 of Gelman's book, the conditional posterior distribution of $\theta_\alpha$ is
-
-\begin{align*}
-N\left (\theta_\alpha \left |   \frac{ \sigma_\alpha^{-2} \alpha_g }{c_\alpha^{-2} + \sigma_\alpha^{-2}} \right ., \ (c_\alpha^{-2} + \sigma_\alpha^{-2})^{-1} \right )
-\end{align*}
-
-Hence, we let
-
-\begin{align*}
-\theta_\alpha' &=  \frac{ \sigma_\alpha^{-2} \alpha_g }{c_\alpha^{-2} + \sigma_\alpha^{-2}} \\
-(\sigma_\alpha^2)' &= \text{Var}(\alpha_g) \\
-&= \text{Var}( E(\alpha_g \mid \theta_\alpha)) + E( \text{Var}(\alpha_g \mid \theta_\alpha)) \\
-&= \underbrace{\text{Var}(\theta_\alpha)}_{\text{Use prior variance.}} + E(\sigma_\alpha^2) \\
-&= c_\alpha^2 + \sigma_\alpha^2
-\end{align*}
-
-
- For example, whereas we interpret $\pi_\alpha$ as $P(\alpha = 0)$, a prior probability, we interpret $\pi_\alpha'$ as:
-
-\begin{align*}
-\pi_\alpha' &= P(\alpha_g = 0 \mid \underline{y}, \ \ldots) \\
-& = \frac{P(\underline{y} \mid \alpha_g = 0,  \ldots) P(\alpha_g = 0)}{P(\underline{y} \mid \alpha_g = 0, \ \ldots) P(\alpha_g = 0) + P(\underline{y} \mid \alpha_g \ne 0,  \ldots) P(\alpha_g \ne 0)} \\
-&= \frac{1}{1 + \frac{P(  \underline{y} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P( \underline{y} \ \mid \ \alpha_g = 0, \ \ldots) } \frac{1 - \pi_\alpha}{\pi_\alpha}} \\
-&= \frac{1}{1 + \frac{1 - \pi_\alpha}{\pi_\alpha} \prod_{k(n) \ne 2}  \frac{ P( y_{g, n} \ \mid \ \alpha_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \alpha_g = 0, \ \ldots) } }
-\end{align*}
-
-where ``$\ldots$" represents all the model parameters except for the other $\alpha_g$'s. To simplify the likelihood ratio in the denominator, we need $P(y_{g, n} \mid \alpha_g = 0, \ldots)$ and $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$. 
-
-\begin{align*}
-P(y_{g, n} \mid \alpha_g = 0, \ldots) &= \text{Poisson}(y_{g, n} \mid \exp(\rho_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)))  \\
-&= \frac{1}{y_{g, n}!} \exp(-\exp(\rho_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \exp(y_{g, n} \cdot (\rho_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
-&=  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (\rho_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g)) - \exp(\rho_n + \e_{g, n} + \mu(n, \phi_g, 0, \delta_g))) \\
-\end{align*}
-
-I break up the calculation of $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ into 2 cases.
-
-\begin{enumerate}
-\item Assume library $n$ is in treatment group 1.
-
-\begin{align*}
-P(y_{g, n}& \mid \alpha_g \ne 0, \ldots) \\
-& = \int_{\alpha_g \ne 0} P(y_{g, n} \mid \alpha_g , \ldots) N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(\rho_n + \e_{g, n} + \eta(g, n)))  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-&=  \int_{\alpha_g \ne 0}  \text{Poisson}(y_{g, n} \mid \exp(\underbrace{\rho_n + \e_{g, n} + \phi_g}_{i} - \alpha_g)  N(\alpha_g \mid \theta_\alpha', (\sigma_\alpha')^2) d \alpha_g \\
-&= \int \frac{\exp(-\exp(i - \alpha_g)) (\exp(i - \alpha_g))^{y_{g, n}}}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right) d \alpha_g\\
-&\approx \int \frac{\exp(-\frac{(i - \alpha_g)^2}{2} - (i - \alpha_g) - 1) (\exp(y_{g, n}(i - \alpha_g)))}{y_{g, n}!} \frac{1}{\sqrt{2 \pi (\sigma_\alpha')^2}} \exp \left (- \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2}\right)d \alpha_g \\
-&= (2 \pi  (\sigma_\alpha')^2)^{-1/2} / y_{g, n}! \int \exp \left (-\frac{(i - \alpha_g)^2}{2} - i + \alpha_g - 1 + y_{g, n}(i - \alpha_g) - \frac{(\alpha_g - \theta_\alpha')^2}{2 (\sigma_\alpha)'^2} \right ) d \alpha_g \\
-&=  (2 \pi  (\sigma_\alpha')^2)^{-1/2} / y_{g, n}! \int \exp \left ( -\frac{\alpha_g^2}{2 (\sigma_\alpha')^2} -\frac{\alpha_g^2}{2} + i \alpha_g + \frac{\theta_\alpha' \alpha_g}{(\sigma_\alpha')^2} - y_{g, n} \alpha_g + \alpha_g  \right . \\
-& \left . \qquad - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1 \right ) d \alpha_g \\
-&=  \underbrace{(2 \pi (\sigma_\alpha')^2)^{-1/2} / y_{g, n}!}_{D} \int \exp \left ( \underbrace{\left ( -\frac{1}{2 (\sigma_\alpha')^2} -\frac{1}{2} \right )}_A \alpha_g^2 + \underbrace{\left ( i  + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} - y_{g, n}  + 1 \right )}_B \alpha_g  \right . \\
-& \left . \qquad \underbrace{ - \frac{i^2}{2} + i y_{g, n} - i - \frac{(\theta_\alpha')^2}{2 (\sigma_\alpha')^2 } - 1}_C \right ) d \alpha_g \\
-&= D \int \exp (A \alpha_g^2 + B \alpha_g + C) d \alpha_g \\
-&= D \int \exp \left( A \left (\alpha_g + \frac{B}{2A} \right )^2 + C - \frac{B^2}{4A} \right ) d \alpha_g \\
-&= D \exp \left ( C - \frac{B^2}{4A} \right ) \int \underbrace{\exp \left( -\frac{1}{2(1/(-2A))} \left (\alpha_g + \frac{B}{2A} \right )^2  \right ) d \alpha_g}_{\text{kernel of a normal distribution (note: $A < 0$)}} \\
-&= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (\frac{2 \pi }{ -2A} \right )^{1/2} \\
-&= D \exp \left ( C - \frac{B^2}{4A} \right ) \left  (- \frac{\pi }{ A} \right )^{1/2} \\
-\end{align*}
-
-\item $P(y_{g, n} \mid \alpha_g \ne 0, \ldots)$ is the same when $n$ is in treatment group 3 except that $B$ changes:
-
-\begin{align*}
-B = -i + \frac{\theta_\alpha'}{(\sigma_\alpha')^2} + y_{g, n} - 1
-\end{align*}
-
-\end{enumerate}
-
-
-\subsection{$\delta_g$}
-
-The proposal for $\delta_g$ is analogous to that of $\alpha_g$:
-
-
-\begin{align*}
-q(\delta_g \mid \theta_\delta', \sigma_\delta', \pi_\delta') = I(\delta_g = 0) \pi_\delta'  + I(\delta_g \ne 0) (1 - \pi_\delta') N(\delta_g \mid \theta_\delta', (\sigma_\delta')^2),
-\end{align*}
-
-where:
-
-\begin{align*}
-\theta_\delta' &=  \frac{ \sigma_\delta^{-2} \delta_g }{c_\delta^{-2} + \sigma_\delta^{-2}} \\
-(\sigma_\delta')^2 &= c_\delta^2 + \sigma_\delta^2 \\
-\pi_\delta' &= \pi_\delta
-\end{align*}
-
-\begin{align*}
-\pi_\delta' &= \frac{1}{1 + \frac{1 - \pi_\delta}{\pi_\delta} \prod_{k(n) = 2}  \frac{ P( y_{g, n} \ \mid \ \delta_g \ne 0, \ \ldots) }{P(y_{g, n} \ \mid \ \delta_g = 0, \ \ldots) }} \\ \\
-& \qquad P(y_{g, n} \mid \delta_g = 0, \ldots ) =  \frac{1}{y_{g, n}!} \exp(y_{g, n} \cdot (\rho_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0)) \\
-& \qquad   \qquad   \qquad  \qquad - \exp(\rho_n + \e_{g, n} + \mu(n, \phi_g, \alpha_g, 0))) \\ 
-& \qquad P(y_{g, n} \mid \delta_g \ne 0, \ldots ) = D \exp \left ( C - \frac{B^2}{4A} \right ) \left ( - \frac{\pi}{A} \right )^{1/2} \\ \\
-& \qquad \qquad A = - \frac{1}{2 (\sigma_\delta')^2} - \frac{1}{2}\\
-& \qquad \qquad B = - i + \frac{\theta_\delta'}{(\sigma_\delta')^2} + y_{g, n} - 1 \\
-& \qquad \qquad C = - \frac{i^2}{2} + i y_{g, n} -i - \frac{(\theta_\delta')^2}{2 (\sigma_\delta')^2} -1 \\
-& \qquad \qquad D = (2 \pi (\sigma_\delta')^2)^{-1/2} / y_{g, n}! \\ \\
-& \qquad \qquad \qquad i = \rho_n + \e_{g, n} + \phi_g \\ \\ 
-\theta_\delta' &= \frac{c_\delta^{-2} \theta_\delta + \sigma_\delta^{-2}    N_\delta^{-1} \sum_{k(n) \ne 2} y_{g, n}     }{c_\delta^{-2} + \sigma_\delta^{-2}} \\ 
-(\sigma_\delta')^2 &= (c_\delta^{-2} + \sigma_\delta^{-2})\nv
-\end{align*}
-
-where $N_\delta$ is the number of libraries in the second treatment group. 
 
 
 \end{flushleft}
