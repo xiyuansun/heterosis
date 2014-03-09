@@ -12,16 +12,28 @@ p = function(nu){
   exp(lp(nu))
 }
 
-x = 1:10000/1000
-m = sum(x * p(x))/sum(p(x))
-v = sum((x-m)^2 * p(x))/sum(p(x))
+wd = 2
 
-shape = m^2/v
-rate = m/v
+xs = 1:(10*wd)/wd
+ys = p(xs)
+f = Vectorize(function(x){
+  if(x < min(xs))
+    return(0)
+  l = floor(wd*x)
+  ys[l]
+}, "x")
 
-f = function(x){dgamma(x, shape = shape, rate = rate) /2}
+#m = sum(x * p(x))/sum(p(x))
+#v = sum((x-m)^2 * p(x))/(sum(p(x)) - 1)
+
+#shape = m^2/v
+#rate = m/v
+#md = (shape-1)/rate
+#f = function(x){dgamma(x, shape = shape, rate = rate) /2}
+
 curve(f, 0, 10, col = "blue")
 xs = 1:10000/1000
-ys = p(xs)/max(p(xs)) * .15
+ys = p(xs)
 lines(x =xs, y = ys)
-legend("topright", fill = c("black", "blue"), legend = c("Const * exp(h(nu))", "Gamma approximation"))
+legend("topright", fill = c("black", "blue"), legend = c("Const * exp(h(nu))", "Approximation"))
+
