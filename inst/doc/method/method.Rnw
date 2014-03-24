@@ -254,18 +254,24 @@ p(\nu \mid \cdots) &\propto  \exp \left ( - \log \Gamma(\nu/2) + \frac{ \nu}{2} 
 h(\nu) &= G \cdot \left  (- \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) 
 \end{align*}
 
-Now, $\exp(G \nv h(\nu))$ can be well approximated by a gamma distribution. For some positive integer $X$, if I take 
+% Now, $\exp(G \nv h(\nu))$ can be well approximated by a gamma distribution. For some positive integer $X$, if I take 
 
-\begin{align*}
-M &= \frac{\sum_{x = 0}^X x \cdot \exp(G \nv h(\nu))}{\sum_{x = 0}^X \exp(G \nv h(\nu))} \\
-V &= \frac{\sum_{x = 0}^X (x - M)^2 \cdot \exp(G \nv h(\nu))}{\sum_{x = 0}^X \exp(G \nv h(\nu))} \\
-\end{align*}
+Using GPUs to accelerate computation, $\exp(G \nv h(\nu))$ can be easily approximated (up to a proportionality constant) by a step function with thick tails, such as the one in the example below.
 
-then,
+\begin{center}
+\includegraphics[scale=.25]{step.png}
+\end{center} 
 
-\begin{align*}
-\exp(G \nv h(\nu)) \mathop{\propto}^\cdot \text{Gamma}(\text{shape} = M^2/V, \text{rate} = M/V)
-\end{align*}
+%\begin{align*}
+%M &= \frac{\sum_{x = 0}^X x \cdot \exp(G \nv h(\nu))}{\sum_{x = 0}^X \exp(G \nv h(\nu))} \\
+%V &= \frac{\sum_{x = 0}^X (x - M)^2 \cdot \exp(G \nv h(\nu))}{\sum_{x = 0}^X \exp(G \nv h(\nu))} \\
+%\end{align*}
+
+%then,
+
+%\begin{align*}
+%\exp(G \nv h(\nu)) \mathop{\propto}^\cdot \text{Gamma}(\text{shape} = M^2/V, \text{rate} = M/V)
+%\end{align*}
 
 %As a demonstration, I simulate 10000 $\gamma_g$'s with $\nu = \tau = 1$. Visually, the agreement between $\exp(G \nv h(\nu))$ and its gamma approximation is excellent.
 
@@ -299,24 +305,26 @@ lines(x =xs, y = ys)
 legend("topright", fill = c("black", "blue"), legend = c("Const * exp((1/G) * h(nu))", "Gamma approximation"))
 @
 
-The upshot of all this is
+%The upshot of all this is
 
-\begin{align*}
-p(\nu \mid \cdots) &\propto \exp(h(\nu)) \\
- &= \exp(G \nv h(\nu))^G\\
-&\approx [\text{Gamma}(M^2/V, M/V)]^G\\
-&\propto \left [\nu^{M^2/V - 1} \exp(M/V \cdot \nu) \right ]^G\\
-&= \nu^{G(M^2/V - 1)} \exp(G M/V \cdot \nu) \\
-&= \nu^{(GM^2/V - G + 1) - 1} \exp(G M/V \cdot \nu) \\
-\end{align*}
+%\begin{align*}
+%p(\nu \mid \cdots) &\propto \exp(h(\nu)) \\
+%&= \exp(G \nv h(\nu))^G\\
+%&\approx [\text{Gamma}(M^2/V, M/V)]^G\\
+%&\propto \left [\nu^{M^2/V - 1} \exp(M/V \cdot \nu) \right ]^G\\
+%&= \nu^{G(M^2/V - 1)} \exp(G M/V \cdot \nu) \\
+%&= \nu^{(GM^2/V - G + 1) - 1} \exp(G M/V \cdot \nu) \\
+%\end{align*}
 
-Hence,
+%Hence,
 
-\begin{align*}
-p(\nu \mid \cdots) \mathop{\propto}^\cdot \text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}{V} \right )
-\end{align*}
+%\begin{align*}
+%p(\nu \mid \cdots) \mathop{\propto}^\cdot \text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}%{V} \right )
+%\end{align*}
 
-Letting $q(\nu)$ be the log density of $\text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}{V} \right )$, we have a Metropolis-Hastings algorithm for sampling $\nu$.
+%Letting $q(\nu)$ be the log density of $\text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}{V} \right )$, we have a Metropolis-Hastings algorithm for sampling $\nu$.
+
+In practice, the step function will have a finer partition. Letting $q(\nu)$ be the log of the step function, we have a Metropolis-Hastings algorithm for sampling $\nu$.
 
 \begin{enumerate}
 \item Sample a proposal $\nu^*$ from a $N \left (\frac{h_2 \wh{\nu} - h_1}{h_2}, \ |h_2| \nv \right )$ distribution.
@@ -375,29 +383,43 @@ h_2 &= h''(\wh{\theta}) = - 2 B - D e^{\wh{\theta}} - Ee^{-\wh{\theta}} \\
 Now, we can approximate $h(\theta)$ with the quadratic Taylor approximation.
 
 \begin{align*}
-h(\theta) &\approx h_0 + h_1 (\theta - \wh{\theta}) + \frac{h_2}{2} (\theta - \wh{\theta})^2 \\
-&= h_0 + h_1 \theta - h_1 \wh{\theta}  + \frac{h_2}{2} \theta^2  - h_2 \wh{\theta} \theta + \frac{h_2}{2} \wh{\theta}^2 \\
-&= \left (h_0 - h_1 \wh{\theta} + \frac{h_2}{2} \wh{\theta}^2 \right ) + (h_1 - h_2 \wh{\theta}) \theta + \frac{h_2}{2} \theta^2 \\
-&= \left (h_0 - h_1 \wh{\theta} + \frac{h_2}{2} \wh{\theta}^2 \right ) - \frac{(h_1 - h_2 \wh{\theta})^2}{2h_2} + \frac{h_2}{2} \left (\theta - \frac{h_2 \wh{\theta} - h_1}{h_2} \right )^2 \\
-&=  -\frac{1}{2 |h_2| \nv} \left (\theta - \frac{h_2 \wh{\theta} - h_1}{h_2} \right )^2  + \text{ constant}
+h(\theta) &\approx h_0 + h_1 (\theta - \wh{\theta}) + \frac{h_2}{2} (\theta - \wh{\theta})^2 
+\end{align*}
+
+$\wh{\theta}$ was found by setting the first derivative equal to 0, so $h_1$ must be 0. Hence,
+
+\begin{align*}
+h(\theta) &\approx h_0 + \frac{h_2}{2} (\theta - \wh{\theta})^2 \\
+&= \left ( h_0 + \frac{h_2}{2} \wh{\theta}^2 \right )  - h_2 \wh{\theta} \theta + \frac{h_2}{2} \wh{\theta}^2 \\
+&=  -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta}  \right )^2  + \text{ constant}
 \end{align*}
 
 Thus, a reasonable proposal distribution for $\theta$ in the Metropolis algorithm is 
 
 \begin{align*}
-N \left (\frac{h_2 \wh{\theta} - h_1}{h_2}, \ |h_2| \nv \right )
+N \left (\wh{\theta}, \ |h_2| \nv \right )
 \end{align*}
 
 Let
 
 \begin{align*}
-q(\theta) = -\frac{1}{2 |h_2| \nv} \left (\theta - \frac{h_2 \wh{\theta} - h_1}{h_2} \right )^2 
+q(\theta) = -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2 
 \end{align*}
 
-i.e., the log density of the normal distribution. Let $\theta^{(i)}$ be the current value of $\theta$ at iteration $i$ of the algorithm. To get $\theta^{(i + 1)}$,
+i.e., the log density of the normal distribution. We see that the normal approximation has thick enough tails to be efficient:
+
+\begin{align*}
+\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} &= \log q(\theta) - \log p(\theta \mid \cdots)  \\
+&= -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2  - \left [  A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta} \right ] \\
+&= -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
+\end{align*} 
+
+If $E > 0$, $\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} \rt \infty$ as  $|\theta| \rt \infty$. If $E = 0$ and $D > 0$, then $\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} \rt -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 \rt \infty$ as $\theta \rt -\infty$. There are no other cases. Thus, the proposal has thicker tails than the full conditional. \q
+
+For the full sampler, let $\theta^{(i)}$ be the current value of $\theta$ at iteration $i$ of the algorithm. To get $\theta^{(i + 1)}$,
 
 \begin{enumerate}
-\item Sample a proposal $\theta^*$ from a $N \left (\frac{h_2 \wh{\theta} - h_1}{h_2}, \ |h_2| \nv \right )$ distribution.
+\item Sample a proposal $\theta^*$ from a $N \left (\wh{\theta}, \ |h_2| \nv \right )$ distribution.
 \item The acceptance probability is
 
 \begin{align*}
