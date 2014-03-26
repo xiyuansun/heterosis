@@ -327,7 +327,7 @@ legend("topright", fill = c("black", "blue"), legend = c("Const * exp((1/G) * h(
 In practice, the step function will have a finer partition. Letting $q(\nu)$ be the log of the step function, we have a Metropolis-Hastings algorithm for sampling $\nu$.
 
 \begin{enumerate}
-\item Sample a proposal $\nu^*$ from a $N \left (\frac{h_2 \wh{\nu} - h_1}{h_2}, \ |h_2| \nv \right )$ distribution.
+\item Sample a proposal $\nu^*$ from a $q(\nu)$.
 \item The acceptance probability is
 
 \begin{align*}
@@ -394,32 +394,89 @@ h(\theta) &\approx h_0 + \frac{h_2}{2} (\theta - \wh{\theta})^2 \\
 &=  -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta}  \right )^2  + \text{ constant}
 \end{align*}
 
-Thus, a reasonable proposal distribution for $\theta$ in the Metropolis algorithm is 
+Thus, one proposal distribution for $\theta$ in the Metropolis might be
 
 \begin{align*}
 N \left (\wh{\theta}, \ |h_2| \nv \right )
 \end{align*}
 
-Let
+whose density has the log kernel,
 
 \begin{align*}
-q(\theta) = -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2 
+k(\theta) = -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2 
 \end{align*}
 
-i.e., the log density of the normal distribution. We see that the normal approximation has thick enough tails to be efficient:
+However, this proposal is inefficient. To see this, consider the log ratio of the kernel of the proposal to the kernel of the full conditional.
 
 \begin{align*}
-\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} &= \log q(\theta) - \log p(\theta \mid \cdots)  \\
+\log \frac{\exp(k(\theta))}{p(\theta \mid \cdots)} &= \log q(\theta) - \log p(\theta \mid \cdots)  \\
 &= -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2  - \left [  A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta} \right ] \\
 &= -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
+&= -\frac{1}{2 | - 2 B - D e^{\wh{\theta}} - Ee^{-\wh{\theta}}| \nv} \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
+&= - \left (B + \frac{D}{2} e^{\wh{\theta}} + \frac{E}{2}e^{-\wh{\theta}} \right) \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
 \end{align*} 
 
-If $E > 0$, $\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} \rt \infty$ as  $|\theta| \rt \infty$. If $E = 0$ and $D > 0$, then $\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} \rt -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 \rt \infty$ as $\theta \rt -\infty$. There are no other cases. Thus, the proposal has thicker tails than the full conditional. \q
+If $E > 0$, then
 
+\begin{align*}
+\lim_{\theta \rt -\infty} \log \frac{\exp(k(\theta))}{p(\theta \mid \cdots)} &= \lim_{\theta \rt -\infty} \left (- \left (B + \frac{D}{2} e^{\wh{\theta}}  \right) \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} \right )\\
+ &= \lim_{\theta \rt -\infty} \left (- \left (B + \frac{D}{2} e^{\wh{\theta}}  \right)  \theta^2 + B \theta^2 \right )\\
+  &= \lim_{\theta \rt -\infty} \left (- \frac{D}{2} e^{\wh{\theta}}   \theta^2  \right )\\
+  &= -\infty
+\end{align*}
+
+With a tail ratio of $-\infty$, this proposal is inefficient. A better proposal would be a Laplace($\wh{\theta}$, $s$) distribution, which has the log kernel,
+
+\begin{align*}
+q(\theta) &= - \frac{|\theta - \wh{\theta}|}{s}
+\end{align*}
+
+The variance of this distribution is $2 s^2$. The variance of the normal approximation was $|h_2|\nv$, so we can set those variances equal. Solving for $s$, we get $s = \frac{1}{2 \sqrt{|h_2|}}$. This proposal is safer because
+
+\begin{align*}
+\lim_{|\theta| \rt \infty} \log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} &= \lim_{|\theta| \rt \infty} \left ( - \frac{|\theta - \wh{\theta}|}{s}  -  A \theta + B(\theta - C)^2 + D e^{\theta} +  E e^{-\theta} \right ) \\
+& \ge  \lim_{|\theta| \rt \infty} \left ( - \frac{|\theta - \wh{\theta}|}{s}  -  A \theta + B(\theta - C)^2 \right ) \\
+&=  \lim_{|\theta| \rt \infty} \left ( - \frac{|\theta - \wh{\theta}|}{s}  -  A \theta + B(\theta - C)^2 \right ) \\
+&= \infty \
+\end{align*}
+
+whether or not $E = 0$. \q
+
+We easily can simulate from the Laplace distribution using the inverse cdf method. The cdf of the Laplace$(\wh{\theta}, \ s)$ distribution is
+
+\begin{align*}
+F(\theta) &= \begin{cases}
+F_1(\theta) = \frac{1}{2} \exp \left ( \frac{\theta - \wh{\theta} }{s} \right ) & \theta < \wh{\theta}\\
+F_2(\theta) = 1 - \frac{1}{2} \exp \left ( - \frac{\theta - \wh{\theta} }{s} \right ) & \theta \ge \wh{\theta}\\
+\end{cases}
+\end{align*}
+
+Note that for $0 < u < \frac{1}{2}$,
+
+\begin{align*}
+u &= \frac{1}{2} \exp \left ( \frac{ F_1 \nv(u) - \wh{\theta} }{s} \right ) \\
+\log (2u) &= \frac{ F_1 \nv(u) - \wh{\theta} }{s} \\
+s \log (2 u) &= F_1 \nv(u) - \wh{\theta} \\
+F_1 \nv(u) &=  s \log(2 u) + \wh{\theta}
+\end{align*}
+
+And for $\frac{1}{2} \le u < 1$,
+
+\begin{align*}
+u &= 1 -  \frac{1}{2} \exp \left (-  \frac{ F_2 \nv(u) - \wh{\theta} }{s} \right ) \\
+2(1 - u) &=  \exp \left (-  \frac{ F_2 \nv(u) - \wh{\theta} }{s} \right ) \\
+\log (2(1 - u)) &=  - \frac{ F_2 \nv(u) - \wh{\theta} }{s}  \\
+-s \log (2(1 - u)) &=  F_2 \nv(u) - \wh{\theta}  \\
+F_2 \nv(u) &= \wh{\theta} -s \log (2(1 - u))
+\end{align*}
+
+We can easily simulate from the Laplace distribution by taking $u \sim U(0, 1)$ and letting our simulated value, $\theta^*$, equal $F_1 \nv(u)$ if $0 < u < \frac{1}{2}$ and $F_2 \nv(u)$ if $\frac{1}{2} \le u < 1$/
+
+\q
 For the full sampler, let $\theta^{(i)}$ be the current value of $\theta$ at iteration $i$ of the algorithm. To get $\theta^{(i + 1)}$,
 
 \begin{enumerate}
-\item Sample a proposal $\theta^*$ from a $N \left (\wh{\theta}, \ |h_2| \nv \right )$ distribution.
+\item Sample a proposal $\theta^*$ from a $q(\theta)$.
 \item The acceptance probability is
 
 \begin{align*}
