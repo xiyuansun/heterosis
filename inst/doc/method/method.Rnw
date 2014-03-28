@@ -416,7 +416,7 @@ However, this proposal is inefficient. To see this, consider the log ratio of th
 &= - \left (B + \frac{D}{2} e^{\wh{\theta}} + \frac{E}{2}e^{-\wh{\theta}} \right) \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
 \end{align*} 
 
-If $E > 0$, then
+If $E = 0$, then
 
 \begin{align*}
 \lim_{\theta \rt -\infty} \log \frac{\exp(k(\theta))}{p(\theta \mid \cdots)} &= \lim_{\theta \rt -\infty} \left (- \left (B + \frac{D}{2} e^{\wh{\theta}}  \right) \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} \right )\\
