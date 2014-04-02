@@ -249,85 +249,48 @@ p \left ( \left . \frac{1}{\sigma_\delta^2} \  \right | \  \cdots \right ) &= \t
 \begin{align*}
 p(\nu \mid \cdots) &\propto  \exp \left ( - \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )^G \\
 & \qquad \times I(0 < \nu < d) \\
-&= \exp(h(\nu))
+&= \exp(h(\nu)) \times I(0 < \nu < d)
 \intertext{where}
-h(\nu) &= G \cdot \left  (- \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) 
+h(\nu) &= G \cdot \left  (- \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu \tau^2}{2} \right ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )  \\
+ &= G \cdot \left  (- \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu}{2} \right ) + \frac{\nu}{2} \log (\tau^2 ) -  \nu \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) \\ 
+ &= G \cdot \left  (- \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu}{2} \right ) + \nu \underbrace{\left ( \frac{ \log (\tau^2 )}{2} -   \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )}_{K} \right )  \\
+ &= G \cdot \left  (- \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \frac{\nu}{2} \right ) + \nu K \right )  \\
 \end{align*}
 
-% Now, $\exp(G \nv h(\nu))$ can be well approximated by a gamma distribution. For some positive integer $X$, if I take 
 
-Using GPUs to accelerate computation, $\exp(G \nv h(\nu))$ can be easily approximated (up to a proportionality constant) by a step function with thick tails, such as the one in the example below.
+Using Stirling's approximation to the gamma function,
 
-\begin{center}
-\includegraphics[scale=.25]{step.png}
-\end{center} 
+\begin{align*}
+\log \Gamma \left ( \frac{\nu}{2} \right) &\approx  \frac{\nu}{2} \log \left (\frac{\nu}{2} \right ) - \frac{1}{2} \log \left (\frac{\nu}{2} \right ) - \frac{\nu}{2} + \frac{1}{2} \log ( 2 \pi )
+\end{align*}
 
-%\begin{align*}
-%M &= \frac{\sum_{x = 0}^X x \cdot \exp(G \nv h(\nu))}{\sum_{x = 0}^X \exp(G \nv h(\nu))} \\
-%V &= \frac{\sum_{x = 0}^X (x - M)^2 \cdot \exp(G \nv h(\nu))}{\sum_{x = 0}^X \exp(G \nv h(\nu))} \\
-%\end{align*}
+Hence,
 
-%then,
+\begin{align*}
+\frac{h(\nu)}{G} &\approx - \frac{\nu}{2} \log \left (\frac{\nu}{2} \right ) + \frac{1}{2} \log \left (\frac{\nu}{2} \right ) + \frac{\nu}{2} - \frac{1}{2} \log ( 2 \pi ) + \frac{ \nu}{2} \log \left ( \frac{\nu}{2} \right ) + \nu K \\
+&= \frac{1}{2} \log \left (\frac{\nu}{2} \right ) + \frac{\nu}{2} - \frac{1}{2} \log ( 2 \pi ) + \nu K \\
+&= \frac{1}{2} \log \left (\frac{\nu}{2} \right ) + \nu \left (\frac{1}{2} + K \right ) - \frac{1}{2} \log ( 2 \pi ) \\
+&= \frac{1}{2} \log (\nu) -  \frac{1}{2} \log \left (\frac{1}{2} \right ) + \nu \left (\frac{1}{2}  + K \right ) - \frac{1}{2} \log ( 2 \pi ) \\
+&= \frac{1}{2} \log (\nu) + \nu \left ( \frac{1}{2} + K \right ) - \frac{1}{2} \log ( 4 \pi ) \\
+&= \frac{1}{2} \log (\nu) + \nu \left ( \frac{1}{2} + \frac{ \log (\tau^2 )}{2} -   \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) - \frac{1}{2} \log ( 4 \pi ) \\
+\end{align*}
 
-%\begin{align*}
-%\exp(G \nv h(\nu)) \mathop{\propto}^\cdot \text{Gamma}(\text{shape} = M^2/V, \text{rate} = M/V)
-%\end{align*}
+Thus, $\frac{h(\nu)}{G}$ is approximately the log kernel of 
 
-%As a demonstration, I simulate 10000 $\gamma_g$'s with $\nu = \tau = 1$. Visually, the agreement between $\exp(G \nv h(\nu))$ and its gamma approximation is excellent.
+\begin{align*}
+\text{Gamma} \left (\text{shape} = \frac{3}{2}, \ \text{rate} = -\frac{1}{2}  - \frac{\log (\tau^2 )}{2} +  \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )
+\end{align*}
 
-<<echo = F, eval = F>>=
-d = 100
-tau = 1
-nu = 1
-G = 10000
-gam = 1/sqrt(rgamma(G, shape = nu/2, rate = nu * tau^2/2))
+Hence, $h(\nu)$ is approximately the log kernel of 
 
-lp = function(nu){
-  - lgamma(nu/2) + nu/2 * log(nu*tau^2/2) - nu* mean(log(gam) + tau^2/2 * 1/gam^2)
-}
+\begin{align*}
+\text{Gamma} \left (\text{shape} = \frac{G}{2} + 1, \ \text{rate} = -\frac{G}{2}  -  \frac{ G \log (\tau^2 )}{2} +  \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )
+\end{align*}
 
-p = function(nu){
-  exp(lp(nu))
-}
-
-x = 1:10000/1000
-m = sum(x * p(x))/sum(p(x))
-v = sum((x-m)^2 * p(x))/sum(p(x))
-
-shape = m^2/v
-rate = m/v
-
-f = function(x){dgamma(x, shape = shape, rate = rate) /2}
-curve(f, 0, 10, col = "blue")
-xs = 1:10000/1000
-ys = p(xs)/max(p(xs)) * .15
-lines(x =xs, y = ys)
-legend("topright", fill = c("black", "blue"), legend = c("Const * exp((1/G) * h(nu))", "Gamma approximation"))
-@
-
-%The upshot of all this is
-
-%\begin{align*}
-%p(\nu \mid \cdots) &\propto \exp(h(\nu)) \\
-%&= \exp(G \nv h(\nu))^G\\
-%&\approx [\text{Gamma}(M^2/V, M/V)]^G\\
-%&\propto \left [\nu^{M^2/V - 1} \exp(M/V \cdot \nu) \right ]^G\\
-%&= \nu^{G(M^2/V - 1)} \exp(G M/V \cdot \nu) \\
-%&= \nu^{(GM^2/V - G + 1) - 1} \exp(G M/V \cdot \nu) \\
-%\end{align*}
-
-%Hence,
-
-%\begin{align*}
-%p(\nu \mid \cdots) \mathop{\propto}^\cdot \text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}%{V} \right )
-%\end{align*}
-
-%Letting $q(\nu)$ be the log density of $\text{Gamma} \left ( \text{shape} = \frac{G M^2}{V} - G + 1, \ \text{rate} = \frac{G M}{V} \right )$, we have a Metropolis-Hastings algorithm for sampling $\nu$.
-
-In practice, the step function will have a finer partition. Letting $q(\nu)$ be the log of the step function, we have a Metropolis-Hastings algorithm for sampling $\nu$.
+Let $q(\nu)$ be the log kernel of this gamma approximation to $p(\nu \mid \cdots)$. Then, we have a Metropolis-Hastings algorithm for sampling $\nu$.
 
 \begin{enumerate}
-\item Sample a proposal $\nu^*$ from a $q(\nu)$.
+\item Sample a proposal $\nu^*$ from a $q(\nu)$ until $0 < \nu^* < d$.
 \item The acceptance probability is
 
 \begin{align*}
@@ -400,77 +363,28 @@ Thus, one proposal distribution for $\theta$ in the Metropolis might be
 N \left (\wh{\theta}, \ |h_2| \nv \right )
 \end{align*}
 
-whose density has the log kernel,
+Unfortunately, the tails of this normal approximation are too thin for the proposal to be efficient. However, we can instead sample $\sqrt{|h_2|}(\theta - \wh{\theta})$ from a $t_d$ distribution, where the degrees of freedom, $d$, is some large positive number. Let $q(\theta)$ be the log density of $\theta$ derived from this $t_d$ approximation. Then, for a proportionality constant, $k$, the ratio of the approximate density to the true full conditional density is
 
 \begin{align*}
-k(\theta) = -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2 
-\end{align*}
-
-However, this proposal is inefficient. To see this, consider the log ratio of the kernel of the proposal to the kernel of the full conditional.
-
-\begin{align*}
-\log \frac{\exp(k(\theta))}{p(\theta \mid \cdots)} &= \log q(\theta) - \log p(\theta \mid \cdots)  \\
-&= -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2  - \left [  A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta} \right ] \\
-&= -\frac{1}{2 |h_2| \nv} \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
-&= -\frac{1}{2 | - 2 B - D e^{\wh{\theta}} - Ee^{-\wh{\theta}}| \nv} \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
-&= - \left (B + \frac{D}{2} e^{\wh{\theta}} + \frac{E}{2}e^{-\wh{\theta}} \right) \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
+\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} &= \log q(\theta) - \log p(\theta \mid \cdots)  \\
+&= \log \left [ k \left ( 1 + \frac{\sqrt{|h_2|}(\theta - \wh{\theta})^2}{d} \right )^{-\frac{d + 1}{2}} \right ]  - \left [  A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta} \right ] \\
+&=  \log(k) - \frac{d + 1}{2} \log \left ( 1 + \frac{\sqrt{|h_2|}(\theta - \wh{\theta})^2}{d} \right ) -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
 \end{align*} 
 
-If $E = 0$, then
+Since $d, \sqrt{|h_2|}, B, D > 0$ and $E \ge 0$, we see that 
 
 \begin{align*}
-\lim_{\theta \rt -\infty} \log \frac{\exp(k(\theta))}{p(\theta \mid \cdots)} &= \lim_{\theta \rt -\infty} \left (- \left (B + \frac{D}{2} e^{\wh{\theta}}  \right) \left (\theta - \wh{\theta} \right )^2  -  A \theta + B(\theta - C)^2 + D e^{\theta} \right )\\
- &= \lim_{\theta \rt -\infty} \left (- \left (B + \frac{D}{2} e^{\wh{\theta}}  \right)  \theta^2 + B \theta^2 \right )\\
-  &= \lim_{\theta \rt -\infty} \left (- \frac{D}{2} e^{\wh{\theta}}   \theta^2  \right )\\
-  &= -\infty
+\lim_{|\theta| \rt \infty}\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} = \infty
 \end{align*}
 
-With a tail ratio of $-\infty$, this proposal is inefficient. A better proposal would be a Laplace($\wh{\theta}$, $s$) distribution, which has the log kernel,
+Thus, the proposal has thicker tails than the full conditional. Moreover, for a large $d$, the $t_d$ density well approximates the full conditional, as seen in an example plot below.
 
-\begin{align*}
-q(\theta) &= - \frac{|\theta - \wh{\theta}|}{s}
-\end{align*}
+\begin{center}
+\includegraphics[scale=.25]{t-approx.png}
+\end{center}
 
-The variance of this distribution is $2 s^2$. The variance of the normal approximation was $|h_2|\nv$, so we can set those variances equal. Solving for $s$, we get $s = \frac{1}{2 \sqrt{|h_2|}}$. This proposal is safer because
 
-\begin{align*}
-\lim_{|\theta| \rt \infty} \log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} &= \lim_{|\theta| \rt \infty} \left ( - \frac{|\theta - \wh{\theta}|}{s}  -  A \theta + B(\theta - C)^2 + D e^{\theta} +  E e^{-\theta} \right ) \\
-& \ge  \lim_{|\theta| \rt \infty} \left ( - \frac{|\theta - \wh{\theta}|}{s}  -  A \theta + B(\theta - C)^2 \right ) \\
-&=  \lim_{|\theta| \rt \infty} \left ( - \frac{|\theta - \wh{\theta}|}{s}  -  A \theta + B(\theta - C)^2 \right ) \\
-&= \infty \
-\end{align*}
-
-whether or not $E = 0$. \q
-
-We easily can simulate from the Laplace distribution using the inverse cdf method. The cdf of the Laplace$(\wh{\theta}, \ s)$ distribution is
-
-\begin{align*}
-F(\theta) &= \begin{cases}
-F_1(\theta) = \frac{1}{2} \exp \left ( \frac{\theta - \wh{\theta} }{s} \right ) & \theta < \wh{\theta}\\
-F_2(\theta) = 1 - \frac{1}{2} \exp \left ( - \frac{\theta - \wh{\theta} }{s} \right ) & \theta \ge \wh{\theta}\\
-\end{cases}
-\end{align*}
-
-Note that for $0 < u < \frac{1}{2}$,
-
-\begin{align*}
-u &= \frac{1}{2} \exp \left ( \frac{ F_1 \nv(u) - \wh{\theta} }{s} \right ) \\
-\log (2u) &= \frac{ F_1 \nv(u) - \wh{\theta} }{s} \\
-s \log (2 u) &= F_1 \nv(u) - \wh{\theta} \\
-F_1 \nv(u) &=  s \log(2 u) + \wh{\theta}
-\end{align*}
-
-And for $\frac{1}{2} \le u < 1$,
-
-\begin{align*}
-u &= 1 -  \frac{1}{2} \exp \left (-  \frac{ F_2 \nv(u) - \wh{\theta} }{s} \right ) \\
-2(1 - u) &=  \exp \left (-  \frac{ F_2 \nv(u) - \wh{\theta} }{s} \right ) \\
-\log (2(1 - u)) &=  - \frac{ F_2 \nv(u) - \wh{\theta} }{s}  \\
--s \log (2(1 - u)) &=  F_2 \nv(u) - \wh{\theta}  \\
-F_2 \nv(u) &= \wh{\theta} -s \log (2(1 - u))
-\end{align*}
-
-We can easily simulate from the Laplace distribution by taking $u \sim U(0, 1)$ and letting our simulated value, $\theta^*$, equal $F_1 \nv(u)$ if $0 < u < \frac{1}{2}$ and $F_2 \nv(u)$ if $\frac{1}{2} \le u < 1$/
+Hence, the $t_d$ proposal should be efficient.
 
 \q
 For the full sampler, let $\theta^{(i)}$ be the current value of $\theta$ at iteration $i$ of the algorithm. To get $\theta^{(i + 1)}$,
@@ -491,7 +405,7 @@ In practice, calculate $p$ on a log scale.
 
 \item Sample $u \sim U(0, 1)$
 
-\item If $\log u < \log p$, set $\theta^{(i + 1)} = \theta^{*}$ (accept $\theta^*$).. Otherwise, set $\theta^{(i+1)} = \theta^{(i)}$ (do not except $\theta^*$).
+\item If $\log u < \log p$, set $\theta^{(i + 1)} = \theta^{*}$ (accept $\theta^*$). Otherwise, set $\theta^{(i+1)} = \theta^{(i)}$ (do not except $\theta^*$).
 
 \end{enumerate}
 
