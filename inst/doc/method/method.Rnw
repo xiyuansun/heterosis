@@ -261,18 +261,20 @@ h(\nu) &= G \cdot \left  (- \log \Gamma(\nu/2) + \frac{ \nu}{2} \log \left ( \fr
 Using Stirling's approximation to the gamma function,
 
 \begin{align*}
-\log \Gamma \left ( \frac{\nu}{2} \right) &\approx  \frac{\nu}{2} \log \left (\frac{\nu}{2} \right ) - \frac{1}{2} \log \left (\frac{\nu}{2} \right ) - \frac{\nu}{2} + \frac{1}{2} \log ( 2 \pi )
+\log \Gamma \left ( \frac{\nu}{2} \right) &\ge  \frac{\nu}{2} \log \left (\frac{\nu}{2} \right ) - \frac{1}{2} \log \left (\frac{\nu}{2} \right ) - \frac{\nu}{2} + \frac{1}{2} \log ( 2 \pi )
 \end{align*}
 
 Hence,
 
 \begin{align*}
-\frac{h(\nu)}{G} &\approx - \frac{\nu}{2} \log \left (\frac{\nu}{2} \right ) + \frac{1}{2} \log \left (\frac{\nu}{2} \right ) + \frac{\nu}{2} - \frac{1}{2} \log ( 2 \pi ) + \frac{ \nu}{2} \log \left ( \frac{\nu}{2} \right ) + \nu K \\
+\frac{h(\nu)}{G} &\le - \frac{\nu}{2} \log \left (\frac{\nu}{2} \right ) + \frac{1}{2} \log \left (\frac{\nu}{2} \right ) + \frac{\nu}{2} - \frac{1}{2} \log ( 2 \pi ) + \frac{ \nu}{2} \log \left ( \frac{\nu}{2} \right ) + \nu K \\
 &= \frac{1}{2} \log \left (\frac{\nu}{2} \right ) + \frac{\nu}{2} - \frac{1}{2} \log ( 2 \pi ) + \nu K \\
 &= \frac{1}{2} \log \left (\frac{\nu}{2} \right ) + \nu \left (\frac{1}{2} + K \right ) - \frac{1}{2} \log ( 2 \pi ) \\
-&= \frac{1}{2} \log (\nu) -  \frac{1}{2} \log \left (\frac{1}{2} \right ) + \nu \left (\frac{1}{2}  + K \right ) - \frac{1}{2} \log ( 2 \pi ) \\
-&= \frac{1}{2} \log (\nu) + \nu \left ( \frac{1}{2} + K \right ) - \frac{1}{2} \log ( 4 \pi ) \\
-&= \frac{1}{2} \log (\nu) + \nu \left ( \frac{1}{2} + \frac{ \log (\tau^2 )}{2} -   \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) - \frac{1}{2} \log ( 4 \pi ) \\
+&= \frac{1}{2} \log (\nu) +  \frac{1}{2} \log \left (\frac{1}{2} \right ) + \nu \left (\frac{1}{2}  + K \right ) - \frac{1}{2} \log \left (2 \pi \right) \\
+&= \frac{1}{2} \log (\nu) + \nu \left ( \frac{1}{2} + K \right ) + \frac{1}{2} \log \left ( \frac{1}{4\pi} \right ) \\
+&= \frac{1}{2} \log (\nu) + \nu \left ( \frac{1}{2} + \frac{ \log (\tau^2 )}{2} -   \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) + \frac{1}{2} \log \left ( \frac{1}{4\pi} \right )\\
+&\le \frac{1}{2} \log (\nu) + \nu \left ( \frac{1}{2} + \frac{ \log (\tau^2 )}{2} -   \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) + \frac{1}{2} \log \left ( 1\right )\\
+&= \frac{1}{2} \log (\nu) + \nu \left ( \frac{1}{2} + \frac{ \log (\tau^2 )}{2} -   \frac{1}{G} \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right ) \\
 \end{align*}
 
 Thus, $\frac{h(\nu)}{G}$ is approximately the log kernel of 
@@ -285,9 +287,26 @@ Hence, $h(\nu)$ is approximately the log kernel of
 
 \begin{align*}
 \text{Gamma} \left (\text{shape} = \frac{G}{2} + 1, \ \text{rate} = -\frac{G}{2}  -  \frac{ G \log (\tau^2 )}{2} +  \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] \right )
+\end{align*} 
+
+However, this distribution is stochastically smaller than the true full conditional of  $\nu$, so it cannot serve as a Metropolis-Hastings proposal. Instead, I will use a step function approximation to $ G * \exp(h(\nu))$ as a proposal distribution.
+
+\begin{center}
+\includegraphics[scale=.5]{step.png}
+\end{center}
+
+There will be at least 1000 equally-spaced ``bins", unlike in the above demonstration. The support of this step function will be the interval $(0, U)$, where 
+
+\begin{align*}
+U &= \frac{a+ 4 \sqrt{a}}{b}
+\intertext{where}
+a &= \frac{G}{2} + 1 \\
+b &= -\frac{G}{2}  -  \frac{ G \log (\tau^2 )}{2} +  \sum_{g = 1}^G \left [ \log \gamma_g + \frac{\tau^2}{2} \frac{1}{\gamma_g^2} \right ] 
 \end{align*}
 
-Let $q(\nu)$ be the log kernel of this gamma approximation to $p(\nu \mid \cdots)$. Then, we have a Metropolis-Hastings algorithm for sampling $\nu$.
+i.e., an interval from 0 up to 4 standard deviations above the mean of the crude gamma approximation to the full conditional. There will be an extra interval from $U$ to $d$ in the support as well, where $d$ is the initialization constant used in the prior distribution for $\nu$. \q
+
+Let $q(\nu)$ be the log of this step function approximation. Then, we have a Metropolis-Hastings algorithm for sampling  $\nu^{(i +1)}$, the  $(i + 1)$'th sample of $\nu$ in the MCMC, given $\nu^{(i)}$. 
 
 \begin{enumerate}
 \item Sample a proposal $\nu^*$ from a $q(\nu)$ until $0 < \nu^* < d$.
@@ -363,12 +382,12 @@ Thus, one proposal distribution for $\theta$ in the Metropolis might be
 N \left (\wh{\theta}, \ |h_2| \nv \right )
 \end{align*}
 
-Unfortunately, the tails of this normal approximation are too thin for the proposal to be efficient. However, we can instead sample $\sqrt{|h_2|}(\theta - \wh{\theta})$ from a $t_d$ distribution, where the degrees of freedom, $d$, is some large positive number. Let $q(\theta)$ be the log density of $\theta$ derived from this $t_d$ approximation. Then, for a proportionality constant, $k$, the ratio of the approximate density to the true full conditional density is
+Unfortunately, the tails of this normal approximation are too thin for the proposal to be efficient. However, we can instead sample $\sqrt{|h_2|}(\theta - \wh{\theta})$ from a $t_l$ distribution, where the degrees of freedom, $l$, is some large positive number. Let $q(\theta)$ be the log kernel of this $t_l$ approximation. Then, for a proportionality constant, $k$, the ratio of the approximate density to the true full conditional density is
 
 \begin{align*}
-\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} &= \log q(\theta) - \log p(\theta \mid \cdots)  \\
-&= \log \left [ k \left ( 1 + \frac{\sqrt{|h_2|}(\theta - \wh{\theta})^2}{d} \right )^{-\frac{d + 1}{2}} \right ]  - \left [  A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta} \right ] \\
-&=  \log(k) - \frac{d + 1}{2} \log \left ( 1 + \frac{\sqrt{|h_2|}(\theta - \wh{\theta})^2}{d} \right ) -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
+\log k \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} &= \log k + \log q(\theta) - \log p(\theta \mid \cdots)  \\
+&= \log k + \log \left [ \left ( 1 + \frac{\sqrt{|h_2|}(\theta - \wh{\theta})^2}{l} \right )^{-\frac{l + 1}{2}} \right ]  - \left [  A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta} \right ] \\
+&=  \log k - \frac{l + 1}{2} \log \left ( 1 + \frac{\sqrt{|h_2|}(\theta - \wh{\theta})^2}{l} \right ) -  A \theta + B(\theta - C)^2 + D e^{\theta} + Ee^{-\theta} \\
 \end{align*} 
 
 Since $d, \sqrt{|h_2|}, B, D > 0$ and $E \ge 0$, we see that 
@@ -377,20 +396,20 @@ Since $d, \sqrt{|h_2|}, B, D > 0$ and $E \ge 0$, we see that
 \lim_{|\theta| \rt \infty}\log \frac{\exp(q(\theta))}{p(\theta \mid \cdots)} = \infty
 \end{align*}
 
-Thus, the proposal has thicker tails than the full conditional. Moreover, for a large $d$, the $t_d$ density well approximates the full conditional, as seen in an example plot below.
+Thus, the proposal has thicker tails than the full conditional. Moreover, for a large $l$, the $t_l$ density well approximates the full conditional, as seen in an example plot below.
 
 \begin{center}
 \includegraphics[scale=.25]{t-approx.png}
 \end{center}
 
 
-Hence, the $t_d$ proposal should be efficient.
+Hence, the $t_l$ proposal should be efficient.
 
 \q
 For the full sampler, let $\theta^{(i)}$ be the current value of $\theta$ at iteration $i$ of the algorithm. To get $\theta^{(i + 1)}$,
 
 \begin{enumerate}
-\item Sample a proposal $\theta^*$ from a $q(\theta)$.
+\item Sample a proposal $\theta^*$ from $q(\theta)$.
 \item The acceptance probability is
 
 \begin{align*}
@@ -407,6 +426,9 @@ In practice, calculate $p$ on a log scale.
 
 \item If $\log u < \log p$, set $\theta^{(i + 1)} = \theta^{*}$ (accept $\theta^*$). Otherwise, set $\theta^{(i+1)} = \theta^{(i)}$ (do not except $\theta^*$).
 
+
+
+
 \end{enumerate}
 
 
@@ -416,13 +438,36 @@ In practice, calculate $p$ on a log scale.
 
 
 
+\section{A rejection sampling alternative for sampling $\rho_n$, $\phi_g$, $\alpha_g$, $\delta_g$, and $\e_{g, n}$}
+
+\paragraph{} Instead of sampling $\rho_n$, $\phi_g$, $\alpha_g$, $\delta_g$, and $\e_{g, n}$ using a Metropolis-Hastings algorithm as in the previous section, I can use the $t_l$ distribution from before as an envelope in a rejection sampler. 
+
+\begin{enumerate}
+\item Sample a proposal $\theta^*$ from $q(\theta)$.
+\item Sample $u \sim U(0, 1)$.
+\item If $\log u \le h(\theta^*) - \log M - q(\theta^*)$, set $\theta^{(i + 1)} = \theta^*$. Otherwise, return to step 1.
+\end{enumerate}
+
+where
+
+\begin{align*}
+\log M &= \sup_{\theta} \left ( h(\theta) - q(\theta) \right )
+\end{align*}
+
+to find $\log M$, we maximize
+
+\begin{align*}
+m(\theta) &= h(\theta) - q(\theta) \\
+&=  A \theta - B(\theta - C)^2 - D e^{\theta} - Ee^{-\theta} + \frac{l + 1}{2} \log \left ( 1 + \frac{\sqrt{|h_2|}(\theta - \wh{\theta})^2}{l} \right )
+\end{align*}
+
+using Newton Raphson with the derivatives,
 
 
-
-
-
-
-
+\begin{align*}
+m'(\theta) &= A - 2 B(\theta - C) - D e^{\theta} + Ee^{-\theta} + \frac{l + 1}{2} \frac{2\frac{\sqrt{|h_2|}}{l}(\theta - \wh{\theta})}{1 + \frac{\sqrt{|h_2|}}{l} (\theta - \wh{\theta})^2}  \\
+m''(\theta) &= - 2 B - D e^{\theta} - Ee^{-\theta} -  \frac{l + 1}{2} \left ( \frac{2\frac{\sqrt{|h_2|}}{l}(\theta - \wh{\theta})}{1 + \frac{\sqrt{|h_2|}}{l} (\theta - \wh{\theta})^2} \right )^2 + \frac{l + 1}{2} \frac{2\frac{\sqrt{|h_2|}}{l}}{1 + \frac{\sqrt{|h_2|}}{l} (\theta - \wh{\theta})^2}
+\end{align*}
 
 
 
